@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">P4-group12</string>
+    <string name="connexion">Connexion</string>
+    <string name="sing_up">Se créer un compte</string>
+    <string name="login">Identifiant</string>
+    <string name="password">Mot de passe</string>
 </resources>
