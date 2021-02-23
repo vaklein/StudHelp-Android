@@ -1,9 +1,6 @@
 package com.example.p4_group12.database;
 
 import android.os.AsyncTask;
-import android.widget.Toast;
-
-import com.example.p4_group12.MainActivity;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -52,7 +49,7 @@ public class DatabaseContact {
 
                 super.onPostExecute(result);
                 //Print txt when POST request done
-                //Toast.makeText(MainActivity.this, "Data Submit Successfully", Toast.LENGTH_LONG).show();
+                //Toast.makeText(LoginActivity.this, "Data Submit Successfully", Toast.LENGTH_LONG).show();
 
             }
         }
@@ -97,7 +94,7 @@ public class DatabaseContact {
 
                 super.onPostExecute(result);
                 //Print txt when POST request done
-                //Toast.makeText(MainActivity.this, "Data Submit Successfully", Toast.LENGTH_LONG).show();
+                //Toast.makeText(LoginActivity.this, "Data Submit Successfully", Toast.LENGTH_LONG).show();
 
             }
         }
@@ -142,7 +139,7 @@ public class DatabaseContact {
 
                 super.onPostExecute(result);
                 //Print txt when POST request done
-                //Toast.makeText(MainActivity.this, "Data Submit Successfully", Toast.LENGTH_LONG).show();
+                //Toast.makeText(LoginActivity.this, "Data Submit Successfully", Toast.LENGTH_LONG).show();
 
             }
         }

@@ -10,11 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.P4group12">
         <uses-library android:name="org.apache.http.legacy" android:required="false" /> <!--Required to use Apache library-->
-        <activity android:name=".MainActivity">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+        android:name=".Signup"
+        android:label="Inscription"
+        android:parentActivityName=".LoginActivity" /> <!-- automaticly create a back button -->
     </application>
 </manifest>
