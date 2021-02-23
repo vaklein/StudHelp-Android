@@ -148,5 +148,8 @@ public class DatabaseContact {
 
         sendPostReqAsyncTask.execute();
     }*/
+public static boolean connect(String login,String password){
+    return false;
+}
 }
 
