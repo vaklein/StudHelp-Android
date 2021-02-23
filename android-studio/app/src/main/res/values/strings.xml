@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">P4-group12</string>
+    <string name="name">Nom complet</string>
+    <string name="email">Email</string>
+    <string name="login">Nom d\'utilisateur</string>
+    <string name="password">Mot de passe</string>
+    <string name="confirm_password">Confirmez le mot de passe</string>
+    <string name="signup">S\'inscrire</string>
 </resources>
