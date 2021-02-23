@@ -53,7 +53,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void goToMenu() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish(); // activity done
     }
