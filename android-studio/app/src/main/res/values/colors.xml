@@ -7,4 +7,13 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    // Colors picked from https://coolors.co/ffaf87-ff8e72-ed6a5e-4ce0b3-377771
+
+    <color name="light_salmon"> #FFAF87 </color>
+    <color name="vivid_tangerine"> #FF8E72 </color>
+    <color name="bittersweet"> #ED6A5E </color>
+    <color name="medium_aquamarine"> #4CE0B3 </color>
+    <color name="myrtic_green"> #377771 </color>
+
 </resources>
