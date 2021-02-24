@@ -1,13 +1,13 @@
-package com.example.p4_group12;
+package com.example.p4_group12.Interface;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.p4_group12.R;
 import com.example.p4_group12.database.DatabaseContact;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;

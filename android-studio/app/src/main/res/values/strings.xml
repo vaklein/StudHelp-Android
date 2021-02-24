@@ -9,6 +9,11 @@
     <string name="confirm_password">Confirmez le mot de passe</string>
     <string name="signup">S\'inscrire</string>
     <string name="title_activity_course_list">CourseListActivity</string>
+
+    <!-- tests strings -->
+
+    <string name="root_button">Root</string>
+
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.

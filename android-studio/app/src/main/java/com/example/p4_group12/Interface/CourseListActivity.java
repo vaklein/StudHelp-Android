@@ -1,16 +1,20 @@
-package com.example.p4_group12;
+package com.example.p4_group12.Interface;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.widget.TextView;
 
 import com.example.p4_group12.DAO.Course;
+import com.example.p4_group12.R;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
 public class CourseListActivity extends AppCompatActivity {
+    private RecyclerView courseRecyclerView;
 
     private TextView mTextView;
 

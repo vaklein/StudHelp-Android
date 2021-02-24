@@ -1,4 +1,4 @@
-package com.example.p4_group12;
+package com.example.p4_group12.Interface;
 
 public class GlobalVariables {
 

@@ -1,4 +1,4 @@
-package com.example.p4_group12;
+package com.example.p4_group12.Interface;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.example.p4_group12.R;
 import com.example.p4_group12.database.DatabaseContact;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -18,6 +20,9 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputLayout loginField;
     private TextInputLayout passwordField;
 
+    // Test values
+    private Button rootButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +34,17 @@ public class LoginActivity extends AppCompatActivity {
         password = (TextInputEditText) findViewById(R.id.passwordtext);
         loginField = (TextInputLayout) findViewById(R.id.login);
         passwordField = (TextInputLayout) findViewById(R.id.password);
+
+        // TEST ELEMENTS
+        this.rootButton = findViewById(R.id.root_button);
+        rootButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent CourseList = new Intent(getApplicationContext(), CourseListActivity.class);
+                startActivity(CourseList);
+            }
+        });
+        // TEST END
 
         sign_up.setOnClickListener(new View.OnClickListener() {
             @Override
