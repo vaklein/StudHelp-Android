@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.R;
 import com.example.p4_group12.Interface.adapter.CourseListAdapter;
+import com.example.p4_group12.database.DatabaseContact;
 
 import java.util.ArrayList;
 
@@ -49,6 +50,8 @@ public class CourseListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_list);
+
+        // ArrayList<Course> test = DatabaseContact.get_courses(); Request to the server
 
         mTextView = (TextView) findViewById(R.id.text);
 
