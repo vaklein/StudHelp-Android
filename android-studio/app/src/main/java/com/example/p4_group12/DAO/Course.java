@@ -1,11 +1,11 @@
 package com.example.p4_group12.DAO;
 
 public class Course {
-    int ID;
-    String code;
-    String teacher;
-    String name;
-    String university;
+    private int ID;
+    private String code;
+    private String teacher;
+    private String name;
+    private String university;
 
     public Course(int ID, String code, String teacher,String name,String university) {
         this.ID = ID;
@@ -13,6 +13,26 @@ public class Course {
         this.teacher = teacher;
         this.name = name;
         this.university = university;
+    }
+
+    public int getID(){
+        return this.ID;
+    }
+
+    public String getCode(){
+        return this.code;
+    }
+
+    public String getTeacher(){
+        return this.teacher;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public String getUniversity(){
+        return this.university;
     }
 
 }

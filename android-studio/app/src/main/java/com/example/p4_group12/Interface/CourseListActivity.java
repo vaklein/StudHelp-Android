@@ -2,26 +2,28 @@ package com.example.p4_group12.Interface;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.widget.TextView;
 
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.R;
+import com.example.p4_group12.Interface.adapter.CourseListAdapter;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class CourseListActivity extends AppCompatActivity {
     private RecyclerView courseRecyclerView;
+    private RecyclerView.LayoutManager courseLayoutManager;
+    private CourseListAdapter courseListAdapter;
 
     private TextView mTextView;
 
     /**
      * Hardcoded implementation to get a list of courses
      * */
-    public static ArrayList<Course> get_courses() throws FileNotFoundException {
+    public static ArrayList<Course> get_courses() {
         ArrayList<Course> courses = new ArrayList<>();
 
         courses.add(new Course(2,"LINGI2261","Yves Deville","Artificial intelligence","UCLouvain"));
@@ -49,5 +51,13 @@ public class CourseListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_list);
 
         mTextView = (TextView) findViewById(R.id.text);
+
+        courseRecyclerView = findViewById(R.id.courseRecyclerView);
+        courseRecyclerView.setHasFixedSize(true);
+        courseLayoutManager = new LinearLayoutManager(this);
+        courseListAdapter = new CourseListAdapter(this.get_courses());
+
+        courseRecyclerView.setLayoutManager(courseLayoutManager);
+        courseRecyclerView.setAdapter(courseListAdapter);
     }
 }
