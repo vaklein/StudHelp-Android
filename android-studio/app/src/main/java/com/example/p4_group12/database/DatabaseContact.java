@@ -110,7 +110,10 @@ public class DatabaseContact {
         sendPostReqAsyncTask.execute();
     }
 
-
+    /**
+     * Temporary version of the method
+     */
+    public static void insert_advertisement(int course_id,String title,String description,String user_email) {}
 /* PAS FINI, le file manager ne repond plus
     public static void insert_advertisement(int course_id,String title,String description,String user_email){
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> { // Il faut lancer un autre thread car une requete sur le main thread peut faire crasher l'app

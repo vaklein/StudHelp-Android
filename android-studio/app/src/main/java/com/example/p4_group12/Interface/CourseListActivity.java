@@ -1,16 +1,20 @@
 package com.example.p4_group12.Interface;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.R;
 import com.example.p4_group12.Interface.adapter.CourseListAdapter;
 import com.example.p4_group12.database.DatabaseContact;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -18,7 +22,7 @@ public class CourseListActivity extends AppCompatActivity {
     private RecyclerView courseRecyclerView;
     private RecyclerView.LayoutManager courseLayoutManager;
     private CourseListAdapter courseListAdapter;
-
+    private FloatingActionButton newAdvertisementButton;
     private TextView mTextView;
 
     /**
@@ -54,6 +58,15 @@ public class CourseListActivity extends AppCompatActivity {
         // ArrayList<Course> test = DatabaseContact.get_courses(); Request to the server
 
         mTextView = (TextView) findViewById(R.id.text);
+
+        newAdvertisementButton = findViewById(R.id.new_advertisement_button);
+        newAdvertisementButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent NewAdvertisement = new Intent(getApplicationContext(), AddAdvertisementActivity.class);
+                startActivity(NewAdvertisement);
+            }
+        });
 
         courseRecyclerView = findViewById(R.id.courseRecyclerView);
         courseRecyclerView.setHasFixedSize(true);
