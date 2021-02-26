@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import android.util.Log;
 import android.widget.Toast;
 
-public class AdvertismentsListActivity extends AppCompatActivity {
+public class AdvertisementsListActivity extends AppCompatActivity {
     private RecyclerView advertisementRecyclerView;
     private RecyclerView.LayoutManager advertisementLayoutManager;
     private AdvertisementListAdapter advertisementListAdapter;

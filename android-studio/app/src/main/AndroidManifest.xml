@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.P4group12">
-        <activity android:name=".Interface.AdvertismentsListActivity"></activity>
+        <activity android:name=".Interface.AdvertisementsListActivity"></activity>
         <!--
          <uses-library
             android:name="com.google.android.wearable"

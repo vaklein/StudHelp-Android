@@ -77,7 +77,7 @@ public class CourseListActivity extends AppCompatActivity {
             public void OnCourseClick(int position) {
                 Course clickedCourse = courseList.get(position);
                 // Toast.makeText(getApplication().getBaseContext(), clickedCourse.getName(), Toast.LENGTH_LONG).show();
-                Intent advertismentsListAct = new Intent(getApplicationContext(), AdvertismentsListActivity.class);
+                Intent advertismentsListAct = new Intent(getApplicationContext(), AdvertisementsListActivity.class);
                 advertismentsListAct.putExtra("ClickedCourse", clickedCourse);
                 startActivity(advertismentsListAct);
             }
