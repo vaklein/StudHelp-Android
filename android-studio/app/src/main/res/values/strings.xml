@@ -9,7 +9,7 @@
     <string name="confirm_password">Confirmez le mot de passe</string>
     <string name="signup">S\'inscrire</string>
     <string name="title_activity_course_list">CourseListActivity</string>
-    <string name="add_adverstisement_button">Create advertisement</string>
+    <string name="add_advertisement_button">Create advertisement</string>
 
     <!-- tests strings -->
 
