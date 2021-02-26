@@ -8,6 +8,7 @@ import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.Interface.adapter.AdvertisementListAdapter;
 import com.example.p4_group12.Interface.adapter.CourseListAdapter;
+import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -17,6 +18,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import android.util.Log;
+import android.widget.Toast;
 
 public class AdvertismentsListActivity extends AppCompatActivity {
     private RecyclerView advertisementRecyclerView;
@@ -38,10 +41,17 @@ public class AdvertismentsListActivity extends AppCompatActivity {
     }
 
 
+    private Course currentCourse;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advertisments_list);
+
+        currentCourse = (Course) getIntent().getSerializableExtra("ClickedCourse");
+        if(currentCourse == null) Log.d("NULLWARNING", "Course is null in AdvertismentListActivity");
+
+        Toast.makeText(getApplicationContext(), currentCourse.getName(), Toast.LENGTH_SHORT);
 
         mTextView = (TextView) findViewById(R.id.text);
 
@@ -61,6 +71,7 @@ public class AdvertismentsListActivity extends AppCompatActivity {
                 startActivity(NewAdvertisement);
             }
         });
+
 
 
     }

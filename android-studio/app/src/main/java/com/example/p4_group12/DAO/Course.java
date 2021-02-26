@@ -1,6 +1,8 @@
 package com.example.p4_group12.DAO;
 
-public class Course {
+import java.io.Serializable;
+
+public class Course implements Serializable {
     private int ID;
     private String code;
     private String teacher;

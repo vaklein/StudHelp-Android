@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.R;
@@ -55,15 +56,31 @@ public class CourseListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_list);
 
         // ArrayList<Course> test = DatabaseContact.get_courses(); Request to the server
+        ArrayList<Course> courseList = CourseListActivity.get_courses();
 
         mTextView = (TextView) findViewById(R.id.text);
 
+
+
+        // Building the recycler view
         courseRecyclerView = findViewById(R.id.courseRecyclerView);
         courseRecyclerView.setHasFixedSize(true);
         courseLayoutManager = new LinearLayoutManager(this);
-        courseListAdapter = new CourseListAdapter(this.get_courses());
+        courseListAdapter = new CourseListAdapter(courseList);
 
         courseRecyclerView.setLayoutManager(courseLayoutManager);
         courseRecyclerView.setAdapter(courseListAdapter);
+
+        // Creating the onClickListener for the courses
+        courseListAdapter.setCourseClickListener(new CourseListAdapter.OnCourseClickListener() {
+            @Override
+            public void OnCourseClick(int position) {
+                Course clickedCourse = courseList.get(position);
+                // Toast.makeText(getApplication().getBaseContext(), clickedCourse.getName(), Toast.LENGTH_LONG).show();
+                Intent advertismentsListAct = new Intent(getApplicationContext(), AdvertismentsListActivity.class);
+                advertismentsListAct.putExtra("ClickedCourse", clickedCourse);
+                startActivity(advertismentsListAct);
+            }
+        });
     }
 }
