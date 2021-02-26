@@ -50,6 +50,7 @@ public class AdvertismentsListActivity extends AppCompatActivity {
 
         currentCourse = (Course) getIntent().getSerializableExtra("ClickedCourse");
         if(currentCourse == null) Log.d("NULLWARNING", "Course is null in AdvertismentListActivity");
+        setTitle(currentCourse.getName());
 
         Toast.makeText(getApplicationContext(), currentCourse.getName(), Toast.LENGTH_SHORT);
 

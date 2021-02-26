@@ -15,6 +15,7 @@ import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.R;
 import com.example.p4_group12.Interface.adapter.CourseListAdapter;
 import com.example.p4_group12.database.DatabaseContact;
+import com.example.p4_group12.database.GetCourses;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -56,7 +57,9 @@ public class CourseListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_list);
 
         // ArrayList<Course> test = DatabaseContact.get_courses(); Request to the server
-        ArrayList<Course> courseList = CourseListActivity.get_courses();
+        ArrayList<Course> courseList = new ArrayList<>();
+        GetCourses query = new GetCourses(courseList);
+
 
         mTextView = (TextView) findViewById(R.id.text);
 
@@ -70,6 +73,8 @@ public class CourseListActivity extends AppCompatActivity {
 
         courseRecyclerView.setLayoutManager(courseLayoutManager);
         courseRecyclerView.setAdapter(courseListAdapter);
+
+        query.getJSON("https://db.valentinklein.eu:8182/get_courses.php", courseListAdapter);
 
         // Creating the onClickListener for the courses
         courseListAdapter.setCourseClickListener(new CourseListAdapter.OnCourseClickListener() {
