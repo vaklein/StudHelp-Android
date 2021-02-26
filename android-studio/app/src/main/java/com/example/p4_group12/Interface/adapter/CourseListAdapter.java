@@ -16,9 +16,19 @@ import java.util.ArrayList;
 
 
 // Followed https://www.youtube.com/watch?v=17NbUcEts9c for the code and xml layout
+// Followed https://www.youtube.com/watch?v=bhhs4bwYyhc for the onClickListeners
 public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.CourseListViewHolder> {
 
     private ArrayList<Course> courseList;
+    private OnCourseClickListener courseClickListener;
+
+    public interface OnCourseClickListener {
+        void OnCourseClick(int position);
+    }
+
+    public void setCourseClickListener(OnCourseClickListener courseClickListener){
+        this.courseClickListener = courseClickListener;
+    }
 
     public static class CourseListViewHolder extends RecyclerView.ViewHolder {
 
@@ -28,11 +38,23 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         private TextView teacherTextView;
 
 
-        public CourseListViewHolder(@NonNull View itemView) {
+        public CourseListViewHolder(@NonNull View itemView, OnCourseClickListener courseClickListener) {
             super(itemView);
             codeTextView = itemView.findViewById(R.id.code);
             courseNameTextView = itemView.findViewById(R.id.course_name);
             teacherTextView = itemView.findViewById(R.id.teacher);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(courseClickListener != null) {
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION){
+                            courseClickListener.OnCourseClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -45,7 +67,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
     public CourseListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Log.v("Gwen", "test");
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.course_item, parent, false);
-        CourseListViewHolder clh = new CourseListViewHolder(v);
+        CourseListViewHolder clh = new CourseListViewHolder(v, this.courseClickListener);
         return  clh;
     }
 

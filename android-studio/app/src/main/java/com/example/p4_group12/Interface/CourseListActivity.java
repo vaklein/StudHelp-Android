@@ -9,11 +9,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.R;
 import com.example.p4_group12.Interface.adapter.CourseListAdapter;
 import com.example.p4_group12.database.DatabaseContact;
+import com.example.p4_group12.database.GetCourses;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -22,7 +24,6 @@ public class CourseListActivity extends AppCompatActivity {
     private RecyclerView courseRecyclerView;
     private RecyclerView.LayoutManager courseLayoutManager;
     private CourseListAdapter courseListAdapter;
-    private FloatingActionButton newAdvertisementButton;
     private TextView mTextView;
 
     /**
@@ -56,24 +57,35 @@ public class CourseListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_list);
 
         // ArrayList<Course> test = DatabaseContact.get_courses(); Request to the server
+        ArrayList<Course> courseList = new ArrayList<>();
+        GetCourses query = new GetCourses(courseList);
+
 
         mTextView = (TextView) findViewById(R.id.text);
 
-        newAdvertisementButton = findViewById(R.id.new_advertisement_button);
-        newAdvertisementButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent NewAdvertisement = new Intent(getApplicationContext(), AddAdvertisementActivity.class);
-                startActivity(NewAdvertisement);
-            }
-        });
 
+
+        // Building the recycler view
         courseRecyclerView = findViewById(R.id.courseRecyclerView);
         courseRecyclerView.setHasFixedSize(true);
         courseLayoutManager = new LinearLayoutManager(this);
-        courseListAdapter = new CourseListAdapter(this.get_courses());
+        courseListAdapter = new CourseListAdapter(courseList);
 
         courseRecyclerView.setLayoutManager(courseLayoutManager);
         courseRecyclerView.setAdapter(courseListAdapter);
+
+        query.getJSON("https://db.valentinklein.eu:8182/get_courses.php", courseListAdapter);
+
+        // Creating the onClickListener for the courses
+        courseListAdapter.setCourseClickListener(new CourseListAdapter.OnCourseClickListener() {
+            @Override
+            public void OnCourseClick(int position) {
+                Course clickedCourse = courseList.get(position);
+                // Toast.makeText(getApplication().getBaseContext(), clickedCourse.getName(), Toast.LENGTH_LONG).show();
+                Intent advertismentsListAct = new Intent(getApplicationContext(), AdvertismentsListActivity.class);
+                advertismentsListAct.putExtra("ClickedCourse", clickedCourse);
+                startActivity(advertismentsListAct);
+            }
+        });
     }
 }
