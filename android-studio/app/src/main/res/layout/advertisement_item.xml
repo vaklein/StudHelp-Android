@@ -30,7 +30,7 @@
             android:layout_below="@+id/username"
             android:layout_marginStart="15dp"
             android:text="Advertisement title"
-            android:textColor="@color/light_salmon"
+            android:textColor="@color/bittersweet"
             android:textSize="20sp"
             android:textStyle="bold" />
 
