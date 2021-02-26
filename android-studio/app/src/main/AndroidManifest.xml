@@ -2,10 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.p4_group12">
 
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-
-    <!-- <uses-feature android:name="android.hardware.type.watch" /> -->
-
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- <uses-feature android:name="android.hardware.type.watch" /> -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -15,10 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.P4group12">
-        <!-- <uses-library
+        <activity android:name=".Interface.AdvertismentsListActivity"></activity>
+        <!--
+         <uses-library
             android:name="com.google.android.wearable"
-            android:required="true" /> -->
-
+            android:required="true" />
+        -->
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.
@@ -29,13 +28,10 @@
 
         <activity
             android:name=".Interface.CourseListActivity"
-            android:label="@string/title_activity_course_list">
-        </activity>
-
+            android:label="@string/title_activity_course_list"></activity>
         <activity
             android:name=".Interface.AddAdvertisementActivity"
-            android:label="NewAdvertisement">
-        </activity>
+            android:label="NewAdvertisement"></activity>
 
         <uses-library
             android:name="org.apache.http.legacy"
