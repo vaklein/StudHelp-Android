@@ -113,8 +113,6 @@ public class DatabaseContact {
     /**
      * Temporary version of the method
      */
-    public static void insert_advertisement(int course_id,String title,String description,String user_email) {}
-/* PAS FINI, le file manager ne repond plus
     public static void insert_advertisement(int course_id,String title,String description,String user_email){
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> { // Il faut lancer un autre thread car une requete sur le main thread peut faire crasher l'app
             @Override                                                       // a modifier en executor si on veut update l'app, asynctask deprecated
@@ -129,7 +127,11 @@ public class DatabaseContact {
                     String data = URLEncoder.encode("title", "UTF-8") + "=" + URLEncoder.encode(title, "UTF-8") + "&" +
                             URLEncoder.encode("description", "UTF-8") + "=" + URLEncoder.encode(description, "UTF-8") + "&" +
                             URLEncoder.encode("user_email", "UTF-8") + "=" + URLEncoder.encode(user_email, "UTF-8") + "&" +
-                            URLEncoder.encode("course_id", "UTF-8") + "=" + URLEncoder.encode(course_id, "UTF-8");//Build form answer
+                            URLEncoder.encode("course_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(course_id), "UTF-8");//Build form answer
+                    Log.d("title",title);
+                    Log.d("descr",description);
+                    Log.d("email",user_email);
+                    Log.d("id",String.valueOf(course_id));
                     bufferedWriter.write(data); //Send data
                     bufferedWriter.flush();
                     bufferedWriter.close();
@@ -149,6 +151,7 @@ public class DatabaseContact {
             protected void onPostExecute(String result) {
 
                 super.onPostExecute(result);
+                Log.i("result",result);
                 //Print txt when POST request done
                 //Toast.makeText(LoginActivity.this, "Data Submit Successfully", Toast.LENGTH_LONG).show();
 
@@ -158,7 +161,7 @@ public class DatabaseContact {
         SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
 
         sendPostReqAsyncTask.execute();
-    }*/
+    }
 
     public static ArrayList<Course> get_courses(){
         // from https://medium.com/@JasonCromer/android-asynctask-http-request-tutorial-6b429d833e28
