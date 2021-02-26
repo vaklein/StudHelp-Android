@@ -218,10 +218,4 @@ public class DatabaseContact {
         sendPostReqAsyncTask.execute();
         return new ArrayList<Course>();
     }
-
-    public static boolean connect(String login,String password){
-    return false;
 }
-
-}
-
