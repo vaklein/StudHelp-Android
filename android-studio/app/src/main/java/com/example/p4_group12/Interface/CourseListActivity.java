@@ -22,7 +22,6 @@ public class CourseListActivity extends AppCompatActivity {
     private RecyclerView courseRecyclerView;
     private RecyclerView.LayoutManager courseLayoutManager;
     private CourseListAdapter courseListAdapter;
-    private FloatingActionButton newAdvertisementButton;
     private TextView mTextView;
 
     /**
@@ -58,15 +57,6 @@ public class CourseListActivity extends AppCompatActivity {
         // ArrayList<Course> test = DatabaseContact.get_courses(); Request to the server
 
         mTextView = (TextView) findViewById(R.id.text);
-
-        newAdvertisementButton = findViewById(R.id.new_advertisement_button);
-        newAdvertisementButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent NewAdvertisement = new Intent(getApplicationContext(), AddAdvertisementActivity.class);
-                startActivity(NewAdvertisement);
-            }
-        });
 
         courseRecyclerView = findViewById(R.id.courseRecyclerView);
         courseRecyclerView.setHasFixedSize(true);
