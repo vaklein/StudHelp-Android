@@ -6,17 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.R;
 import com.example.p4_group12.Interface.adapter.CourseListAdapter;
-import com.example.p4_group12.database.DatabaseContact;
-import com.example.p4_group12.database.GetCourses;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.p4_group12.database.GetObjectFromDB;
 
 import java.util.ArrayList;
 
@@ -58,7 +53,7 @@ public class CourseListActivity extends AppCompatActivity {
 
         // ArrayList<Course> test = DatabaseContact.get_courses(); Request to the server
         ArrayList<Course> courseList = new ArrayList<>();
-        GetCourses query = new GetCourses(courseList);
+        GetObjectFromDB query = new GetObjectFromDB(courseList, Course.class);
 
 
         mTextView = (TextView) findViewById(R.id.text);

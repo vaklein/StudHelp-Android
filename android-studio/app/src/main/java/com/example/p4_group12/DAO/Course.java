@@ -1,5 +1,8 @@
 package com.example.p4_group12.DAO;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 
 public class Course implements Serializable {
@@ -36,5 +39,4 @@ public class Course implements Serializable {
     public String getUniversity(){
         return this.university;
     }
-
 }

@@ -10,6 +10,7 @@ import com.example.p4_group12.Interface.adapter.AdvertisementListAdapter;
 import com.example.p4_group12.Interface.adapter.CourseListAdapter;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.R;
+import com.example.p4_group12.database.GetObjectFromDB;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.content.Intent;
@@ -17,6 +18,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import java.io.BufferedWriter;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import android.util.Log;
 import android.widget.Toast;
@@ -48,21 +53,28 @@ public class AdvertismentsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advertisments_list);
 
+        ArrayList<Advertisement> advertisementsList = new ArrayList<Advertisement>();
+        GetObjectFromDB query = new GetObjectFromDB(advertisementsList, Advertisement .class);
+
         currentCourse = (Course) getIntent().getSerializableExtra("ClickedCourse");
         if(currentCourse == null) Log.d("NULLWARNING", "Course is null in AdvertismentListActivity");
         setTitle(currentCourse.getName());
 
-        Toast.makeText(getApplicationContext(), currentCourse.getName(), Toast.LENGTH_SHORT);
+
 
         mTextView = (TextView) findViewById(R.id.text);
 
         advertisementRecyclerView = findViewById(R.id.advertisementRecyclerView);
         advertisementRecyclerView.setHasFixedSize(true);
         advertisementLayoutManager = new LinearLayoutManager(this);
-        advertisementListAdapter = new AdvertisementListAdapter(this.get_advertisements());
+        // advertisementListAdapter = new AdvertisementListAdapter(this.get_advertisements());
+        advertisementListAdapter = new AdvertisementListAdapter(advertisementsList);
 
         advertisementRecyclerView.setLayoutManager(advertisementLayoutManager);
         advertisementRecyclerView.setAdapter(advertisementListAdapter);
+
+        // Setting the query
+        query.getJSON("https://db.valentinklein.eu:8182/get_course_advertisment.php?courseID="+Integer.toString(currentCourse.getID()), advertisementListAdapter);
 
         newAdvertisementButton = findViewById(R.id.new_advertisement_button);
         newAdvertisementButton.setOnClickListener(new View.OnClickListener() {

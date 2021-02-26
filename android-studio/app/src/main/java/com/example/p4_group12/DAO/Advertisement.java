@@ -2,13 +2,13 @@ package com.example.p4_group12.DAO;
 
 public class Advertisement {
     private int ID;
-    private String username;
+    private String mail;
     private String title;
     private String description;
 
-    public Advertisement(int ID, String username, String title, String description) {
+    public Advertisement(int ID, String mail, String title, String description) {
         this.ID = ID;
-        this.username = username;
+        this.mail = mail;
         this.title = title;
         this.description = description;
     }
@@ -18,7 +18,7 @@ public class Advertisement {
     }
 
     public String getUsername(){
-        return this.username;
+        return this.mail;
     }
 
     public String getTitle(){
