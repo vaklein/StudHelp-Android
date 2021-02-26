@@ -1,6 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.P4group12" parent="Theme.MaterialComponents.Light">
+    <!-- Base application theme.
+    See the following URL for more infos !!
+    https://material.io/design/material-theming/implementing-your-theme.html#color
+    -->
 
+    <style name="Theme.P4group12" parent="Theme.MaterialComponents.Light">
+        <item name="colorPrimary"> @color/vivid_tangerine </item>
+        <item name="colorOnPrimary"> @color/myrtic_green </item>
+        <item name="colorPrimaryVariant"> @color/light_salmon </item>
+        <item name="colorPrimaryDark"> @color/bittersweet </item>
+        <item name="colorSecondary"> @color/myrtic_green </item>
+        <item name="colorOnSecondary"> @color/light_salmon </item>
+        <item name="colorSecondaryVariant"> @color/medium_aquamarine </item>
     </style>
 </resources>

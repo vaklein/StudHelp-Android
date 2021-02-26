@@ -1,17 +1,9 @@
 package com.example.p4_group12.database;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
 import com.example.p4_group12.DAO.Course;
-import com.example.p4_group12.Interface.CourseListActivity;
-import com.example.p4_group12.Interface.LoginActivity;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -24,16 +16,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class DatabaseContact {
 
-    public static void insert_user(String login, String password, String name, String email) {
+    public static void insert_user(String login,String password,String name,String email){
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> { // Il faut lancer un autre thread car une requete sur le main thread peut faire crasher l'app
-            @Override
-            // a modifier en executor si on veut update l'app, asynctask deprecated
+            @Override                                                       // a modifier en executor si on veut update l'app, asynctask deprecated
             protected String doInBackground(String... params) {
                 try {
                     URL url = new URL("https://db.valentinklein.eu:8182/insert_user.php");
@@ -76,10 +65,9 @@ public class DatabaseContact {
         sendPostReqAsyncTask.execute(name, email);
     }
 
-    public static void insert_course(String code, String teacher, String name, String university) {
+    public static void insert_course(String code,String teacher,String name,String university){
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> { // Il faut lancer un autre thread car une requete sur le main thread peut faire crasher l'app
-            @Override
-            // a modifier en executor si on veut update l'app, asynctask deprecated
+            @Override                                                       // a modifier en executor si on veut update l'app, asynctask deprecated
             protected String doInBackground(String... params) {
                 try {
                     URL url = new URL("https://db.valentinklein.eu:8182/insert_course.php");
@@ -125,9 +113,6 @@ public class DatabaseContact {
     /**
      * Temporary version of the method
      */
-    public static void insert_advertisement(int course_id, String title, String description, String user_email) {
-    }
-/* PAS FINI, le file manager ne repond plus
     public static void insert_advertisement(int course_id,String title,String description,String user_email){
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> { // Il faut lancer un autre thread car une requete sur le main thread peut faire crasher l'app
             @Override                                                       // a modifier en executor si on veut update l'app, asynctask deprecated
@@ -142,7 +127,11 @@ public class DatabaseContact {
                     String data = URLEncoder.encode("title", "UTF-8") + "=" + URLEncoder.encode(title, "UTF-8") + "&" +
                             URLEncoder.encode("description", "UTF-8") + "=" + URLEncoder.encode(description, "UTF-8") + "&" +
                             URLEncoder.encode("user_email", "UTF-8") + "=" + URLEncoder.encode(user_email, "UTF-8") + "&" +
-                            URLEncoder.encode("course_id", "UTF-8") + "=" + URLEncoder.encode(course_id, "UTF-8");//Build form answer
+                            URLEncoder.encode("course_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(course_id), "UTF-8");//Build form answer
+                    Log.d("title",title);
+                    Log.d("descr",description);
+                    Log.d("email",user_email);
+                    Log.d("id",String.valueOf(course_id));
                     bufferedWriter.write(data); //Send data
                     bufferedWriter.flush();
                     bufferedWriter.close();
@@ -162,6 +151,7 @@ public class DatabaseContact {
             protected void onPostExecute(String result) {
 
                 super.onPostExecute(result);
+                Log.i("result",result);
                 //Print txt when POST request done
                 //Toast.makeText(LoginActivity.this, "Data Submit Successfully", Toast.LENGTH_LONG).show();
 
@@ -171,14 +161,14 @@ public class DatabaseContact {
         SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
 
         sendPostReqAsyncTask.execute();
-    }*/
+    }
 
-    public static ArrayList<Course> get_courses() {
+    public static ArrayList<Course> get_courses(){
         // from https://medium.com/@JasonCromer/android-asynctask-http-request-tutorial-6b429d833e28
 
         class SendGetReqAsyncTask extends AsyncTask<String, Void, String> {
             @Override
-            protected String doInBackground(String... params) {
+            protected String doInBackground(String... params){
                 String inputLine;
                 String result = "test";
                 try {
@@ -201,7 +191,7 @@ public class DatabaseContact {
                     BufferedReader reader = new BufferedReader(streamReader);
                     StringBuilder stringBuilder = new StringBuilder();
                     //Check if the line we are reading is not null
-                    while ((inputLine = reader.readLine()) != null) {
+                    while((inputLine = reader.readLine()) != null){
                         stringBuilder.append(inputLine);
                     }
                     //Close our InputStream and Buffered reader
@@ -228,6 +218,10 @@ public class DatabaseContact {
         sendPostReqAsyncTask.execute();
         return new ArrayList<Course>();
     }
+
+    public static boolean connect(String login,String password){
+    return false;
 }
 
+}
 

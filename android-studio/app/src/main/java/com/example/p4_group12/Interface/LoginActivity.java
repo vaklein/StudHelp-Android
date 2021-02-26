@@ -52,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         loginField = (TextInputLayout) findViewById(R.id.login);
         passwordField = (TextInputLayout) findViewById(R.id.password);
 
+
         // TEST ELEMENTS
         this.rootButton = findViewById(R.id.root_button);
         rootButton.setOnClickListener(new View.OnClickListener() {
