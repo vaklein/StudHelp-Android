@@ -1,9 +1,12 @@
 package com.example.p4_group12.Interface;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +14,21 @@ import com.example.p4_group12.R;
 import com.example.p4_group12.database.DatabaseContact;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -52,8 +70,7 @@ public class SignupActivity extends AppCompatActivity {
                 passwordField.setErrorEnabled(false);
                 confirmPasswordField.setErrorEnabled(false);
                 if (isCorrectlyFil() && isPasswordConfirmed()) {
-                    DatabaseContact.insert_user(login.getText().toString(), password.getText().toString(), name.getText().toString(), email.getText().toString().toLowerCase());
-                    goToLogin();
+                    new AsyncSignUp().execute(name.getText().toString(), email.getText().toString().toLowerCase(), login.getText().toString(), password.getText().toString());
                 }
             }
         });
@@ -91,10 +108,83 @@ public class SignupActivity extends AppCompatActivity {
             return false;
         }
     }
-    private void goToLogin() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish(); // activity done
-    }
 
+    class AsyncSignUp extends AsyncTask<String, Void, String> { // Il faut lancer un autre thread car une requete sur le main thread peut faire crasher l'app
+
+        // a modifier en executor si on veut update l'app, asynctask deprecated
+        ProgressDialog pdLoading = new ProgressDialog(SignupActivity.this);
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            //this method will be running on UI thread
+            pdLoading.setMessage("\tLoading...");
+            pdLoading.setCancelable(false);
+            pdLoading.show();
+
+        }
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                URL url = new URL("https://db.valentinklein.eu:8182/insert_user.php");
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");  //POST request
+                httpURLConnection.setDoOutput(true);
+                OutputStream OS = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
+                String data = URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(params[0], "UTF-8") + "&" +
+                        URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(params[1], "UTF-8") + "&" +
+                        URLEncoder.encode("login", "UTF-8") + "=" + URLEncoder.encode(params[2], "UTF-8") + "&" +
+                        URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(params[3], "UTF-8");//Build form answer
+                bufferedWriter.write(data); //Send data
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                OS.close();
+                InputStream IS = httpURLConnection.getInputStream(); //DB answer
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(IS));
+                String json;
+                StringBuilder result = new StringBuilder();
+                while ((json = bufferedReader.readLine()) != null) {
+                    result.append(json + "\n");
+                }
+                IS.close();
+                httpURLConnection.disconnect();
+                return result.toString();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return null;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            pdLoading.dismiss();
+            try {
+                JSONObject response = new JSONObject(result);
+                JSONObject object = response.getJSONObject("response");
+                if (object.getBoolean("error")) {
+                    if (object.getString("error_msg").equals("EMAIL AND LOGIN ALREADY EXIST")) {
+                        loginField.setError("Identifiant déjà utilisé");
+                        emailField.setError("Email déjà utilisé");
+                    }else if (object.getString("error_msg").equals("LOGIN ALREADY EXISTS")) {
+                        loginField.setError("Identifiant déjà utilisé");
+                    }else if (object.getString("error_msg").equals("EMAIL ALREADY EXISTS")) {
+                        emailField.setError("Email déjà utilisé");
+                    }else{
+                        Toast.makeText(SignupActivity.this, "OOPs! Réessayer", Toast.LENGTH_LONG).show();
+                    }
+                } else if (object.getBoolean("created")) {
+                    Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    SignupActivity.this.finish();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

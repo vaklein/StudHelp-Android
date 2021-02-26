@@ -47,9 +47,6 @@
             android:name=".Interface.SignupActivity"
             android:label="Inscription"
             android:parentActivityName=".Interface.LoginActivity" />
-        <activity
-            android:name=".Interface.GetCoursesActivityTest"
-            android:label="Test get courses" />
     </application>
 
 </manifest>
