@@ -36,7 +36,7 @@ public class AddAdvertisementActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // TODO : It should submit with the CORRECT id of the course !!
                 DatabaseContact.insert_advertisement(1, advertisementTitleText.getText().toString(), advertisementDescriptionText.getText().toString(), GlobalVariables.getUser());
-                Intent CourseList = new Intent(getApplicationContext(), CourseListActivity.class);
+                Intent CourseList = new Intent(getApplicationContext(), AdvertismentsListActivity.class);
                 startActivity(CourseList);
             }
         });
