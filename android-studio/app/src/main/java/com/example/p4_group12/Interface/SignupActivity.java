@@ -29,6 +29,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -43,6 +45,7 @@ public class SignupActivity extends AppCompatActivity {
     private TextInputLayout loginField;
     private TextInputLayout passwordField;
     private TextInputLayout confirmPasswordField;
+    private static final String PASSWORD_STRENGTH = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[*@#$%!]).{8,40})";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +72,7 @@ public class SignupActivity extends AppCompatActivity {
                 loginField.setErrorEnabled(false);
                 passwordField.setErrorEnabled(false);
                 confirmPasswordField.setErrorEnabled(false);
-                if (isCorrectlyFil() && isPasswordConfirmed()) {
+                if (isCorrectlyFil() && isPasswordPowerfull() &&isPasswordConfirmed()) {
                     new AsyncSignUp().execute(name.getText().toString(), email.getText().toString().toLowerCase(), login.getText().toString(), password.getText().toString());
                 }
             }
@@ -100,6 +103,17 @@ public class SignupActivity extends AppCompatActivity {
         }
         return filled;
     }
+
+    private boolean isPasswordPowerfull(){
+        Pattern passwordPattern = Pattern.compile(PASSWORD_STRENGTH);
+        Matcher passwordMatcher = passwordPattern.matcher(password.getText().toString());
+        if (!passwordMatcher.matches()){
+            passwordField.setError("Votre mot de passe doit contenir au moins 8 caractères dont au moins : un chiffre, une majuscule, une minuscule et un caractère spéciale (@, #, !, ...)");
+            return false;
+        }
+        return true;
+    }
+
     private boolean isPasswordConfirmed() {
         if (password.getText().toString().equals(confirmPassword.getText().toString())){
             return true;
