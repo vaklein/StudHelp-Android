@@ -57,7 +57,7 @@ public class AdvertisementsListActivity extends AppCompatActivity {
         GetObjectFromDB query = new GetObjectFromDB(advertisementsList, Advertisement .class);
 
         currentCourse = (Course) getIntent().getSerializableExtra("ClickedCourse");
-        if(currentCourse == null) Log.d("NULLWARNING", "Course is null in AdvertismentListActivity");
+        if(currentCourse == null) Log.d("NULLWARNING", "Course is null in AdvertisementListActivity");
         setTitle(currentCourse.getName());
 
 
@@ -80,8 +80,10 @@ public class AdvertisementsListActivity extends AppCompatActivity {
         newAdvertisementButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent NewAdvertisement = new Intent(getApplicationContext(), AddAdvertisementActivity.class);
-                startActivity(NewAdvertisement);
+                // Toast.makeText(getApplication().getBaseContext(), clickedCourse.getName(), Toast.LENGTH_LONG).show();
+                Intent newAdvertisement = new Intent(getApplicationContext(), AddAdvertisementActivity.class);
+                newAdvertisement.putExtra("CurrentCourse", currentCourse);
+                startActivity(newAdvertisement);
             }
         });
 

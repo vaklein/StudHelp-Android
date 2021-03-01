@@ -2,9 +2,12 @@ package com.example.p4_group12.Interface;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.DatabaseContact;
 import com.google.android.material.textfield.TextInputEditText;
@@ -17,6 +20,7 @@ public class AddAdvertisementActivity extends AppCompatActivity {
     private TextInputLayout advertisementTitle;
     private TextInputLayout advertisementDescription;
     private Button submitAdvertisement;
+    private Course course;
 
 
 
@@ -34,10 +38,12 @@ public class AddAdvertisementActivity extends AppCompatActivity {
         submitAdvertisement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO : It should submit with the CORRECT id of the course + correct email !!
-                DatabaseContact.insert_advertisement(2, advertisementTitleText.getText().toString(), advertisementDescriptionText.getText().toString(), "testemail");
-                Intent CourseList = new Intent(getApplicationContext(), CourseListActivity.class);
-                startActivity(CourseList);
+                course = (Course) getIntent().getSerializableExtra("CurrentCourse");
+                Log.v("Julius", Integer.toString(course.getID()));
+                DatabaseContact.insert_advertisement(course.getID(), advertisementTitleText.getText().toString(), advertisementDescriptionText.getText().toString(), GlobalVariables.getUser());
+                Intent advertisementList = new Intent(getApplicationContext(), AdvertisementsListActivity.class);
+                advertisementList.putExtra("ClickedCourse", course);
+                startActivity(advertisementList);
             }
         });
 
