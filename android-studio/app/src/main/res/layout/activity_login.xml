@@ -52,6 +52,7 @@
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
+<!--
     <Button
         android:id="@+id/root_button"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -63,6 +64,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent" />
+
+-->
+
 
     <Button
         android:id="@+id/sign_up"

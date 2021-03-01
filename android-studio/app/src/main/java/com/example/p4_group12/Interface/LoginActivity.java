@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
     private LoadingDialog loadingDialog;
 
     // Test values
-    private Button rootButton;
+    //private Button rootButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +65,7 @@ public class LoginActivity extends AppCompatActivity {
 
         loadingDialog = new LoadingDialog(this, "Connexion en cours...");
 
+        /*
         // TEST ELEMENTS
         this.rootButton = findViewById(R.id.root_button);
         rootButton.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         // TEST END
+        */
 
         sign_up.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,6 +162,7 @@ public class LoginActivity extends AppCompatActivity {
                     loginField.setError("Identifiant/Mot de passe incorrect");
                     passwordField.setError("Identifiant/Mot de passe incorrect");
                 } else if (object.getBoolean("Logged")) {
+                    GlobalVariables.setUser(login.getText().toString()); // TODO change Login to Email
                     Intent intent = new Intent(LoginActivity.this, CourseListActivity.class);
                     startActivity(intent);
                     LoginActivity.this.finish();
