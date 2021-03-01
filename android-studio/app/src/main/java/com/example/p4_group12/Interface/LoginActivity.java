@@ -1,13 +1,23 @@
 package com.example.p4_group12.Interface;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.DatabaseContact;
@@ -36,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputEditText password;
     private TextInputLayout loginField;
     private TextInputLayout passwordField;
+    private LoadingDialog loadingDialog;
 
     // Test values
     private Button rootButton;
@@ -52,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         loginField = (TextInputLayout) findViewById(R.id.login);
         passwordField = (TextInputLayout) findViewById(R.id.password);
 
+        loadingDialog = new LoadingDialog(this, "Connexion en cours...");
 
         // TEST ELEMENTS
         this.rootButton = findViewById(R.id.root_button);
@@ -98,16 +110,10 @@ public class LoginActivity extends AppCompatActivity {
     class AsyncLogin extends AsyncTask<String, Void, String> { // Il faut lancer un autre thread car une requete sur le main thread peut faire crasher l'app
 
         // a modifier en executor si on veut update l'app, asynctask deprecated
-        ProgressDialog pdLoading = new ProgressDialog(LoginActivity.this);
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-            //this method will be running on UI thread
-            pdLoading.setMessage("\tLoading...");
-            pdLoading.setCancelable(false);
-            pdLoading.show();
-
+            loadingDialog.getDialog().show();
         }
         @Override
         protected String doInBackground(String... params) {
@@ -146,7 +152,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            pdLoading.dismiss();
+            loadingDialog.getDialog().cancel();
             try {
                 JSONObject response = new JSONObject(result);
                 JSONObject object = response.getJSONObject("response");
@@ -163,4 +169,5 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+
 }

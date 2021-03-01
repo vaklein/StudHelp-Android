@@ -46,6 +46,7 @@ public class SignupActivity extends AppCompatActivity {
     private TextInputLayout passwordField;
     private TextInputLayout confirmPasswordField;
     private static final String PASSWORD_STRENGTH = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[*@#$%!]).{8,40})";
+    private LoadingDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,8 @@ public class SignupActivity extends AppCompatActivity {
         loginField = (TextInputLayout) findViewById(R.id.login);
         passwordField = (TextInputLayout) findViewById(R.id.password);
         confirmPasswordField = (TextInputLayout) findViewById(R.id.confirm_password);
+
+        loadingDialog = new LoadingDialog(this, "Inscription en cours...");
 
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,16 +129,12 @@ public class SignupActivity extends AppCompatActivity {
     class AsyncSignUp extends AsyncTask<String, Void, String> { // Il faut lancer un autre thread car une requete sur le main thread peut faire crasher l'app
 
         // a modifier en executor si on veut update l'app, asynctask deprecated
-        ProgressDialog pdLoading = new ProgressDialog(SignupActivity.this);
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            //this method will be running on UI thread
-            pdLoading.setMessage("\tLoading...");
-            pdLoading.setCancelable(false);
-            pdLoading.show();
-
+            loadingDialog.getDialog().show();
         }
         @Override
         protected String doInBackground(String... params) {
@@ -176,7 +175,7 @@ public class SignupActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            pdLoading.dismiss();
+            loadingDialog.getDialog().cancel();
             try {
                 JSONObject response = new JSONObject(result);
                 JSONObject object = response.getJSONObject("response");
