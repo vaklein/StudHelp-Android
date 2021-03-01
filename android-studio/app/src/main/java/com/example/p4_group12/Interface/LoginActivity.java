@@ -162,7 +162,7 @@ public class LoginActivity extends AppCompatActivity {
                     loginField.setError("Identifiant/Mot de passe incorrect");
                     passwordField.setError("Identifiant/Mot de passe incorrect");
                 } else if (object.getBoolean("Logged")) {
-                    GlobalVariables.setUser(login.getText().toString()); // TODO change Login to Email
+                    GlobalVariables.setUser(object.getString("email"));
                     Intent intent = new Intent(LoginActivity.this, CourseListActivity.class);
                     startActivity(intent);
                     LoginActivity.this.finish();
