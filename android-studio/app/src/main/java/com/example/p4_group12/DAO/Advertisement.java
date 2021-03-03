@@ -1,6 +1,8 @@
 package com.example.p4_group12.DAO;
 
-public class Advertisement {
+import java.io.Serializable;
+
+public class Advertisement  implements Serializable {
     private int ID;
     private String mail;
     private String title;

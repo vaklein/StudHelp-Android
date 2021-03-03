@@ -87,7 +87,15 @@ public class AdvertisementsListActivity extends AppCompatActivity {
             }
         });
 
-
+        advertisementListAdapter.setAdvertisementClickListener(new AdvertisementListAdapter.OnAdvertisementClickListener() {
+            @Override
+            public void OnAdvertisementClick(int position) {
+                Advertisement clickedAdvertisement = advertisementsList.get(position);
+                Intent advertisementView = new Intent(getApplicationContext(), AdvertisementView.class);
+                advertisementView.putExtra("ClickedAdvertisement", clickedAdvertisement);
+                startActivity(advertisementView);
+            }
+        });
 
     }
 }

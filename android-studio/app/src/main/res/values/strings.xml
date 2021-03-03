@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">P4-group12</string>
+    <string name="app_name">StudHelp</string>
     <string name="connexion">Connexion</string>
     <string name="sing_up">Se créer un compte</string>
     <string name="login">Identifiant</string>
@@ -20,4 +20,7 @@
     values-round/strings.xml for round devices.
     -->
     <string name="hello_world">Hello Square World!</string>
+    <string name="advertisement_view_title_text">Ad title</string>
+    <string name="advertisement_view_owner_text">Username</string>
+    <string name="advertisement_view_description_text">Description</string>
 </resources>

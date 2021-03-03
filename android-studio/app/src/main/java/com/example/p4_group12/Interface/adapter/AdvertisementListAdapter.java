@@ -9,18 +9,28 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.p4_group12.DAO.Advertisement;
-import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.R;
 
 import java.util.ArrayList;
 
 
+
+
 // Followed https://www.youtube.com/watch?v=17NbUcEts9c for the code and xml layout
-public class AdvertisementListAdapter extends RecyclerView.Adapter<AdvertisementListAdapter.CourseListViewHolder> {
+public class AdvertisementListAdapter extends RecyclerView.Adapter<AdvertisementListAdapter.AdvertisementListViewHolder> {
 
     private ArrayList<Advertisement> advertisementList;
+    private OnAdvertisementClickListener advertisementClickListener;
 
-    public static class CourseListViewHolder extends RecyclerView.ViewHolder {
+    public interface OnAdvertisementClickListener {
+        void OnAdvertisementClick(int position);
+    }
+
+    public void setAdvertisementClickListener(OnAdvertisementClickListener advertisementClickListener) {
+        this.advertisementClickListener = advertisementClickListener;
+    }
+
+    public static class AdvertisementListViewHolder extends RecyclerView.ViewHolder {
 
         // Here goes the elements of each item of the recyclerview item
         private TextView usernameTextView;
@@ -28,11 +38,23 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
         private TextView advertisementDescriptionTextView;
 
 
-        public CourseListViewHolder(@NonNull View itemView) {
+        public AdvertisementListViewHolder(@NonNull View itemView, OnAdvertisementClickListener advertisementClickListener) {
             super(itemView);
             usernameTextView = itemView.findViewById(R.id.username);
             advertisementTitleTextView = itemView.findViewById(R.id.advertisement_title_view);
-            advertisementDescriptionTextView = itemView.findViewById(R.id.advertisement_description_view);
+            advertisementDescriptionTextView = itemView.findViewById(R.id.advertisement_description_recycler);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (advertisementClickListener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            advertisementClickListener.OnAdvertisementClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -42,15 +64,15 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
 
     @NonNull
     @Override
-    public CourseListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdvertisementListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Log.v("Gwen", "test");
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.advertisement_item, parent, false);
-        CourseListViewHolder clh = new CourseListViewHolder(v);
+        AdvertisementListViewHolder clh = new AdvertisementListViewHolder(v, this.advertisementClickListener);
         return  clh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CourseListViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AdvertisementListViewHolder holder, int position) {
         Advertisement currentAdvertisement = advertisementList.get(position);
 
         holder.usernameTextView.setText(currentAdvertisement.getUsername());
