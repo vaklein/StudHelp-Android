@@ -4,12 +4,16 @@
     <string name="sing_up">Se créer un compte</string>
     <string name="login">Identifiant</string>
     <string name="password">Mot de passe</string>
+    <string name="previous_password">Mot de passe actuel</string>
+    <string name="new_password">Nouveau mot de passe</string>
     <string name="name">Nom complet</string>
     <string name="email">Email</string>
     <string name="confirm_password">Confirmez le mot de passe</string>
     <string name="signup">S\'inscrire</string>
     <string name="title_activity_course_list">CourseListActivity</string>
     <string name="add_advertisement_button">Create advertisement</string>
+    <string name="backup">Sauvegarder mes modifications</string>
+    <string name="edit_password">Modifier mon mot de passe</string>
 
     <!-- tests strings -->
 

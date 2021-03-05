@@ -44,6 +44,7 @@ public class AddAdvertisementActivity extends AppCompatActivity {
                 Intent advertisementList = new Intent(getApplicationContext(), AdvertisementsListActivity.class);
                 advertisementList.putExtra("ClickedCourse", course);
                 startActivity(advertisementList);
+                finish();
             }
         });
 

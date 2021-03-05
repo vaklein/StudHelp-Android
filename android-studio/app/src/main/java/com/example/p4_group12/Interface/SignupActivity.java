@@ -75,7 +75,7 @@ public class SignupActivity extends AppCompatActivity {
                 loginField.setErrorEnabled(false);
                 passwordField.setErrorEnabled(false);
                 confirmPasswordField.setErrorEnabled(false);
-                if (isCorrectlyFil() && isPasswordPowerfull() &&isPasswordConfirmed()) {
+                if (isCorrectlyFil() && isPasswordPowerfull() && isPasswordConfirmed()) {
                     new AsyncSignUp().execute(name.getText().toString(), email.getText().toString().toLowerCase(), login.getText().toString(), password.getText().toString());
                 }
             }

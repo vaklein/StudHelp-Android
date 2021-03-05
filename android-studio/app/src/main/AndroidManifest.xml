@@ -13,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.P4group12">
         <activity android:name=".Interface.AdvertisementsListActivity"
+            android:label="Liste des annonces"
             android:parentActivityName=".Interface.CourseListActivity" />
 
 
@@ -34,11 +35,12 @@
             android:label="@string/title_activity_course_list" />
         <activity
             android:name=".Interface.AddAdvertisementActivity"
-            android:label="NewAdvertisement"
-            android:parentActivityName=".Interface.AdvertisementsListActivity" />
+            android:label="Ajouter une annonce"
+            android:parentActivityName=".Interface.AdvertisementView" />
         <activity
             android:name=".Interface.AdvertisementView"
-            android:label="AdvertisementView" />
+            android:label="AdvertisementView"
+            android:parentActivityName=".Interface.AdvertisementView"/>
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" /> <!-- Required to use Apache library -->
@@ -53,6 +55,18 @@
             android:name=".Interface.SignupActivity"
             android:label="Inscription"
             android:parentActivityName=".Interface.LoginActivity"/>
+        <activity
+            android:name=".Interface.ProfilActivity"
+            android:label="Mon profil" />
+        <activity
+            android:name=".Interface.EditProfilActivity"
+            android:label="Modifier mon profil"
+            android:parentActivityName=".Interface.ProfilActivity"/>
+        <activity
+            android:name=".Interface.EditPasswordActivity"
+            android:label="Modifier mon mot de passe"
+            android:parentActivityName=".Interface.EditProfilActivity"/>
+
     </application>
 
 </manifest>

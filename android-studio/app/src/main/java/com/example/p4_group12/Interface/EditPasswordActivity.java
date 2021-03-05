@@ -1,0 +1,97 @@
+package com.example.p4_group12.Interface;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.p4_group12.R;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class EditPasswordActivity extends AppCompatActivity {
+
+    private Button edit_password;
+    private TextInputEditText previous_password;
+    private TextInputEditText new_password;
+    private TextInputEditText password_confirmation;
+    private TextInputLayout previous_passwordField;
+    private TextInputLayout new_passwordField;
+    private TextInputLayout password_confirmationField;
+    private static final String PASSWORD_STRENGTH = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[*@#$%!]).{8,40})";
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_edit_password);
+
+
+        edit_password = findViewById(R.id.backup);
+        previous_password = (TextInputEditText) findViewById(R.id.previous_password_text);
+        new_password = (TextInputEditText) findViewById(R.id.new_password_text);
+        password_confirmation = (TextInputEditText) findViewById(R.id.password_confirmation_text);
+        previous_passwordField = (TextInputLayout) findViewById(R.id.previous_password);
+        new_passwordField = (TextInputLayout) findViewById(R.id.new_password);
+        password_confirmationField = (TextInputLayout) findViewById(R.id.password_confirmation);
+
+
+        edit_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                previous_passwordField.setErrorEnabled(false);
+                new_passwordField.setErrorEnabled(false);
+                password_confirmationField.setErrorEnabled(false);
+                password_confirmationField.setErrorEnabled(false);
+                if (isCorrectlyFil() && isSameNewPassword() && isPasswordPowerfull()) {
+                    // TODO request to the DB
+                    Intent edit_profil = new Intent(getApplicationContext(), EditProfilActivity.class);
+                    startActivity(edit_profil);
+                    finish();
+                }
+
+            }
+        });
+
+    }
+    private boolean isCorrectlyFil() {
+        // tout doit être complèté
+        boolean filled = true;
+        if (previous_password.getText().toString().isEmpty()) {
+            filled = false;
+            previous_passwordField.setError("Champs obligatoire");
+        }
+        if (new_password.getText().toString().isEmpty()) {
+            filled = false;
+            new_passwordField.setError("Champs obligatoire");
+        }
+        if (password_confirmation.getText().toString().isEmpty()) {
+            filled = false;
+            password_confirmationField.setError("Champs obligatoire");
+        }
+        return filled;
+    }
+    private boolean isSameNewPassword() {
+        boolean same = true;
+        if (! new_password.getText().toString().equals(password_confirmation.getText().toString().isEmpty())){
+            same = false;
+            new_passwordField.setError("Les deux mots de passe doivent être identiques");
+            password_confirmationField.setError("Les deux mots de passe doivent être identiques");
+        }
+        return same;
+    }
+    private boolean isPasswordPowerfull(){
+        Pattern passwordPattern = Pattern.compile(PASSWORD_STRENGTH);
+        Matcher passwordMatcher = passwordPattern.matcher(new_password.getText().toString());
+        if (!passwordMatcher.matches()){
+            new_passwordField.setError("Votre mot de passe doit contenir au moins 8 caractères dont au moins : un chiffre, une majuscule, une minuscule et un caractère spéciale (@, #, !, ...)");
+            return false;
+        }
+        return true;
+    }
+}
