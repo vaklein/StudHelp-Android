@@ -20,7 +20,7 @@ public class ProfilActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profil);
+        setContentView(R.layout.activity_profile);
 
         edit = findViewById(R.id.edit);
         edit.setOnClickListener(new View.OnClickListener() {

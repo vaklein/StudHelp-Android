@@ -16,4 +16,7 @@
     <color name="medium_aquamarine"> #4CE0B3 </color>
     <color name="myrtic_green"> #377771 </color>
 
+    <color name="transparent"> #00FFFFFF </color>
+    <color name="colorRipple"> #dcf3ee </color>
+
 </resources>
