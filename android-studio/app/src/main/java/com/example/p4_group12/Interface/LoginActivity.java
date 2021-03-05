@@ -53,6 +53,10 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Intent edit_profil = new Intent(getApplicationContext(), ProfilActivity.class);
+        startActivity(edit_profil);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 

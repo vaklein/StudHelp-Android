@@ -22,7 +22,7 @@ public class ProfilActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        edit = findViewById(R.id.edit);
+        edit = findViewById(R.id.floating_action_button);
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
