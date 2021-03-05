@@ -1,6 +1,5 @@
 package com.example.p4_group12.Interface;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.p4_group12.R;
-import com.example.p4_group12.database.DatabaseContact;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -60,8 +58,8 @@ public class SignupActivity extends AppCompatActivity {
         password = (TextInputEditText) findViewById(R.id.password_text);
         confirmPassword = (TextInputEditText) findViewById(R.id.confirm_password_text);
         nameField = (TextInputLayout) findViewById(R.id.name);
-        emailField = (TextInputLayout) findViewById(R.id.email);
-        loginField = (TextInputLayout) findViewById(R.id.login);
+        emailField = (TextInputLayout) findViewById(R.id.user_profil_email);
+        loginField = (TextInputLayout) findViewById(R.id.user_profil_login);
         passwordField = (TextInputLayout) findViewById(R.id.password);
         confirmPasswordField = (TextInputLayout) findViewById(R.id.confirm_password);
 

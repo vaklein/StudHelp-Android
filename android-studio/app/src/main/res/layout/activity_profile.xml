@@ -77,14 +77,16 @@
                         android:layout_height="50dp"
                         android:src="@drawable/ic_baseline_login_24"
                         android:layout_centerVertical="true"/>
+
                     <TextView
+                        android:id="@+id/user_profil_login"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="username"
-                        android:singleLine="true"
-                        android:textSize="18sp"
+                        android:layout_centerVertical="true"
                         android:layout_toRightOf="@+id/login_icon"
-                        android:layout_centerVertical="true"/>
+                        android:singleLine="true"
+                        android:text="username"
+                        android:textSize="18sp" />
                 </RelativeLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -108,14 +110,16 @@
                         android:layout_height="50dp"
                         android:src="@drawable/ic_baseline_email_24"
                         android:layout_centerVertical="true"/>
+
                     <TextView
+                        android:id="@+id/user_profil_email"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="adresse@email.com"
-                        android:singleLine="true"
-                        android:textSize="18sp"
+                        android:layout_centerVertical="true"
                         android:layout_toRightOf="@+id/email_icon"
-                        android:layout_centerVertical="true"/>
+                        android:singleLine="true"
+                        android:text="adresse@email.com"
+                        android:textSize="18sp" />
                 </RelativeLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>

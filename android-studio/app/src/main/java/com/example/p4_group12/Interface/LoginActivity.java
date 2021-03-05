@@ -1,26 +1,15 @@
 package com.example.p4_group12.Interface;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.p4_group12.R;
-import com.example.p4_group12.database.DatabaseContact;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -53,9 +42,6 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
-        startActivity(edit_profil);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -167,10 +153,16 @@ public class LoginActivity extends AppCompatActivity {
                     loginField.setError("Identifiant/Mot de passe incorrect");
                     passwordField.setError("Identifiant/Mot de passe incorrect");
                 } else if (object.getBoolean("Logged")) {
-                    GlobalVariables.setUser(object.getString("email"));
+                    GlobalVariables.setEmail(object.getString("email"));
+                    GlobalVariables.setName(object.getString("name"));
+                    GlobalVariables.setLogin(login.getText().toString());
+                    //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
+                    //startActivity(edit_profil);
                     Intent intent = new Intent(LoginActivity.this, CourseListActivity.class);
                     startActivity(intent);
                     LoginActivity.this.finish();
+                }else{
+                    Toast.makeText(LoginActivity.this, "OOPs! Réessayer", Toast.LENGTH_LONG).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
