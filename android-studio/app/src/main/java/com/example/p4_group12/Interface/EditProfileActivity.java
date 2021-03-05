@@ -26,23 +26,14 @@ public class EditProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_profil);
+        setContentView(R.layout.activity_edit_profile);
 
-        edit_picture = findViewById(R.id.edit);
         edit_password = findViewById(R.id.edit_password);
         backup_profil = findViewById(R.id.backup);
         new_name = (TextInputEditText) findViewById(R.id.name_text);
         new_login = (TextInputEditText) findViewById(R.id.login_text);
         new_nameField = (TextInputLayout) findViewById(R.id.name);
         new_loginField = (TextInputLayout) findViewById(R.id.name);
-
-        edit_picture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO : laisser l'utilisateru rentrer dans ces photos pour changer la ppt
-            }
-        });
-
 
         edit_password.setOnClickListener(new View.OnClickListener() {
             @Override
