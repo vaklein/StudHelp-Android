@@ -34,7 +34,9 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="136dp"
-                android:text="Nom complet"
+                android:text="Nom complete"
+                android:maxWidth="250dp"
+                android:singleLine="true"
                 android:textColor="#fff"
                 android:textSize="24sp"
                 android:textStyle="bold" />
