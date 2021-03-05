@@ -185,13 +185,13 @@ public class SignupActivity extends AppCompatActivity {
                         loginField.setError("Identifiant déjà utilisé");
                     }else if (object.getString("error_msg").equals("EMAIL ALREADY EXISTS")) {
                         emailField.setError("Email déjà utilisé");
-                    }else{
-                        Toast.makeText(SignupActivity.this, "OOPs! Réessayer", Toast.LENGTH_LONG).show();
                     }
                 } else if (object.getBoolean("created")) {
                     Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
                     startActivity(intent);
                     SignupActivity.this.finish();
+                }else{
+                    Toast.makeText(SignupActivity.this, "OOPs! Réessayer", Toast.LENGTH_LONG).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
