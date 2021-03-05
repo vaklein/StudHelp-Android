@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Intent edit_profil = new Intent(getApplicationContext(), ProfilActivity.class);
+        Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
         startActivity(edit_profil);
 
         super.onCreate(savedInstanceState);

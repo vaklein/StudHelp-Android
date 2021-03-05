@@ -50,7 +50,7 @@ public class EditPasswordActivity extends AppCompatActivity {
                 password_confirmationField.setErrorEnabled(false);
                 if (isCorrectlyFil() && isSameNewPassword() && isPasswordPowerfull()) {
                     // TODO request to the DB
-                    Intent edit_profil = new Intent(getApplicationContext(), EditProfilActivity.class);
+                    Intent edit_profil = new Intent(getApplicationContext(), EditProfileActivity.class);
                     startActivity(edit_profil);
                     finish();
                 }

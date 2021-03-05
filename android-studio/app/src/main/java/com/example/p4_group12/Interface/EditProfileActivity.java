@@ -13,7 +13,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 
-public class EditProfilActivity extends AppCompatActivity {
+public class EditProfileActivity extends AppCompatActivity {
 
     private Button edit_password;
     private FloatingActionButton edit_picture;
@@ -63,7 +63,7 @@ public class EditProfilActivity extends AppCompatActivity {
                     //TODO  check if the new login isn't already took + set if not + set correct to false if already took
                 }
                 if (correct){
-                    Intent edit_pw = new Intent(getApplicationContext(), ProfilActivity.class);
+                    Intent edit_pw = new Intent(getApplicationContext(), ProfileActivity.class);
                     startActivity(edit_pw);
                     finish();
                 }

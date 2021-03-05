@@ -3,16 +3,13 @@ package com.example.p4_group12.Interface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.p4_group12.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 
-public class ProfilActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity {
 
     private FloatingActionButton edit;
 
@@ -26,7 +23,7 @@ public class ProfilActivity extends AppCompatActivity {
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent edit_profil = new Intent(getApplicationContext(), EditProfilActivity.class);
+                Intent edit_profil = new Intent(getApplicationContext(), EditProfileActivity.class);
                 startActivity(edit_profil);
             }
         });

@@ -56,16 +56,16 @@
             android:label="Inscription"
             android:parentActivityName=".Interface.LoginActivity"/>
         <activity
-            android:name=".Interface.ProfilActivity"
+            android:name=".Interface.ProfileActivity"
             android:label="Mon profil" />
         <activity
-            android:name=".Interface.EditProfilActivity"
+            android:name=".Interface.EditProfileActivity"
             android:label="Modifier mon profil"
-            android:parentActivityName=".Interface.ProfilActivity"/>
+            android:parentActivityName=".Interface.ProfileActivity"/>
         <activity
             android:name=".Interface.EditPasswordActivity"
             android:label="Modifier mon mot de passe"
-            android:parentActivityName=".Interface.EditProfilActivity"/>
+            android:parentActivityName=".Interface.EditProfileActivity"/>
 
     </application>
 
