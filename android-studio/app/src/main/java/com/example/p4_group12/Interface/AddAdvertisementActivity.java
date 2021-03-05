@@ -40,7 +40,7 @@ public class AddAdvertisementActivity extends AppCompatActivity {
             public void onClick(View view) {
                 course = (Course) getIntent().getSerializableExtra("CurrentCourse");
                 Log.v("Julius", Integer.toString(course.getID()));
-                DatabaseContact.insert_advertisement(course.getID(), advertisementTitleText.getText().toString(), advertisementDescriptionText.getText().toString(), GlobalVariables.getUser());
+                DatabaseContact.insert_advertisement(course.getID(), advertisementTitleText.getText().toString(), advertisementDescriptionText.getText().toString(), GlobalVariables.getEmail());
                 Intent advertisementList = new Intent(getApplicationContext(), AdvertisementsListActivity.class);
                 advertisementList.putExtra("ClickedCourse", course);
                 startActivity(advertisementList);
