@@ -156,10 +156,10 @@ public class LoginActivity extends AppCompatActivity {
                     GlobalVariables.setEmail(object.getString("email"));
                     GlobalVariables.setName(object.getString("name"));
                     GlobalVariables.setLogin(login.getText().toString());
-                    Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
-                    startActivity(edit_profil);
-                    //Intent intent = new Intent(LoginActivity.this, CourseListActivity.class);
-                    //startActivity(intent);
+                    //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
+                    //startActivity(edit_profil);
+                    Intent intent = new Intent(LoginActivity.this, CourseListActivity.class);
+                    startActivity(intent);
                     LoginActivity.this.finish();
                 }else{
                     Toast.makeText(LoginActivity.this, "OOPs! Réessayer", Toast.LENGTH_LONG).show();
