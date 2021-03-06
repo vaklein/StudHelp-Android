@@ -51,7 +51,7 @@ public class EditProfileActivity extends AppCompatActivity {
         new_name = (TextInputEditText) findViewById(R.id.name_text);
         new_login = (TextInputEditText) findViewById(R.id.login_text);
         new_nameField = (TextInputLayout) findViewById(R.id.name);
-        new_loginField = (TextInputLayout) findViewById(R.id.name);
+        new_loginField = (TextInputLayout) findViewById(R.id.login);
         loadingDialog = new LoadingDialog(this, "Modification en cours...");
 
 
@@ -69,24 +69,13 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 new_loginField.setErrorEnabled(false);
                 boolean correct = true;
-                if (! new_name.getText().toString().isEmpty()){
-                    //TODO set the new nam in the BDD
-                }
-                if (! new_login.getText().toString().isEmpty()){
-                    //TODO  check if the new login isn't already took + set if not + set correct to false if already took
-                }
-                if (correct){
-                    Intent edit_pw = new Intent(getApplicationContext(), ProfileActivity.class);
-                    startActivity(edit_pw);
-                    finish();
-                }
-                else {
-                    new_loginField.setError("Identifiant déjà prit");
+                if (!new_name.getText().toString().isEmpty() || !new_login.getText().toString().isEmpty()) {
+                    new AsyncLogin().execute(String.valueOf(GlobalVariables.getEmail()), new_name.getText().toString(),new_login.getText().toString());
                 }
             }
         });
     }
-    /*
+
     class AsyncLogin extends AsyncTask<String, Void, String> { // Il faut lancer un autre thread car une requete sur le main thread peut faire crasher l'app
 
         // a modifier en executor si on veut update l'app, asynctask deprecated
@@ -98,14 +87,15 @@ public class EditProfileActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             try {
-                URL url = new URL("https://db.valentinklein.eu:8182/connect.php");
+                URL url = new URL("https://db.valentinklein.eu:8182/update_login_and_name.php");
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");  //POST request
                 httpURLConnection.setDoOutput(true);
                 OutputStream OS = httpURLConnection.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
-                String data = URLEncoder.encode("login", "UTF-8") + "=" + URLEncoder.encode(params[0], "UTF-8") + "&" +
-                        URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(params[1], "UTF-8");//Build form answer
+                String data = URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(params[0], "UTF-8") + "&" +
+                        URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(params[1], "UTF-8") + "&" +
+                        URLEncoder.encode("login", "UTF-8") + "=" + URLEncoder.encode(params[2], "UTF-8");//Build form answer
                 bufferedWriter.write(data); //Send data
                 bufferedWriter.flush();
                 bufferedWriter.close();
@@ -137,25 +127,22 @@ public class EditProfileActivity extends AppCompatActivity {
                 JSONObject response = new JSONObject(result);
                 JSONObject object = response.getJSONObject("response");
                 if (object.getBoolean("error")) {
-                    loginField.setError("Identifiant/Mot de passe incorrect");
-                    passwordField.setError("Identifiant/Mot de passe incorrect");
-                } else if (object.getBoolean("Logged")) {
-                    GlobalVariables.setEmail(object.getString("email"));
-                    GlobalVariables.setName(object.getString("name"));
-                    GlobalVariables.setLogin(login.getText().toString());
+                    new_loginField.setError("Identifiant déjà utilisé");
+                }
+                else if (object.getBoolean("effet")) {
                     Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
+                    if (!new_name.getText().toString().isEmpty()) GlobalVariables.setName(new_name.getText().toString());
+                    if(!new_login.getText().toString().isEmpty()) GlobalVariables.setLogin(new_login.getText().toString());
                     startActivity(edit_profil);
-                    //Intent intent = new Intent(LoginActivity.this, CourseListActivity.class);
-                    //startActivity(intent);
-                    LoginActivity.this.finish();
+                    EditProfileActivity.this.finish();
                 }else{
-                    Toast.makeText(LoginActivity.this, "OOPs! Réessayer", Toast.LENGTH_LONG).show();
+                    if (!object.getBoolean("effetLogin") && ! object.getBoolean("effetName")) Toast.makeText(EditProfileActivity.this, "Une erreur est survenue, veuilliez réessayer", Toast.LENGTH_LONG).show();
+                    else if (! object.getBoolean("effetLogin")) Toast.makeText(EditProfileActivity.this, "Une erreur est survenue lors de la modification de votre identifiant, veuilliez réessayer", Toast.LENGTH_LONG).show();
+                    else Toast.makeText(EditProfileActivity.this, "Une erreur est survenue lors de la modification de votre nom, veuilliez réessayer", Toast.LENGTH_LONG).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     }
-
-     */
 }
