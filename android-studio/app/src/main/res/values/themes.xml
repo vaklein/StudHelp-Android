@@ -14,3 +14,7 @@
         <item name="colorSecondaryVariant"> @color/medium_aquamarine </item>
     </style>
 </resources>
+
+<!--
+https://github.com/material-components/material-components-android/blob/master/docs/getting-started.md
+-->

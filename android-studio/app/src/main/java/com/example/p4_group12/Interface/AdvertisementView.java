@@ -28,10 +28,6 @@ public class AdvertisementView extends AppCompatActivity {
         advertisementOwner = findViewById(R.id.advertisement_owner_view);
         advertisementDescription = findViewById(R.id.advertisement_description_view);
 
-        Log.v("Jules", "Titl" + String.valueOf(advertisementTitle == null));
-        Log.v("Jules", "Owne" + String.valueOf(advertisementOwner == null));
-        Log.v("Jules", "Desc" + String.valueOf(advertisementDescription == null));
-
         advertisementTitle.setText(currentAdvertisement.getTitle());
         advertisementOwner.setText(currentAdvertisement.getUsername());
         advertisementDescription.setText(currentAdvertisement.getDescription());

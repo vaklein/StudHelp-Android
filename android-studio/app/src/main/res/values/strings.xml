@@ -27,4 +27,7 @@
     <string name="advertisement_view_title_text">Ad title</string>
     <string name="advertisement_view_owner_text">Username</string>
     <string name="advertisement_view_description_text">Description</string>
+    <string name="advertisement_type_hint">Choose the type of your advertisement</string>
+    <string name="advertisement_description_hint">Description of your advertisement</string>
+    <string name="advertisement_title_hint">Title of your advertisement</string>
 </resources>
