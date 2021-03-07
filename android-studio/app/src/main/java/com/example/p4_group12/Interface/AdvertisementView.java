@@ -13,6 +13,7 @@ public class AdvertisementView extends AppCompatActivity {
     private TextView advertisementTitle;
     private TextView advertisementOwner;
     private TextView advertisementDescription;
+    private TextView advertisementType;
     private Advertisement currentAdvertisement;
 
     @Override
@@ -27,9 +28,11 @@ public class AdvertisementView extends AppCompatActivity {
         advertisementTitle = findViewById(R.id.advertisement_title_view);
         advertisementOwner = findViewById(R.id.advertisement_owner_view);
         advertisementDescription = findViewById(R.id.advertisement_description_view);
+        advertisementType = findViewById(R.id.advertisement_type_view);
 
         advertisementTitle.setText(currentAdvertisement.getTitle());
         advertisementOwner.setText(currentAdvertisement.getUsername());
         advertisementDescription.setText(currentAdvertisement.getDescription());
+        advertisementType.setText(currentAdvertisement.getType());
     }
 }

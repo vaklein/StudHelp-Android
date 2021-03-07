@@ -66,8 +66,9 @@ public class DatabaseContact {
 
     /**
      * Temporary version of the method
+     * TODO : Should use the new arguement type to insert the type into the database
      */
-    public static void insert_advertisement(int course_id,String title,String description,String user_email){
+    public static void insert_advertisement(int course_id,String title,String description,String user_email, String type){
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> { // Il faut lancer un autre thread car une requete sur le main thread peut faire crasher l'app
             @Override                                                       // a modifier en executor si on veut update l'app, asynctask deprecated
             protected String doInBackground(String... params) {
