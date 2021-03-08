@@ -6,7 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
+import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.R;
@@ -14,11 +17,13 @@ import com.example.p4_group12.Interface.adapter.CourseListAdapter;
 import com.example.p4_group12.database.GetObjectFromDB;
 
 import java.util.ArrayList;
+import java.util.TreeSet;
 
 public class CourseListActivity extends AppCompatActivity {
     private RecyclerView courseRecyclerView;
     private RecyclerView.LayoutManager courseLayoutManager;
     private CourseListAdapter courseListAdapter;
+    private SearchView searchView;
     private TextView mTextView;
 
     /**
@@ -49,7 +54,7 @@ public class CourseListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_course_list);
+        setContentView(R.layout.activity_search);
 
         // ArrayList<Course> test = DatabaseContact.get_courses(); Request to the server
         ArrayList<Course> courseList = new ArrayList<>();
@@ -62,6 +67,7 @@ public class CourseListActivity extends AppCompatActivity {
 
         // Building the recycler view
         courseRecyclerView = findViewById(R.id.courseRecyclerView);
+        searchView = findViewById(R.id.searchView);
         courseRecyclerView.setHasFixedSize(true);
         courseLayoutManager = new LinearLayoutManager(this);
         courseListAdapter = new CourseListAdapter(courseList);
@@ -71,15 +77,35 @@ public class CourseListActivity extends AppCompatActivity {
 
         query.getJSON("https://db.valentinklein.eu:8182/get_courses.php", courseListAdapter);
 
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if(true){
+                    courseListAdapter.getFilter().filter(query);
+                }else{
+                    Toast.makeText(CourseListActivity.this, "No Match found",Toast.LENGTH_LONG).show();
+                }
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                courseListAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+
+
         // Creating the onClickListener for the courses
         courseListAdapter.setCourseClickListener(new CourseListAdapter.OnCourseClickListener() {
             @Override
             public void OnCourseClick(int position) {
                 Course clickedCourse = courseList.get(position);
                 // Toast.makeText(getApplication().getBaseContext(), clickedCourse.getName(), Toast.LENGTH_LONG).show();
-                Intent advertismentsListAct = new Intent(getApplicationContext(), AdvertisementsListActivity.class);
-                advertismentsListAct.putExtra("ClickedCourse", clickedCourse);
-                startActivity(advertismentsListAct);
+                Intent advertisementsListAct = new Intent(getApplicationContext(), AdvertisementsListActivity.class);
+                advertisementsListAct.putExtra("ClickedCourse", clickedCourse);
+                startActivity(advertisementsListAct);
             }
         });
     }

@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 // Followed https://www.youtube.com/watch?v=17NbUcEts9c for the code and xml layout
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.CourseListViewHolder> {
 
     private ArrayList<Course> courseList;
+    final private ArrayList<Course> allCourses;
     private OnCourseClickListener courseClickListener;
 
     public interface OnCourseClickListener {
@@ -59,6 +62,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
     }
 
     public CourseListAdapter(ArrayList<Course> courseList){
+        this.allCourses = courseList;
         this.courseList = courseList;
     }
 
@@ -83,5 +87,36 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
     @Override
     public int getItemCount() {
         return courseList.size();
+    }
+
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                List<Course> filteredList = new ArrayList<>();
+                String queryString = constraint.toString().toLowerCase().trim();
+
+                if (queryString.isEmpty()) {
+                    filteredList.addAll(allCourses);
+                } else {
+                    for (Course course : allCourses) {
+                        if (course.getCode().toLowerCase().trim().contains(queryString) ||
+                                course.getName().toLowerCase().trim().contains(queryString) ||
+                                course.getTeacher().toLowerCase().trim().contains(queryString)) {
+                            filteredList.add(course);
+                        }
+                    }
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filteredList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                courseList = (ArrayList<Course>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 }
