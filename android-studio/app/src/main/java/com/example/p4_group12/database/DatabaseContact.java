@@ -7,6 +7,7 @@ import com.example.p4_group12.DAO.Course;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -66,7 +67,6 @@ public class DatabaseContact {
 
     /**
      * Temporary version of the method
-     * TODO : Should use the new arguement type to insert the type into the database
      */
     public static void insert_advertisement(int course_id,String title,String description,String user_email, String type){
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> { // Il faut lancer un autre thread car une requete sur le main thread peut faire crasher l'app
@@ -82,7 +82,8 @@ public class DatabaseContact {
                     String data = URLEncoder.encode("title", "UTF-8") + "=" + URLEncoder.encode(title, "UTF-8") + "&" +
                             URLEncoder.encode("description", "UTF-8") + "=" + URLEncoder.encode(description, "UTF-8") + "&" +
                             URLEncoder.encode("user_email", "UTF-8") + "=" + URLEncoder.encode(user_email, "UTF-8") + "&" +
-                            URLEncoder.encode("course_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(course_id), "UTF-8");//Build form answer
+                            URLEncoder.encode("course_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(course_id), "UTF-8") + "&" +
+                            URLEncoder.encode("type", "UTF-8") + "=" + URLEncoder.encode(type, "UTF-8");//Build form answer
                     Log.d("title",title);
                     Log.d("descr",description);
                     Log.d("email",user_email);
@@ -92,6 +93,17 @@ public class DatabaseContact {
                     bufferedWriter.close();
                     OS.close();
                     InputStream IS = httpURLConnection.getInputStream(); //DB answer
+
+                    // Used to print what the php script is printing
+                    /* ByteArrayOutputStream result = new ByteArrayOutputStream();
+                    byte[] buffer = new byte[500];
+                    int length;
+                    while ((length = IS.read(buffer)) != -1) {
+                        result.write(buffer, 0, length);
+                    }
+
+                    Log.d("Gwen", result.toString()); */
+
                     IS.close();
                     httpURLConnection.disconnect();
                 } catch (MalformedURLException e) {

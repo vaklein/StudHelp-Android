@@ -58,7 +58,7 @@ public class AddAdvertisementActivity extends AppCompatActivity {
                 if (isCorrectlyFilled()) {
                     course = (Course) getIntent().getSerializableExtra("CurrentCourse");
                     DatabaseContact.insert_advertisement(course.getID(), advertisementTitleText.getText().toString(),
-                            advertisementDescriptionText.getText().toString(), GlobalVariables.getEmail(), advertisementTypePickerTextView.getText().toString());
+                            formatFieldForSqlPostRequest(advertisementDescriptionText.getText().toString()), GlobalVariables.getEmail(), advertisementTypePickerTextView.getText().toString());
                     Intent advertisementList = new Intent(getApplicationContext(), AdvertisementsListActivity.class);
                     advertisementList.putExtra("ClickedCourse", course);
                     startActivity(advertisementList);
@@ -94,5 +94,10 @@ public class AddAdvertisementActivity extends AppCompatActivity {
             advertisementTypePicker.setErrorEnabled(false);
         }
         return filled;
+    }
+
+    private static String formatFieldForSqlPostRequest(String field){
+        // We might want to replace other char if we find other bugs
+        return field.replace("'", "''");
     }
 }

@@ -9,13 +9,12 @@ public class Advertisement  implements Serializable {
     private String description;
     private String type;
 
-    /* TODO : Add the type which is currently hardcoded */
-    public Advertisement(int ID, String mail, String title, String description) {
+    public Advertisement(int ID, String mail, String title, String description, String type) {
         this.ID = ID;
         this.mail = mail;
         this.title = title;
         this.description = description;
-        this.type = "Type";
+        this.type = type;
     }
 
     public int getID(){

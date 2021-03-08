@@ -17,7 +17,7 @@ public class GettableObjectFactory {
             return new Course(Integer.parseInt(dbObject.getString("ID")), dbObject.getString("CODE"), dbObject.getString("TEACHER"), dbObject.getString("NAME"), dbObject.getString("NAME"));
         }
         else if(objectClass.getCanonicalName().equals(Advertisement.class.getCanonicalName())){
-            return new Advertisement(Integer.parseInt(dbObject.getString("ID")), dbObject.getString("USER_EMAIL"), dbObject.getString("TITLE"), dbObject.getString("DESCRIPTION"));
+            return new Advertisement(Integer.parseInt(dbObject.getString("ID")), dbObject.getString("USER_EMAIL"), dbObject.getString("TITLE"), dbObject.getString("DESCRIPTION"), dbObject.getString("TYPE"));
         }
         else throw new NoSuchElementException();
     }
