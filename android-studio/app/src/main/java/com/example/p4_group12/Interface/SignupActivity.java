@@ -58,8 +58,8 @@ public class SignupActivity extends AppCompatActivity {
         password = (TextInputEditText) findViewById(R.id.password_text);
         confirmPassword = (TextInputEditText) findViewById(R.id.confirm_password_text);
         nameField = (TextInputLayout) findViewById(R.id.name);
-        emailField = (TextInputLayout) findViewById(R.id.user_profil_email);
-        loginField = (TextInputLayout) findViewById(R.id.user_profil_login);
+        emailField = (TextInputLayout) findViewById(R.id.email);
+        loginField = (TextInputLayout) findViewById(R.id.login);
         passwordField = (TextInputLayout) findViewById(R.id.password);
         confirmPasswordField = (TextInputLayout) findViewById(R.id.confirm_password);
 
