@@ -4,74 +4,86 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/advertisement_title"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:hint="@string/advertisement_title_hint"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="150dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/advertisement_title_text"
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            />
+            android:orientation="vertical"
+            android:layout_marginTop="30dp"
+            android:gravity="center_horizontal">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/advertisement_title"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:hint="@string/advertisement_title_hint">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/advertisement_description"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="25dp"
-        android:hint="@string/advertisement_description_hint"
-        app:layout_constraintTop_toBottomOf="@+id/advertisement_title"
-        >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/advertisement_title_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/advertisement_description_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/advertisement_description"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:hint="@string/advertisement_description_hint">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/advertisement_type_picker"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/advertisement_type_hint"
-        android:layout_margin="25dp"
-        app:layout_constraintTop_toBottomOf="@+id/advertisement_description">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/advertisement_description_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:lines="5"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="top"
+                    />
 
-        <AutoCompleteTextView
-            android:id="@+id/advertisement_type_picker_textview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:editable="false"
-            android:inputType="none"
-            />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/advertisement_type_picker"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/advertisement_type_hint"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp">
 
-    <Button
-        android:id="@+id/add_advertisement_button"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_advertisement_button"
-        android:layout_margin="25dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/advertisement_type_picker" />
+                <AutoCompleteTextView
+                    android:id="@+id/advertisement_type_picker_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    android:inputType="none"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/add_advertisement_button"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_advertisement_button"
+                android:layout_marginTop="25dp" />
+        </LinearLayout>
+    </RelativeLayout>
+
 
 
 
