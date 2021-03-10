@@ -14,9 +14,11 @@ import android.widget.Toast;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.R;
 import com.example.p4_group12.Interface.adapter.CourseListAdapter;
+import com.example.p4_group12.database.DatabaseContact;
 import com.example.p4_group12.database.GetObjectFromDB;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.TreeSet;
 
 public class CourseListActivity extends AppCompatActivity {
@@ -33,8 +35,8 @@ public class CourseListActivity extends AppCompatActivity {
 
         // ArrayList<Course> test = DatabaseContact.get_courses(); Request to the server
         ArrayList<Course> courseList = new ArrayList<>();
-        GetObjectFromDB query = new GetObjectFromDB(courseList, Course.class);
-
+        HashSet<Integer> favoritesID = new HashSet<>();
+        GetObjectFromDB courseQuery = new GetObjectFromDB(courseList, Course.class);
 
         mTextView = (TextView) findViewById(R.id.text);
 
@@ -45,13 +47,13 @@ public class CourseListActivity extends AppCompatActivity {
         searchView = findViewById(R.id.searchView);
         courseRecyclerView.setHasFixedSize(true);
         courseLayoutManager = new LinearLayoutManager(this);
-        courseListAdapter = new CourseListAdapter(courseList);
+        courseListAdapter = new CourseListAdapter(courseList, favoritesID);
 
         courseRecyclerView.setLayoutManager(courseLayoutManager);
         courseRecyclerView.setAdapter(courseListAdapter);
 
-        query.getJSON("https://db.valentinklein.eu:8182/get_courses.php", courseListAdapter);
-
+        courseQuery.getJSON("https://db.valentinklein.eu:8182/get_courses.php", courseListAdapter);
+        DatabaseContact.getUserFavoriteCourseIds(GlobalVariables.getEmail(), favoritesID, courseListAdapter);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

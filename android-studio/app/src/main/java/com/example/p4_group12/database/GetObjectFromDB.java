@@ -39,7 +39,7 @@ public class GetObjectFromDB {
 
     /**
      * urlWebService : url to the PHP file that computes the query inside the database
-     * courseListAdapter : courseListAdapter object. Used to notify the adapter to update the course list when we get a response from the DB
+     * adapter : adapter object. Used to notify the adapter to update the course list when we get a response from the DB
      * **/
     public void getJSON(final String urlWebService, RecyclerView.Adapter adapter) {
 
@@ -87,6 +87,7 @@ public class GetObjectFromDB {
                     while ((json = bufferedReader.readLine()) != null) {
                         sb.append(json + "\n");
                     }
+                    bufferedReader.close();
                     return sb.toString().trim();
                 } catch (Exception e) {
                     return null;
