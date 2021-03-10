@@ -80,7 +80,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         Course currentCourse = courseList.get(position);
 
         holder.codeTextView.setText(currentCourse.getCode());
-        holder.courseNameTextView.setText(currentCourse.getName());
+        holder.courseNameTextView.setText(currentCourse.getName().length() <= 25 ? currentCourse.getName() : currentCourse.getName().substring(0,25)+"..."); // avoiding that the name is too long. Hardcoded 25 but can be changed
         holder.teacherTextView.setText(currentCourse.getTeacher());
     }
 
