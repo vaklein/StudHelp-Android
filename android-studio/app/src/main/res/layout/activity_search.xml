@@ -1,35 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerLayout"
+    tools:openDrawer="start"
+    android:fitsSystemWindows="true">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/courseRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="4dp"
-        android:scrollbars="vertical"
-        android:layout_below="@+id/searchView"
-        />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true">
 
-    <!--
-    Inspired by :
-    https://www.tutorialspoint.com/how-to-use-searchview-in-android
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/listView"
-        android:divider="@color/light_salmon"
-        android:dividerHeight="5dp"
-        android:layout_below="@+id/searchView"/>-->
-    <SearchView
-        android:id="@+id/searchView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:layout_margin="15dp"
-        android:queryHint="Search a course code..."
-        android:iconifiedByDefault="false"
-        android:layout_alignParentTop="true"/>
-</RelativeLayout>
+            <include
+                layout="@layout/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <!-- Screen content -->
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/courseRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="4dp"
+                android:scrollbars="vertical"
+                android:layout_below="@+id/searchView"
+                />
+
+
+            <!--
+            Inspired by :
+            https://www.tutorialspoint.com/how-to-use-searchview-in-android
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/listView"
+                android:divider="@color/light_salmon"
+                android:dividerHeight="5dp"
+                android:layout_below="@+id/searchView"/>-->
+            <SearchView
+                android:id="@+id/searchView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:layout_margin="15dp"
+                android:queryHint="Search a course code..."
+                android:iconifiedByDefault="false"
+
+                android:layout_below="@+id/appbarlayout"/>
+        </RelativeLayout>
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navigation"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:menu="@menu/navigation_drawer"
+            android:fitsSystemWindows="true"
+            />
+
+</androidx.drawerlayout.widget.DrawerLayout>
+
+
+
