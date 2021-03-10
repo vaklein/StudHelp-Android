@@ -12,6 +12,8 @@
         <item name="colorSecondary"> @color/myrtic_green </item>
         <item name="colorOnSecondary"> @color/light_salmon </item>
         <item name="colorSecondaryVariant"> @color/medium_aquamarine </item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 </resources>
 

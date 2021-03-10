@@ -2,11 +2,16 @@ package com.example.p4_group12.Interface;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
+import android.view.MenuItem;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,21 +20,34 @@ import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.R;
 import com.example.p4_group12.Interface.adapter.CourseListAdapter;
 import com.example.p4_group12.database.GetObjectFromDB;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
-import java.util.TreeSet;
 
-public class CourseListActivity extends AppCompatActivity {
+public class CourseListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private RecyclerView courseRecyclerView;
     private RecyclerView.LayoutManager courseLayoutManager;
     private CourseListAdapter courseListAdapter;
     private SearchView searchView;
     private TextView mTextView;
+    private MaterialToolbar toolbar;
+    private NavigationView navigationView;
+    private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        toolbar =  findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        this.drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView = findViewById(R.id.navigation);
+        navigationView.setNavigationItemSelectedListener(this);
 
         // ArrayList<Course> test = DatabaseContact.get_courses(); Request to the server
         ArrayList<Course> courseList = new ArrayList<>();
@@ -83,5 +101,30 @@ public class CourseListActivity extends AppCompatActivity {
                 startActivity(advertisementsListAct);
             }
         });
+
+
+
+    }
+
+    //redirige l'utilisateur en fonction du bouton de menu
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id=item.getItemId();
+        switch (id){
+            case R.id.nav_profil :
+                Intent intentprofile= new Intent(getApplicationContext(),ProfileActivity.class);
+                startActivity(intentprofile);
+                break;
+            case R.id.nav_menu:
+                break;
+            case R.id.nav_courses:
+                Intent intentcourses= new Intent(getApplicationContext(),CourseListActivity.class);
+                startActivity(intentcourses);
+                break;
+            default:
+                break;
+        }
+        this.drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 }

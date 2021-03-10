@@ -14,6 +14,9 @@
     <string name="add_advertisement_button">Create advertisement</string>
     <string name="backup">Sauvegarder mes modifications</string>
     <string name="edit_password">Modifier mon mot de passe</string>
+    <string name="profil">Profil</string>
+    <string name="menu">Menu</string>
+    <string name="courses">Cours</string>
 
     <!-- tests strings -->
 
@@ -31,4 +34,9 @@
     <string name="advertisement_description_hint">Description of your advertisement</string>
     <string name="advertisement_title_hint">Title of your advertisement</string>
     <string name="advertisement_type_view">Advertisement type</string>
+
+    <!-- Used in NavigationDrawer -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
 </resources>
