@@ -63,5 +63,7 @@ public class NavigationActivity extends AppCompatActivity{
         actionBarDrawerToggle.syncState();
     }
 
-
+    public void setTitleToolbar(String s){
+        toolbar.setTitle(s);
+    }
 }

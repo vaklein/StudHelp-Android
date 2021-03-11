@@ -45,6 +45,7 @@ public class CourseListActivity extends NavigationActivity{
         // Use this to set the correct layout instead of setContentView cfr NavigationActivity/drawer_layout
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_search, contentFrameLayout);
+        setTitleToolbar("Cours");
 
 
         // ArrayList<Course> test = DatabaseContact.get_courses(); Request to the server
