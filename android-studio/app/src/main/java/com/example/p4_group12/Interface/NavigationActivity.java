@@ -25,7 +25,7 @@ public class NavigationActivity extends AppCompatActivity{
         setContentView(R.layout.drawer_layout);
 
         toolbar = findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar); //mis en commentaire car fait crasher l'app - Gwendal 10-03
+        //setSupportActionBar(toolbar); //mis en commentaire car fait crasher l'app - Gwendal 10-03, je n'arrive pas a recreer le bug Lucas
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);

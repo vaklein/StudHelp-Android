@@ -16,6 +16,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import java.io.BufferedWriter;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 import android.util.Log;
 import android.widget.Toast;
 
-public class AdvertisementsListActivity extends AppCompatActivity {
+public class AdvertisementsListActivity extends NavigationActivity {
     private RecyclerView advertisementRecyclerView;
     private RecyclerView.LayoutManager advertisementLayoutManager;
     private AdvertisementListAdapter advertisementListAdapter;
@@ -51,7 +52,9 @@ public class AdvertisementsListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_advertisments_list);
+        // Use this to set the correct layout instead of setContentView cfr NavigationActivity/drawer_layout
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); //Remember this is the FrameLayout area within your activity_main.xml
+        getLayoutInflater().inflate(R.layout.activity_advertisments_list, contentFrameLayout);
 
         ArrayList<Advertisement> advertisementsList = new ArrayList<Advertisement>();
         GetObjectFromDB query = new GetObjectFromDB(advertisementsList, Advertisement .class);

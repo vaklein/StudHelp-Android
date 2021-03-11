@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +31,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 
-public class EditProfileActivity extends AppCompatActivity {
+public class EditProfileActivity extends NavigationActivity {
 
     private Button edit_password;
     private FloatingActionButton edit_picture;
@@ -44,7 +45,9 @@ public class EditProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_profile);
+        // Use this to set the correct layout instead of setContentView cfr NavigationActivity/drawer_layout
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); //Remember this is the FrameLayout area within your activity_main.xml
+        getLayoutInflater().inflate(R.layout.activity_edit_profile, contentFrameLayout);
 
         edit_password = findViewById(R.id.edit_password);
         backup_profil = findViewById(R.id.backup);

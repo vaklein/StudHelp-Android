@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +28,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends NavigationActivity {
 
     private FloatingActionButton edit;
     private TextView name;
@@ -39,7 +40,10 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        // Use this to set the correct layout instead of setContentView cfr NavigationActivity/drawer_layout
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); //Remember this is the FrameLayout area within your activity_main.xml
+        getLayoutInflater().inflate(R.layout.activity_profile, contentFrameLayout);
+
         name = (TextView) findViewById(R.id.user_profile_name);
         login = (TextView) findViewById(R.id.user_profil_login);
         email = (TextView) findViewById(R.id.user_profil_email);

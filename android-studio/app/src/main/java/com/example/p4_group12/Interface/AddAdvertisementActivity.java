@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.FrameLayout;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.p4_group12.DAO.Course;
@@ -18,7 +20,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.ArrayList;
 
 
-public class AddAdvertisementActivity extends AppCompatActivity {
+public class AddAdvertisementActivity extends NavigationActivity {
     private TextInputEditText advertisementTitleText;
     private TextInputEditText advertisementDescriptionText;
     private TextInputLayout advertisementTitle;
@@ -34,7 +36,9 @@ public class AddAdvertisementActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_advertisement);
+        // Use this to set the correct layout instead of setContentView cfr NavigationActivity/drawer_layout
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); //Remember this is the FrameLayout area within your activity_main.xml
+        getLayoutInflater().inflate(R.layout.activity_add_advertisement, contentFrameLayout);
 
         advertisementTitle = findViewById(R.id.advertisement_title);
         advertisementDescription = findViewById(R.id.advertisement_description);
