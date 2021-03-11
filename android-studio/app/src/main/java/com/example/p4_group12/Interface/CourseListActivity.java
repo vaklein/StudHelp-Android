@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.TreeSet;
 
-public class CourseListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class CourseListActivity extends NavigationActivity{
     private RecyclerView courseRecyclerView;
     private RecyclerView.LayoutManager courseLayoutManager;
     private CourseListAdapter courseListAdapter;
@@ -41,16 +42,10 @@ public class CourseListActivity extends AppCompatActivity implements NavigationV
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        // Use this to set the correct layout instead of setContentView cfr NavigationActivity/drawer_layout
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); //Remember this is the FrameLayout area within your activity_main.xml
+        getLayoutInflater().inflate(R.layout.activity_search, contentFrameLayout);
 
-        toolbar =  findViewById(R.id.toolbar);
-        // setSupportActionBar(toolbar); mis en commentaire car fait crasher l'app - Gwendal 10-03
-        this.drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-        navigationView = findViewById(R.id.navigation);
-        navigationView.setNavigationItemSelectedListener(this);
 
         // ArrayList<Course> test = DatabaseContact.get_courses(); Request to the server
         ArrayList<Course> courseList = new ArrayList<>();
@@ -107,27 +102,5 @@ public class CourseListActivity extends AppCompatActivity implements NavigationV
 
 
 
-    }
-
-    //redirige l'utilisateur en fonction du bouton de menu
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id=item.getItemId();
-        switch (id){
-            case R.id.nav_profil :
-                Intent intentprofile= new Intent(getApplicationContext(),ProfileActivity.class);
-                startActivity(intentprofile);
-                break;
-            case R.id.nav_menu:
-                break;
-            case R.id.nav_courses:
-                Intent intentcourses= new Intent(getApplicationContext(),CourseListActivity.class);
-                startActivity(intentcourses);
-                break;
-            default:
-                break;
-        }
-        this.drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
     }
 }

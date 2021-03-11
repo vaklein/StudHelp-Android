@@ -15,7 +15,7 @@
     <string name="backup">Sauvegarder mes modifications</string>
     <string name="edit_password">Modifier mon mot de passe</string>
     <string name="profil">Profil</string>
-    <string name="menu">Menu</string>
+    <string name="favorites">Mes Cours favoris</string>
     <string name="courses">Cours</string>
 
     <!-- tests strings -->

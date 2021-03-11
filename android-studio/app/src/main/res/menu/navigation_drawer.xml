@@ -9,12 +9,12 @@
             android:title="@string/profil"
              />
         <item
-            android:id="@+id/nav_menu"
-
-            android:title="@string/menu" />
-        <item
             android:id="@+id/nav_courses"
 
             android:title="@string/courses" />
+        <item
+            android:id="@+id/nav_favoris"
+
+            android:title="@string/favorites" />
     </group>
 </menu>
