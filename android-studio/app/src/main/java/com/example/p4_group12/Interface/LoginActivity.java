@@ -159,6 +159,7 @@ public class LoginActivity extends AppCompatActivity {
                     //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
                     //startActivity(edit_profil);
                     Intent intent = new Intent(LoginActivity.this, CourseListActivity.class);
+                    intent.putExtra("FavList", false);
                     startActivity(intent);
                     LoginActivity.this.finish();
                 }else{

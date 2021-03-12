@@ -17,6 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 /**
  * This class is used to do GET queries inside the database in order to show them inside a recycler view
@@ -29,8 +30,7 @@ public class GetObjectFromDB {
 
     /**
      *
-     * @param gettableObjectArrayList : ArrayList of Course object. It must be the same passed as an argument into the recyclerView
-     * @param objectClass : The class of the object that we are trying to get with the query
+
      */
     public GetObjectFromDB(ArrayList gettableObjectArrayList, Class objectClass){
         this.gettableObjectArrayList = gettableObjectArrayList;
@@ -38,13 +38,14 @@ public class GetObjectFromDB {
     }
 
     /**
-     * urlWebService : url to the PHP file that computes the query inside the database
-     * adapter : adapter object. Used to notify the adapter to update the course list when we get a response from the DB
+     * query made in a synchronous way
+     * @param urlWebService : url to the PHP file that computes the query inside the database
+     * @param gettableObjectArrayList : ArrayList of Course object. It must be the same passed as an argument into the recyclerView
+     * @param objectClass : The class of the object that we are trying to get with the query (this object needs to be defined in GettableObjectFactory)
      * **/
-    public void getJSON(final String urlWebService, RecyclerView.Adapter adapter) {
+    public static void getJSON(final String urlWebService, ArrayList gettableObjectArrayList, Class objectClass) {
 
         class GetJSON extends AsyncTask<Void, Void, String> {
-
 
             @Override
             protected void onPreExecute() {
@@ -55,25 +56,6 @@ public class GetObjectFromDB {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-
-                try {
-                    loadIntoArrayList(s);
-                    adapter.notifyDataSetChanged();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    Log.v("Gwen","instantiation Exception");
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    Log.v("Gwen","Invocation Exception");
-                    e.printStackTrace();
-                } catch (NoSuchMethodException e) {
-                    Log.v("Gwen","no such elem Exception");
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    Log.v("Gwen","illegal access Exception");
-                    e.printStackTrace();
-                }
             }
 
             @Override
@@ -95,18 +77,39 @@ public class GetObjectFromDB {
             }
         }
         GetJSON getJSON = new GetJSON();
-        getJSON.execute();
+        try {
+            loadIntoArrayList(getJSON.execute().get(), gettableObjectArrayList, objectClass);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d("Gwen", "Json exception");
+        } catch (InstantiationException e) {
+            Log.d("Gwen","instantiation Exception");
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            Log.d("Gwen","Invocation Exception");
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            Log.d("Gwen","no such elem Exception");
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            Log.d("Gwen","illegal access Exception");
+            e.printStackTrace();
+        }
     }
 
     /**
      * Here we get the JSON given by the DB and we get the courses from it in order to add them into the course list
      */
-    private void loadIntoArrayList(String json) throws JSONException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    private static void loadIntoArrayList(String json, ArrayList gettableObjectArrayList, Class objectClass) throws JSONException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         JSONArray jsonArray = new JSONArray(json);
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject obj = jsonArray.getJSONObject(i);
-            // Log.v("Gwen", obj.toString());
-            gettableObjectArrayList.add(GettableObjectFactory.getObject(obj, this.objectClass)); // Careful, check if the class has been added inside the factory method
+            Log.d("Gwen", obj.toString());
+            gettableObjectArrayList.add(GettableObjectFactory.getObject(obj, objectClass)); // Careful, check if the class has been added inside the factory method
         }
     }
 }

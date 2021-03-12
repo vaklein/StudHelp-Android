@@ -11,9 +11,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.SearchView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +38,7 @@ public class CourseListActivity extends NavigationActivity{
     private CourseListAdapter courseListAdapter;
     private SearchView searchView;
     private TextView mTextView;
+    private Switch favoriteSwitch;
     private MaterialToolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
@@ -51,24 +55,27 @@ public class CourseListActivity extends NavigationActivity{
         // ArrayList<Course> test = DatabaseContact.get_courses(); Request to the server
         ArrayList<Course> courseList = new ArrayList<>();
         HashSet<Integer> favoritesID = new HashSet<>();
-        GetObjectFromDB courseQuery = new GetObjectFromDB(courseList, Course.class);
 
         mTextView = (TextView) findViewById(R.id.text);
 
-
+        // Doing all the synchronous queries
+        GetObjectFromDB.getJSON("https://db.valentinklein.eu:8182/get_courses.php", courseList, Course.class); // getting all the courses
 
         // Building the recycler view
         courseRecyclerView = findViewById(R.id.courseRecyclerView);
         searchView = findViewById(R.id.searchView);
+        favoriteSwitch = findViewById(R.id.show_fav_switch);
+        courseListAdapter = new CourseListAdapter(courseList, favoritesID);
         courseRecyclerView.setHasFixedSize(true);
         courseLayoutManager = new LinearLayoutManager(this);
-        courseListAdapter = new CourseListAdapter(courseList, favoritesID);
 
         courseRecyclerView.setLayoutManager(courseLayoutManager);
+
         courseRecyclerView.setAdapter(courseListAdapter);
 
-        courseQuery.getJSON("https://db.valentinklein.eu:8182/get_courses.php", courseListAdapter);
+        // Getting the favorite course list of the user
         DatabaseContact.getUserFavoriteCourseIds(GlobalVariables.getEmail(), favoritesID, courseListAdapter);
+
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -84,6 +91,14 @@ public class CourseListActivity extends NavigationActivity{
             public boolean onQueryTextChange(String newText) {
                 courseListAdapter.getFilter().filter(newText);
                 return false;
+            }
+        });
+
+        favoriteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean activated) {
+                if(activated) courseListAdapter.favoriteFilter();
+                else courseListAdapter.resetFavoriteFilter();
             }
         });
 

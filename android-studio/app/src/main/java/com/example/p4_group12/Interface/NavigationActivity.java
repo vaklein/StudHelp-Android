@@ -41,7 +41,7 @@ public class NavigationActivity extends AppCompatActivity{
                         Intent intentprofile = new Intent(getApplicationContext(), ProfileActivity.class);
                         startActivity(intentprofile);
                         break;
-                    case R.id.nav_favoris:
+                    case R.id.nav_favoris: // Surement à remove vu qu'on affiche les favoris dans la courseListActivity avec un switch
                         break;
                     case R.id.nav_courses:
                         Intent intentcourses = new Intent(getApplicationContext(), CourseListActivity.class);

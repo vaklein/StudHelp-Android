@@ -65,6 +65,8 @@ public class AdvertisementsListActivity extends NavigationActivity {
         setTitle(currentCourse.getName());
 
 
+        // doing the query
+        GetObjectFromDB.getJSON("https://db.valentinklein.eu:8182/get_course_advertisment.php?courseID="+Integer.toString(currentCourse.getID()), advertisementsList, Advertisement.class);
 
         mTextView = (TextView) findViewById(R.id.text);
 
@@ -77,8 +79,6 @@ public class AdvertisementsListActivity extends NavigationActivity {
         advertisementRecyclerView.setLayoutManager(advertisementLayoutManager);
         advertisementRecyclerView.setAdapter(advertisementListAdapter);
 
-        // Setting the query
-        query.getJSON("https://db.valentinklein.eu:8182/get_course_advertisment.php?courseID="+Integer.toString(currentCourse.getID()), advertisementListAdapter);
 
         newAdvertisementButton = findViewById(R.id.new_advertisement_button);
         newAdvertisementButton.setOnClickListener(new View.OnClickListener() {
