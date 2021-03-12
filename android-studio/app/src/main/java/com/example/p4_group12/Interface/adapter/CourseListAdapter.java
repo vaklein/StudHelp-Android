@@ -70,7 +70,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
     }
 
     public CourseListAdapter(ArrayList<Course> courseList, HashSet<Integer> favoritesID){
-        this.allCourses = courseList;
+        this.allCourses = new ArrayList<>(courseList);
         this.courseList = courseList;
         this.favoritesID = favoritesID;
     }
@@ -146,5 +146,20 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
                 notifyDataSetChanged();
             }
         };
+    }
+
+
+
+    public void favoriteFilter(){
+        courseList.removeIf((Course course) -> !favoritesID.contains(course.getID()));
+        this.notifyDataSetChanged();
+    }
+
+    public void resetFavoriteFilter(){
+        courseList = new ArrayList<>(allCourses.size());
+        for(int i=0; i<allCourses.size(); i++){
+            courseList.add(allCourses.get(i));
+        }
+        this.notifyDataSetChanged();
     }
 }
