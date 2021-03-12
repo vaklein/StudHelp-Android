@@ -52,7 +52,9 @@ public class EditProfileActivity extends NavigationActivity {
         edit_password = findViewById(R.id.edit_password);
         backup_profil = findViewById(R.id.backup);
         new_name = (TextInputEditText) findViewById(R.id.name_text);
+        new_name.setText(GlobalVariables.getName());
         new_login = (TextInputEditText) findViewById(R.id.login_text);
+        new_login.setText(GlobalVariables.getLogin());
         new_nameField = (TextInputLayout) findViewById(R.id.name);
         new_loginField = (TextInputLayout) findViewById(R.id.login);
         loadingDialog = new LoadingDialog(this, "Modification en cours...");
