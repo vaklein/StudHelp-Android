@@ -18,8 +18,8 @@
                 android:id="@+id/courseRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="634dp"
-                android:layout_below="@+id/searchView"
-                android:layout_marginTop="35dp"
+                android:layout_below="@+id/show_fav_switch"
+                android:layout_marginTop="5dp"
                 android:padding="4dp"
                 android:scrollbars="vertical" />
 
@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:layout_margin="15dp"
-                android:queryHint="Search a course code..."
+                android:queryHint="Course code or name, teacher, ..."
                 android:iconifiedByDefault="false"
 
                 />
@@ -52,8 +52,8 @@
                 android:layout_below="@+id/searchView"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="1dp"
-                android:layout_marginEnd="10dp"
-                android:text="Favorites"
+                android:layout_marginEnd="15dp"
+                android:text="@string/favorites_switch_text"
                 android:thumbTint="@color/myrtic_green"
                 android:trackTint="@color/myrtic_green"/>
         </RelativeLayout>
