@@ -156,12 +156,8 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
     }
 
     public void resetFavoriteFilter(){
-        courseList = new ArrayList<>(allCourses);
-        /*
-        courseList = new ArrayList<>(allCourses.size());
-        for(int i=0; i<allCourses.size(); i++){
-            courseList.add(allCourses.get(i));
-        }*/
+        courseList.clear();
+        for(Course course:allCourses) courseList.add(course);
         this.notifyDataSetChanged();
     }
 }

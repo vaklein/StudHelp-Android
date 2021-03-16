@@ -101,7 +101,7 @@ public class CourseListActivity extends NavigationActivity{
                 if(activated) courseListAdapter.favoriteFilter();
                 else courseListAdapter.resetFavoriteFilter();//courseListAdapter.getFilter().filter(searchView.getQuery());
 
-                courseList = courseListAdapter.courseList;
+                // courseList = courseListAdapter.courseList;
             }
         });
 
