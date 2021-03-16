@@ -42,6 +42,7 @@ public class CourseListActivity extends NavigationActivity{
     private MaterialToolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
+    ArrayList<Course> courseList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,6 @@ public class CourseListActivity extends NavigationActivity{
 
 
         // ArrayList<Course> test = DatabaseContact.get_courses(); Request to the server
-        ArrayList<Course> courseList = new ArrayList<>();
         HashSet<Integer> favoritesID = new HashSet<>();
 
         mTextView = (TextView) findViewById(R.id.text);
@@ -97,8 +97,11 @@ public class CourseListActivity extends NavigationActivity{
         favoriteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean activated) {
+                Log.v("Jules", searchView.getQuery().toString());
                 if(activated) courseListAdapter.favoriteFilter();
-                else courseListAdapter.resetFavoriteFilter();
+                else courseListAdapter.resetFavoriteFilter();//courseListAdapter.getFilter().filter(searchView.getQuery());
+
+                courseList = courseListAdapter.courseList;
             }
         });
 
@@ -108,6 +111,7 @@ public class CourseListActivity extends NavigationActivity{
         courseListAdapter.setCourseClickListener(new CourseListAdapter.OnCourseClickListener() {
             @Override
             public void OnCourseClick(int position) {
+                Log.v("Jules", courseList.toString());
                 Course clickedCourse = courseList.get(position);
                 // Toast.makeText(getApplication().getBaseContext(), clickedCourse.getName(), Toast.LENGTH_LONG).show();
                 Intent advertisementsListAct = new Intent(getApplicationContext(), AdvertisementsListActivity.class);

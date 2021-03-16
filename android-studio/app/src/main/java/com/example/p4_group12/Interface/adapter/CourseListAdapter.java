@@ -26,7 +26,7 @@ import java.util.List;
 // Followed https://www.youtube.com/watch?v=bhhs4bwYyhc for the onClickListeners
 public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.CourseListViewHolder> {
 
-    private ArrayList<Course> courseList;
+    public ArrayList<Course> courseList;
     final private ArrayList<Course> allCourses;
     private OnCourseClickListener courseClickListener;
     private HashSet<Integer> favoritesID;
@@ -156,10 +156,12 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
     }
 
     public void resetFavoriteFilter(){
+        courseList = new ArrayList<>(allCourses);
+        /*
         courseList = new ArrayList<>(allCourses.size());
         for(int i=0; i<allCourses.size(); i++){
             courseList.add(allCourses.get(i));
-        }
+        }*/
         this.notifyDataSetChanged();
     }
 }
