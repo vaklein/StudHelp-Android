@@ -48,7 +48,7 @@ public class EditProfileActivity extends NavigationActivity {
         // Use this to set the correct layout instead of setContentView cfr NavigationActivity/drawer_layout
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); //Remember this is the FrameLayout area within your activity_main.xml
         getLayoutInflater().inflate(R.layout.activity_edit_profile, contentFrameLayout);
-
+        setTitleToolbar("Profil");
         edit_password = findViewById(R.id.edit_password);
         backup_profil = findViewById(R.id.backup);
         new_name = (TextInputEditText) findViewById(R.id.name_text);

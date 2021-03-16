@@ -39,7 +39,8 @@ public class AddAdvertisementActivity extends NavigationActivity {
         // Use this to set the correct layout instead of setContentView cfr NavigationActivity/drawer_layout
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); //Remember this is the FrameLayout area within your activity_main.xml
         getLayoutInflater().inflate(R.layout.activity_add_advertisement, contentFrameLayout);
-
+        course = (Course) getIntent().getSerializableExtra("CurrentCourse");
+        setTitleToolbar(course.getName());
         advertisementTitle = findViewById(R.id.advertisement_title);
         advertisementDescription = findViewById(R.id.advertisement_description);
         advertisementTitleText = findViewById(R.id.advertisement_title_text);
@@ -60,7 +61,6 @@ public class AddAdvertisementActivity extends NavigationActivity {
             public void onClick(View view) {
                 Log.v("Jules", String.valueOf(isCorrectlyFilled()));
                 if (isCorrectlyFilled()) {
-                    course = (Course) getIntent().getSerializableExtra("CurrentCourse");
                     DatabaseContact.insert_advertisement(course.getID(), advertisementTitleText.getText().toString(),
                             formatFieldForSqlPostRequest(advertisementDescriptionText.getText().toString()), GlobalVariables.getEmail(), advertisementTypePickerTextView.getText().toString());
                     Intent advertisementList = new Intent(getApplicationContext(), AdvertisementsListActivity.class);

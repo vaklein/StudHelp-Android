@@ -26,7 +26,7 @@ public class AdvertisementView extends NavigationActivity {
 
         currentAdvertisement = (Advertisement) getIntent().getSerializableExtra("ClickedAdvertisement");
         if(currentAdvertisement == null) Log.d("NULLWARNING", "Course is null in AdvertisementListActivity");
-        setTitle("Advertisement");
+        setTitleToolbar(currentAdvertisement.getTitle());
 
         advertisementTitle = findViewById(R.id.advertisement_title_view);
         advertisementOwner = findViewById(R.id.advertisement_owner_view);

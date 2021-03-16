@@ -51,7 +51,7 @@ public class EditPasswordActivity extends NavigationActivity {
         // Use this to set the correct layout instead of setContentView cfr NavigationActivity/drawer_layout
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); //Remember this is the FrameLayout area within your activity_main.xml
         getLayoutInflater().inflate(R.layout.activity_edit_password, contentFrameLayout);
-
+        setTitleToolbar("Profil");
 
         edit_password = findViewById(R.id.backup);
         previous_password = (TextInputEditText) findViewById(R.id.previous_password_text);
