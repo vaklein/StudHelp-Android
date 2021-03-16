@@ -75,7 +75,7 @@ public class EditProfileActivity extends NavigationActivity {
                 new_loginField.setErrorEnabled(false);
                 boolean correct = true;
                 if (!new_name.getText().toString().isEmpty() || !new_login.getText().toString().isEmpty()) {
-                    new AsyncLogin().execute(String.valueOf(GlobalVariables.getEmail()), new_name.getText().toString(),new_login.getText().toString());
+                    new AsyncLogin().execute(String.valueOf(GlobalVariables.getEmail()), GlobalVariables.getLogin(),new_name.getText().toString(),new_login.getText().toString());
                 }
             }
         });
@@ -99,8 +99,9 @@ public class EditProfileActivity extends NavigationActivity {
                 OutputStream OS = httpURLConnection.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
                 String data = URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(params[0], "UTF-8") + "&" +
-                        URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(params[1], "UTF-8") + "&" +
-                        URLEncoder.encode("login", "UTF-8") + "=" + URLEncoder.encode(params[2], "UTF-8");//Build form answer
+                        URLEncoder.encode("oldlogin", "UTF-8") + "=" + URLEncoder.encode(params[1], "UTF-8") + "&" +
+                        URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(params[2], "UTF-8") + "&" +
+                        URLEncoder.encode("login", "UTF-8") + "=" + URLEncoder.encode(params[3], "UTF-8");//Build form answer
                 bufferedWriter.write(data); //Send data
                 bufferedWriter.flush();
                 bufferedWriter.close();
