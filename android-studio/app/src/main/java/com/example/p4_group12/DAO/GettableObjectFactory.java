@@ -19,6 +19,9 @@ public class GettableObjectFactory {
         else if(objectClass.getCanonicalName().equals(Advertisement.class.getCanonicalName())){
             return new Advertisement(Integer.parseInt(dbObject.getString("ID")), dbObject.getString("USER_EMAIL"), dbObject.getString("TITLE"), dbObject.getString("DESCRIPTION"), dbObject.getString("TYPE"));
         }
+        else if(objectClass.getCanonicalName().equals(User.class.getCanonicalName())) {
+            return new User(dbObject.getString("NAME"), dbObject.getString("LOGIN"), dbObject.getString("EMAIL"));
+        }
         else throw new NoSuchElementException();
     }
 }

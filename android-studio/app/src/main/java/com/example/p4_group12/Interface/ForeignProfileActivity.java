@@ -31,14 +31,13 @@ public class ForeignProfileActivity extends NavigationActivity {
         email = (TextView) findViewById(R.id.foreign_user_profil_email);
 
         //String foreignUserEmail = (String) getIntent().getSerializableExtra("ForeignUser");
-        /*ArrayList<User> onlyUser = new ArrayList<>();
+        ArrayList<User> onlyUser = new ArrayList<>();
         GetObjectFromDB.getJSON("https://db.valentinklein.eu:8182/get_user_from_email.php?UserEmail="+"jules.lesuisse@student.uclouvain.be", onlyUser, User.class);
         Log.v("Jules", onlyUser.toString());
         foreignUser = onlyUser.get(0);
         if(foreignUser == null) Log.d("NULLWARNING", "foreignUser is null in ForeignProfileActivity");
-        */
 
-        foreignUser = new User("Bond", "jamesbond", "jamesbond@killing.you");
+        //foreignUser = new User("Bond", "jamesbond", "jamesbond@killing.you");
         setTitleToolbar("Contact profile");
         name.setText(String.valueOf(foreignUser.getName()));
         login.setText(String.valueOf(foreignUser.getLogin()));
