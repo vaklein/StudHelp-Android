@@ -38,6 +38,10 @@
             android:label="Ajouter une annonce"
             android:parentActivityName=".Interface.AdvertisementView" />
         <activity
+            android:name=".Interface.ForeignProfileActivity"
+            android:label="Vision d'un profil"
+            android:parentActivityName=".Interface.AdvertisementView" />
+        <activity
             android:name=".Interface.AdvertisementView"
             android:label="AdvertisementView"
             android:parentActivityName=".Interface.AdvertisementView"/>
