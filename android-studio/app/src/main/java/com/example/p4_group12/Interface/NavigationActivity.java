@@ -45,6 +45,10 @@ public class NavigationActivity extends AppCompatActivity{
                         Intent intentcourses = new Intent(getApplicationContext(), CourseListActivity.class);
                         startActivity(intentcourses);
                         break;
+                    case R.id.nav_myadvertisements:
+                        Intent intentmyadverts = new Intent(getApplicationContext(), MyAdvertisementsActivity.class);
+                        startActivity(intentmyadverts);
+                        break;
                     default:
                         break;
                 }

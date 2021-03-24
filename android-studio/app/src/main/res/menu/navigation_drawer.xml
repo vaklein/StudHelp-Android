@@ -12,5 +12,9 @@
             android:id="@+id/nav_courses"
 
             android:title="@string/courses" />
+        <item
+            android:id="@+id/nav_myadvertisements"
+            android:title="@string/myadvertisements"
+            />
     </group>
 </menu>

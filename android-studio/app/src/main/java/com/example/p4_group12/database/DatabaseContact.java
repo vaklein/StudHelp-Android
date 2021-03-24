@@ -343,4 +343,47 @@ public class DatabaseContact {
 
         sendPostReqAsyncTask.execute();
     }
+
+    public static void delete_advertisement(Integer advertisementID){
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> { // Il faut lancer un autre thread car une requete sur le main thread peut faire crasher l'app
+            @Override                                                       // a modifier en executor si on veut update l'app, asynctask deprecated
+            protected String doInBackground(String... params) {
+                try {
+                    URL url = new URL("https://db.valentinklein.eu:8182/delete_advertisement.php");
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestMethod("POST");  //POST request
+                    httpURLConnection.setDoOutput(true);
+                    OutputStream OS = httpURLConnection.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
+                    String data =
+                            URLEncoder.encode("advertisementID", "UTF-8") + "=" + URLEncoder.encode(advertisementID.toString(), "UTF-8");//Build form answer
+                    bufferedWriter.write(data); //Send data
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    OS.close();
+                    InputStream IS = httpURLConnection.getInputStream(); //DB answer
+                    IS.close();
+                    httpURLConnection.disconnect();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+                //Print txt when POST request done
+                //Toast.makeText(LoginActivity.this, "Data Submit Successfully", Toast.LENGTH_LONG).show();
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+
+        sendPostReqAsyncTask.execute();
+    }
 }

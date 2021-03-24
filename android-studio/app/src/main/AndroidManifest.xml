@@ -70,7 +70,9 @@
             android:name=".Interface.EditPasswordActivity"
             android:label="Modifier mon mot de passe"
             android:parentActivityName=".Interface.EditProfileActivity"/>
-
+        <activity
+            android:name=".Interface.MyAdvertisementsActivity"
+            />
     </application>
 
 </manifest>
