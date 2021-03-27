@@ -505,4 +505,71 @@ public class DatabaseContact {
         SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
         sendPostReqAsyncTask.execute();
     }
+
+    public static ArrayList<String> get_social_links(String email) {
+        ArrayList<String> array = new ArrayList<>();
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+        /*    @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                loadingDialog.getDialog().show();
+            }*/
+
+            @Override
+            protected String doInBackground(String... params) {
+                try {
+                    Log.i("lucas","test1");
+                    URL url = new URL("https://db.valentinklein.eu:8182/update_social_links.php");
+                    Log.i("lucas","test2");
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestMethod("POST");  //POST request
+                    httpURLConnection.setDoOutput(true);
+                    OutputStream OS = httpURLConnection.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
+                    String data = URLEncoder.encode("user_email", "UTF-8") + "=" + URLEncoder.encode(email, "UTF-8");
+                    bufferedWriter.write(data); //Send data
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    OS.close();
+                    InputStream IS = httpURLConnection.getInputStream(); //DB answer
+                    InputStreamReader isr = new InputStreamReader(IS,
+                            StandardCharsets.UTF_8);
+                    BufferedReader br = new BufferedReader(isr);
+
+                    br.lines().forEach(line -> Log.i("lucas",line));
+                    IS.close();
+                    httpURLConnection.disconnect();
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                    return null;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+                return "data ok";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                try {
+                    JSONObject response = new JSONObject(result);
+                    JSONObject object = response.getJSONObject("response");
+                    array.add(object.getString("DISCORD"));
+                    array.add(object.getString("TEAMS"));
+                    array.add(object.getString("FACEBOOK"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute();
+        return array;
+    }
+
+
 }
