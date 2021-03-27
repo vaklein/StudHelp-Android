@@ -16,7 +16,7 @@ import com.google.android.material.navigation.NavigationView;
 
 public class NavigationActivity extends AppCompatActivity{
     private DrawerLayout drawerLayout;
-    private MaterialToolbar toolbar;
+    protected MaterialToolbar toolbar;
     private NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     @Override
