@@ -8,8 +8,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.p4_group12.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -56,7 +54,7 @@ public class EditProfileActivity extends NavigationActivity {
         new_login = (TextInputEditText) findViewById(R.id.login_text);
         new_login.setText(GlobalVariables.getLogin());
         new_nameField = (TextInputLayout) findViewById(R.id.name);
-        new_loginField = (TextInputLayout) findViewById(R.id.login);
+        new_loginField = (TextInputLayout) findViewById(R.id.teams);
         loadingDialog = new LoadingDialog(this, "Modification en cours...");
 
 

@@ -1,5 +1,7 @@
 package com.example.p4_group12.Interface;
 
+import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -59,6 +61,7 @@ public class AddAdvertisementActivity extends NavigationActivity {
         submitAdvertisement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Log.v("Jules", String.valueOf(isCorrectlyFilled()));
                 if (isCorrectlyFilled()) {
                     DatabaseContact.insert_advertisement(course.getID(), advertisementTitleText.getText().toString(),
@@ -66,6 +69,7 @@ public class AddAdvertisementActivity extends NavigationActivity {
                     Intent advertisementList = new Intent(getApplicationContext(), AdvertisementsListActivity.class);
                     advertisementList.putExtra("ClickedCourse", course);
                     startActivity(advertisementList);
+                    setResult(RESULT_OK, null);
                     finish();
                 }
             }

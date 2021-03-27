@@ -87,7 +87,8 @@ public class AdvertisementsListActivity extends NavigationActivity {
                 // Toast.makeText(getApplication().getBaseContext(), clickedCourse.getName(), Toast.LENGTH_LONG).show();
                 Intent newAdvertisement = new Intent(getApplicationContext(), AddAdvertisementActivity.class);
                 newAdvertisement.putExtra("CurrentCourse", currentCourse);
-                startActivity(newAdvertisement);
+                startActivityForResult(newAdvertisement, 1); // 1 for finish
+                //startActivity(newAdvertisement);
             }
         });
 
@@ -100,6 +101,13 @@ public class AdvertisementsListActivity extends NavigationActivity {
                 startActivity(advertisementView);
             }
         });
-
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 1
+        if(requestCode==RESULT_OK) {
+            finish();
+        }
     }
 }

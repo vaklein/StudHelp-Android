@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         connexion = findViewById(R.id.connexion);
         login = (TextInputEditText) findViewById(R.id.logintext);
         password = (TextInputEditText) findViewById(R.id.passwordtext);
-        loginField = (TextInputLayout) findViewById(R.id.login);
+        loginField = (TextInputLayout) findViewById(R.id.teams);
         passwordField = (TextInputLayout) findViewById(R.id.password);
 
         loadingDialog = new LoadingDialog(this, "Connexion en cours...");

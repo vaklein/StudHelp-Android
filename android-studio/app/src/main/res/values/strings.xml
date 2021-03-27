@@ -17,6 +17,15 @@
     <string name="profil">Profil</string>
     <string name="favorites">Mes Cours favoris</string>
     <string name="courses">Cours</string>
+    <string name="social_network_underline"><u>Mes réseaux sociaux :</u></string>
+    <string name="social_network">Mes réseaux sociaux :</string>
+    <string name="no_socal_network_advertisment">Vous n\'avez pas encore ajouté de réseau social</string>
+    <string name="personal_information_underline"><u>Mes données personelles :</u></string>
+    <string name="social_network_public_advertissemnt">Ces données seront publique, veuilliez remplir uniquement les champs pour lesquels vous voulez bien que d\'autres utilisateurs aient accès</string>
+    <string name="teams">emails de votre compte Teams (UCL)</string>
+    <string name="facebook">nom + prénom</string>
+    <string name="discord">pas trouvé comment faire</string>
+
 
     <!-- tests strings -->
 
