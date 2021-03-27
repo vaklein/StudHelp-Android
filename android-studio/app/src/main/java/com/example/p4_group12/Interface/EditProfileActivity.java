@@ -9,6 +9,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.example.p4_group12.R;
+import com.example.p4_group12.database.DatabaseContact;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -39,6 +40,12 @@ public class EditProfileActivity extends NavigationActivity {
     private TextInputLayout new_nameField;
     private TextInputLayout new_loginField;
     private LoadingDialog loadingDialog;
+    private TextInputLayout facebook;
+    private TextInputEditText facebook_text;
+    private TextInputLayout discord;
+    private TextInputEditText discord_text;
+    private TextInputLayout teams;
+    private TextInputEditText teams_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +63,12 @@ public class EditProfileActivity extends NavigationActivity {
         new_nameField = (TextInputLayout) findViewById(R.id.name);
         new_loginField = (TextInputLayout) findViewById(R.id.teams);
         loadingDialog = new LoadingDialog(this, "Modification en cours...");
-
+        facebook_text = (TextInputEditText) findViewById(R.id.facebook_text);
+        facebook_text.setText(GlobalVariables.getFacebook());
+        discord_text = findViewById(R.id.discord_text);
+        discord_text.setText(GlobalVariables.getDiscord());
+        teams_text = findViewById(R.id.teams_text);
+        teams_text.setText(GlobalVariables.getTeams());
 
 
 
@@ -75,6 +87,10 @@ public class EditProfileActivity extends NavigationActivity {
                 if (!new_name.getText().toString().isEmpty() || !new_login.getText().toString().isEmpty()) {
                     new AsyncLogin().execute(String.valueOf(GlobalVariables.getEmail()), GlobalVariables.getLogin(),new_name.getText().toString(),new_login.getText().toString());
                 }
+                DatabaseContact.update_social_links(discord_text.getText().toString(),teams_text.getText().toString(),facebook_text.getText().toString());
+                GlobalVariables.setDiscord(discord_text.getText().toString());
+                GlobalVariables.setFacebook(facebook_text.getText().toString());
+                GlobalVariables.setFacebook(teams_text.getText().toString());
             }
         });
     }

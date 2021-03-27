@@ -1,12 +1,17 @@
 package com.example.p4_group12.database;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.DAO.GettableObjectFactory;
+import com.example.p4_group12.Interface.EditProfileActivity;
+import com.example.p4_group12.Interface.GlobalVariables;
+import com.example.p4_group12.Interface.ProfileActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,8 +30,12 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class DatabaseContact {
@@ -385,5 +394,104 @@ public class DatabaseContact {
         SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
 
         sendPostReqAsyncTask.execute();
+    }
+
+    public static void insert_social_links(String user_email,String discord,String teams,String facebook){
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> { // Il faut lancer un autre thread car une requete sur le main thread peut faire crasher l'app
+            @Override                                                       // a modifier en executor si on veut update l'app, asynctask deprecated
+            protected String doInBackground(String... params) {
+                try {
+                    URL url = new URL("https://db.valentinklein.eu:8182/insert_social_links.php");
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestMethod("POST");  //POST request
+                    httpURLConnection.setDoOutput(true);
+                    OutputStream OS = httpURLConnection.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
+                    String data = URLEncoder.encode("user_email", "UTF-8") + "=" + URLEncoder.encode(user_email, "UTF-8") + "&" +
+                            URLEncoder.encode("discord", "UTF-8") + "=" + URLEncoder.encode(discord, "UTF-8") + "&" +
+                            URLEncoder.encode("teams", "UTF-8") + "=" + URLEncoder.encode(teams, "UTF-8") + "&" +
+                            URLEncoder.encode("facebook", "UTF-8") + "=" + URLEncoder.encode(facebook, "UTF-8");//Build form answer
+                    bufferedWriter.write(data); //Send data
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    OS.close();
+                    InputStream IS = httpURLConnection.getInputStream(); //DB answer
+
+                         InputStreamReader isr = new InputStreamReader(IS,
+                                 StandardCharsets.UTF_8);
+                         BufferedReader br = new BufferedReader(isr);
+
+                        br.lines().forEach(line -> Log.i("lucas",line));
+                    IS.close();
+                    httpURLConnection.disconnect();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return "Data Inserted Successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+
+                super.onPostExecute(result);
+                Log.i("lucas",result);
+                //Print txt when POST request done
+                //Toast.makeText(LoginActivity.this, "Data Submit Successfully", Toast.LENGTH_LONG).show();
+
+            }
+        }
+
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+
+        sendPostReqAsyncTask.execute();
+    }
+
+    public static void update_social_links(String discord,String teams,String facebook) {
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
+        /*    @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                loadingDialog.getDialog().show();
+            }*/
+
+            @Override
+            protected String doInBackground(String... params) {
+                try {
+                    URL url = new URL("https://db.valentinklein.eu:8182/update_social_links.php");
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestMethod("POST");  //POST request
+                    httpURLConnection.setDoOutput(true);
+                    OutputStream OS = httpURLConnection.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
+                    String data = URLEncoder.encode("user_email", "UTF-8") + "=" + URLEncoder.encode(GlobalVariables.getEmail(), "UTF-8") + "&" +
+                            URLEncoder.encode("discord", "UTF-8") + "=" + URLEncoder.encode(discord, "UTF-8") + "&" +
+                            URLEncoder.encode("teams", "UTF-8") + "=" + URLEncoder.encode(teams, "UTF-8") + "&" +
+                            URLEncoder.encode("facebook", "UTF-8") + "=" + URLEncoder.encode(facebook, "UTF-8");//Build form answer
+                    bufferedWriter.write(data); //Send data
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    OS.close();
+                    InputStream IS = httpURLConnection.getInputStream(); //DB answer
+                    IS.close();
+                    httpURLConnection.disconnect();
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                    return null;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+                return "data ok";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+
+            }
+        }
     }
 }

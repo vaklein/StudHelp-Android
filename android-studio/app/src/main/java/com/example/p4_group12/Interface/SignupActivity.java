@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.p4_group12.R;
+import com.example.p4_group12.database.DatabaseContact;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -75,6 +76,8 @@ public class SignupActivity extends AppCompatActivity {
                 confirmPasswordField.setErrorEnabled(false);
                 if (isCorrectlyFil() && isPasswordPowerfull() && isPasswordConfirmed()) {
                     new AsyncSignUp().execute(name.getText().toString(), email.getText().toString().toLowerCase(), login.getText().toString(), password.getText().toString());
+                    //L'utilisateur n'a aucun reseaux sociaux au debut -> on cree une ligne pour lui dans la table SOCIAL_LINKS
+                    DatabaseContact.insert_social_links(email.getText().toString().toLowerCase(),"","","");
                 }
             }
         });
