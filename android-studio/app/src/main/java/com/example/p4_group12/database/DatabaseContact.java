@@ -459,7 +459,9 @@ public class DatabaseContact {
             @Override
             protected String doInBackground(String... params) {
                 try {
+                    Log.i("lucas","test1");
                     URL url = new URL("https://db.valentinklein.eu:8182/update_social_links.php");
+                    Log.i("lucas","test2");
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("POST");  //POST request
                     httpURLConnection.setDoOutput(true);
@@ -469,11 +471,17 @@ public class DatabaseContact {
                             URLEncoder.encode("discord", "UTF-8") + "=" + URLEncoder.encode(discord, "UTF-8") + "&" +
                             URLEncoder.encode("teams", "UTF-8") + "=" + URLEncoder.encode(teams, "UTF-8") + "&" +
                             URLEncoder.encode("facebook", "UTF-8") + "=" + URLEncoder.encode(facebook, "UTF-8");//Build form answer
+                    Log.i("lucas",data);
                     bufferedWriter.write(data); //Send data
                     bufferedWriter.flush();
                     bufferedWriter.close();
                     OS.close();
                     InputStream IS = httpURLConnection.getInputStream(); //DB answer
+                    InputStreamReader isr = new InputStreamReader(IS,
+                            StandardCharsets.UTF_8);
+                    BufferedReader br = new BufferedReader(isr);
+
+                    br.lines().forEach(line -> Log.i("lucas",line));
                     IS.close();
                     httpURLConnection.disconnect();
 
@@ -492,6 +500,9 @@ public class DatabaseContact {
                 super.onPostExecute(result);
 
             }
+
         }
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute();
     }
 }

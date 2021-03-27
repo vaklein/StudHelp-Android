@@ -3,6 +3,7 @@ package com.example.p4_group12.Interface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -82,15 +83,16 @@ public class EditProfileActivity extends NavigationActivity {
         backup_profil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DatabaseContact.update_social_links(discord_text.getText().toString(),teams_text.getText().toString(),facebook_text.getText().toString());
+                GlobalVariables.setDiscord(discord_text.getText().toString());
+                GlobalVariables.setFacebook(facebook_text.getText().toString());
+                GlobalVariables.setTeams(teams_text.getText().toString());
                 new_loginField.setErrorEnabled(false);
                 boolean correct = true;
                 if (!new_name.getText().toString().isEmpty() || !new_login.getText().toString().isEmpty()) {
                     new AsyncLogin().execute(String.valueOf(GlobalVariables.getEmail()), GlobalVariables.getLogin(),new_name.getText().toString(),new_login.getText().toString());
                 }
-                DatabaseContact.update_social_links(discord_text.getText().toString(),teams_text.getText().toString(),facebook_text.getText().toString());
-                GlobalVariables.setDiscord(discord_text.getText().toString());
-                GlobalVariables.setFacebook(facebook_text.getText().toString());
-                GlobalVariables.setFacebook(teams_text.getText().toString());
+
             }
         });
     }
