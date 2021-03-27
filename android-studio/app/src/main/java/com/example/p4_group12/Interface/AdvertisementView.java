@@ -4,11 +4,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -33,6 +38,7 @@ public class AdvertisementView extends NavigationActivity {
         currentAdvertisement = (Advertisement) getIntent().getSerializableExtra("ClickedAdvertisement");
         if(currentAdvertisement == null) Log.d("NULLWARNING", "Course is null in AdvertisementListActivity");
         setTitleToolbar(currentAdvertisement.getTitle());
+        setSupportActionBar(toolbar);
 
         advertisementTitle = findViewById(R.id.advertisement_title_view);
         advertisementOwner = findViewById(R.id.advertisement_owner_view);
@@ -44,38 +50,44 @@ public class AdvertisementView extends NavigationActivity {
         advertisementDescription.setText(currentAdvertisement.getDescription());
         advertisementType.setText(currentAdvertisement.getType());
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Confirmation");
-        builder.setMessage("Etes vous sûr de vouloir supprimer cette annonce ?");
-        builder.setPositiveButton("OUI", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                DatabaseContact.delete_advertisement(currentAdvertisement.getID());
-                Intent myadvertisementList = new Intent(getApplicationContext(), MyAdvertisementsActivity.class);
-                startActivity(myadvertisementList);
-                finish();
-                dialog.dismiss();
-            }
-        });
-        builder.setNegativeButton("NON", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Do nothing
-                dialog.dismiss();
-            }
-        });
-
-        deleteButton = findViewById(R.id.delete_button);
-        if(GlobalVariables.getEmail().equals(currentAdvertisement.getUsername())){
-            deleteButton.setVisibility(View.VISIBLE);
-        }
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog alert = builder.create();
-                alert.show();
-            }
-        });
     }
-
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.del:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Confirmation");
+                builder.setMessage("Etes vous sûr de vouloir supprimer cette annonce ?");
+                builder.setPositiveButton("OUI", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DatabaseContact.delete_advertisement(currentAdvertisement.getID());
+                        Intent myadvertisementList = new Intent(getApplicationContext(), MyAdvertisementsActivity.class);
+                        startActivity(myadvertisementList);
+                        finish();
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton("NON", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
+                return true;
+        }
+        return true;
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        if(GlobalVariables.getEmail().equals(currentAdvertisement.getUsername())){
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.del_ad, menu);
+            return super.onCreateOptionsMenu(menu);
+        }
+        return false;
+    }
 
 }
