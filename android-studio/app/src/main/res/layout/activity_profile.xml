@@ -5,8 +5,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_anchor="@+id/relativeLayout"
+        app:layout_anchorGravity="center">
 
         <ImageButton
             android:id="@+id/user_profile_photo"
@@ -34,9 +37,9 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="136dp"
-                android:text="Nom complete"
                 android:maxWidth="250dp"
                 android:singleLine="true"
+                android:text="Nom complete"
                 android:textColor="#fff"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -61,11 +64,11 @@
             android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
+                style="@style/CardViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginRight="20dp"
                 android:layout_marginLeft="20dp"
-                style="@style/CardViewStyle"
+                android:layout_marginRight="20dp"
                 app:strokeColor="@color/myrtic_green"
                 app:strokeWidth="1dp">
 
@@ -73,12 +76,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="5dp">
+
                     <ImageView
                         android:id="@+id/login_icon"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:src="@drawable/ic_baseline_login_24"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_baseline_login_24" />
 
                     <TextView
                         android:id="@+id/user_profil_login"
@@ -93,12 +97,12 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
+                style="@style/CardViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginRight="20dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="15dp"
-                style="@style/CardViewStyle"
+                android:layout_marginRight="20dp"
                 app:strokeColor="@color/myrtic_green"
                 app:strokeWidth="1dp">
 
@@ -106,12 +110,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="5dp">
+
                     <ImageView
                         android:id="@+id/email_icon"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:src="@drawable/ic_baseline_email_24"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_baseline_email_24" />
 
                     <TextView
                         android:id="@+id/user_profil_email"
@@ -124,34 +129,143 @@
                         android:textSize="18sp" />
                 </RelativeLayout>
             </com.google.android.material.card.MaterialCardView>
-        </LinearLayout>
+
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textreseauxsociaux"
             android:layout_width="186dp"
             android:layout_height="36dp"
             android:layout_below="@+id/profile_layout"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="19dp"
-            android:layout_marginTop="172dp"
+            android:layout_marginTop="30dp"
             android:layout_marginEnd="206dp"
             android:text="@string/social_network_underline"
             android:textSize="18sp"
             android:textStyle="bold" />
 
+        <LinearLayout
+            android:id="@+id/facebook_profil_champ"
+            android:layout_width="match_parent"
+            android:layout_height="76dp"
+            android:layout_below="@+id/no_network_profil"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/fb_image_profil"
+                android:layout_width="48dp"
+                android:layout_height="91dp"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/logo_facebook" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/facebook_txt_profil"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="321dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:hint="@string/facebook">
+
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/facebook_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/teams_profil_champ"
+            android:layout_width="match_parent"
+            android:layout_height="74dp"
+            android:layout_below="@+id/facebook_profil_champ"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="48dp"
+                android:layout_height="91dp"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/logo_teams" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/teams"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="321dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:hint="@string/teams">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/teams_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/discord_profil_champ"
+            android:layout_width="wrap_content"
+            android:layout_height="82dp"
+            android:layout_below="@+id/teams_profil"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="48dp"
+                android:layout_height="91dp"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/logo_discord" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/discord"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="321dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:hint="@string/discord">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/discord_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/no_network_profil"
             android:layout_width="315dp"
             android:layout_height="29dp"
-            android:layout_below="@+id/profile_layout"
+            android:layout_below="@+id/textreseauxsociaux"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="48dp"
-            android:layout_marginTop="250dp"
-            android:layout_marginEnd="48dp"
+            android:layout_marginStart="52dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="44dp"
             android:text="@string/no_socal_network_advertisment"
             android:textSize="14sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="visible" />
+        </LinearLayout>
+
     </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

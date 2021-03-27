@@ -22,6 +22,9 @@ public class GettableObjectFactory {
         else if(objectClass.getCanonicalName().equals(User.class.getCanonicalName())) {
             return new User(dbObject.getString("NAME"), dbObject.getString("LOGIN"), dbObject.getString("EMAIL"));
         }
+        else if(objectClass.getCanonicalName().equals(Social_links.class.getCanonicalName())){
+            return new Social_links(dbObject.getString("DISCORD"),dbObject.getString("TEAMS"),dbObject.getString("FACEBOOK"));
+        }
         else throw new NoSuchElementException();
     }
 }

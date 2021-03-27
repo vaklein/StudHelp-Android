@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.DAO.GettableObjectFactory;
+import com.example.p4_group12.Interface.CourseListActivity;
 import com.example.p4_group12.Interface.EditProfileActivity;
 import com.example.p4_group12.Interface.GlobalVariables;
+import com.example.p4_group12.Interface.LoginActivity;
 import com.example.p4_group12.Interface.ProfileActivity;
 
 import org.json.JSONArray;
@@ -32,6 +34,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -459,9 +462,7 @@ public class DatabaseContact {
             @Override
             protected String doInBackground(String... params) {
                 try {
-                    Log.i("lucas","test1");
                     URL url = new URL("https://db.valentinklein.eu:8182/update_social_links.php");
-                    Log.i("lucas","test2");
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("POST");  //POST request
                     httpURLConnection.setDoOutput(true);
@@ -471,7 +472,6 @@ public class DatabaseContact {
                             URLEncoder.encode("discord", "UTF-8") + "=" + URLEncoder.encode(discord, "UTF-8") + "&" +
                             URLEncoder.encode("teams", "UTF-8") + "=" + URLEncoder.encode(teams, "UTF-8") + "&" +
                             URLEncoder.encode("facebook", "UTF-8") + "=" + URLEncoder.encode(facebook, "UTF-8");//Build form answer
-                    Log.i("lucas",data);
                     bufferedWriter.write(data); //Send data
                     bufferedWriter.flush();
                     bufferedWriter.close();
@@ -508,38 +508,41 @@ public class DatabaseContact {
 
     public static ArrayList<String> get_social_links(String email) {
         ArrayList<String> array = new ArrayList<>();
-        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
-        /*    @Override
+        class AsyncLogin extends AsyncTask<String, Void, String> {
+            @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                loadingDialog.getDialog().show();
-            }*/
+
+            }
 
             @Override
             protected String doInBackground(String... params) {
                 try {
-                    Log.i("lucas","test1");
-                    URL url = new URL("https://db.valentinklein.eu:8182/update_social_links.php");
-                    Log.i("lucas","test2");
+                    Log.i("lucas","enter");
+                    URL url = new URL("https://db.valentinklein.eu:8182/get_social_links.php");
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("POST");  //POST request
+                    Log.i("lucas","enter");
                     httpURLConnection.setDoOutput(true);
                     OutputStream OS = httpURLConnection.getOutputStream();
+                    Log.i("lucas","enter");
                     BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
-                    String data = URLEncoder.encode("user_email", "UTF-8") + "=" + URLEncoder.encode(email, "UTF-8");
+                    Log.i("lucas","enterbis");
+                    String data = URLEncoder.encode("UserEmail", "UTF-8") + "=" + URLEncoder.encode(email, "UTF-8") ;//Build form answer
                     bufferedWriter.write(data); //Send data
                     bufferedWriter.flush();
                     bufferedWriter.close();
                     OS.close();
                     InputStream IS = httpURLConnection.getInputStream(); //DB answer
-                    InputStreamReader isr = new InputStreamReader(IS,
-                            StandardCharsets.UTF_8);
-                    BufferedReader br = new BufferedReader(isr);
-
-                    br.lines().forEach(line -> Log.i("lucas",line));
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(IS));
+                    String json;
+                    StringBuilder result = new StringBuilder();
+                    while ((json = bufferedReader.readLine()) != null) {
+                        result.append(json + "\n");
+                    }
                     IS.close();
                     httpURLConnection.disconnect();
-
+                    return result.toString();
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                     return null;
@@ -547,7 +550,6 @@ public class DatabaseContact {
                     e.printStackTrace();
                     return null;
                 }
-                return "data ok";
             }
 
             @Override
@@ -562,12 +564,9 @@ public class DatabaseContact {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
 
         }
-        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
-        sendPostReqAsyncTask.execute();
         return array;
     }
 
