@@ -16,6 +16,7 @@ import com.example.p4_group12.DAO.Social_links;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.DatabaseContact;
 import com.example.p4_group12.database.GetObjectFromDB;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -42,13 +43,13 @@ public class ProfileActivity extends NavigationActivity {
     private TextView name;
     private TextView login;
     private TextView email;
-    private LinearLayout discordlayout;
-    private LinearLayout teamslayout;
-    private LinearLayout facebooklayout;
+    private MaterialCardView discordlayout;
+    private MaterialCardView teamslayout;
+    private MaterialCardView facebooklayout;
     private TextView noNetworkString;
-    private TextInputEditText facebooktext;
-    private TextInputEditText discordtext;
-    private TextInputEditText teamstext;
+    private TextView facebooktext;
+    private TextView discordtext;
+    private TextView teamstext;
     private ArrayList<TextInputEditText> textreseaux ;
     private ArrayList<LinearLayout> affichagereseaux ;
 
