@@ -33,9 +33,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
                 android:text="Nom complet"
-                android:textColor="@color/myrtic_green"
                 android:textStyle="bold"
                 android:textSize="18dp"
+                android:textColor="?attr/colorOnPrimary"
                 android:visibility="gone"></TextView>
         </com.google.android.material.appbar.MaterialToolbar>
 
