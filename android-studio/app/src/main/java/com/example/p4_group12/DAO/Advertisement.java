@@ -21,7 +21,7 @@ public class Advertisement  implements Serializable {
         return this.ID;
     }
 
-    public String getUsername(){
+    public String getEmailAddress(){
         return this.mail;
     }
 

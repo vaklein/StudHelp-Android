@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -16,7 +17,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.R;
@@ -30,6 +30,7 @@ public class AdvertisementView extends NavigationActivity {
     private ImageView profilePicture;
     private Advertisement currentAdvertisement;
     private ImageButton deleteButton;
+    private Button contactButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,9 +53,19 @@ public class AdvertisementView extends NavigationActivity {
 
         advertisementTitle.setText(currentAdvertisement.getTitle());
         advertisementOwner.setVisibility(View.VISIBLE);
-        advertisementOwner.setText(currentAdvertisement.getUsername());
+        advertisementOwner.setText(currentAdvertisement.getEmailAddress());
         advertisementDescription.setText(currentAdvertisement.getDescription());
         advertisementType.setText(currentAdvertisement.getType());
+
+        contactButton = findViewById(R.id.contactAdvertiserButton);
+        contactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent foreignProfile = new Intent(getApplicationContext(), ForeignProfileActivity.class);
+                foreignProfile.putExtra("ForeignUser", currentAdvertisement.getEmailAddress());
+                startActivity(foreignProfile);
+            }
+        });
 
     }
     @Override
@@ -88,7 +99,7 @@ public class AdvertisementView extends NavigationActivity {
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-        if(GlobalVariables.getEmail().equals(currentAdvertisement.getUsername())){
+        if(GlobalVariables.getEmail().equals(currentAdvertisement.getEmailAddress())){
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.del_ad, menu);
             return super.onCreateOptionsMenu(menu);

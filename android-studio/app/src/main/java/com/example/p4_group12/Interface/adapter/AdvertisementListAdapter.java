@@ -75,7 +75,7 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
     public void onBindViewHolder(@NonNull AdvertisementListViewHolder holder, int position) {
         Advertisement currentAdvertisement = advertisementList.get(position);
 
-        holder.usernameTextView.setText(currentAdvertisement.getUsername());
+        holder.usernameTextView.setText(currentAdvertisement.getEmailAddress());
         holder.advertisementTitleTextView.setText(currentAdvertisement.getTitle());
         holder.advertisementDescriptionTextView.setText(currentAdvertisement.getDescription());
     }
