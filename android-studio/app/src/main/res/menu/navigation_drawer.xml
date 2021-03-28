@@ -5,15 +5,16 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_profil"
-
+            android:icon="@drawable/ic_baseline_login_24"
             android:title="@string/profil"
              />
         <item
             android:id="@+id/nav_courses"
-
+            android:icon="@drawable/ic_books"
             android:title="@string/courses" />
         <item
             android:id="@+id/nav_myadvertisements"
+            android:icon="@drawable/ic_pen"
             android:title="@string/myadvertisements"
             />
     </group>
