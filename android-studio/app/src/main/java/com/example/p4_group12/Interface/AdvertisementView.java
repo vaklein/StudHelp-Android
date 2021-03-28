@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ public class AdvertisementView extends NavigationActivity {
     private TextView advertisementOwner;
     private TextView advertisementDescription;
     private TextView advertisementType;
+    private ImageView profilePicture;
     private Advertisement currentAdvertisement;
     private ImageButton deleteButton;
     @Override
@@ -37,15 +39,19 @@ public class AdvertisementView extends NavigationActivity {
 
         currentAdvertisement = (Advertisement) getIntent().getSerializableExtra("ClickedAdvertisement");
         if(currentAdvertisement == null) Log.d("NULLWARNING", "Course is null in AdvertisementListActivity");
-        setTitleToolbar(currentAdvertisement.getTitle());
+        setTitleToolbar("");
         setSupportActionBar(toolbar);
 
+        profilePicture = findViewById(R.id.profile_picture);
+        profilePicture.setVisibility(View.VISIBLE);
+
         advertisementTitle = findViewById(R.id.advertisement_title_view);
-        advertisementOwner = findViewById(R.id.advertisement_owner_view);
+        advertisementOwner = findViewById(R.id.advertisementOwner);
         advertisementDescription = findViewById(R.id.advertisement_description_view);
         advertisementType = findViewById(R.id.advertisement_type_view);
 
         advertisementTitle.setText(currentAdvertisement.getTitle());
+        advertisementOwner.setVisibility(View.VISIBLE);
         advertisementOwner.setText(currentAdvertisement.getUsername());
         advertisementDescription.setText(currentAdvertisement.getDescription());
         advertisementType.setText(currentAdvertisement.getType());

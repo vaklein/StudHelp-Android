@@ -11,72 +11,29 @@
         android:id="@+id/advertisement_cardview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="75dp"
-        app:cardCornerRadius="15dp"
-        app:layout_constraintTop_toTopOf="parent">
+        app:cardCornerRadius="15dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="15dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/advertisement_title_view"
                 android:layout_height="wrap_content"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:text="@string/advertisement_view_title_text"
                 android:textColor="@color/bittersweet"
                 android:textSize="30sp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/delete_button"
                 android:layout_marginTop="15dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginBottom="15dp"
-                android:layout_marginEnd="5dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:maxLines="2"
                 />
-
-            <ImageButton
-                android:id="@+id/delete_button"
-                android:layout_width="50dip"
-                android:layout_height="50dip"
-                android:layout_marginStart="16dp"
-                android:background="@drawable/delete_image"
-                android:layout_margin="15dp"
-                android:visibility="invisible"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <ImageButton
-                android:id="@+id/user_profile_photo_advertisement_view"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/profile_circular_imageview"
-                android:elevation="5dp"
-                android:padding="20dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_baseline_login_24"
-                app:layout_constraintTop_toBottomOf="@+id/advertisement_title_view"
-                app:layout_constraintLeft_toLeftOf="parent"
-                android:layout_marginTop="5dp"
-                android:layout_marginStart="15dp"/>
-
-            <TextView
-                android:id="@+id/advertisement_owner_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/advertisement_view_owner_text"
-                android:textColor="@color/light_salmon"
-                android:textSize="15sp"
-                android:layout_marginTop="8dp"
-                android:layout_marginStart="5dp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="@+id/user_profile_photo_advertisement_view"
-                app:layout_constraintLeft_toRightOf="@id/user_profile_photo_advertisement_view"/>
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -85,9 +42,10 @@
                 app:layout_constraintTop_toBottomOf="@+id/user_profile_photo_advertisement_view"
                 app:layout_constraintLeft_toLeftOf="parent">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -95,30 +53,27 @@
                         android:text="@string/advertisement_type_view"
                         android:textSize="15sp"
                         android:id="@+id/advertisement_type_view"
-                        android:layout_marginStart="15dp"
+                        android:layout_marginLeft="15dp"
                         android:textStyle="bold"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
                         />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="5dp"
                         android:id="@+id/advertisement_description_view"
                         android:text="@string/advertisement_view_description_text"
-                        android:textSize="15sp"
-                        app:layout_constraintTop_toBottomOf="@+id/advertisement_type_view"
-                        app:layout_constraintLeft_toLeftOf="parent"/>
+                        android:textSize="15sp"/>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
 
             </ScrollView>
 
 
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
