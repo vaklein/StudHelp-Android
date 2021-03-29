@@ -18,6 +18,7 @@ import com.example.p4_group12.R;
 import com.example.p4_group12.database.DatabaseContact;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -142,7 +143,11 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                courseList = (ArrayList<Course>) results.values;
+                courseList.clear();
+                ArrayList<Course> filteredCourseIds = ( ArrayList<Course>) results.values;
+                for(Course course: filteredCourseIds){
+                    courseList.add(course);
+                }
                 notifyDataSetChanged();
             }
         };
