@@ -76,21 +76,28 @@ public class ProfileActivity extends NavigationActivity {
         teamstext = findViewById(R.id.teams_text);
 
         //ArrayList<String> reseaux = DatabaseContact.get_social_links(GlobalVariables.getEmail());
-        ArrayList<Social_links> reseaux = new ArrayList<>();
-        GetObjectFromDB.getJSON("https://db.valentinklein.eu:8182/get_social_links.php?UserEmail="+GlobalVariables.getEmail(),reseaux,Social_links.class);
-        Social_links s=reseaux.get(0);
-        if(!s.getDiscord().equals("")){
-            discordtext.setText(s.getDiscord());
+        if (!GlobalVariables.getSocialNetwokCharged()) {
+            ArrayList<Social_links> reseaux = new ArrayList<>();
+            GetObjectFromDB.getJSON("https://db.valentinklein.eu:8182/get_social_links.php?UserEmail=" + GlobalVariables.getEmail(), reseaux, Social_links.class);
+            Social_links s = reseaux.get(0);
+            GlobalVariables.setDiscord(s.getDiscord());
+            GlobalVariables.setTeams(s.getTeams());
+            GlobalVariables.setFacebook(s.getFacebook());
+            GlobalVariables.setSocialNetwokCharged(true);
+        }
+
+        if(!GlobalVariables.getDiscord().equals("")){
+            discordtext.setText(GlobalVariables.getDiscord());
             discordlayout.setVisibility(View.VISIBLE);
             noNetworkString.setVisibility(View.GONE);
         }
-        if(!s.getTeams().equals("")){
-            teamstext.setText(s.getTeams());
+        if(!GlobalVariables.getTeams().equals("")){
+            teamstext.setText(GlobalVariables.getTeams());
             teamslayout.setVisibility(View.VISIBLE);
             noNetworkString.setVisibility(View.GONE);
         }
-        if(!s.getFacebook().equals("")){
-            facebooktext.setText(s.getFacebook());
+        if(!GlobalVariables.getFacebook().equals("")){
+            facebooktext.setText(GlobalVariables.getFacebook());
             facebooklayout.setVisibility(View.VISIBLE);
             noNetworkString.setVisibility(View.GONE);
         }
