@@ -32,7 +32,9 @@
             android:text="Course name"
             android:textColor="@color/bittersweet"
             android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:singleLine="true"
+            android:maxWidth="250dp"/>
 
         <TextView
             android:id="@+id/teacher"
