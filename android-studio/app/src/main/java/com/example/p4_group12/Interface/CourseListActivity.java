@@ -44,6 +44,8 @@ public class CourseListActivity extends NavigationActivity{
     private DrawerLayout drawerLayout;
     ArrayList<Course> courseList = new ArrayList<>();
 
+    private String currentQuerry = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +81,7 @@ public class CourseListActivity extends NavigationActivity{
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if(true){
+                    currentQuerry = query;
                     courseListAdapter.getFilter().filter(query);
                 }else{
                     Toast.makeText(CourseListActivity.this, "No Match found",Toast.LENGTH_LONG).show();
@@ -87,6 +90,7 @@ public class CourseListActivity extends NavigationActivity{
             }
             @Override
             public boolean onQueryTextChange(String newText) {
+                currentQuerry = newText;
                 courseListAdapter.getFilter().filter(newText);
                 return false;
             }
@@ -96,8 +100,8 @@ public class CourseListActivity extends NavigationActivity{
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean activated) {
                 Log.v("Jules", searchView.getQuery().toString());
-                if(activated) courseListAdapter.favoriteFilter();
-                else courseListAdapter.resetFavoriteFilter();//courseListAdapter.getFilter().filter(searchView.getQuery());
+                if(activated) courseListAdapter.favoriteFilter(currentQuerry);
+                else courseListAdapter.resetFavoriteFilter(currentQuerry);//courseListAdapter.getFilter().filter(searchView.getQuery());
 
                 // courseList = courseListAdapter.courseList;
             }

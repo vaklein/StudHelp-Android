@@ -108,7 +108,7 @@ public class GetObjectFromDB {
         JSONArray jsonArray = new JSONArray(json);
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject obj = jsonArray.getJSONObject(i);
-            Log.d("Gwen", obj.toString());
+            // Log.d("Gwen", obj.toString());
             gettableObjectArrayList.add(GettableObjectFactory.getObject(obj, objectClass)); // Careful, check if the class has been added inside the factory method
         }
     }

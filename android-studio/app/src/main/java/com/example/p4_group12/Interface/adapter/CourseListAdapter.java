@@ -22,6 +22,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
+import static android.view.View.GONE;
+
 
 // Followed https://www.youtube.com/watch?v=17NbUcEts9c for the code and xml layout
 // Followed https://www.youtube.com/watch?v=bhhs4bwYyhc for the onClickListeners
@@ -31,6 +33,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
     final private ArrayList<Course> allCourses;
     private OnCourseClickListener courseClickListener;
     private HashSet<Integer> favoritesID;
+    private boolean showOnlyFav = false;
 
     public interface OnCourseClickListener {
         void OnCourseClick(int position);
@@ -122,29 +125,27 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                List<Course> filteredList = new ArrayList<>();
+                ArrayList<Course> filteredCourses = new ArrayList<>();
                 String queryString = constraint.toString().toLowerCase().trim();
 
-                if (queryString.isEmpty()) {
-                    filteredList.addAll(allCourses);
-                } else {
-                    for (Course course : allCourses) {
-                        if (course.getCode().toLowerCase().trim().contains(queryString) ||
-                                course.getName().toLowerCase().trim().contains(queryString) ||
-                                course.getTeacher().toLowerCase().trim().contains(queryString)) {
-                            filteredList.add(course);
-                        }
+                for (Course course : allCourses) {
+                    if ((course.getCode().toLowerCase().trim().contains(queryString) ||
+                            course.getName().toLowerCase().trim().contains(queryString) ||
+                            course.getTeacher().toLowerCase().trim().contains(queryString)) &&
+                            (!showOnlyFav  || favoritesID.contains(course.getID()))) {
+                        filteredCourses.add(course);
                     }
                 }
+
                 FilterResults filterResults = new FilterResults();
-                filterResults.values = filteredList;
+                filterResults.values = filteredCourses;
                 return filterResults;
             }
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
+                ArrayList<Course> filteredCourseIds = (ArrayList<Course>) results.values;
                 courseList.clear();
-                ArrayList<Course> filteredCourseIds = ( ArrayList<Course>) results.values;
                 for(Course course: filteredCourseIds){
                     courseList.add(course);
                 }
@@ -155,14 +156,13 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
 
 
 
-    public void favoriteFilter(){
-        courseList.removeIf((Course course) -> !favoritesID.contains(course.getID()));
-        this.notifyDataSetChanged();
+    public void favoriteFilter(String currentQuery){
+        this.showOnlyFav = true;
+        this.getFilter().filter(currentQuery);
     }
 
-    public void resetFavoriteFilter(){
-        courseList.clear();
-        for(Course course:allCourses) courseList.add(course);
-        this.notifyDataSetChanged();
+    public void resetFavoriteFilter(String currentQuery){
+        this.showOnlyFav = false;
+        this.getFilter().filter(currentQuery);
     }
 }
