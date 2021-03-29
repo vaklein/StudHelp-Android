@@ -41,19 +41,16 @@ public class AdvertisementView extends NavigationActivity {
         currentAdvertisement = (Advertisement) getIntent().getSerializableExtra("ClickedAdvertisement");
         if(currentAdvertisement == null) Log.d("NULLWARNING", "Course is null in AdvertisementListActivity");
         setTitleToolbar("");
-        setSupportActionBar(toolbar);
 
+        //Il faut get le user proprietaire de l'annonce et set les variables ci-dessous
         profilePicture = findViewById(R.id.profile_picture);
         profilePicture.setVisibility(View.VISIBLE);
+        setTitleToolbar(currentAdvertisement.getEmailAddress());
 
         advertisementTitle = findViewById(R.id.advertisement_title_view);
-        advertisementOwner = findViewById(R.id.advertisementOwner);
         advertisementDescription = findViewById(R.id.advertisement_description_view);
         advertisementType = findViewById(R.id.advertisement_type_view);
-
         advertisementTitle.setText(currentAdvertisement.getTitle());
-        advertisementOwner.setVisibility(View.VISIBLE);
-        advertisementOwner.setText(currentAdvertisement.getEmailAddress());
         advertisementDescription.setText(currentAdvertisement.getDescription());
         advertisementType.setText(currentAdvertisement.getType());
 
@@ -75,44 +72,37 @@ public class AdvertisementView extends NavigationActivity {
             });
         }
 
-    }
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.del:
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Confirmation");
-                builder.setMessage("Etes vous sûr de vouloir supprimer cette annonce ?");
-                builder.setPositiveButton("OUI", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        DatabaseContact.delete_advertisement(currentAdvertisement.getID());
-                        Intent myadvertisementList = new Intent(getApplicationContext(), MyAdvertisementsActivity.class);
-                        startActivity(myadvertisementList);
-                        finish();
-                        dialog.dismiss();
-                    }
-                });
-                builder.setNegativeButton("NON", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Do nothing
-                        dialog.dismiss();
-                    }
-                });
-                builder.show();
-                return true;
-        }
-        return true;
-    }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+        // delete advertisement
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirmation");
+        builder.setMessage("Etes vous sûr de vouloir supprimer cette annonce ?");
+        builder.setPositiveButton("OUI", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                DatabaseContact.delete_advertisement(currentAdvertisement.getID());
+                Intent myadvertisementList = new Intent(getApplicationContext(), MyAdvertisementsActivity.class);
+                startActivity(myadvertisementList);
+                finish();
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("NON", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing
+                dialog.dismiss();
+            }
+        });
+        deleteButton = findViewById(R.id.delete_button);
         if(GlobalVariables.getEmail().equals(currentAdvertisement.getEmailAddress())){
-            MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.del_ad, menu);
-            return super.onCreateOptionsMenu(menu);
+            deleteButton.setVisibility(View.VISIBLE);
         }
-        return false;
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+        });
     }
 
 }

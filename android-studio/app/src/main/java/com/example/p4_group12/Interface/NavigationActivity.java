@@ -3,6 +3,7 @@ package com.example.p4_group12.Interface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -19,6 +20,7 @@ public class NavigationActivity extends AppCompatActivity{
     protected MaterialToolbar toolbar;
     private NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
+    private TextView toolbartitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +32,7 @@ public class NavigationActivity extends AppCompatActivity{
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         navigationView = findViewById(R.id.navigation);
-
+        toolbartitle = findViewById(R.id.toolbar_title);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -66,6 +68,6 @@ public class NavigationActivity extends AppCompatActivity{
     }
 
     public void setTitleToolbar(String s){
-        toolbar.setTitle(s);
+        toolbartitle.setText(s);
     }
 }
