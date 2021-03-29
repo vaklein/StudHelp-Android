@@ -58,14 +58,22 @@ public class AdvertisementView extends NavigationActivity {
         advertisementType.setText(currentAdvertisement.getType());
 
         contactButton = findViewById(R.id.contactAdvertiserButton);
-        contactButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent foreignProfile = new Intent(getApplicationContext(), ForeignProfileActivity.class);
-                foreignProfile.putExtra("ForeignUser", currentAdvertisement.getEmailAddress());
-                startActivity(foreignProfile);
-            }
-        });
+        Log.v("Jules", "The current ad is " + String.valueOf(currentAdvertisement));
+        Log.v("Jules", "The email of this ad is " + String.valueOf(currentAdvertisement.getEmailAddress()));
+        if (GlobalVariables.getEmail().equals(currentAdvertisement.getEmailAddress())) {
+            Log.v("Jules", "There should be no button as the user is the owner");
+            contactButton.setVisibility(View.GONE);
+        } else {
+            Log.v("Jules", "The button must be there the user is not the owner");
+            contactButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent foreignProfile = new Intent(getApplicationContext(), ForeignProfileActivity.class);
+                    foreignProfile.putExtra("ForeignUser", currentAdvertisement.getEmailAddress());
+                    startActivity(foreignProfile);
+                }
+            });
+        }
 
     }
     @Override
