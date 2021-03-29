@@ -149,7 +149,7 @@
             android:layout_below="@+id/textreseauxsociaux"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="5dp"
-            android:text="@string/no_socal_network_advertisment"
+            android:text="@string/no_social_network_advertisment"
             android:textSize="14sp"
             android:textStyle="bold"
             android:visibility="visible" />

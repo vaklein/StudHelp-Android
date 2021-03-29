@@ -1,5 +1,6 @@
 package com.example.p4_group12.Interface;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -51,11 +52,13 @@ public class ForeignProfileActivity extends NavigationActivity {
     private TextView facebooktext;
     private TextView discordtext;
     private TextView teamstext;
+    private TextView textreseauxsociaux;
     private ArrayList<TextInputEditText> textreseaux ;
     private ArrayList<LinearLayout> affichagereseaux ;
 
 
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,9 +82,13 @@ public class ForeignProfileActivity extends NavigationActivity {
         facebooklayout = findViewById(R.id.facebook_profil_champ);
         teamslayout = findViewById(R.id.teams_profil_champ);
         noNetworkString = findViewById(R.id.no_network_profil);
+        noNetworkString.setText(getText(R.string.no_social_network_other_user));
+        textreseauxsociaux = findViewById(R.id.textreseauxsociaux);
+        textreseauxsociaux.setText(R.string.social_network_other_user);
         facebooktext = findViewById(R.id.facebook_text);
         discordtext = findViewById(R.id.discord_text);
         teamstext = findViewById(R.id.teams_text);
+
 
         //ArrayList<String> reseaux = DatabaseContact.get_social_links(GlobalVariables.getEmail());
         ArrayList<Social_links> reseaux = new ArrayList<>();
