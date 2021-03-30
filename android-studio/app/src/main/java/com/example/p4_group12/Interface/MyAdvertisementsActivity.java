@@ -57,7 +57,7 @@ public class MyAdvertisementsActivity extends NavigationActivity{
                 Advertisement clickedAdvertisement = advertisementsList.get(position);
                 Intent advertisementView = new Intent(getApplicationContext(), AdvertisementView.class);
                 advertisementView.putExtra("ClickedAdvertisement", clickedAdvertisement);
-                startActivity(advertisementView);
+                startActivityForResult(advertisementView, 1);
             }
         });
 
@@ -65,6 +65,16 @@ public class MyAdvertisementsActivity extends NavigationActivity{
         newAdvertisementButton = findViewById(R.id.new_advertisement_button);
         newAdvertisementButton.setVisibility(View.INVISIBLE);
 
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 1
+        if(requestCode == 1) {
+            Intent MyadvertisementList = new Intent(getApplicationContext(), MyAdvertisementsActivity.class);
+            startActivity(MyadvertisementList);
+            finish();
+        }
     }
 
 }

@@ -100,7 +100,7 @@ public class AdvertisementsListActivity extends NavigationActivity {
                 Advertisement clickedAdvertisement = advertisementsList.get(position);
                 Intent advertisementView = new Intent(getApplicationContext(), AdvertisementView.class);
                 advertisementView.putExtra("ClickedAdvertisement", clickedAdvertisement);
-                startActivity(advertisementView);
+                startActivityForResult(advertisementView, 1);
             }
         });
     }
@@ -108,7 +108,10 @@ public class AdvertisementsListActivity extends NavigationActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 1
-        if(requestCode==RESULT_OK) {
+        if(requestCode == 1) {
+            Intent advertisementList = new Intent(getApplicationContext(), AdvertisementsListActivity.class);
+            advertisementList.putExtra("ClickedCourse", currentCourse);
+            startActivity(advertisementList);
             finish();
         }
     }

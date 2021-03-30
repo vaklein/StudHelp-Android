@@ -95,12 +95,10 @@ public class AddAdvertisementActivity extends NavigationActivity {
 
                 Log.v("Jules", String.valueOf(isCorrectlyFilled()));
                 if (isCorrectlyFilled()) {
+                    Intent intent = new Intent();
                     DatabaseContact.insert_advertisement(course.getID(), advertisementTitleText.getText().toString(),
                             formatFieldForSqlPostRequest(advertisementDescriptionText.getText().toString()), GlobalVariables.getEmail(), advertisementTypePickerTextView.getText().toString());
-                    Intent advertisementList = new Intent(getApplicationContext(), AdvertisementsListActivity.class);
-                    advertisementList.putExtra("ClickedCourse", course);
-                    startActivity(advertisementList);
-                    setResult(RESULT_OK, null);
+                    setResult(1, intent);
                     finish();
                 }
             }

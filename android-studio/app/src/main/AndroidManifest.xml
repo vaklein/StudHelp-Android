@@ -26,25 +26,21 @@
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.
         -->
+
+                <!--#############################################################-->
+                <!--#############################################################-->
+                <!--######################## METADATAs #########################-->
+                <!--#############################################################-->
+                <!--#############################################################-->
         <meta-data
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
 
-        <activity
-            android:name=".Interface.CourseListActivity"
-            android:label="@string/title_activity_course_list" />
-        <activity
-            android:name=".Interface.AddAdvertisementActivity"
-            android:label="Ajouter une annonce"
-            android:parentActivityName=".Interface.AdvertisementsListActivity" />
-        <activity
-            android:name=".Interface.ForeignProfileActivity"
-            android:label="Vision d'un profil"
-            android:parentActivityName=".Interface.AdvertisementView" />
-        <activity
-            android:name=".Interface.AdvertisementView"
-            android:label="AdvertisementView"
-            android:parentActivityName=".Interface.AdvertisementView"/>
+                <!--#############################################################-->
+                <!--#############################################################-->
+                <!--######################## LIBRARIES #########################-->
+                <!--#############################################################-->
+                <!--#############################################################-->
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" /> <!-- Required to use Apache library -->
@@ -55,24 +51,91 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+                <!--#############################################################-->
+                <!--#############################################################-->
+                <!--######################## ACTIVITIES #########################-->
+                <!--#############################################################-->
+                <!--#############################################################-->
+
+        <!--#########################################################################################-->
+        <!--# 1) activities with no go back because accessible with a drawer of after the connexion #-->
+        <!--#########################################################################################-->
+
+
+                      <!-- ############# CourseListActivity ############## -->
+                <!--#############################################################-->
+
+        <activity
+            android:name=".Interface.CourseListActivity"
+            android:label="@string/title_activity_course_list" />
+
+                        <!-- ############# EditPasswordActivity ############## -->
+                <!--#############################################################-->
+        <activity
+            android:name=".Interface.MyAdvertisementsActivity" />
+
+
+                        <!-- ############# ProfileActivity ############## -->
+                <!--#############################################################-->
+        <activity
+            android:name=".Interface.ProfileActivity"
+            android:label="Mon profil" />
+
+
+        <!--#################################-->
+        <!--# 2) activities with no go back #-->
+        <!--#################################-->
+
+
+
+        <!-- ############# AddAdvertisementActivity ############## -->
+                <!--#############################################################-->
+        <activity
+            android:name=".Interface.AddAdvertisementActivity"
+            android:label="Ajouter une annonce"
+            android:parentActivityName=".Interface.AdvertisementsListActivity" />
+
+
+                   <!-- ############# ForeignProfileActivity ############## -->
+                <!--#############################################################-->
+        <activity
+            android:name=".Interface.ForeignProfileActivity"
+            android:label="Vision d'un profil"
+            android:parentActivityName=".Interface.AdvertisementView" />
+
+                       <!-- ############# AdvertisementView ############## -->
+                <!--#############################################################-->
+        <activity
+            android:name=".Interface.AdvertisementView"
+            android:label="AdvertisementView"
+            android:parentActivityName=".Interface.AdvertisementView"/>
+
+
+                   <!-- ############# SignupActivity ############## -->
+            <!--#############################################################-->
         <activity
             android:name=".Interface.SignupActivity"
             android:label="Inscription"
             android:parentActivityName=".Interface.LoginActivity"/>
-        <activity
-            android:name=".Interface.ProfileActivity"
-            android:label="Mon profil" />
+
+
+                  <!-- ############# EditProfileActivity ############## -->
+            <!--#############################################################-->
         <activity
             android:name=".Interface.EditProfileActivity"
             android:label="Modifier mon profil"
             android:parentActivityName=".Interface.ProfileActivity"/>
+
+
+                <!-- ############# EditPasswordActivity ############## -->
+            <!--#############################################################-->
         <activity
             android:name=".Interface.EditPasswordActivity"
             android:label="Modifier mon mot de passe"
             android:parentActivityName=".Interface.EditProfileActivity"/>
-        <activity
-            android:name=".Interface.MyAdvertisementsActivity"
-            />
+
+
     </application>
 
 </manifest>
