@@ -18,9 +18,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
+import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
+import com.example.p4_group12.DAO.User;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.DatabaseContact;
+import com.example.p4_group12.database.GetObjectFromDB;
+
+import java.util.ArrayList;
 
 public class AdvertisementView extends NavigationActivity {
     private TextView advertisementTitle;
@@ -45,7 +50,9 @@ public class AdvertisementView extends NavigationActivity {
         //Il faut get le user proprietaire de l'annonce et set les variables ci-dessous
         profilePicture = findViewById(R.id.profile_picture);
         profilePicture.setVisibility(View.VISIBLE);
-        setTitleToolbar(currentAdvertisement.getEmailAddress());
+        ArrayList<User> onlyUser = new ArrayList<>();
+        GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_user_from_email.php?UserEmail="+currentAdvertisement.getEmailAddress(), onlyUser, User.class);
+        setTitleToolbar("Annonce de:" + onlyUser.get(0).getName());
 
         advertisementTitle = findViewById(R.id.advertisement_title_view);
         advertisementDescription = findViewById(R.id.advertisement_description_view);
