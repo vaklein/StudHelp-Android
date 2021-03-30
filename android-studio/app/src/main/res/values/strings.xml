@@ -11,7 +11,7 @@
     <string name="confirm_password">Confirmez le mot de passe</string>
     <string name="signup">S\'inscrire</string>
     <string name="title_activity_course_list">CourseListActivity</string>
-    <string name="add_advertisement_button">Create advertisement</string>
+    <string name="add_advertisement_button">Poster l\'annonce</string>
     <string name="backup">Sauvegarder mes modifications</string>
     <string name="edit_password">Modifier mon mot de passe</string>
     <string name="profil">Profil</string>
@@ -23,7 +23,7 @@
     <string name="no_social_network_advertisment">Vous n\'avez pas encore ajouté de réseau social.</string>
     <string name="no_social_network_other_user">Cette personne n\'est pas contactable car elle n\'a pas encore ajouté ses réseaux sociaux.</string>
     <string name="personal_information_underline"><u>Mes données personelles :</u></string>
-    <string name="social_network_public_advertissemnt">Ces données seront publique, veuilliez remplir uniquement les champs pour lesquels vous autorisez les autres utilisateurs a y avoir accès.</string>
+    <string name="social_network_public_advertissemnt">Ces données seront publiques, tous les utilisateurs pour y accéder.</string>
     <string name="teams">Email de votre compte Teams</string>
     <string name="facebook">Nom et prénom</string>
     <string name="discord">Pseudo et #Tag</string>
@@ -41,15 +41,15 @@
     <string name="advertisement_view_title_text">Ad title (that might be a very very long title) YESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS</string>
     <string name="advertisement_view_owner_text">Username</string>
     <string name="advertisement_view_description_text">Description</string>
-    <string name="advertisement_type_hint">Choose the type of your advertisement</string>
-    <string name="advertisement_description_hint">Description of your advertisement</string>
-    <string name="advertisement_title_hint">Title of your advertisement</string>
+    <string name="advertisement_type_hint">Choisissez le type de votre annonce</string>
+    <string name="advertisement_description_hint">Description de votre annonce</string>
+    <string name="advertisement_title_hint">Titre de votre annonce</string>
     <string name="advertisement_type_view">Advertisement type</string>
 
     <!-- Used in NavigationDrawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="favorites_switch_text">Favorites</string>
+    <string name="favorites_switch_text">Favoris</string>
     <string name="myadvertisements">Mes annonces</string>
 
 </resources>

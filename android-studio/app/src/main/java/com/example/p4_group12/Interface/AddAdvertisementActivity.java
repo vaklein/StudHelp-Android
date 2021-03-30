@@ -71,7 +71,7 @@ public class AddAdvertisementActivity extends NavigationActivity {
         if (!GlobalVariables.havaASocialNetwork()){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Attention");
-            builder.setMessage("Vous n'avez pas encore ajouté de réseaux. Vous pouvez ajouter des annonces mais les autres utilisateurs ne serons pas vous contacter. Pour ajouter des réseaux sociaux, allez dans profil > modifier, ensuite ajoutez vos réseaux sociaux et confirmez vos modifications");
+            builder.setMessage("Vous n'avez pas encore ajouté de réseau social. Vous pouvez ajouter des annonces mais les autres utilisateurs ne sauront pas vous contacter. Pour ajouter des réseaux sociaux, allez dans profil > modifier, ensuite ajoutez vos réseaux sociaux et confirmez vos modifications");
             builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -82,8 +82,8 @@ public class AddAdvertisementActivity extends NavigationActivity {
             builder.show();
         }
 
-        types.add("Request");
-        types.add("Offer");
+        types.add("Offre");
+        types.add("Demande");
 
         // Every step of dropdown menu done with : https://www.youtube.com/watch?v=Bdm-pR3Nqkw
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.type_picker_item, types);
