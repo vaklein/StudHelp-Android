@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:layout_margin="15dp"
-                android:queryHint="Course code or name, teacher, ..."
+                android:queryHint="Code de cours, nom du cours, professeur, ..."
                 android:iconifiedByDefault="false"
 
                 />
