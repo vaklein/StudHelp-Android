@@ -1,9 +1,14 @@
 package com.example.p4_group12.Interface;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -95,20 +100,50 @@ public class ForeignProfileActivity extends NavigationActivity {
         GetObjectFromDB.getJSON("https://db.valentinklein.eu:8182/get_social_links.php?UserEmail="+foreignUser.getEmail(),reseaux,Social_links.class);
         Social_links s=reseaux.get(0);
         if(!s.getDiscord().equals("")){
-            discordtext.setText(s.getDiscord());
+            SpannableString content = new SpannableString(s.getDiscord());
+            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+            discordtext.setText(content);
             discordlayout.setVisibility(View.VISIBLE);
             noNetworkString.setVisibility(View.GONE);
         }
+        discordtext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Discord contact", s.getDiscord());
+                clipboard.setPrimaryClip(clip);
+            }
+        });
         if(!s.getTeams().equals("")){
-            teamstext.setText(s.getTeams());
+            SpannableString content = new SpannableString(s.getTeams());
+            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+            teamstext.setText(content);
             teamslayout.setVisibility(View.VISIBLE);
             noNetworkString.setVisibility(View.GONE);
         }
+        teamstext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Teams contact", s.getTeams());
+                clipboard.setPrimaryClip(clip);
+            }
+        });
         if(!s.getFacebook().equals("")){
-            facebooktext.setText(s.getFacebook());
+            SpannableString content = new SpannableString(s.getFacebook());
+            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+            facebooktext.setText(content);
             facebooklayout.setVisibility(View.VISIBLE);
             noNetworkString.setVisibility(View.GONE);
         }
+        facebooktext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Facebook contact", s.getFacebook());
+                clipboard.setPrimaryClip(clip);
+            }
+        });
 
 
         name.setText(String.valueOf(foreignUser.getName()));

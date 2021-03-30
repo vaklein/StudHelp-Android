@@ -1,8 +1,14 @@
 package com.example.p4_group12.Interface;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -50,8 +56,6 @@ public class ProfileActivity extends NavigationActivity {
     private TextView facebooktext;
     private TextView discordtext;
     private TextView teamstext;
-    private ArrayList<TextInputEditText> textreseaux ;
-    private ArrayList<LinearLayout> affichagereseaux ;
 
 
 
@@ -87,20 +91,52 @@ public class ProfileActivity extends NavigationActivity {
         }
 
         if(!GlobalVariables.getDiscord().equals("")){
-            discordtext.setText(GlobalVariables.getDiscord());
+            SpannableString content = new SpannableString(GlobalVariables.getDiscord());
+            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+            discordtext.setText(content);
             discordlayout.setVisibility(View.VISIBLE);
             noNetworkString.setVisibility(View.GONE);
         }
+        discordtext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Discord contact", GlobalVariables.getDiscord());
+                clipboard.setPrimaryClip(clip);
+            }
+        });
         if(!GlobalVariables.getTeams().equals("")){
-            teamstext.setText(GlobalVariables.getTeams());
+            SpannableString content = new SpannableString(GlobalVariables.getTeams());
+            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+            teamstext.setText(content);
             teamslayout.setVisibility(View.VISIBLE);
             noNetworkString.setVisibility(View.GONE);
         }
+        teamstext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Teams contact", GlobalVariables.getTeams());
+                clipboard.setPrimaryClip(clip);
+            }
+        });
         if(!GlobalVariables.getFacebook().equals("")){
-            facebooktext.setText(GlobalVariables.getFacebook());
+            SpannableString content = new SpannableString(GlobalVariables.getFacebook());
+            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+            facebooktext.setText(content);
             facebooklayout.setVisibility(View.VISIBLE);
             noNetworkString.setVisibility(View.GONE);
         }
+        facebooktext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Facebook contact", GlobalVariables.getFacebook());
+                clipboard.setPrimaryClip(clip);
+            }
+        });
+
+
 
 
         name.setText(String.valueOf(GlobalVariables.getName()));
