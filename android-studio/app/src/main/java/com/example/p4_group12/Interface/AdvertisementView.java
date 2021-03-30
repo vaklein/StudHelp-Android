@@ -52,7 +52,7 @@ public class AdvertisementView extends NavigationActivity {
         profilePicture.setVisibility(View.VISIBLE);
         ArrayList<User> onlyUser = new ArrayList<>();
         GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_user_from_email.php?UserEmail="+currentAdvertisement.getEmailAddress(), onlyUser, User.class);
-        setTitleToolbar("Annonce de:" + onlyUser.get(0).getName());
+        setTitleToolbar(onlyUser.get(0).getName());
 
         advertisementTitle = findViewById(R.id.advertisement_title_view);
         advertisementDescription = findViewById(R.id.advertisement_description_view);

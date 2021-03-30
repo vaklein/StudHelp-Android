@@ -19,24 +19,6 @@
             android:elevation="0dp"
             android:layout_gravity="fill_horizontal">
 
-            <TextView
-                android:id="@+id/toolbar_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textSize="20dp"
-                android:textStyle="bold"
-                />
-
-            <ImageButton
-                android:id="@+id/delete_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_delete_24"
-                android:layout_gravity="end"
-                android:visibility="gone"
-                />
-
             <ImageView
                 android:layout_gravity="start"
                 android:id="@+id/profile_picture"
@@ -47,6 +29,30 @@
                 android:scaleX="1.5"
                 android:scaleY="1.5"
                 android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                />
+
+            <ImageButton
+                android:id="@+id/delete_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_delete_24"
+                android:background="@color/transparent"
+                android:layout_gravity="end"
+                android:layout_marginRight="10dp"
+                android:scaleX="1.25"
+                android:scaleY="1.25"
+                android:visibility="gone"
+                />
+
+
 
         </com.google.android.material.appbar.MaterialToolbar>
 
