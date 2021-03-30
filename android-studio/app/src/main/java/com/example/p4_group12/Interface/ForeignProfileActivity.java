@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Social_links;
 import com.example.p4_group12.DAO.User;
 import com.example.p4_group12.R;
@@ -69,7 +70,7 @@ public class ForeignProfileActivity extends NavigationActivity {
 
         String foreignUserEmail = (String) getIntent().getSerializableExtra("ForeignUser");
         ArrayList<User> onlyUser = new ArrayList<>();
-        GetObjectFromDB.getJSON("https://db.valentinklein.eu:8182/get_user_from_email.php?UserEmail="+foreignUserEmail, onlyUser, User.class);
+        GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_user_from_email.php?UserEmail="+foreignUserEmail, onlyUser, User.class);
         Log.v("Jules", "This is the list of user for the mail address" + onlyUser.toString());
         User foreignUser = onlyUser.get(0);
         if(foreignUser == null) Log.d("NULLWARNING", "foreignUser is null in ForeignProfileActivity");
@@ -92,7 +93,7 @@ public class ForeignProfileActivity extends NavigationActivity {
 
         //ArrayList<String> reseaux = DatabaseContact.get_social_links(GlobalVariables.getEmail());
         ArrayList<Social_links> reseaux = new ArrayList<>();
-        GetObjectFromDB.getJSON("https://db.valentinklein.eu:8182/get_social_links.php?UserEmail="+foreignUser.getEmail(),reseaux,Social_links.class);
+        GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_social_links.php?UserEmail="+foreignUser.getEmail(),reseaux,Social_links.class);
         Social_links s=reseaux.get(0);
         if(!s.getDiscord().equals("")){
             discordtext.setText(s.getDiscord());

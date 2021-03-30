@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.Interface.adapter.AdvertisementListAdapter;
@@ -39,7 +40,7 @@ public class MyAdvertisementsActivity extends NavigationActivity{
 
 
         // doing the query
-        GetObjectFromDB.getJSON("https://db.valentinklein.eu:8182/get_all_my_advertisements.php?UserEmail="+GlobalVariables.getEmail(), advertisementsList, Advertisement.class);
+        GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_all_my_advertisements.php?UserEmail="+GlobalVariables.getEmail(), advertisementsList, Advertisement.class);
 
         mTextView = (TextView) findViewById(R.id.text);
 

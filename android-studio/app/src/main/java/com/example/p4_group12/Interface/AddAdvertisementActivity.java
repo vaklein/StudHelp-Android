@@ -16,6 +16,7 @@ import android.widget.GridLayout;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.DAO.Social_links;
@@ -61,7 +62,7 @@ public class AddAdvertisementActivity extends NavigationActivity {
 
         if (!GlobalVariables.getSocialNetwokCharged()) {
             ArrayList<Social_links> reseaux = new ArrayList<>();
-            GetObjectFromDB.getJSON("https://db.valentinklein.eu:8182/get_social_links.php?UserEmail=" + GlobalVariables.getEmail(), reseaux, Social_links.class);
+            GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_social_links.php?UserEmail=" + GlobalVariables.getEmail(), reseaux, Social_links.class);
             Social_links s = reseaux.get(0);
             GlobalVariables.setDiscord(s.getDiscord());
             GlobalVariables.setTeams(s.getTeams());

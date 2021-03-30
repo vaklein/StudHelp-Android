@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.R;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -120,7 +121,7 @@ public class EditPasswordActivity extends NavigationActivity {
         @Override
         protected String doInBackground(String... params) {
             try {
-                URL url = new URL("https://db.valentinklein.eu:8182/update_password.php");
+                URL url = new URL(BuildConfig.DB_URL + "update_password.php");
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");  //POST request
                 httpURLConnection.setDoOutput(true);

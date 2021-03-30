@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.DatabaseContact;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -108,7 +109,7 @@ public class EditProfileActivity extends NavigationActivity {
         @Override
         protected String doInBackground(String... params) {
             try {
-                URL url = new URL("https://db.valentinklein.eu:8182/update_login_and_name.php");
+                URL url = new URL(BuildConfig.DB_URL + "update_login_and_name.php");
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");  //POST request
                 httpURLConnection.setDoOutput(true);

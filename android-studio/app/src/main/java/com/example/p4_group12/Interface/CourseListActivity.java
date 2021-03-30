@@ -20,6 +20,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.R;
 import com.example.p4_group12.Interface.adapter.CourseListAdapter;
@@ -59,7 +60,7 @@ public class CourseListActivity extends NavigationActivity{
         mTextView = (TextView) findViewById(R.id.text);
 
         // Doing all the synchronous queries
-        GetObjectFromDB.getJSON("https://db.valentinklein.eu:8182/get_courses.php", courseList, Course.class); // getting all the courses
+        GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_courses.php", courseList, Course.class); // getting all the courses
 
         // Building the recycler view
         courseRecyclerView = findViewById(R.id.courseRecyclerView);

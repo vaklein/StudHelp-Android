@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.Interface.adapter.AdvertisementListAdapter;
@@ -68,7 +69,7 @@ public class AdvertisementsListActivity extends NavigationActivity {
 
 
         // doing the query
-        GetObjectFromDB.getJSON("https://db.valentinklein.eu:8182/get_course_advertisment.php?courseID="+Integer.toString(currentCourse.getID()), advertisementsList, Advertisement.class);
+        GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_course_advertisment.php?courseID="+Integer.toString(currentCourse.getID()), advertisementsList, Advertisement.class);
 
         mTextView = (TextView) findViewById(R.id.text);
 

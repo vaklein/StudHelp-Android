@@ -3,6 +3,16 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+        storeFile file('C:\\Users\\Valentin\\Documents\\Projet 4\\Projet-4\\android-studio\\keystore.jks')
+            storePassword '4BnxxQzPUpYRojJT'
+            keyPassword '4BnxxQzPUpYRojJT'
+            keyAlias 'key0'
+        }
+        releaseDebug {
+        }
+    }
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 
@@ -11,15 +21,22 @@ android {
         minSdkVersion 28
         targetSdkVersion 29
         versionCode 1
-        versionName "1.0"
+        versionName "0.3"
         useLibrary 'org.apache.http.legacy'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
+            buildConfigField "String", "DB_URL", "\"https://db.valentinklein.eu:8182/PROD/\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        releaseDebug {
+            buildConfigField "String", "DB_URL", "\"https://db.valentinklein.eu:8182/PROD/\""
+        }
+        debug {
+            buildConfigField "String", "DB_URL", "\"https://db.valentinklein.eu:8182/\""
         }
     }
     compileOptions {

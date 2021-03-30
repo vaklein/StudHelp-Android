@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Social_links;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.DatabaseContact;
@@ -78,7 +79,7 @@ public class ProfileActivity extends NavigationActivity {
         //ArrayList<String> reseaux = DatabaseContact.get_social_links(GlobalVariables.getEmail());
         if (!GlobalVariables.getSocialNetwokCharged()) {
             ArrayList<Social_links> reseaux = new ArrayList<>();
-            GetObjectFromDB.getJSON("https://db.valentinklein.eu:8182/get_social_links.php?UserEmail=" + GlobalVariables.getEmail(), reseaux, Social_links.class);
+            GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_social_links.php?UserEmail=" + GlobalVariables.getEmail(), reseaux, Social_links.class);
             Social_links s = reseaux.get(0);
             GlobalVariables.setDiscord(s.getDiscord());
             GlobalVariables.setTeams(s.getTeams());

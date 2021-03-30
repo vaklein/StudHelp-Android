@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.DatabaseContact;
 import com.google.android.material.textfield.TextInputEditText;
@@ -140,7 +141,7 @@ public class SignupActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             try {
-                URL url = new URL("https://db.valentinklein.eu:8182/insert_user.php");
+                URL url = new URL(BuildConfig.DB_URL + "insert_user.php");
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");  //POST request
                 httpURLConnection.setDoOutput(true);

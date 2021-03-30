@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.DAO.GettableObjectFactory;
 import com.example.p4_group12.Interface.CourseListActivity;
@@ -47,7 +48,7 @@ public class DatabaseContact {
             @Override                                                       // a modifier en executor si on veut update l'app, asynctask deprecated
             protected String doInBackground(String... params) {
                 try {
-                    URL url = new URL("https://db.valentinklein.eu:8182/insert_course.php");
+                    URL url = new URL(BuildConfig.DB_URL + "insert_course.php");
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("POST");  //POST request
                     httpURLConnection.setDoOutput(true);
@@ -95,7 +96,7 @@ public class DatabaseContact {
             @Override                                                       // a modifier en executor si on veut update l'app, asynctask deprecated
             protected String doInBackground(String... params) {
                 try {
-                    URL url = new URL("https://db.valentinklein.eu:8182/insert_advertisement.php");
+                    URL url = new URL(BuildConfig.DB_URL + "insert_advertisement.php");
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("POST");  //POST request
                     httpURLConnection.setDoOutput(true);
@@ -162,7 +163,7 @@ public class DatabaseContact {
                 String result = "test";
                 try {
                     //Create a URL object holding our url
-                    URL url = new URL("https://db.valentinklein.eu:8182/get_courses.php");
+                    URL url = new URL(BuildConfig.DB_URL + "get_courses.php");
                     //Create a connection
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     //Set methods and timeouts
@@ -238,7 +239,7 @@ public class DatabaseContact {
             @Override
             protected String doInBackground(Void... voids) {
                 try {
-                    URL url = new URL("https://db.valentinklein.eu:8182/get_user_favorite.php?UserEmail=" + userEmail);
+                    URL url = new URL(BuildConfig.DB_URL + "get_user_favorite.php?UserEmail=" + userEmail);
                     HttpURLConnection con = (HttpURLConnection) url.openConnection();
                     StringBuilder sb = new StringBuilder();
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -275,7 +276,7 @@ public class DatabaseContact {
             @Override                                                       // a modifier en executor si on veut update l'app, asynctask deprecated
             protected String doInBackground(String... params) {
                 try {
-                    URL url = new URL("https://db.valentinklein.eu:8182/insert_new_favorite.php");
+                    URL url = new URL(BuildConfig.DB_URL + "insert_new_favorite.php");
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("POST");  //POST request
                     httpURLConnection.setDoOutput(true);
@@ -318,7 +319,7 @@ public class DatabaseContact {
             @Override                                                       // a modifier en executor si on veut update l'app, asynctask deprecated
             protected String doInBackground(String... params) {
                 try {
-                    URL url = new URL("https://db.valentinklein.eu:8182/delete_favorite.php");
+                    URL url = new URL(BuildConfig.DB_URL + "delete_favorite.php");
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("POST");  //POST request
                     httpURLConnection.setDoOutput(true);
@@ -361,7 +362,7 @@ public class DatabaseContact {
             @Override                                                       // a modifier en executor si on veut update l'app, asynctask deprecated
             protected String doInBackground(String... params) {
                 try {
-                    URL url = new URL("https://db.valentinklein.eu:8182/delete_advertisement.php");
+                    URL url = new URL(BuildConfig.DB_URL + "delete_advertisement.php");
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("POST");  //POST request
                     httpURLConnection.setDoOutput(true);
@@ -404,7 +405,7 @@ public class DatabaseContact {
             @Override                                                       // a modifier en executor si on veut update l'app, asynctask deprecated
             protected String doInBackground(String... params) {
                 try {
-                    URL url = new URL("https://db.valentinklein.eu:8182/insert_social_links.php");
+                    URL url = new URL(BuildConfig.DB_URL + "insert_social_links.php");
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("POST");  //POST request
                     httpURLConnection.setDoOutput(true);
@@ -462,7 +463,7 @@ public class DatabaseContact {
             @Override
             protected String doInBackground(String... params) {
                 try {
-                    URL url = new URL("https://db.valentinklein.eu:8182/update_social_links.php");
+                    URL url = new URL(BuildConfig.DB_URL + "update_social_links.php");
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("POST");  //POST request
                     httpURLConnection.setDoOutput(true);
@@ -519,7 +520,7 @@ public class DatabaseContact {
             protected String doInBackground(String... params) {
                 try {
                     Log.i("lucas","enter");
-                    URL url = new URL("https://db.valentinklein.eu:8182/get_social_links.php");
+                    URL url = new URL(BuildConfig.DB_URL + "get_social_links.php");
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("POST");  //POST request
                     Log.i("lucas","enter");
