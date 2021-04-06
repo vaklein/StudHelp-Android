@@ -68,6 +68,15 @@
                     android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <Switch
+                android:id="@+id/rememberme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/rememberme"
+                android:thumbTint="@color/myrtic_green"
+                android:trackTint="@color/myrtic_green"/>
+
             <Button
                 android:id="@+id/connexion"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"

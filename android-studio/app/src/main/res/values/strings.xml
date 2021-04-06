@@ -52,5 +52,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="favorites_switch_text">Favoris</string>
     <string name="myadvertisements">Mes annonces</string>
+    <string name="rememberme">Rester connecté</string>
 
 </resources>

@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.p4_group12.BuildConfig;
@@ -43,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputLayout passwordField;
     private LoadingDialog loadingDialog;
     // to remember that the user is already connected
+    private Switch rememberMe;
     public static final String PREFS_NAME = "MyPrefsFile";
     public static final String PREF_EMAIL = null;
     // Test values
@@ -81,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
         password = (TextInputEditText) findViewById(R.id.passwordtext);
         loginField = (TextInputLayout) findViewById(R.id.teams);
         passwordField = (TextInputLayout) findViewById(R.id.password);
+        rememberMe = findViewById(R.id.rememberme);
 
 
         /*
@@ -180,13 +183,15 @@ public class LoginActivity extends AppCompatActivity {
                     loginField.setError("Identifiant/Mot de passe incorrect");
                     passwordField.setError("Identifiant/Mot de passe incorrect");
                 } else if (object.getBoolean("Logged")) {
-                    getSharedPreferences(PREFS_NAME,MODE_PRIVATE)
-                            .edit()
-                            .putString(PREF_EMAIL, object.getString("email"))
-                            .apply();
-                    GlobalVariables.setLogin(login.getText().toString());
-                    GlobalVariables.setEmail(object.getString("email"));
-                    GlobalVariables.setName(object.getString("name"));
+                    if (rememberMe.isChecked()) {
+                        getSharedPreferences(PREFS_NAME,MODE_PRIVATE)
+                                .edit()
+                                .putString(PREF_EMAIL, object.getString("email"))
+                                .apply();
+                        GlobalVariables.setLogin(login.getText().toString());
+                        GlobalVariables.setEmail(object.getString("email"));
+                        GlobalVariables.setName(object.getString("name"));
+                    }
                     //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
                     //startActivity(edit_profil);
                     Intent intent = new Intent(LoginActivity.this, CourseListActivity.class);
