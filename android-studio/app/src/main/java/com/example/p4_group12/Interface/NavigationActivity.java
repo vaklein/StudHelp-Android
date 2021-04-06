@@ -1,8 +1,11 @@
 package com.example.p4_group12.Interface;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,6 +24,7 @@ public class NavigationActivity extends AppCompatActivity{
     private NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private TextView toolbartitle;
+    private Button deconnexion;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +37,21 @@ public class NavigationActivity extends AppCompatActivity{
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         navigationView = findViewById(R.id.navigation);
         toolbartitle = findViewById(R.id.toolbar_title);
+        deconnexion = findViewById(R.id.deconnexion);
+
+        deconnexion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getSharedPreferences(LoginActivity.PREFS_NAME,MODE_PRIVATE)
+                        .edit()
+                        .putString(LoginActivity.PREF_EMAIL, null)
+                        .apply();
+                Intent intentLoginActivity = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intentLoginActivity);
+                finish();
+            }
+        });
+
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -42,14 +61,17 @@ public class NavigationActivity extends AppCompatActivity{
                     case R.id.nav_profil:
                         Intent intentprofile = new Intent(getApplicationContext(), ProfileActivity.class);
                         startActivity(intentprofile);
+                        finish();
                         break;
                     case R.id.nav_courses:
                         Intent intentcourses = new Intent(getApplicationContext(), CourseListActivity.class);
                         startActivity(intentcourses);
+                        finish();
                         break;
                     case R.id.nav_myadvertisements:
                         Intent intentmyadverts = new Intent(getApplicationContext(), MyAdvertisementsActivity.class);
                         startActivity(intentmyadverts);
+                        finish();
                         break;
                     default:
                         break;

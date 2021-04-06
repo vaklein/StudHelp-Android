@@ -3,6 +3,7 @@ package com.example.p4_group12.Interface;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,7 +12,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.p4_group12.BuildConfig;
+import com.example.p4_group12.DAO.User;
 import com.example.p4_group12.R;
+import com.example.p4_group12.database.GetObjectFromDB;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -29,6 +32,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
     private Button sign_up;
@@ -38,7 +42,9 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputLayout loginField;
     private TextInputLayout passwordField;
     private LoadingDialog loadingDialog;
-
+    // to remember that the user is already connected
+    public static final String PREFS_NAME = "MyPrefsFile";
+    public static final String PREF_EMAIL = null;
     // Test values
     //private Button rootButton;
 
@@ -48,6 +54,27 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        loadingDialog = new LoadingDialog(this, "Connexion en cours...");
+
+        SharedPreferences pref = getSharedPreferences(PREFS_NAME,MODE_PRIVATE);
+        String already_email = pref.getString(PREF_EMAIL, null);
+        if (already_email != null) {
+            loadingDialog.getDialog().show();
+            ArrayList<User> onlyUser = new ArrayList<>();
+            GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_user_from_email.php?UserEmail="+already_email, onlyUser, User.class);
+            User user = onlyUser.get(0);
+            GlobalVariables.setLogin(user.getLogin());
+            GlobalVariables.setEmail(user.getEmail());
+            GlobalVariables.setName(user.getName());
+            //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
+            //startActivity(edit_profil);
+            Intent intent = new Intent(LoginActivity.this, CourseListActivity.class);
+            intent.putExtra("FavList", false);
+            startActivity(intent);
+            loadingDialog.getDialog().cancel();
+            LoginActivity.this.finish();
+        }
+
         sign_up = findViewById(R.id.sign_up);
         connexion = findViewById(R.id.connexion);
         login = (TextInputEditText) findViewById(R.id.logintext);
@@ -55,7 +82,6 @@ public class LoginActivity extends AppCompatActivity {
         loginField = (TextInputLayout) findViewById(R.id.teams);
         passwordField = (TextInputLayout) findViewById(R.id.password);
 
-        loadingDialog = new LoadingDialog(this, "Connexion en cours...");
 
         /*
         // TEST ELEMENTS
@@ -154,9 +180,13 @@ public class LoginActivity extends AppCompatActivity {
                     loginField.setError("Identifiant/Mot de passe incorrect");
                     passwordField.setError("Identifiant/Mot de passe incorrect");
                 } else if (object.getBoolean("Logged")) {
+                    getSharedPreferences(PREFS_NAME,MODE_PRIVATE)
+                            .edit()
+                            .putString(PREF_EMAIL, object.getString("email"))
+                            .apply();
+                    GlobalVariables.setLogin(login.getText().toString());
                     GlobalVariables.setEmail(object.getString("email"));
                     GlobalVariables.setName(object.getString("name"));
-                    GlobalVariables.setLogin(login.getText().toString());
                     //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
                     //startActivity(edit_profil);
                     Intent intent = new Intent(LoginActivity.this, CourseListActivity.class);

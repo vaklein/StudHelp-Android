@@ -12,6 +12,7 @@ public class GlobalVariables {
     private static String facebook = "";
     private static boolean social_network_charged = false;
 
+
     // personal informations
 
     public static String getEmail() { return email; }
@@ -52,5 +53,5 @@ public class GlobalVariables {
         GlobalVariables.facebook = facebook;
     }
 
-
 }
+

@@ -27,6 +27,7 @@
     <string name="teams">Email de votre compte Teams</string>
     <string name="facebook">Nom et prénom</string>
     <string name="discord">Pseudo et #Tag</string>
+    <string name="deconnexion">Se déconnecter</string>
 
 
     <!-- tests strings -->
