@@ -46,7 +46,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/deconnexion" />
+                android:text="@string/deconnexion"
+                app:icon="@drawable/ic_baseline_logout_24"/>
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>
 
