@@ -114,6 +114,7 @@ public class API {
 
     public static API getInstance(){ return INSTANCE;} // The instance is created either on login or signup. getInstance shouldn't be called before doing one of these actions
 
+
     public static JSONObject registerUser(User user, String passwordConfirmation){
         try {
             String data = URLEncoder.encode("login", "UTF-8") + "=" + URLEncoder.encode(user.getLogin(), "UTF-8") + "&" +
