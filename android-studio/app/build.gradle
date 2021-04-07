@@ -5,7 +5,7 @@ plugins {
 android {
     signingConfigs {
         release {
-        storeFile file('C:\\Users\\Valentin\\Documents\\Projet 4\\Projet-4\\android-studio\\keystore.jks')
+        storeFile file('keystore.jks')
             storePassword '4BnxxQzPUpYRojJT'
             keyPassword '4BnxxQzPUpYRojJT'
             keyAlias 'key0'
@@ -36,7 +36,7 @@ android {
             buildConfigField "String", "DB_URL", "\"https://db.valentinklein.eu:8182/PROD/\""
         }
         debug {
-            buildConfigField "String", "DB_URL", "\"https://db.valentinklein.eu:8182/\""
+            buildConfigField "String", "DB_URL", "\"https://db.valentinklein.eu:8182/DEV_Laravel/public/api\""
         }
     }
     compileOptions {
