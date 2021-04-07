@@ -14,16 +14,16 @@ public class GettableObjectFactory {
 
     public static Object getObject(JSONObject dbObject, Class objectClass) throws JSONException {
         if(objectClass.getCanonicalName().equals(Course.class.getCanonicalName())){
-            return new Course(Integer.parseInt(dbObject.getString("ID")), dbObject.getString("CODE"), dbObject.getString("TEACHER"), dbObject.getString("NAME"), dbObject.getString("NAME"));
+            return new Course(Integer.parseInt(dbObject.getString("id")), dbObject.getString("code"), dbObject.getString("university"), dbObject.getString("name"), dbObject.getString("fac"), dbObject.getString("quadri"));
         }
         else if(objectClass.getCanonicalName().equals(Advertisement.class.getCanonicalName())){
-            return new Advertisement(Integer.parseInt(dbObject.getString("ID")), dbObject.getString("USER_EMAIL"), dbObject.getString("TITLE"), dbObject.getString("DESCRIPTION"), dbObject.getString("TYPE"));
+            return new Advertisement(Integer.parseInt(dbObject.getString("id")), dbObject.getString("user_email"), dbObject.getString("title"), dbObject.getString("description"), dbObject.getString("type"));
         }
         else if(objectClass.getCanonicalName().equals(User.class.getCanonicalName())) {
-            return new User(dbObject.getString("NAME"), dbObject.getString("LOGIN"), dbObject.getString("EMAIL"));
+            return new User(dbObject.getString("name"), dbObject.getString("login"), dbObject.getString("email"));
         }
         else if(objectClass.getCanonicalName().equals(Social_links.class.getCanonicalName())){
-            return new Social_links(dbObject.getString("DISCORD"),dbObject.getString("TEAMS"),dbObject.getString("FACEBOOK"));
+            return new Social_links(dbObject.getString("discord"),dbObject.getString("teams"),dbObject.getString("facebook"));
         }
         else throw new NoSuchElementException();
     }

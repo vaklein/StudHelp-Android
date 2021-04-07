@@ -24,6 +24,7 @@ import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.R;
 import com.example.p4_group12.Interface.adapter.CourseListAdapter;
+import com.example.p4_group12.database.API;
 import com.example.p4_group12.database.DatabaseContact;
 import com.example.p4_group12.database.GetObjectFromDB;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -43,7 +44,7 @@ public class CourseListActivity extends NavigationActivity{
     private MaterialToolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
-    ArrayList<Course> courseList = new ArrayList<>();
+    private ArrayList<Course> courseList;
 
     private String currentQuerry = "";
 
@@ -55,12 +56,13 @@ public class CourseListActivity extends NavigationActivity{
         getLayoutInflater().inflate(R.layout.activity_search, contentFrameLayout);
         setTitleToolbar("Cours");
         // ArrayList<Course> test = DatabaseContact.get_courses(); Request to the server
-        HashSet<Integer> favoritesID = new HashSet<>();
 
         mTextView = (TextView) findViewById(R.id.text);
 
         // Doing all the synchronous queries
-        GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_courses.php", courseList, Course.class); // getting all the courses
+        API api = API.getInstance();
+        courseList = api.getCourses();
+        HashSet<Integer> favoritesID = api.getFavoriteCoursesIdsOfUser(GlobalVariables.getUser());
 
         // Building the recycler view
         courseRecyclerView = findViewById(R.id.courseRecyclerView);
@@ -73,10 +75,6 @@ public class CourseListActivity extends NavigationActivity{
         courseRecyclerView.setLayoutManager(courseLayoutManager);
 
         courseRecyclerView.setAdapter(courseListAdapter);
-
-        // Getting the favorite course list of the user
-        DatabaseContact.getUserFavoriteCourseIds(GlobalVariables.getEmail(), favoritesID, courseListAdapter);
-
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

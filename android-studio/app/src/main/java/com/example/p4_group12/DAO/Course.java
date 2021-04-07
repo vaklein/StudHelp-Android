@@ -8,16 +8,18 @@ import java.io.Serializable;
 public class Course implements Serializable {
     private int ID;
     private String code;
-    private String teacher;
     private String name;
     private String university;
+    private String fac;
+    private String quadri;
 
-    public Course(int ID, String code, String teacher,String name,String university) {
+    public Course(int ID, String code, String university, String name, String fac, String quadri) {
         this.ID = ID;
         this.code = code;
-        this.teacher = teacher;
         this.name = name;
         this.university = university;
+        this.fac = fac;
+        this.quadri = quadri;
     }
 
     public int getID(){
@@ -26,10 +28,6 @@ public class Course implements Serializable {
 
     public String getCode(){
         return this.code;
-    }
-
-    public String getTeacher(){
-        return this.teacher;
     }
 
     public String getName(){

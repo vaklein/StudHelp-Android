@@ -10,7 +10,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.p4_group12.BuildConfig;
+import com.example.p4_group12.DAO.User;
 import com.example.p4_group12.R;
+import com.example.p4_group12.database.API;
 import com.example.p4_group12.database.DatabaseContact;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -76,9 +78,25 @@ public class SignupActivity extends AppCompatActivity {
                 passwordField.setErrorEnabled(false);
                 confirmPasswordField.setErrorEnabled(false);
                 if (isCorrectlyFil() && isPasswordPowerfull() && isPasswordConfirmed()) {
-                    new AsyncSignUp().execute(name.getText().toString(), email.getText().toString().toLowerCase(), login.getText().toString(), password.getText().toString());
-                    //L'utilisateur n'a aucun reseaux sociaux au debut -> on cree une ligne pour lui dans la table SOCIAL_LINKS
-                    DatabaseContact.insert_social_links(email.getText().toString().toLowerCase(),"","","");
+                    User user = new User(name.getText().toString(), login.getText().toString(), email.getText().toString(), password.getText().toString());
+
+                    JSONObject apiResponse = API.registerUser(user, confirmPassword.getText().toString());
+                    // TODO create a line in SOCIAL_LINKS (might be better to do that in the back end)
+
+                    try {
+                        if(apiResponse.has("error")){ // error while trying to create the new user
+                            handleError(apiResponse);
+                        }else{
+                            GlobalVariables.setUser(user);
+                            // TODO make the connection permanent
+                            Intent intent = new Intent(SignupActivity.this, CourseListActivity.class);
+                            intent.putExtra("FavList", false);
+                            startActivity(intent);
+                            SignupActivity.this.finish();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -128,78 +146,14 @@ public class SignupActivity extends AppCompatActivity {
         }
     }
 
-    class AsyncSignUp extends AsyncTask<String, Void, String> { // Il faut lancer un autre thread car une requete sur le main thread peut faire crasher l'app
-
-        // a modifier en executor si on veut update l'app, asynctask deprecated
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            loadingDialog.getDialog().show();
-        }
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                URL url = new URL(BuildConfig.DB_URL + "insert_user.php");
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                httpURLConnection.setRequestMethod("POST");  //POST request
-                httpURLConnection.setDoOutput(true);
-                OutputStream OS = httpURLConnection.getOutputStream();
-                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
-                String data = URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(params[0], "UTF-8") + "&" +
-                        URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(params[1], "UTF-8") + "&" +
-                        URLEncoder.encode("login", "UTF-8") + "=" + URLEncoder.encode(params[2], "UTF-8") + "&" +
-                        URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(params[3], "UTF-8");//Build form answer
-                bufferedWriter.write(data); //Send data
-                bufferedWriter.flush();
-                bufferedWriter.close();
-                OS.close();
-                InputStream IS = httpURLConnection.getInputStream(); //DB answer
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(IS));
-                String json;
-                StringBuilder result = new StringBuilder();
-                while ((json = bufferedReader.readLine()) != null) {
-                    result.append(json + "\n");
-                }
-                IS.close();
-                httpURLConnection.disconnect();
-                return result.toString();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-                return null;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            loadingDialog.getDialog().cancel();
-            try {
-                JSONObject response = new JSONObject(result);
-                JSONObject object = response.getJSONObject("response");
-                if (object.getBoolean("error")) {
-                    if (object.getString("error_msg").equals("EMAIL AND LOGIN ALREADY EXIST")) {
-                        loginField.setError("Identifiant déjà utilisé");
-                        emailField.setError("Email déjà utilisé");
-                    }else if (object.getString("error_msg").equals("LOGIN ALREADY EXISTS")) {
-                        loginField.setError("Identifiant déjà utilisé");
-                    }else if (object.getString("error_msg").equals("EMAIL ALREADY EXISTS")) {
-                        emailField.setError("Email déjà utilisé");
-                    }
-                } else if (object.getBoolean("created")) {
-                    Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    SignupActivity.this.finish();
-                }else{
-                    Toast.makeText(SignupActivity.this, "OOPs! Réessayer", Toast.LENGTH_LONG).show();
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+    private void handleError(JSONObject object) throws JSONException {
+        if (object.getString("error_msg").equals("EMAIL AND LOGIN ALREADY EXIST")) {
+            loginField.setError("Identifiant déjà utilisé");
+            emailField.setError("Email déjà utilisé");
+        }else if (object.getString("error_msg").equals("LOGIN ALREADY EXISTS")) {
+            loginField.setError("Identifiant déjà utilisé");
+        }else if (object.getString("error_msg").equals("EMAIL ALREADY EXISTS")) {
+            emailField.setError("Email déjà utilisé");
         }
     }
 }

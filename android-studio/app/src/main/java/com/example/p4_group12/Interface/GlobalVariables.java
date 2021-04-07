@@ -1,6 +1,7 @@
 package com.example.p4_group12.Interface;
 
 import com.example.p4_group12.DAO.Social_links;
+import com.example.p4_group12.DAO.User;
 
 public class GlobalVariables {
 
@@ -11,6 +12,7 @@ public class GlobalVariables {
     private static String teams = "";
     private static String facebook = "";
     private static boolean social_network_charged = false;
+    private static User user;
 
 
     // personal informations
@@ -52,6 +54,10 @@ public class GlobalVariables {
     public static void setFacebook(String facebook) {
         GlobalVariables.facebook = facebook;
     }
+
+    public static void setUser(User user){ GlobalVariables.user = user; }
+
+    public static User getUser(){ return user; }
 
 }
 
