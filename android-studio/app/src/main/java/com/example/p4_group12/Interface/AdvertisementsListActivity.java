@@ -11,8 +11,7 @@ import com.example.p4_group12.Interface.adapter.AdvertisementListAdapter;
 import com.example.p4_group12.Interface.adapter.CourseListAdapter;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.R;
-import com.example.p4_group12.database.DatabaseContact;
-import com.example.p4_group12.database.GetObjectFromDB;
+import com.example.p4_group12.database.API;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.content.Intent;
@@ -36,18 +35,7 @@ public class AdvertisementsListActivity extends NavigationActivity {
     private AdvertisementListAdapter advertisementListAdapter;
     private TextView mTextView;
     private FloatingActionButton newAdvertisementButton;
-
-
-    /**
-     * Hardcoded implementation to get a list of courses
-     * */
-    public static ArrayList<Advertisement> get_advertisements() {
-        ArrayList<Advertisement> advertisements = new ArrayList<>();
-
-        advertisements.add(new Advertisement(1, "Jules", "Help me in ML please !!", "I really need some help to do the project in ML for another course. If you are good in ML please contact me I can help you in an other course if you want me to!", "Request"));
-
-        return advertisements;
-    }
+    private API api;
 
 
     private Course currentCourse;
@@ -59,17 +47,12 @@ public class AdvertisementsListActivity extends NavigationActivity {
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); //Remember this is the FrameLayout area within your activity_main.xml
         getLayoutInflater().inflate(R.layout.activity_advertisments_list, contentFrameLayout);
 
-
-        ArrayList<Advertisement> advertisementsList = new ArrayList<Advertisement>();
-        GetObjectFromDB query = new GetObjectFromDB(advertisementsList, Advertisement .class);
-
         currentCourse = (Course) getIntent().getSerializableExtra("ClickedCourse");
         if(currentCourse == null) Log.d("NULLWARNING", "Course is null in AdvertisementListActivity");
         setTitleToolbar(currentCourse.getName());
 
-
-        // doing the query
-        GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_course_advertisment.php?courseID="+Integer.toString(currentCourse.getID()), advertisementsList, Advertisement.class);
+        this.api = API.getInstance();
+        ArrayList<Advertisement> advertisementsList = api.getCourseAdvertisements(currentCourse);
 
         mTextView = (TextView) findViewById(R.id.text);
 

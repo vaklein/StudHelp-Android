@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.p4_group12.BuildConfig;
+import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.DAO.GettableObjectFactory;
 import com.example.p4_group12.DAO.User;
@@ -244,6 +245,18 @@ public class API {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
+
+    public ArrayList<Advertisement> getCourseAdvertisements(Course course){
+        ArrayList<Advertisement> allAds = new ArrayList<>();
+        try{
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/course/" + course.getID() + "/advertisement", "", "GET");
+            String response = getJSON.execute().get();
+            loadIntoArrayList(response, allAds, Advertisement.class);
+        } catch (InterruptedException  | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException  e) {
+            e.printStackTrace();
+        }
+        return allAds;
     }
 
     /**
