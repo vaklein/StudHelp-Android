@@ -17,7 +17,7 @@ public class GettableObjectFactory {
             return new Course(Integer.parseInt(dbObject.getString("id")), dbObject.getString("code"), dbObject.getString("university"), dbObject.getString("name"), dbObject.getString("fac"), dbObject.getString("quadri"));
         }
         else if(objectClass.getCanonicalName().equals(Advertisement.class.getCanonicalName())){
-            return new Advertisement(Integer.parseInt(dbObject.getString("id")), dbObject.getString("user_email"), dbObject.getString("title"), dbObject.getString("description"), dbObject.getString("type"));
+            return new Advertisement(Integer.parseInt(dbObject.getString("id")), dbObject.getString("user_email"), dbObject.getString("title"), dbObject.getString("description"), dbObject.getString("type"), Integer.parseInt(dbObject.getString("course_id")));
         }
         else if(objectClass.getCanonicalName().equals(User.class.getCanonicalName())) {
             return new User(dbObject.getString("name"), dbObject.getString("login"), dbObject.getString("email"));

@@ -10,7 +10,9 @@ import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.DAO.GettableObjectFactory;
+import com.example.p4_group12.DAO.Social_links;
 import com.example.p4_group12.DAO.User;
+import com.example.p4_group12.Interface.GlobalVariables;
 import com.example.p4_group12.Interface.LoginActivity;
 import com.example.p4_group12.Interface.SignupActivity;
 
@@ -257,6 +259,35 @@ public class API {
             e.printStackTrace();
         }
         return allAds;
+    }
+
+    public Social_links getSocialLinksOfUser(User user){
+        try{
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + user.getEmail() + "/social_links", "", "GET");
+            String response = getJSON.execute().get();
+
+            JSONObject jsonObject = (JSONObject) new JSONArray(response).get(0);
+            if(jsonObject == null) return null;
+            return (Social_links) GettableObjectFactory.getObject(jsonObject, Social_links.class);
+        } catch (InterruptedException  | ExecutionException | JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void addNewAdvertisement(int courseId, String title, String description, String email, String type){
+        try{
+            String data = URLEncoder.encode("course_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(courseId), "UTF-8") + "&" +
+                    URLEncoder.encode("title", "UTF-8") + "=" + URLEncoder.encode(title, "UTF-8") + "&" +
+                    URLEncoder.encode("user_email", "UTF-8") + "=" + URLEncoder.encode(email, "UTF-8") + "&" +
+                    URLEncoder.encode("type", "UTF-8") + "=" + URLEncoder.encode(type, "UTF-8") + "&" +
+                    URLEncoder.encode("description", "UTF-8") + "=" + URLEncoder.encode(description, "UTF-8");
+
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement", data, "POST");
+            getJSON.execute(); // Making the request Async
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

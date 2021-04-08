@@ -8,13 +8,15 @@ public class Advertisement  implements Serializable {
     private String title;
     private String description;
     private String type;
+    private int courseID;
 
-    public Advertisement(int ID, String mail, String title, String description, String type) {
+    public Advertisement(int ID, String mail, String title, String description, String type, int courseID) {
         this.ID = ID;
         this.mail = mail;
         this.title = title;
         this.description = description;
         this.type = type;
+        this.courseID = courseID;
     }
 
     public int getID(){
@@ -34,4 +36,6 @@ public class Advertisement  implements Serializable {
     }
 
     public String getType() { return this.type; }
+
+    public int getCourseID() { return this.courseID; }
 }

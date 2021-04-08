@@ -21,8 +21,7 @@ import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.DAO.Social_links;
 import com.example.p4_group12.R;
-import com.example.p4_group12.database.DatabaseContact;
-import com.example.p4_group12.database.GetObjectFromDB;
+import com.example.p4_group12.database.API;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -40,6 +39,7 @@ public class AddAdvertisementActivity extends NavigationActivity {
     private Advertisement currentAdvertisement;
     private Course course;
     private ArrayList<String> types = new ArrayList<>(2);
+    private API api;
 
 
 
@@ -60,16 +60,14 @@ public class AddAdvertisementActivity extends NavigationActivity {
         advertisementTypePickerTextView = findViewById(R.id.advertisement_type_picker_textview);
         currentAdvertisement = (Advertisement) getIntent().getSerializableExtra("ClickedAdvertisement");
 
+        this.api = API.getInstance();
+
         if (!GlobalVariables.getSocialNetwokCharged()) {
-            ArrayList<Social_links> reseaux = new ArrayList<>();
-            GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_social_links.php?UserEmail=" + GlobalVariables.getEmail(), reseaux, Social_links.class);
-            Social_links s = reseaux.get(0);
-            GlobalVariables.setDiscord(s.getDiscord());
-            GlobalVariables.setTeams(s.getTeams());
-            GlobalVariables.setFacebook(s.getFacebook());
-            GlobalVariables.setSocialNetwokCharged(true);
+            GlobalVariables.getUser().setSocial_links(api.getSocialLinksOfUser(GlobalVariables.getUser()));
+
+            GlobalVariables.setSocialNetwokCharged(true); // TODO remove when finding where it is used
         }
-        if (!GlobalVariables.havaASocialNetwork()){
+        if (!GlobalVariables.getUser().hasASocialNetwork()){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Attention");
             builder.setMessage("Vous n'avez pas encore ajouté de réseau social. Vous pouvez ajouter des annonces mais les autres utilisateurs ne sauront pas vous contacter. Pour ajouter des réseaux sociaux, allez dans profil > modifier, ensuite ajoutez vos réseaux sociaux et confirmez vos modifications");
@@ -97,8 +95,8 @@ public class AddAdvertisementActivity extends NavigationActivity {
                 Log.v("Jules", String.valueOf(isCorrectlyFilled()));
                 if (isCorrectlyFilled()) {
                     Intent intent = new Intent();
-                    DatabaseContact.insert_advertisement(course.getID(), advertisementTitleText.getText().toString(),
-                            formatFieldForSqlPostRequest(advertisementDescriptionText.getText().toString()), GlobalVariables.getEmail(), advertisementTypePickerTextView.getText().toString());
+                    api.addNewAdvertisement(course.getID(), advertisementTitleText.getText().toString(),
+                            formatFieldForSqlPostRequest(advertisementDescriptionText.getText().toString()), GlobalVariables.getUser().getEmail(), advertisementTypePickerTextView.getText().toString());
                     setResult(1, intent);
                     finish();
                 }
