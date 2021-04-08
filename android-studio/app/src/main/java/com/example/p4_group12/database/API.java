@@ -290,6 +290,11 @@ public class API {
         }
     }
 
+    public void deleteAdvertisment(Advertisement advertisement){
+        SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement/" + advertisement.getID(), "", "DELETE");
+        getJSON.execute(); // Making the request Async
+    }
+
     /**
      * Here we get the JSON given by the DB and we get the courses from it in order to add them into the course list
      */

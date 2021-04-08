@@ -89,7 +89,7 @@ public class AdvertisementView extends NavigationActivity {
         builder.setPositiveButton("OUI", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent();
-                DatabaseContact.delete_advertisement(currentAdvertisement.getID());
+                api.deleteAdvertisment(currentAdvertisement);
                 setResult(1, intent);
                 finish();
                 dialog.dismiss();
