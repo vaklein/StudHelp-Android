@@ -80,6 +80,7 @@ public class SignupActivity extends AppCompatActivity {
                 if (isCorrectlyFil() && isPasswordPowerfull() && isPasswordConfirmed()) {
                     User user = new User(name.getText().toString(), login.getText().toString(), email.getText().toString(), password.getText().toString());
 
+                    loadingDialog.getDialog().show();
                     JSONObject apiResponse = API.registerUser(user, confirmPassword.getText().toString());
                     // TODO create a line in SOCIAL_LINKS (might be better to do that in the back end)
 
@@ -92,10 +93,13 @@ public class SignupActivity extends AppCompatActivity {
                             Intent intent = new Intent(SignupActivity.this, CourseListActivity.class);
                             intent.putExtra("FavList", false);
                             startActivity(intent);
+                            loadingDialog.getDialog().cancel();
                             SignupActivity.this.finish();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    } finally {
+                        loadingDialog.getDialog().cancel();
                     }
                 }
             }
