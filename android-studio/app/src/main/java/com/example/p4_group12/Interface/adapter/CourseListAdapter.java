@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.TextView;
 
@@ -15,14 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.Interface.GlobalVariables;
 import com.example.p4_group12.R;
-import com.example.p4_group12.database.DatabaseContact;
+import com.example.p4_group12.database.API;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
-
-import static android.view.View.GONE;
 
 
 // Followed https://www.youtube.com/watch?v=17NbUcEts9c for the code and xml layout
@@ -50,6 +45,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         private TextView courseNameTextView;
         private TextView teacherTextView;
         private CheckBox favoriteCheckBox;
+        private API api;
 
 
         public CourseListViewHolder(@NonNull View itemView, OnCourseClickListener courseClickListener) {
@@ -58,6 +54,8 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
             courseNameTextView = itemView.findViewById(R.id.course_name);
             teacherTextView = itemView.findViewById(R.id.teacher);
             favoriteCheckBox = itemView.findViewById(R.id.favoriteCourseCheckBox);
+
+            this.api = API.getInstance();
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -106,12 +104,12 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
                 if(holder.favoriteCheckBox.isChecked()){
                     // Log.d("Gwen", "Adding " + currentCourse.getCode() + " to the favorites");
                     favoritesID.add(currentCourse.getID());
-                    DatabaseContact.insert_favorite(GlobalVariables.getEmail(), currentCourse.getID());
+                    holder.api.addNewFavoriteToUser(GlobalVariables.getUser(), currentCourse);
                 }
                 else{
                     // Log.d("Gwen", "Removing " + currentCourse.getCode() + " from the favorites");
                     favoritesID.remove(currentCourse.getID());
-                    DatabaseContact.delete_favorite(GlobalVariables.getEmail(), currentCourse.getID());
+                    holder.api.removeFavoriteToUser(GlobalVariables.getUser(), currentCourse);
                 }
             }
         });

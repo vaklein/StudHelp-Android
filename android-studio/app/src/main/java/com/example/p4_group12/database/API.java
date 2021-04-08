@@ -70,7 +70,7 @@ public class API {
 
                 if(this.requestType == "GET") httpURLConnection.setRequestProperty("Accept", "application/json");
                 if(this.requestType == "GET") httpURLConnection.setRequestProperty("Content-Type", "application/json");
-                if(this.requestType == "POST" || this.requestType == "PUT") httpURLConnection.setDoOutput(true);
+                if(this.requestType == "POST" || this.requestType == "PUT" || this.requestType == "DELETE") httpURLConnection.setDoOutput(true);
 
                 if(data.length() > 0){
                     OutputStream OS = httpURLConnection.getOutputStream();
@@ -81,9 +81,9 @@ public class API {
                     OS.close();
                 }
 
-                // Getting the answer from th DB
-                Log.d("Gwen", Integer.toString(httpURLConnection.getResponseCode()));
+                // Log.d("Gwen", Integer.toString(httpURLConnection.getResponseCode())); printing the response code of the http request
 
+                // Getting the answer from th DB
                 InputStream IS = httpURLConnection.getResponseCode() / 100 == 2 ? httpURLConnection.getInputStream() : httpURLConnection.getErrorStream(); //DB answer
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(IS));
                 String json;
@@ -189,6 +189,30 @@ public class API {
             e.printStackTrace();
         }
         return favoriteIDs;
+    }
+
+    public void addNewFavoriteToUser(User user, Course course){
+        try{
+            String data = URLEncoder.encode("user_email", "UTF-8") + "=" + URLEncoder.encode(user.getEmail(), "UTF-8") + "&" +
+                    URLEncoder.encode("course_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(course.getID()), "UTF-8");
+
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/favorite", data, "POST");
+            getJSON.execute(); // Making the request Async
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeFavoriteToUser(User user, Course course){
+        try{
+            String data = URLEncoder.encode("user_email", "UTF-8") + "=" + URLEncoder.encode(user.getEmail(), "UTF-8") + "&" +
+                    URLEncoder.encode("course_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(course.getID()), "UTF-8");
+
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/favorite", data, "DELETE");
+            getJSON.execute(); // Making the request Async
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
