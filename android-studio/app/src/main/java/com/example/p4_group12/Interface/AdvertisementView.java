@@ -23,9 +23,6 @@ import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.User;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
-import com.example.p4_group12.database.DatabaseContact;
-import com.example.p4_group12.database.GetObjectFromDB;
-
 import java.util.ArrayList;
 
 public class AdvertisementView extends NavigationActivity {
@@ -89,7 +86,7 @@ public class AdvertisementView extends NavigationActivity {
         builder.setPositiveButton("OUI", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent();
-                DatabaseContact.delete_advertisement(currentAdvertisement.getID());
+                api.deleteAdvertisment(currentAdvertisement);
                 setResult(1, intent);
                 finish();
                 dialog.dismiss();
