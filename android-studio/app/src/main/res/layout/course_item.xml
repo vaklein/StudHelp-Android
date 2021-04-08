@@ -5,8 +5,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="10dp"
-    android:layout_marginBottom="5dp"
-    >
+    android:layout_marginBottom="5dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,9 +16,7 @@
             android:id="@+id/code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
             android:text="Code"
             android:textSize="15sp" />
 
@@ -28,12 +25,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/code"
-            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
             android:text="Course name"
             android:textColor="@color/bittersweet"
             android:textSize="20sp"
             android:textStyle="bold"
             android:maxWidth="250dp"/>
+        <CheckBox
+            android:id="@+id/favoriteCourseCheckBox"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:button="@drawable/sl_course_favorite"
+            app:buttonTint="@color/myrtic_green" />
 
         <TextView
             android:id="@+id/teacher"
@@ -41,20 +47,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/course_name"
             android:layout_alignParentRight="true"
-            android:text="Teacher"
+            android:layout_marginRight="10dp"
+            android:text="FAC"
             android:textSize="15sp" />
-
-        <CheckBox
-            android:id="@+id/favoriteCourseCheckBox"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-            android:button="@drawable/sl_course_favorite"
-            app:buttonTint="@color/myrtic_green" />
-
 
     </RelativeLayout>
 
