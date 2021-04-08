@@ -15,7 +15,7 @@ import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.Interface.adapter.AdvertisementListAdapter;
 import com.example.p4_group12.R;
-import com.example.p4_group12.database.GetObjectFromDB;
+import com.example.p4_group12.database.API;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -26,6 +26,7 @@ public class MyAdvertisementsActivity extends NavigationActivity{
     private AdvertisementListAdapter advertisementListAdapter;
     private TextView mTextView;
     private FloatingActionButton newAdvertisementButton;
+    private API api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +36,8 @@ public class MyAdvertisementsActivity extends NavigationActivity{
         getLayoutInflater().inflate(R.layout.activity_advertisments_list, contentFrameLayout);
         setTitleToolbar("Mes annonces");
 
-        ArrayList<Advertisement> advertisementsList = new ArrayList<Advertisement>();
-        GetObjectFromDB query = new GetObjectFromDB(advertisementsList, Advertisement .class);
-
-
-        // doing the query
-        GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_all_my_advertisements.php?UserEmail="+GlobalVariables.getEmail(), advertisementsList, Advertisement.class);
+        api = API.getInstance();
+        ArrayList<Advertisement> advertisementsList = api.getAdvertisementsOfUser(GlobalVariables.getUser());
 
         mTextView = (TextView) findViewById(R.id.text);
 

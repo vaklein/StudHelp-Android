@@ -295,6 +295,18 @@ public class API {
         getJSON.execute(); // Making the request Async
     }
 
+    public ArrayList<Advertisement> getAdvertisementsOfUser(User user){
+        ArrayList<Advertisement> allUserAds = new ArrayList<>();
+        try{
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + user.getEmail() + "/advertisement", "", "GET");
+            String response = getJSON.execute().get();
+            loadIntoArrayList(response, allUserAds, Advertisement.class);
+        } catch (InterruptedException  | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException  e) {
+            e.printStackTrace();
+        }
+        return allUserAds;
+    }
+
     /**
      * Here we get the JSON given by the DB and we get the courses from it in order to add them into the course list
      */
