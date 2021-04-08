@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.p4_group12.BuildConfig;
+import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.R;
 import com.example.p4_group12.Interface.adapter.CourseListAdapter;
@@ -38,6 +39,7 @@ public class SearchActivity extends NavigationActivity{
     private MaterialToolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
+    private String currentCategory;
     ArrayList<Course> courseList = new ArrayList<>();
 
     private String currentQuery = "";
@@ -54,12 +56,21 @@ public class SearchActivity extends NavigationActivity{
 
         mTextView = (TextView) findViewById(R.id.text);
 
+        currentCategory = (String) getIntent().getSerializableExtra("ClickedCategory");
+        if(currentCategory == null) Log.d("NULLWARNING", "Category is null in SearchActivity");
+        setTitleToolbar("Cours de la faculté " + currentCategory);
+
+        if (currentCategory.equals("search all")) {
+            courseList = GlobalVariables.getCourses();
+        } else {
+            courseList = filterFaculties(GlobalVariables.getCourses(), currentCategory);
+        }
 
         // Building the recycler view
         courseRecyclerView = findViewById(R.id.courseRecyclerView);
         searchView = findViewById(R.id.searchView);
         favoriteSwitch = findViewById(R.id.show_fav_switch);
-        courseListAdapter = new CourseListAdapter(GlobalVariables.getCourses(), favoritesID);
+        courseListAdapter = new CourseListAdapter(courseList, favoritesID);
         courseRecyclerView.setHasFixedSize(true);
         courseLayoutManager = new LinearLayoutManager(this);
 
@@ -107,8 +118,7 @@ public class SearchActivity extends NavigationActivity{
         courseListAdapter.setCourseClickListener(new CourseListAdapter.OnCourseClickListener() {
             @Override
             public void OnCourseClick(int position) {
-                Log.v("Jules", GlobalVariables.getCourses().toString());
-                Course clickedCourse = GlobalVariables.getCourses().get(position);
+                Course clickedCourse = courseList.get(position);
                 // Toast.makeText(getApplication().getBaseContext(), clickedCourse.getName(), Toast.LENGTH_LONG).show();
                 Intent advertisementsListAct = new Intent(getApplicationContext(), AdvertisementsListActivity.class);
                 advertisementsListAct.putExtra("ClickedCourse", clickedCourse);
@@ -118,5 +128,15 @@ public class SearchActivity extends NavigationActivity{
 
 
 
+    }
+
+    private ArrayList<Course> filterFaculties(ArrayList<Course> courses, String faculty) {
+        ArrayList<Course> filtered = new ArrayList<>();
+        for (Course course : courses) {
+            if (course.getFaculty().equals(faculty)) {
+                filtered.add(course);
+            }
+        }
+        return filtered;
     }
 }

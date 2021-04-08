@@ -49,13 +49,16 @@
             android:layout_below="@+id/search_bar_button"
             />
 
-        <TextView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/category_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="No stress c'est en cours de travail, si vous trouvez des bugs déjà maintenant, faites m'en part !"
-            android:layout_below="@+id/categorical_search_title"
-            android:layout_margin="25dp"
+            android:layout_height="fill_parent"
+            android:layout_below="@id/categorical_search_title"
+            android:layout_margin="15dp"
             />
+            <!--app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="2"-->
+
 
     </RelativeLayout>
 

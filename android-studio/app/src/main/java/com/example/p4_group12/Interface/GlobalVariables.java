@@ -4,6 +4,7 @@ import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.DAO.Social_links;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class GlobalVariables {
 
@@ -15,6 +16,7 @@ public class GlobalVariables {
     private static String facebook = "";
     private static boolean social_network_charged = false;
     private static ArrayList<Course> courseArrayList;
+    private static final ArrayList<String> faculties = new ArrayList<>();
 
 
     // personal informations
@@ -58,7 +60,17 @@ public class GlobalVariables {
     }
 
     public static ArrayList<Course> getCourses() { return courseArrayList; }
-    public static void setCourses(ArrayList<Course> courses) { courseArrayList = courses; }
+    public static void setCourses(ArrayList<Course> courses) {
+        courseArrayList = courses;
+        for (Course course : courseArrayList) {
+            if (!faculties.contains(course.getFaculty()) && !course.getFaculty().isEmpty()) {
+                faculties.add(course.getFaculty());
+            }
+        }
+        Collections.sort(faculties);
+    }
+
+    public static ArrayList<String> getFaculties() { return faculties; }
 
 }
 
