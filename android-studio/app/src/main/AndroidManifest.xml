@@ -12,10 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_2_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.P4group12">
-        <activity android:name=".Interface.AdvertisementsListActivity"
-            android:label="Liste des annonces"
-            android:parentActivityName=".Interface.SearchActivity" />
-
 
         <!--
          <uses-library
@@ -66,25 +62,31 @@
         <!--#########################################################################################-->
 
 
-        <!-- ############# SearchListActivity ############## -->
-        <!--#############################################################-->
+                        <!-- ############# HomeListActivity ############## -->
+                <!--#############################################################-->
 
         <activity
             android:name=".Interface.HomeActivity"
             android:label="HomeActivity" />
 
-                      <!-- ############# SearchListActivity ############## -->
+                        <!-- ############# SearchListActivity ############## -->
                 <!--#############################################################-->
 
         <activity
             android:name=".Interface.SearchActivity"
-            android:label="@string/title_activity_course_list" />
+            android:label="@string/title_activity_course_list"
+            android:parentActivityName=".Interface.HomeActivity"/>
 
                         <!-- ############# EditPasswordActivity ############## -->
                 <!--#############################################################-->
         <activity
             android:name=".Interface.MyAdvertisementsActivity" />
 
+                        <!-- ############# AdvertisementsListActivity ############## -->
+                <!--#############################################################-->
+        <activity android:name=".Interface.AdvertisementsListActivity"
+            android:label="Liste des annonces"
+            android:parentActivityName=".Interface.SearchActivity" />
 
                         <!-- ############# ProfileActivity ############## -->
                 <!--#############################################################-->

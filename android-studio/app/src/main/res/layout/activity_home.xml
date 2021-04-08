@@ -21,21 +21,31 @@
             android:textSize="30sp"
             />
 
-        <com.google.android.material.button.MaterialButton
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/search_bar_button"
             android:padding="12dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:layout_below="@+id/search_bar_title"
-            app:backgroundTint="@color/colorRipple"
-            android:textColor="@color/black"
-            android:textAlignment="textStart"
-            android:textAllCaps="false"
-            android:text="@string/query_hint_string"
-            app:icon="@drawable/ic_baseline_search_24"
-            app:iconTint="@color/black"
-            />
+            app:cardCornerRadius="7dp"
+            android:layout_below="@+id/search_bar_title">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_search_24"
+                android:layout_margin="10dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/query_hint_string"
+                android:layout_gravity="center"
+                android:layout_marginStart="35dp"
+                android:layout_marginEnd="20dp"
+                />
+
+        </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:id="@+id/categorical_search_title"
