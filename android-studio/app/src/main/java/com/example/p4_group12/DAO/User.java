@@ -29,5 +29,5 @@ public class User {
     public String getPassword() { return password; }
     public void setSocial_links(Social_links social_links){ this.social_links = social_links; }
     public Social_links getSocial_links(){ return this.social_links; }
-    public boolean hasASocialNetwork(){ return social_links != null && (social_links.getDiscord() != "" || social_links.getFacebook() != "" || social_links.getTeams() != ""); }
+    public boolean hasASocialNetwork(){ return social_links != null && (!social_links.getDiscord().equals("") || !social_links.getFacebook().equals("") || !social_links.getTeams().equals("")); }
 }
