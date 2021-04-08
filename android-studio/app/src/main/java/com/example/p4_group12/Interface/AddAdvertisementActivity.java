@@ -72,12 +72,21 @@ public class AddAdvertisementActivity extends NavigationActivity {
         if (!GlobalVariables.havaASocialNetwork()){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Attention");
-            builder.setMessage("Vous n'avez pas encore ajouté de réseau social. Vous pouvez ajouter des annonces mais les autres utilisateurs ne sauront pas vous contacter. Pour ajouter des réseaux sociaux, allez dans profil > modifier, ensuite ajoutez vos réseaux sociaux et confirmez vos modifications");
-            builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+            builder.setMessage("Vous n'avez pas encore ajouté de réseau social. Vous pouvez ajouter des annonces mais les autres utilisateurs ne sauront pas vous contacter." +
+                    " Pour ajouter des réseaux sociaux, sélectionnez \"Ajouter des réseaux\".");
+            builder.setPositiveButton("J'ai compris !", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     // Do nothing
                     dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("Ajouter des réseaux  ", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                    Intent modifyProfile = new Intent(getApplicationContext(),EditProfileActivity.class);
+                    startActivity(modifyProfile);
                 }
             });
             builder.show();

@@ -36,7 +36,7 @@ public class AdvertisementsListActivity extends NavigationActivity {
     private AdvertisementListAdapter advertisementListAdapter;
     private TextView mTextView;
     private FloatingActionButton newAdvertisementButton;
-
+    private TextView noAdvertisment;
 
     /**
      * Hardcoded implementation to get a list of courses
@@ -72,7 +72,10 @@ public class AdvertisementsListActivity extends NavigationActivity {
         GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_course_advertisment.php?courseID="+Integer.toString(currentCourse.getID()), advertisementsList, Advertisement.class);
 
         mTextView = (TextView) findViewById(R.id.text);
-
+        noAdvertisment = findViewById(R.id.no_advertisements);
+        if(advertisementsList.size()==0){
+            noAdvertisment.setVisibility(View.VISIBLE);
+        }
         advertisementRecyclerView = findViewById(R.id.advertisementRecyclerView);
         advertisementRecyclerView.setHasFixedSize(true);
         advertisementLayoutManager = new LinearLayoutManager(this);
