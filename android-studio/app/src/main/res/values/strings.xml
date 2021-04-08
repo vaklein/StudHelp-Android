@@ -58,5 +58,7 @@
     <string name="query_hint_string">Code, nom de cours, ou faculté</string>
     <string name="categorical_search_title_string">Facultés</string>
     <string name="nav_home_string">Recherche</string>
+    <string name="firstTab">Données</string>
+    <string name="secondTab">Contacts</string>
 
 </resources>

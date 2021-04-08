@@ -39,7 +39,7 @@
                 android:layout_marginTop="136dp"
                 android:maxWidth="250dp"
                 android:singleLine="true"
-                android:text="Nom complete"
+                android:text="Nom complet"
                 android:textColor="#fff"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -56,220 +56,29 @@
             android:layout_marginRight="20dp"
             android:src="@drawable/ic_baseline_edit_24" />
 
-        <LinearLayout
-            android:layout_width="fill_parent"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/profile_layout"
-            android:layout_marginTop="25dp"
-            android:orientation="vertical">
+            android:layout_marginTop="17dp">
 
-            <com.google.android.material.card.MaterialCardView
-                style="@style/CardViewStyle"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                app:strokeColor="@color/myrtic_green"
-                app:strokeWidth="1dp">
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/firstTab"
+                />
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="5dp">
-
-                    <ImageView
-                        android:id="@+id/login_icon"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_baseline_login_24" />
-
-                    <TextView
-                        android:id="@+id/user_profil_login"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@+id/login_icon"
-                        android:singleLine="true"
-                        android:text="username"
-                        android:textSize="18sp" />
-                </RelativeLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                style="@style/CardViewStyle"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginRight="20dp"
-                app:strokeColor="@color/myrtic_green"
-                app:strokeWidth="1dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="5dp">
-
-                    <ImageView
-                        android:id="@+id/email_icon"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_baseline_email_24" />
-
-                    <TextView
-                        android:id="@+id/user_profil_email"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@+id/email_icon"
-                        android:singleLine="true"
-                        android:text="adresse@email.com"
-                        android:textSize="18sp" />
-                </RelativeLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-
-        <TextView
-            android:id="@+id/textreseauxsociaux"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/profile_layout"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="30dp"
-            android:text="@string/social_network_underline"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/no_network_profil"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/textreseauxsociaux"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
-            android:text="@string/no_social_network_advertisment"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:visibility="visible" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/facebook_profil_champ"
-                style="@style/CardViewStyle"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginRight="20dp"
-                android:visibility="gone"
-                app:strokeColor="@color/myrtic_green"
-                app:strokeWidth="1dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="5dp">
-
-                    <ImageView
-                        android:id="@+id/logo_facebook"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_logo_facebook" />
-
-                    <TextView
-                        android:id="@+id/facebook_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@+id/logo_facebook"
-                        android:singleLine="true"
-                        android:text="@string/facebook"
-                        android:textSize="18sp"
-                        android:clickable="true"
-                        android:background="?android:attr/selectableItemBackground"/>
-                </RelativeLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            style="@style/CardViewStyle"
-            android:id="@+id/teams_profil_champ"
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/secondTab"
+                />
+        </com.google.android.material.tabs.TabLayout>
+        <FrameLayout
+            android:id="@+id/frameLayout"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="20dp"
-            app:strokeColor="@color/myrtic_green"
-            app:strokeWidth="1dp"
-            android:visibility="gone">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="5dp">
-
-                <ImageView
-                    android:id="@+id/logo_teams"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_logo_teams" />
-
-                <TextView
-                    android:id="@+id/teams_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/logo_teams"
-                    android:singleLine="true"
-                    android:text="@string/facebook"
-                    android:textSize="18sp"
-                    android:clickable="true"
-                    android:background="?android:attr/selectableItemBackground"/>
-            </RelativeLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            style="@style/CardViewStyle"
-            android:id="@+id/discord_profil_champ"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="20dp"
-            app:strokeColor="@color/myrtic_green"
-            app:strokeWidth="1dp"
-            android:visibility="gone">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="5dp">
-
-                <ImageView
-                    android:id="@+id/logo_discord"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_logo_discord" />
-
-                <TextView
-                    android:id="@+id/discord_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/logo_discord"
-                    android:singleLine="true"
-                    android:text="@string/discord"
-                    android:textSize="18sp"
-                    android:clickable="true"
-                    android:background="?android:attr/selectableItemBackground"
-                    />
-            </RelativeLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        </LinearLayout>
-
+            android:layout_height="match_parent"
+            android:layout_below="@id/tabs"/>
     </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
