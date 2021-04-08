@@ -37,19 +37,6 @@ public class AdvertisementsListActivity extends NavigationActivity {
     private TextView mTextView;
     private FloatingActionButton newAdvertisementButton;
     private TextView noAdvertisment;
-
-    /**
-     * Hardcoded implementation to get a list of courses
-     * */
-    public static ArrayList<Advertisement> get_advertisements() {
-        ArrayList<Advertisement> advertisements = new ArrayList<>();
-
-        advertisements.add(new Advertisement(1, "Jules", "Help me in ML please !!", "I really need some help to do the project in ML for another course. If you are good in ML please contact me I can help you in an other course if you want me to!", "Request"));
-
-        return advertisements;
-    }
-
-
     private Course currentCourse;
 
     @Override

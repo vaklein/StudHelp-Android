@@ -4,18 +4,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.p4_group12.BuildConfig;
@@ -24,18 +19,22 @@ import com.example.p4_group12.DAO.User;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.DatabaseContact;
 import com.example.p4_group12.database.GetObjectFromDB;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AdvertisementView extends NavigationActivity {
     private TextView advertisementTitle;
-    private TextView advertisementOwner;
     private TextView advertisementDescription;
-    private TextView advertisementType;
+    private ChipGroup advertisementTags;
     private ImageView profilePicture;
     private Advertisement currentAdvertisement;
     private ImageButton deleteButton;
     private Button contactButton;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,10 +55,16 @@ public class AdvertisementView extends NavigationActivity {
 
         advertisementTitle = findViewById(R.id.advertisement_title_view);
         advertisementDescription = findViewById(R.id.advertisement_description_view);
-        advertisementType = findViewById(R.id.advertisement_type_view);
+        advertisementTags = findViewById(R.id.advertisement_tags_view);
         advertisementTitle.setText(currentAdvertisement.getTitle());
         advertisementDescription.setText(currentAdvertisement.getDescription());
-        advertisementType.setText(currentAdvertisement.getType());
+
+        for (String type : currentAdvertisement.getTags()) {
+            Chip chip = new Chip(this);
+            chip.setText(type);
+            chip.setCheckable(false);
+            advertisementTags.addView(chip);
+        }
 
         contactButton = findViewById(R.id.contactAdvertiserButton);
         Log.v("Jules", "The current ad is " + String.valueOf(currentAdvertisement));

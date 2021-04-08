@@ -1,6 +1,8 @@
 package com.example.p4_group12.DAO;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Advertisement  implements Serializable {
     private int ID;
@@ -8,6 +10,7 @@ public class Advertisement  implements Serializable {
     private String title;
     private String description;
     private String type;
+    private List<String> tags;
 
     public Advertisement(int ID, String mail, String title, String description, String type) {
         this.ID = ID;
@@ -15,6 +18,8 @@ public class Advertisement  implements Serializable {
         this.title = title;
         this.description = description;
         this.type = type;
+        this.tags = new ArrayList<>();
+        tags.add(type);
     }
 
     public int getID(){
@@ -33,5 +38,5 @@ public class Advertisement  implements Serializable {
         return this.description;
     }
 
-    public String getType() { return this.type; }
+    public List<String> getTags() { return this.tags; }
 }
