@@ -7,6 +7,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
@@ -53,15 +54,12 @@ public class SearchActivity extends NavigationActivity{
 
         mTextView = (TextView) findViewById(R.id.text);
 
-        // Doing all the synchronous queries
-        GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_courses.php", courseList, Course.class); // getting all the courses
-
 
         // Building the recycler view
         courseRecyclerView = findViewById(R.id.courseRecyclerView);
         searchView = findViewById(R.id.searchView);
         favoriteSwitch = findViewById(R.id.show_fav_switch);
-        courseListAdapter = new CourseListAdapter(courseList, favoritesID);
+        courseListAdapter = new CourseListAdapter(GlobalVariables.getCourses(), favoritesID);
         courseRecyclerView.setHasFixedSize(true);
         courseLayoutManager = new LinearLayoutManager(this);
 
@@ -109,8 +107,8 @@ public class SearchActivity extends NavigationActivity{
         courseListAdapter.setCourseClickListener(new CourseListAdapter.OnCourseClickListener() {
             @Override
             public void OnCourseClick(int position) {
-                Log.v("Jules", courseList.toString());
-                Course clickedCourse = courseList.get(position);
+                Log.v("Jules", GlobalVariables.getCourses().toString());
+                Course clickedCourse = GlobalVariables.getCourses().get(position);
                 // Toast.makeText(getApplication().getBaseContext(), clickedCourse.getName(), Toast.LENGTH_LONG).show();
                 Intent advertisementsListAct = new Intent(getApplicationContext(), AdvertisementsListActivity.class);
                 advertisementsListAct.putExtra("ClickedCourse", clickedCourse);

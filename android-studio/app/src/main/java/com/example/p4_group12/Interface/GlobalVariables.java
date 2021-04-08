@@ -1,6 +1,9 @@
 package com.example.p4_group12.Interface;
 
+import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.DAO.Social_links;
+
+import java.util.ArrayList;
 
 public class GlobalVariables {
 
@@ -11,6 +14,7 @@ public class GlobalVariables {
     private static String teams = "";
     private static String facebook = "";
     private static boolean social_network_charged = false;
+    private static ArrayList<Course> courseArrayList;
 
 
     // personal informations
@@ -52,6 +56,9 @@ public class GlobalVariables {
     public static void setFacebook(String facebook) {
         GlobalVariables.facebook = facebook;
     }
+
+    public static ArrayList<Course> getCourses() { return courseArrayList; }
+    public static void setCourses(ArrayList<Course> courses) { courseArrayList = courses; }
 
 }
 
