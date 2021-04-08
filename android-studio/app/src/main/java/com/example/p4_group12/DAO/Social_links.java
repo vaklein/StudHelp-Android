@@ -33,4 +33,10 @@ public class Social_links {
     public void setFacebook(String facebook) {
         this.facebook = facebook;
     }
+
+    public void setAllSocialLinks(String discord, String teams, String facebook){
+        this.discord = discord;
+        this.teams = teams;
+        this.facebook = facebook;
+    }
 }

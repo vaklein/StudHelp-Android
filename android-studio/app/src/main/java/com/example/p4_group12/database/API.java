@@ -307,6 +307,45 @@ public class API {
         return allUserAds;
     }
 
+    public static Boolean editNameAndLogin(User user, String newLogin, String newName){
+        try{
+            String data = "";
+            // Probably a better way to do it but can't find it
+            if(!newLogin.equals("") && !newName.equals("")){
+                data =  URLEncoder.encode("login", "UTF-8") + "=" + URLEncoder.encode(!newLogin.equals("")? newLogin : user.getLogin(), "UTF-8") + "&" +
+                        URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(!newName.equals("")? newName : user.getName(), "UTF-8");
+            }else if(!newLogin.equals("")){
+                data =  URLEncoder.encode("login", "UTF-8") + "=" + URLEncoder.encode(!newLogin.equals("")? newLogin : user.getLogin(), "UTF-8");
+            }else if(!!newName.equals("")){
+                data = URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(!newName.equals("")? newName : user.getName(), "UTF-8");
+            }
+
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + user.getEmail(), data, "PUT");
+            String response = getJSON.execute().get();
+
+            JSONObject jsonObject = (JSONObject) new JSONArray(response).get(0);
+            return jsonObject != null && !jsonObject.has("error");
+
+
+        } catch (UnsupportedEncodingException | ExecutionException | InterruptedException | JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void updateSocialLinks(User user){
+        try{
+            String data = URLEncoder.encode("discord", "UTF-8") + "=" + URLEncoder.encode(user.getSocial_links().getDiscord(), "UTF-8") + "&" +
+                    URLEncoder.encode("teams", "UTF-8") + "=" + URLEncoder.encode(user.getSocial_links().getTeams(), "UTF-8") + "&" +
+                    URLEncoder.encode("facebook", "UTF-8") + "=" + URLEncoder.encode(user.getSocial_links().getFacebook(), "UTF-8");
+
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/social_links/" + user.getEmail(), data, "PUT");
+            getJSON.execute(); // Making the request Async
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Here we get the JSON given by the DB and we get the courses from it in order to add them into the course list
      */
