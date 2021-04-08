@@ -4,37 +4,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.User;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
-import com.example.p4_group12.database.GetObjectFromDB;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
     private Button sign_up;
@@ -63,14 +46,10 @@ public class LoginActivity extends AppCompatActivity {
         String already_email = pref.getString(PREF_EMAIL, null);
         if (already_email != null) {
             loadingDialog.getDialog().show();
-            ArrayList<User> onlyUser = new ArrayList<>();
-            GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_user_from_email.php?UserEmail="+already_email, onlyUser, User.class);
-            User user = onlyUser.get(0);
-            GlobalVariables.setLogin(user.getLogin());
-            GlobalVariables.setEmail(user.getEmail());
-            GlobalVariables.setName(user.getName());
-            //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
-            //startActivity(edit_profil);
+
+            API api =  API.setToken(getSharedPreferences(PREFS_NAME,MODE_PRIVATE));
+            GlobalVariables.setUser(api.getSavedUser(already_email));
+
             Intent intent = new Intent(LoginActivity.this, CourseListActivity.class);
             intent.putExtra("FavList", false);
             startActivity(intent);
@@ -112,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                                         .edit()
                                         .putString(PREF_EMAIL, jsonObject.getString("email"))
                                         .apply();
+                                API.saveToken(getSharedPreferences(PREFS_NAME, MODE_PRIVATE)); // saving the API key in the shared prefs
                             }
                             GlobalVariables.setUser(new User(jsonObject.getString("name"), jsonObject.getString("login"), jsonObject.getString("email"), jsonObject.getString("password")));
                         } catch (JSONException e) {

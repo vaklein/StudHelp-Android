@@ -1,6 +1,7 @@
 package com.example.p4_group12.database;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -35,7 +36,9 @@ import java.util.concurrent.ExecutionException;
 
 public class API {
 
-    // Class to use to do a Sync request to the API
+    // Class to use to do a request to the API
+    // To perform a Sync request use getJSON.execute().get() to get the response from the server
+    // To perform a Async request just use getJSON.execute()
     private static class SyncGetJSON extends AsyncTask<Void, Void, String> {
 
         private String urlWebService;
@@ -113,6 +116,16 @@ public class API {
 
     public static API getInstance(){ return INSTANCE;} // The instance is created either on login or signup. getInstance shouldn't be called before doing one of these actions
 
+    public static void saveToken(SharedPreferences sharedPreferences){
+        sharedPreferences.edit()
+                .putString("API_key", key)
+                .apply();
+    }
+
+    public static API setToken(SharedPreferences sharedPreferences){
+        INSTANCE = new API(sharedPreferences.getString("API_key", null));
+        return INSTANCE;
+    }
 
     public static JSONObject registerUser(User user, String passwordConfirmation){
         try {
@@ -156,6 +169,24 @@ public class API {
             return jsonObject;
 
         } catch (UnsupportedEncodingException | ExecutionException | InterruptedException | JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public User getSavedUser(String email){
+        try{
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + email, "", "GET");
+            String response = getJSON.execute().get();
+
+            JSONObject jsonObject = new JSONArray(response).getJSONObject(0);
+            if(jsonObject == null) return null;
+            else if(!jsonObject.has("error")){ // If no error while creating the new user, create an insance of the API object with the key of the user
+                return (User) GettableObjectFactory.getObject(jsonObject, User.class);
+            }
+            return null;
+
+        } catch (ExecutionException | InterruptedException | JSONException e) {
             e.printStackTrace();
             return null;
         }
