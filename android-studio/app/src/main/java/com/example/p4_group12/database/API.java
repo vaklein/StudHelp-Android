@@ -177,14 +177,14 @@ public class API {
         }
     }
 
-    public User getSavedUser(String email){
+    public User getUserWithEmail(String email){
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + email, "", "GET");
             String response = getJSON.execute().get();
 
             JSONObject jsonObject = new JSONArray(response).getJSONObject(0);
             if(jsonObject == null) return null;
-            else if(!jsonObject.has("error")){ // If no error while creating the new user, create an insance of the API object with the key of the user
+            else if(!jsonObject.has("error")){
                 return (User) GettableObjectFactory.getObject(jsonObject, User.class);
             }
             return null;

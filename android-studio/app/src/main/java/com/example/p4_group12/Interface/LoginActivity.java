@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
             loadingDialog.getDialog().show();
 
             API api =  API.setToken(getSharedPreferences(PREFS_NAME,MODE_PRIVATE));
-            GlobalVariables.setUser(api.getSavedUser(already_email));
+            GlobalVariables.setUser(api.getUserWithEmail(already_email));
 
             Intent intent = new Intent(LoginActivity.this, CourseListActivity.class);
             intent.putExtra("FavList", false);

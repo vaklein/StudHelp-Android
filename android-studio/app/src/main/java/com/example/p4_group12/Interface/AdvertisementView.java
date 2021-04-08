@@ -22,6 +22,7 @@ import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.User;
 import com.example.p4_group12.R;
+import com.example.p4_group12.database.API;
 import com.example.p4_group12.database.DatabaseContact;
 import com.example.p4_group12.database.GetObjectFromDB;
 
@@ -36,6 +37,7 @@ public class AdvertisementView extends NavigationActivity {
     private Advertisement currentAdvertisement;
     private ImageButton deleteButton;
     private Button contactButton;
+    private API api;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,12 +49,13 @@ public class AdvertisementView extends NavigationActivity {
         if(currentAdvertisement == null) Log.d("NULLWARNING", "Course is null in AdvertisementListActivity");
         setTitleToolbar("");
 
+        api = API.getInstance();
+
         //Il faut get le user proprietaire de l'annonce et set les variables ci-dessous
         profilePicture = findViewById(R.id.profile_picture);
         profilePicture.setVisibility(View.VISIBLE);
-        ArrayList<User> onlyUser = new ArrayList<>();
-        GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_user_from_email.php?UserEmail="+currentAdvertisement.getEmailAddress(), onlyUser, User.class);
-        setTitleToolbar(onlyUser.get(0).getName());
+        User onlyUser = api.getUserWithEmail(currentAdvertisement.getEmailAddress());
+        setTitleToolbar(onlyUser.getName());
 
         advertisementTitle = findViewById(R.id.advertisement_title_view);
         advertisementDescription = findViewById(R.id.advertisement_description_view);
@@ -64,7 +67,7 @@ public class AdvertisementView extends NavigationActivity {
         contactButton = findViewById(R.id.contactAdvertiserButton);
         Log.v("Jules", "The current ad is " + String.valueOf(currentAdvertisement));
         Log.v("Jules", "The email of this ad is " + String.valueOf(currentAdvertisement.getEmailAddress()));
-        if (GlobalVariables.getEmail().equals(currentAdvertisement.getEmailAddress())) {
+        if (GlobalVariables.getUser().getEmail().equals(currentAdvertisement.getEmailAddress())) {
             Log.v("Jules", "There should be no button as the user is the owner");
             contactButton.setVisibility(View.GONE);
         } else {
@@ -100,7 +103,7 @@ public class AdvertisementView extends NavigationActivity {
             }
         });
         deleteButton = findViewById(R.id.delete_button);
-        if(GlobalVariables.getEmail().equals(currentAdvertisement.getEmailAddress())){
+        if(GlobalVariables.getUser().getEmail().equals(currentAdvertisement.getEmailAddress())){
             deleteButton.setVisibility(View.VISIBLE);
         }
         deleteButton.setOnClickListener(new View.OnClickListener() {
