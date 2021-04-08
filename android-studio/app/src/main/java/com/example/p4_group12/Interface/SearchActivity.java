@@ -27,7 +27,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class CourseListActivity extends NavigationActivity{
+public class SearchActivity extends NavigationActivity{
     private RecyclerView courseRecyclerView;
     private RecyclerView.LayoutManager courseLayoutManager;
     private CourseListAdapter courseListAdapter;
@@ -80,7 +80,7 @@ public class CourseListActivity extends NavigationActivity{
                     currentQuery = query;
                     courseListAdapter.getFilter().filter(query);
                 }else{
-                    Toast.makeText(CourseListActivity.this, "No Match found",Toast.LENGTH_LONG).show();
+                    Toast.makeText(SearchActivity.this, "No Match found",Toast.LENGTH_LONG).show();
                 }
                 return false;
             }

@@ -1,20 +1,13 @@
 package com.example.p4_group12.database;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Course;
-import com.example.p4_group12.DAO.GettableObjectFactory;
-import com.example.p4_group12.Interface.CourseListActivity;
-import com.example.p4_group12.Interface.EditProfileActivity;
 import com.example.p4_group12.Interface.GlobalVariables;
-import com.example.p4_group12.Interface.LoginActivity;
-import com.example.p4_group12.Interface.ProfileActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,25 +15,18 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class DatabaseContact {
     public static void insert_course(String code,String teacher,String name,String university){

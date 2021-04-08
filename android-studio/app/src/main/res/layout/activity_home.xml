@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/search_bar_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:text="@string/search_bar_title_string"
+            android:textSize="30sp"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/search_bar_button"
+            android:padding="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:layout_below="@+id/search_bar_title"
+            app:backgroundTint="@color/colorRipple"
+            android:textColor="@color/black"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:text="@string/query_hint_string"
+            app:icon="@drawable/ic_baseline_search_24"
+            app:iconTint="@color/black"
+            />
+
+        <TextView
+            android:id="@+id/categorical_search_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:text="@string/categorical_search_title_string"
+            android:textSize="30sp"
+            android:layout_below="@+id/search_bar_button"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No stress c'est en cours de travail, si vous trouvez des bugs déjà maintenant, faites m'en part !"
+            android:layout_below="@+id/categorical_search_title"
+            android:layout_margin="25dp"
+            />
+
+    </RelativeLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>

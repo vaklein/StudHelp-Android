@@ -14,7 +14,7 @@
         android:theme="@style/Theme.P4group12">
         <activity android:name=".Interface.AdvertisementsListActivity"
             android:label="Liste des annonces"
-            android:parentActivityName=".Interface.CourseListActivity" />
+            android:parentActivityName=".Interface.SearchActivity" />
 
 
         <!--
@@ -66,11 +66,18 @@
         <!--#########################################################################################-->
 
 
-                      <!-- ############# CourseListActivity ############## -->
+        <!-- ############# SearchListActivity ############## -->
+        <!--#############################################################-->
+
+        <activity
+            android:name=".Interface.HomeActivity"
+            android:label="HomeActivity" />
+
+                      <!-- ############# SearchListActivity ############## -->
                 <!--#############################################################-->
 
         <activity
-            android:name=".Interface.CourseListActivity"
+            android:name=".Interface.SearchActivity"
             android:label="@string/title_activity_course_list" />
 
                         <!-- ############# EditPasswordActivity ############## -->

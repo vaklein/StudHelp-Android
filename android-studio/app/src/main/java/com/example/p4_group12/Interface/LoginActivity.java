@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -70,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
             GlobalVariables.setName(user.getName());
             //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
             //startActivity(edit_profil);
-            Intent intent = new Intent(LoginActivity.this, CourseListActivity.class);
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             intent.putExtra("FavList", false);
             startActivity(intent);
             loadingDialog.getDialog().cancel();
@@ -194,7 +193,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
                     //startActivity(edit_profil);
-                    Intent intent = new Intent(LoginActivity.this, CourseListActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     intent.putExtra("FavList", false);
                     startActivity(intent);
                     LoginActivity.this.finish();

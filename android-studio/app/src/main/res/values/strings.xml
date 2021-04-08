@@ -54,5 +54,9 @@
     <string name="myadvertisements">Mes annonces</string>
     <string name="rememberme">Rester connecté</string>
     <string name="no_advertisement_text">Ce cours n\'a pas encore d\'annonces, n\'hésitez pas à en ajouter!</string>
+    <string name="search_bar_title_string">Recherche</string>
+    <string name="query_hint_string">Code, nom de cours, ou faculté</string>
+    <string name="categorical_search_title_string">Facultés</string>
+    <string name="nav_home_string">Recherche</string>
 
 </resources>
