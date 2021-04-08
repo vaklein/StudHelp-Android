@@ -94,7 +94,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
 
         holder.codeTextView.setText(currentCourse.getCode());
         holder.courseNameTextView.setText(currentCourse.getName());
-        holder.teacherTextView.setText(currentCourse.getTeacher());
+        holder.teacherTextView.setText(currentCourse.getFaculty());
         if(favoritesID.contains(currentCourse.getID())) {
             holder.favoriteCheckBox.setChecked(true);
         }
@@ -131,7 +131,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
                 for (Course course : allCourses) {
                     if ((course.getCode().toLowerCase().trim().contains(queryString) ||
                             course.getName().toLowerCase().trim().contains(queryString) ||
-                            course.getTeacher().toLowerCase().trim().contains(queryString)) &&
+                            course.getFaculty().toLowerCase().trim().contains(queryString)) &&
                             (!showOnlyFav  || favoritesID.contains(course.getID()))) {
                         filteredCourses.add(course);
                     }
