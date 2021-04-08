@@ -62,7 +62,6 @@ public class API {
         @Override
         protected String doInBackground(Void... voids) {
             try {
-                if(key != null) Log.d("Gwen", key);
                 // Sending the request
                 URL url = new URL(urlWebService);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -85,7 +84,7 @@ public class API {
                 // Getting the answer from th DB
                 Log.d("Gwen", Integer.toString(httpURLConnection.getResponseCode()));
 
-                InputStream IS = httpURLConnection.getInputStream(); //DB answer
+                InputStream IS = httpURLConnection.getResponseCode() / 100 == 2 ? httpURLConnection.getInputStream() : httpURLConnection.getErrorStream(); //DB answer
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(IS));
                 String json;
                 StringBuilder result = new StringBuilder();
@@ -134,6 +133,28 @@ public class API {
                 return (JSONObject) jsonObject.get("user");
             }
             return jsonObject;
+        } catch (UnsupportedEncodingException | ExecutionException | InterruptedException | JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static JSONObject loginUser(String login, String password){
+        try{
+            String data = URLEncoder.encode("login", "UTF-8") + "=" + URLEncoder.encode(login, "UTF-8") + "&" +
+                          URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(password, "UTF-8");
+
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/login", data, "POST");
+            String response = getJSON.execute().get();
+
+            JSONObject jsonObject = new JSONObject(response);
+            if(jsonObject == null) return null;
+            else if(!jsonObject.has("message")){ // If no error while creating the new user, create an insance of the API object with the key of the user
+                INSTANCE = new API(jsonObject.getString("token"));
+                return (JSONObject) jsonObject.get("user");
+            }
+            return jsonObject;
+
         } catch (UnsupportedEncodingException | ExecutionException | InterruptedException | JSONException e) {
             e.printStackTrace();
             return null;
