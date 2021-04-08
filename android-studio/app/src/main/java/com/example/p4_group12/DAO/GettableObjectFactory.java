@@ -14,7 +14,7 @@ public class GettableObjectFactory {
 
     public static Object getObject(JSONObject dbObject, Class objectClass) throws JSONException {
         if(objectClass.getCanonicalName().equals(Course.class.getCanonicalName())){
-            return new Course(Integer.parseInt(dbObject.getString("ID")), dbObject.getString("CODE"), dbObject.getString("TEACHER"), dbObject.getString("NAME"), dbObject.getString("NAME"));
+            return new Course(Integer.parseInt(dbObject.getString("ID")), dbObject.getString("CODE"), dbObject.getString("TEACHER"), dbObject.getString("NAME"), dbObject.getString("UNIVERSITY"), dbObject.getString("FACULTY"), dbObject.getString("QUADRI"));
         }
         else if(objectClass.getCanonicalName().equals(Advertisement.class.getCanonicalName())){
             return new Advertisement(Integer.parseInt(dbObject.getString("ID")), dbObject.getString("USER_EMAIL"), dbObject.getString("TITLE"), dbObject.getString("DESCRIPTION"), dbObject.getString("TYPE"));
