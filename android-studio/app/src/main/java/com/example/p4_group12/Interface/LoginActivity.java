@@ -194,10 +194,10 @@ public class LoginActivity extends AppCompatActivity {
                                 .edit()
                                 .putString(PREF_EMAIL, object.getString("email"))
                                 .apply();
-                        GlobalVariables.setLogin(login.getText().toString());
-                        GlobalVariables.setEmail(object.getString("email"));
-                        GlobalVariables.setName(object.getString("name"));
                     }
+                    GlobalVariables.setLogin(login.getText().toString());
+                    GlobalVariables.setEmail(object.getString("email"));
+                    GlobalVariables.setName(object.getString("name"));
                     //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
                     //startActivity(edit_profil);
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);

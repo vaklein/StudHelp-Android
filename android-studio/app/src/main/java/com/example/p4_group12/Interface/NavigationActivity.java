@@ -43,6 +43,10 @@ public class NavigationActivity extends AppCompatActivity{
                         .edit()
                         .putString(LoginActivity.PREF_EMAIL, null)
                         .apply();
+                GlobalVariables.setDiscord("");
+                GlobalVariables.setTeams("");
+                GlobalVariables.setFacebook("");
+                GlobalVariables.setSocialNetwokCharged(false);
                 Intent intentLoginActivity = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intentLoginActivity);
                 finish();
