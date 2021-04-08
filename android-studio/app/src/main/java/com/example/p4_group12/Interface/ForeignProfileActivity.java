@@ -17,15 +17,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Social_links;
 import com.example.p4_group12.DAO.User;
+import com.example.p4_group12.Interface.fragments.ContactsFragment;
+import com.example.p4_group12.Interface.fragments.DataFragment;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.DatabaseContact;
 import com.example.p4_group12.database.GetObjectFromDB;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
@@ -45,7 +51,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ForeignProfileActivity extends NavigationActivity {
+public class ForeignProfileActivity extends NavigationActivity implements TabLayout.OnTabSelectedListener {
 
     private FloatingActionButton edit;
     private TextView name;
@@ -62,7 +68,10 @@ public class ForeignProfileActivity extends NavigationActivity {
     private ArrayList<TextInputEditText> textreseaux ;
     private ArrayList<LinearLayout> affichagereseaux ;
 
-
+    private TabLayout tabLayout;
+    private Fragment fragment = null;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
 
     @SuppressLint("ResourceType")
     @Override
@@ -73,6 +82,16 @@ public class ForeignProfileActivity extends NavigationActivity {
         getLayoutInflater().inflate(R.layout.activity_profile, contentFrameLayout);
         setTitleToolbar("Profil");
 
+        tabLayout = findViewById(R.id.tabs);
+        fragment = new DataFragment();
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameLayout, fragment);
+
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.commit();
+        tabLayout.addOnTabSelectedListener(this);
+
         String foreignUserEmail = (String) getIntent().getSerializableExtra("ForeignUser");
         ArrayList<User> onlyUser = new ArrayList<>();
         GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_user_from_email.php?UserEmail="+foreignUserEmail, onlyUser, User.class);
@@ -81,9 +100,13 @@ public class ForeignProfileActivity extends NavigationActivity {
         if(foreignUser == null) Log.d("NULLWARNING", "foreignUser is null in ForeignProfileActivity");
 
         name = (TextView) findViewById(R.id.user_profile_name);
+        name.setText(String.valueOf(foreignUser.getName()));
+        edit = findViewById(R.id.floating_action_button);
+        //edit.setVisibility(View.GONE);
+
+  /*
         login = (TextView) findViewById(R.id.user_profil_login);
         email = (TextView) findViewById(R.id.user_profil_email);
-        edit = findViewById(R.id.floating_action_button);
         discordlayout = findViewById(R.id.discord_profil_champ);
         facebooklayout = findViewById(R.id.facebook_profil_champ);
         teamslayout = findViewById(R.id.teams_profil_champ);
@@ -147,11 +170,40 @@ public class ForeignProfileActivity extends NavigationActivity {
         });
 
 
-        name.setText(String.valueOf(foreignUser.getName()));
+
         login.setText(String.valueOf(foreignUser.getLogin()));
         email.setText(String.valueOf(foreignUser.getEmail()));
 
-        edit.setVisibility(View.GONE);
+
+*/
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        switch (tab.getPosition()) {
+            case 0:
+                fragment = new DataFragment();
+                break;
+
+            case 1:
+                fragment = new ContactsFragment();
+                break;
+        }
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameLayout, fragment);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
 
     }
 }
