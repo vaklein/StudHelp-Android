@@ -3,16 +3,11 @@ package com.example.p4_group12.Interface;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.SearchView;
@@ -31,7 +26,6 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.TreeSet;
 
 public class CourseListActivity extends NavigationActivity{
     private RecyclerView courseRecyclerView;
@@ -45,7 +39,7 @@ public class CourseListActivity extends NavigationActivity{
     private DrawerLayout drawerLayout;
     ArrayList<Course> courseList = new ArrayList<>();
 
-    private String currentQuerry = "";
+    private String currentQuery = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +55,7 @@ public class CourseListActivity extends NavigationActivity{
 
         // Doing all the synchronous queries
         GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_courses.php", courseList, Course.class); // getting all the courses
+
 
         // Building the recycler view
         courseRecyclerView = findViewById(R.id.courseRecyclerView);
@@ -82,7 +77,7 @@ public class CourseListActivity extends NavigationActivity{
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if(true){
-                    currentQuerry = query;
+                    currentQuery = query;
                     courseListAdapter.getFilter().filter(query);
                 }else{
                     Toast.makeText(CourseListActivity.this, "No Match found",Toast.LENGTH_LONG).show();
@@ -91,7 +86,7 @@ public class CourseListActivity extends NavigationActivity{
             }
             @Override
             public boolean onQueryTextChange(String newText) {
-                currentQuerry = newText;
+                currentQuery = newText;
                 courseListAdapter.getFilter().filter(newText);
                 return false;
             }
@@ -101,8 +96,8 @@ public class CourseListActivity extends NavigationActivity{
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean activated) {
                 Log.v("Jules", searchView.getQuery().toString());
-                if(activated) courseListAdapter.favoriteFilter(currentQuerry);
-                else courseListAdapter.resetFavoriteFilter(currentQuerry);//courseListAdapter.getFilter().filter(searchView.getQuery());
+                if(activated) courseListAdapter.favoriteFilter(currentQuery);
+                else courseListAdapter.resetFavoriteFilter(currentQuery);//courseListAdapter.getFilter().filter(searchView.getQuery());
 
                 // courseList = courseListAdapter.courseList;
             }

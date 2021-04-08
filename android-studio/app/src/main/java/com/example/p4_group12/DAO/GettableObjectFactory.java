@@ -1,5 +1,7 @@
 package com.example.p4_group12.DAO;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,7 +16,7 @@ public class GettableObjectFactory {
 
     public static Object getObject(JSONObject dbObject, Class objectClass) throws JSONException {
         if(objectClass.getCanonicalName().equals(Course.class.getCanonicalName())){
-            return new Course(Integer.parseInt(dbObject.getString("ID")), dbObject.getString("CODE"), dbObject.getString("TEACHER"), dbObject.getString("NAME"), dbObject.getString("UNIVERSITY"), dbObject.getString("FACULTY"), dbObject.getString("QUADRI"));
+                return new Course(Integer.parseInt(dbObject.getString("ID")), dbObject.getString("CODE"), dbObject.getString("TEACHER"), dbObject.getString("UNIVERSITY"), dbObject.getString("NAME"), dbObject.getString("FAC"), dbObject.getString("QUADRI"));
         }
         else if(objectClass.getCanonicalName().equals(Advertisement.class.getCanonicalName())){
             return new Advertisement(Integer.parseInt(dbObject.getString("ID")), dbObject.getString("USER_EMAIL"), dbObject.getString("TITLE"), dbObject.getString("DESCRIPTION"), dbObject.getString("TYPE"));
