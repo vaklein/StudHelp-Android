@@ -68,6 +68,8 @@ public class ForeignProfileActivity extends NavigationActivity implements TabLay
     private ArrayList<TextInputEditText> textreseaux ;
     private ArrayList<LinearLayout> affichagereseaux ;
 
+    private User foreignUser;
+
     private TabLayout tabLayout;
     private Fragment fragment = null;
     private FragmentManager fragmentManager;
@@ -82,8 +84,19 @@ public class ForeignProfileActivity extends NavigationActivity implements TabLay
         getLayoutInflater().inflate(R.layout.activity_profile, contentFrameLayout);
         setTitleToolbar("Profil");
 
+        String foreignUserEmail = (String) getIntent().getSerializableExtra("ForeignUser");
+        ArrayList<User> onlyUser = new ArrayList<>();
+        GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_user_from_email.php?UserEmail="+foreignUserEmail, onlyUser, User.class);
+        Log.v("Jules", "This is the list of user for the mail address" + onlyUser.toString());
+        foreignUser = onlyUser.get(0);
+        if(foreignUser == null) Log.d("NULLWARNING", "foreignUser is null in ForeignProfileActivity");
+
         tabLayout = findViewById(R.id.tabs);
+        Bundle bundle = new Bundle();
+        bundle.putString("login", String.valueOf(foreignUser.getLogin()));
+        bundle.putString("email", null);
         fragment = new DataFragment();
+        fragment.setArguments(bundle);
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment);
@@ -91,18 +104,10 @@ public class ForeignProfileActivity extends NavigationActivity implements TabLay
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
         tabLayout.addOnTabSelectedListener(this);
-
-        String foreignUserEmail = (String) getIntent().getSerializableExtra("ForeignUser");
-        ArrayList<User> onlyUser = new ArrayList<>();
-        GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_user_from_email.php?UserEmail="+foreignUserEmail, onlyUser, User.class);
-        Log.v("Jules", "This is the list of user for the mail address" + onlyUser.toString());
-        User foreignUser = onlyUser.get(0);
-        if(foreignUser == null) Log.d("NULLWARNING", "foreignUser is null in ForeignProfileActivity");
-
         name = (TextView) findViewById(R.id.user_profile_name);
         name.setText(String.valueOf(foreignUser.getName()));
         edit = findViewById(R.id.floating_action_button);
-        //edit.setVisibility(View.GONE);
+        edit.setVisibility(View.GONE);
 
   /*
         login = (TextView) findViewById(R.id.user_profil_login);
@@ -110,10 +115,6 @@ public class ForeignProfileActivity extends NavigationActivity implements TabLay
         discordlayout = findViewById(R.id.discord_profil_champ);
         facebooklayout = findViewById(R.id.facebook_profil_champ);
         teamslayout = findViewById(R.id.teams_profil_champ);
-        noNetworkString = findViewById(R.id.no_network_profil);
-        noNetworkString.setText(getText(R.string.no_social_network_other_user));
-        textreseauxsociaux = findViewById(R.id.textreseauxsociaux);
-        textreseauxsociaux.setText(R.string.social_network_other_user);
         facebooktext = findViewById(R.id.facebook_text);
         discordtext = findViewById(R.id.discord_text);
         teamstext = findViewById(R.id.teams_text);
@@ -180,13 +181,20 @@ public class ForeignProfileActivity extends NavigationActivity implements TabLay
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
+        Bundle bundle = new Bundle();
         switch (tab.getPosition()) {
             case 0:
+                bundle.putString("login", String.valueOf(foreignUser.getLogin()));
+                bundle.putString("email", null);
                 fragment = new DataFragment();
+                fragment.setArguments(bundle);
                 break;
 
             case 1:
+                bundle.putString("email", String.valueOf(foreignUser.getEmail()));
+                bundle.putString("type", "foreign");
                 fragment = new ContactsFragment();
+                fragment.setArguments(bundle);
                 break;
         }
 

@@ -46,7 +46,11 @@ public class ProfileActivity extends NavigationActivity implements TabLayout.OnT
         setTitleToolbar("Profil");
 
         tabLayout = findViewById(R.id.tabs);
+        Bundle bundle = new Bundle();
+        bundle.putString("login", GlobalVariables.getLogin());
+        bundle.putString("email", GlobalVariables.getEmail());
         fragment = new DataFragment();
+        fragment.setArguments(bundle);
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment);
@@ -71,16 +75,21 @@ public class ProfileActivity extends NavigationActivity implements TabLayout.OnT
     }
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
+        Bundle bundle = new Bundle();
         switch (tab.getPosition()) {
             case 0:
+                bundle.putString("login", GlobalVariables.getLogin());
+                bundle.putString("email", GlobalVariables.getEmail());
                 fragment = new DataFragment();
+                fragment.setArguments(bundle);
                 break;
-
             case 1:
+                bundle.putString("email", GlobalVariables.getEmail());
+                bundle.putString("type", "user");
                 fragment = new ContactsFragment();
+                fragment.setArguments(bundle);
                 break;
         }
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment);

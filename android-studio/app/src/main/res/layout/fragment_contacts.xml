@@ -18,20 +18,9 @@
             android:orientation="vertical"
             android:layout_marginTop="25dp">
             <TextView
-                android:id="@+id/textreseauxsociaux"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/profile_layout"
-                android:layout_marginLeft="20dp"
-                android:text="@string/social_network_underline"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
                 android:id="@+id/no_network_profil"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/textreseauxsociaux"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="5dp"
                 android:text="@string/no_social_network_advertisment"
@@ -45,7 +34,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="15dp"
                 android:layout_marginRight="20dp"
                 android:visibility="gone"
                 app:strokeColor="@color/myrtic_green"

@@ -20,8 +20,12 @@ public class DataFragment extends Fragment {
         View result = inflater.inflate(R.layout.fragment_data, container, false);
         TextView login = (TextView) result.findViewById(R.id.user_profil_login);
         TextView email = (TextView) result.findViewById(R.id.user_profil_email);
-        login.setText(String.valueOf(GlobalVariables.getLogin()));
-        email.setText(String.valueOf(GlobalVariables.getEmail()));
+        String loginValue = this.getArguments().getString("login");
+        String emailValue = this.getArguments().getString("email");
+        login.setText(loginValue);
+        if (emailValue == null) result.findViewById(R.id.emailCard).setVisibility(View.GONE);
+        else email.setText(emailValue);
         return result;
     }
+
 }

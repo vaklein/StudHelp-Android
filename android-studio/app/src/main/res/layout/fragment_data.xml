@@ -54,6 +54,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 style="@style/CardViewStyle"
+                android:id="@+id/emailCard"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginLeft="20dp"

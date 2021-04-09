@@ -11,9 +11,7 @@ public class GlobalVariables {
     private static String name;
     private static String login;
     private static String email;
-    private static String discord = "";
-    private static String teams = "";
-    private static String facebook = "";
+    private static Social_links social_links = new Social_links();
     private static boolean social_network_charged = false;
     private static ArrayList<Course> courseArrayList;
     private static final ArrayList<String> faculties = new ArrayList<>();
@@ -36,27 +34,35 @@ public class GlobalVariables {
     public static  void setSocialNetwokCharged(boolean b){ social_network_charged = b; }
     public static boolean havaASocialNetwork(){
         boolean b = false;
-        if (!discord.equals("")) b = true;
-        if (!teams.equals("")) b = true;
-        if (!facebook.equals("")) b = true;
+        if (!social_links.getDiscord().equals("")) b = true;
+        if (!social_links.getTeams().equals("")) b = true;
+        if (!social_links.getFacebook().equals("")) b = true;
         return b;
     }
 
-    public static String getDiscord() { return discord; }
-    public static void setDiscord(String discord) { GlobalVariables.discord = discord; }
+    public static Social_links getSocial_links() {
+        return social_links;
+    }
+
+    public static void setSocial_links(Social_links social_links) {
+        GlobalVariables.social_links = social_links;
+    }
+
+    public static String getDiscord() { return social_links.getDiscord(); }
+    public static void setDiscord(String discord) { social_links.setDiscord(discord);}
 
     public static String getTeams() {
-        return teams;
+        return social_links.getTeams();
     }
     public static void setTeams(String teams) {
-        GlobalVariables.teams = teams;
+        social_links.setDiscord(teams);
     }
 
     public static String getFacebook() {
-        return facebook;
+        return social_links.getFacebook();
     }
     public static void setFacebook(String facebook) {
-        GlobalVariables.facebook = facebook;
+        social_links.setDiscord(facebook);
     }
 
     public static ArrayList<Course> getCourses() { return courseArrayList; }

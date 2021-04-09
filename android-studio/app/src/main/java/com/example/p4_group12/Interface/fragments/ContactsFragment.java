@@ -39,19 +39,28 @@ public class ContactsFragment extends Fragment {
         TextView teamstext = result.findViewById(R.id.teams_text);
         TextView discordtext = result.findViewById(R.id.discord_text);
 
+        String emailValue = this.getArguments().getString("email");
         //ArrayList<String> reseaux = DatabaseContact.get_social_links(GlobalVariables.getEmail());
-        if (!GlobalVariables.getSocialNetwokCharged()) {
+        Social_links s;
+        if (this.getArguments().getString("type").equals("foreign")){
+            noNetworkString.setText(getText(R.string.no_social_network_other_user));
             ArrayList<Social_links> reseaux = new ArrayList<>();
-            GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_social_links.php?UserEmail=" + GlobalVariables.getEmail(), reseaux, Social_links.class);
-            Social_links s = reseaux.get(0);
-            GlobalVariables.setDiscord(s.getDiscord());
-            GlobalVariables.setTeams(s.getTeams());
-            GlobalVariables.setFacebook(s.getFacebook());
-            GlobalVariables.setSocialNetwokCharged(true);
+            GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_social_links.php?UserEmail="+emailValue,reseaux,Social_links.class);
+            s = reseaux.get(0);
+        }else {
+            if (!GlobalVariables.getSocialNetwokCharged()) {
+                ArrayList<Social_links> reseaux = new ArrayList<>();
+                GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_social_links.php?UserEmail=" + GlobalVariables.getEmail(), reseaux, Social_links.class);
+                s = reseaux.get(0);
+                GlobalVariables.setSocial_links(s);
+                GlobalVariables.setSocialNetwokCharged(true);
+            } else {
+                s = GlobalVariables.getSocial_links();
+            }
         }
 
-        if(!GlobalVariables.getDiscord().equals("")){
-            SpannableString content = new SpannableString(GlobalVariables.getDiscord());
+        if(!s.getDiscord().equals("")){
+            SpannableString content = new SpannableString(s.getDiscord());
             content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
             discordtext.setText(content);
             discordlayout.setVisibility(View.VISIBLE);
@@ -61,12 +70,12 @@ public class ContactsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Discord contact", GlobalVariables.getDiscord());
+                ClipData clip = ClipData.newPlainText("Discord contact", s.getDiscord());
                 clipboard.setPrimaryClip(clip);
             }
         });
-        if(!GlobalVariables.getTeams().equals("")){
-            SpannableString content = new SpannableString(GlobalVariables.getTeams());
+        if(!s.getTeams().equals("")){
+            SpannableString content = new SpannableString(s.getTeams());
             content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
             teamstext.setText(content);
             teamslayout.setVisibility(View.VISIBLE);
@@ -76,12 +85,12 @@ public class ContactsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Teams contact", GlobalVariables.getTeams());
+                ClipData clip = ClipData.newPlainText("Teams contact", s.getTeams());
                 clipboard.setPrimaryClip(clip);
             }
         });
-        if(!GlobalVariables.getFacebook().equals("")){
-            SpannableString content = new SpannableString(GlobalVariables.getFacebook());
+        if(!s.getFacebook().equals("")){
+            SpannableString content = new SpannableString(s.getFacebook());
             content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
             facebooktext.setText(content);
             facebooklayout.setVisibility(View.VISIBLE);
@@ -91,7 +100,7 @@ public class ContactsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Facebook contact", GlobalVariables.getFacebook());
+                ClipData clip = ClipData.newPlainText("Facebook contact", s.getFacebook());
                 clipboard.setPrimaryClip(clip);
             }
         });
