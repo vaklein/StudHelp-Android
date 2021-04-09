@@ -41,7 +41,6 @@ public class HomeActivity extends NavigationActivity{
                 Intent searchActivity = new Intent(getApplicationContext(), SearchActivity.class);
                 searchActivity.putExtra("ClickedCategory", "search all");
                 startActivity(searchActivity);
-                finish();
             }
         });
 

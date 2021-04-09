@@ -25,7 +25,7 @@
 
                 <!--#############################################################-->
                 <!--#############################################################-->
-                <!--######################## METADATAs #########################-->
+                <!--######################## METADATAS #########################-->
                 <!--#############################################################-->
                 <!--#############################################################-->
         <meta-data
@@ -69,24 +69,13 @@
             android:name=".Interface.HomeActivity"
             android:label="HomeActivity" />
 
-                        <!-- ############# SearchListActivity ############## -->
-                <!--#############################################################-->
-
-        <activity
-            android:name=".Interface.SearchActivity"
-            android:label="@string/title_activity_course_list"
-            android:parentActivityName=".Interface.HomeActivity"/>
 
                         <!-- ############# EditPasswordActivity ############## -->
                 <!--#############################################################-->
         <activity
             android:name=".Interface.MyAdvertisementsActivity" />
 
-                        <!-- ############# AdvertisementsListActivity ############## -->
-                <!--#############################################################-->
-        <activity android:name=".Interface.AdvertisementsListActivity"
-            android:label="Liste des annonces"
-            android:parentActivityName=".Interface.SearchActivity" />
+
 
                         <!-- ############# ProfileActivity ############## -->
                 <!--#############################################################-->
@@ -96,12 +85,12 @@
 
 
         <!--#################################-->
-        <!--# 2) activities with no go back #-->
+        <!--# 2) activities with go back #-->
         <!--#################################-->
 
 
 
-        <!-- ############# AddAdvertisementActivity ############## -->
+                    <!-- ############# AddAdvertisementActivity ############## -->
                 <!--#############################################################-->
         <activity
             android:name=".Interface.AddAdvertisementActivity"
@@ -115,6 +104,20 @@
             android:name=".Interface.ForeignProfileActivity"
             android:label="Vision d'un profil"
             android:parentActivityName=".Interface.AdvertisementView" />
+
+                <!-- ############# AdvertisementsListActivity ############## -->
+            <!--#############################################################-->
+        <activity android:name=".Interface.AdvertisementsListActivity"
+            android:label="Liste des annonces"
+            android:parentActivityName=".Interface.SearchActivity" />
+
+                <!-- ############# SearchListActivity ############## -->
+            <!--#############################################################-->
+
+        <activity
+            android:name=".Interface.SearchActivity"
+            android:label="@string/title_activity_course_list"
+            android:parentActivityName=".Interface.HomeActivity"/>
 
                        <!-- ############# AdvertisementView ############## -->
                 <!--#############################################################-->
