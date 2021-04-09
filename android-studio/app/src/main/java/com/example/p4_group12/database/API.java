@@ -72,7 +72,9 @@ public class API {
                 URL url = new URL(urlWebService);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestProperty("Authorization","Bearer "+ key); // Setting the bearer token for the request
+                // Log.d("Gwen", this.requestType);
                 httpURLConnection.setRequestMethod(this.requestType);  //setting the request type
+                // Log.d("Gwen", this.requestType);
 
                 if(this.requestType == "GET") httpURLConnection.setRequestProperty("Accept", "application/json");
                 if(this.requestType == "GET") httpURLConnection.setRequestProperty("Content-Type", "application/json");
@@ -307,7 +309,7 @@ public class API {
         return allUserAds;
     }
 
-    public static Boolean editNameAndLogin(User user, String newLogin, String newName){
+    public Boolean editNameAndLogin(User user, String newName, String newLogin){
         try{
             String data = "";
             // Probably a better way to do it but can't find it
@@ -316,14 +318,15 @@ public class API {
                         URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(!newName.equals("")? newName : user.getName(), "UTF-8");
             }else if(!newLogin.equals("")){
                 data =  URLEncoder.encode("login", "UTF-8") + "=" + URLEncoder.encode(!newLogin.equals("")? newLogin : user.getLogin(), "UTF-8");
-            }else if(!!newName.equals("")){
+            }else if(!newName.equals("")){
                 data = URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(!newName.equals("")? newName : user.getName(), "UTF-8");
             }
 
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + user.getEmail(), data, "PUT");
             String response = getJSON.execute().get();
+            Log.d("Gwen", response);
 
-            JSONObject jsonObject = (JSONObject) new JSONArray(response).get(0);
+            JSONObject jsonObject = (JSONObject) new JSONObject(response);
             return jsonObject != null && !jsonObject.has("error");
 
 
@@ -333,7 +336,7 @@ public class API {
         }
     }
 
-    public static void updateSocialLinks(User user){
+    public void updateSocialLinks(User user){
         try{
             String data = URLEncoder.encode("discord", "UTF-8") + "=" + URLEncoder.encode(user.getSocial_links().getDiscord(), "UTF-8") + "&" +
                     URLEncoder.encode("teams", "UTF-8") + "=" + URLEncoder.encode(user.getSocial_links().getTeams(), "UTF-8") + "&" +
@@ -343,6 +346,22 @@ public class API {
             getJSON.execute(); // Making the request Async
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
+        }
+    }
+
+    public Boolean updatePassword(User user, String newPassword, String passwordConfirmation, String oldPasswordGiven){
+        try{
+            String data = URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(newPassword, "UTF-8") + "&" +
+                    URLEncoder.encode("password_confirmation", "UTF-8") + "=" + URLEncoder.encode(passwordConfirmation, "UTF-8") + "&" +
+                    URLEncoder.encode("old_password", "UTF-8") + "=" + URLEncoder.encode(oldPasswordGiven, "UTF-8");
+
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/password/" + user.getEmail(), data, "PUT");
+            JSONObject jsonObject = new JSONObject(getJSON.execute().get());
+            Log.d("Gwen", jsonObject.toString());
+            return !jsonObject.has("errors");
+        } catch (UnsupportedEncodingException | ExecutionException | InterruptedException | JSONException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

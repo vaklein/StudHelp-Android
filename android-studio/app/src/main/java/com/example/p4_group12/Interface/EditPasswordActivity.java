@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.R;
+import com.example.p4_group12.database.API;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -43,6 +44,7 @@ public class EditPasswordActivity extends NavigationActivity {
     private TextInputLayout password_confirmationField;
     private static final String PASSWORD_STRENGTH = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[*@#$%!]).{8,40})";
     private LoadingDialog loadingDialog;
+    private API api;
 
 
 
@@ -70,14 +72,25 @@ public class EditPasswordActivity extends NavigationActivity {
                 new_passwordField.setErrorEnabled(false);
                 password_confirmationField.setErrorEnabled(false);
                 password_confirmationField.setErrorEnabled(false);
-                if (isCorrectlyFil() && isSameNewPassword() && isPasswordPowerfull()) {
-                    new AsyncLogin().execute(String.valueOf(GlobalVariables.getEmail()), previous_password.getText().toString(), new_password.getText().toString());
+                if (isCorrectlyFill() && isSameNewPassword() && isPasswordPowerfull()) {
+                    api = API.getInstance();
+                    Boolean apiRetValue = api.updatePassword(GlobalVariables.getUser(), new_password.getText().toString(), password_confirmation.getText().toString(), previous_password.getText().toString());
+                    if(apiRetValue == null) {
+                        Toast.makeText(EditPasswordActivity.this, "Une erreur est survenue, veuilliez réessayer", Toast.LENGTH_LONG).show();
+                    }else if(!apiRetValue){
+                        previous_passwordField.setError("Mauvais mot de passe");
+                    }else{
+                        GlobalVariables.getUser().setPassword(new_password.getText().toString());
+                        Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
+                        startActivity(edit_profil);
+                        EditPasswordActivity.this.finish();
+                    }
                 }
             }
         });
 
     }
-    private boolean isCorrectlyFil() {
+    private boolean isCorrectlyFill() {
         // tout doit être complèté
         boolean filled = true;
         if (previous_password.getText().toString().isEmpty()) {
@@ -111,68 +124,5 @@ public class EditPasswordActivity extends NavigationActivity {
             return false;
         }
         return true;
-    }
-    class AsyncLogin extends AsyncTask<String, Void, String> { // Il faut lancer un autre thread car une requete sur le main thread peut faire crasher l'app
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            loadingDialog.getDialog().show();
-        }
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                URL url = new URL(BuildConfig.DB_URL + "update_password.php");
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                httpURLConnection.setRequestMethod("POST");  //POST request
-                httpURLConnection.setDoOutput(true);
-                OutputStream OS = httpURLConnection.getOutputStream();
-                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
-                String data = URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(params[0], "UTF-8") + "&" +
-                        URLEncoder.encode("oldpassword", "UTF-8") + "=" + URLEncoder.encode(params[1], "UTF-8")+ "&" +
-                        URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(params[2], "UTF-8");
-                bufferedWriter.write(data); //Send data
-                bufferedWriter.flush();
-                bufferedWriter.close();
-                OS.close();
-                InputStream IS = httpURLConnection.getInputStream(); //DB answer
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(IS));
-                String json;
-                StringBuilder result = new StringBuilder();
-                while ((json = bufferedReader.readLine()) != null) {
-                    result.append(json + "\n");
-                }
-                IS.close();
-                httpURLConnection.disconnect();
-                return result.toString();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-                return null;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            loadingDialog.getDialog().cancel();
-            try {
-                JSONObject response = new JSONObject(result);
-                JSONObject object = response.getJSONObject("response");
-                if (object.getBoolean("error")) {
-                    previous_passwordField.setError("Mauvais mot de passe");
-                }
-                else if (object.getBoolean("effet")) {
-                    Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
-                    startActivity(edit_profil);
-                    EditPasswordActivity.this.finish();
-                }else{
-                    Toast.makeText(EditPasswordActivity.this, "Une erreur est survenue, veuilliez réessayer", Toast.LENGTH_LONG).show();
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
     }
 }

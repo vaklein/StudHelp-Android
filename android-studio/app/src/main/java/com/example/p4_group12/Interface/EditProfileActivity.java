@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
-import com.example.p4_group12.database.DatabaseContact;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -74,6 +73,7 @@ public class EditProfileActivity extends NavigationActivity {
         teams_text = findViewById(R.id.teams_text);
         teams_text.setText(GlobalVariables.getUser().getSocial_links().getTeams());
 
+        api = API.getInstance();
 
 
         edit_password.setOnClickListener(new View.OnClickListener() {
