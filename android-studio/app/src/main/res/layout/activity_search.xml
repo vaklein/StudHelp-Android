@@ -42,21 +42,27 @@
                 android:divider="@color/light_salmon"
                 android:dividerHeight="5dp"
                 android:layout_below="@+id/searchView"/>-->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/searchViewCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp">
             <SearchView
                 android:id="@+id/searchView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:layout_margin="15dp"
+                android:layout_margin="2dp"
                 android:queryHint="@string/query_hint_string"
                 android:iconifiedByDefault="false"
                 />
+            </com.google.android.material.card.MaterialCardView>
 
             <Switch
                 android:id="@+id/show_fav_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/searchView"
+                android:layout_below="@+id/searchViewCard"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="15dp"
