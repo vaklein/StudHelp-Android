@@ -22,8 +22,7 @@ import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Social_links;
 import com.example.p4_group12.DAO.User;
 import com.example.p4_group12.R;
-import com.example.p4_group12.database.DatabaseContact;
-import com.example.p4_group12.database.GetObjectFromDB;
+import com.example.p4_group12.database.API;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -61,6 +60,7 @@ public class ForeignProfileActivity extends NavigationActivity {
     private TextView textreseauxsociaux;
     private ArrayList<TextInputEditText> textreseaux ;
     private ArrayList<LinearLayout> affichagereseaux ;
+    private API api;
 
 
 
@@ -73,11 +73,11 @@ public class ForeignProfileActivity extends NavigationActivity {
         getLayoutInflater().inflate(R.layout.activity_profile, contentFrameLayout);
         setTitleToolbar("Profil");
 
+        api = API.getInstance();
+
         String foreignUserEmail = (String) getIntent().getSerializableExtra("ForeignUser");
-        ArrayList<User> onlyUser = new ArrayList<>();
-        GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_user_from_email.php?UserEmail="+foreignUserEmail, onlyUser, User.class);
-        Log.v("Jules", "This is the list of user for the mail address" + onlyUser.toString());
-        User foreignUser = onlyUser.get(0);
+
+        User foreignUser = api.getUserWithEmail(foreignUserEmail);
         if(foreignUser == null) Log.d("NULLWARNING", "foreignUser is null in ForeignProfileActivity");
 
         name = (TextView) findViewById(R.id.user_profile_name);
@@ -97,9 +97,7 @@ public class ForeignProfileActivity extends NavigationActivity {
 
 
         //ArrayList<String> reseaux = DatabaseContact.get_social_links(GlobalVariables.getEmail());
-        ArrayList<Social_links> reseaux = new ArrayList<>();
-        GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_social_links.php?UserEmail="+foreignUser.getEmail(),reseaux,Social_links.class);
-        Social_links s=reseaux.get(0);
+        Social_links s= api.getSocialLinksOfUser(foreignUser);
         if(!s.getDiscord().equals("")){
             SpannableString content = new SpannableString(s.getDiscord());
             content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
