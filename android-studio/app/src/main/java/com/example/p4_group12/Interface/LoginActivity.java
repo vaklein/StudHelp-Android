@@ -110,6 +110,9 @@ public class LoginActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
+                        ArrayList<Course> loadCourses = API.getInstance().getCourses();
+                        GlobalVariables.setCourses(loadCourses);
                         //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
                         //startActivity(edit_profil);
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);

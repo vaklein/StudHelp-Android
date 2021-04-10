@@ -68,16 +68,15 @@ public class AddAdvertisementActivity extends NavigationActivity {
         advertisementDescriptionText = findViewById(R.id.advertisement_description_text);
         submitAdvertisement = findViewById(R.id.add_advertisement_button);
         currentAdvertisement = (Advertisement) getIntent().getSerializableExtra("ClickedAdvertisement");
-
-        this.api = API.getInstance();
-
-        if (GlobalVariables.getUser().getSocial_links() != null) {
-            GlobalVariables.getUser().setSocial_links(api.getSocialLinksOfUser(GlobalVariables.getUser()));
         chipGroupError = findViewById(R.id.chip_group_unckecked_error);
         typeChipGroup = findViewById(R.id.add_advertisement_type_chip_group);
         cycleChipGroup = findViewById(R.id.add_advertisement_cycle_chip_group);
         objectChipGroup = findViewById(R.id.add_advertisement_object_chip_group);
 
+        this.api = API.getInstance();
+
+        if (GlobalVariables.getUser().getSocial_links() == null) {
+            GlobalVariables.getUser().setSocial_links(api.getSocialLinksOfUser(GlobalVariables.getUser()));
         }
         if (!GlobalVariables.getUser().hasASocialNetwork()){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
