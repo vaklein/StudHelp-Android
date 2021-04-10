@@ -54,18 +54,6 @@ public class ForeignProfileActivity extends NavigationActivity implements TabLay
 
     private FloatingActionButton edit;
     private TextView name;
-    private TextView login;
-    private TextView email;
-    private MaterialCardView discordlayout;
-    private MaterialCardView teamslayout;
-    private MaterialCardView facebooklayout;
-    private TextView noNetworkString;
-    private TextView facebooktext;
-    private TextView discordtext;
-    private TextView teamstext;
-    private TextView textreseauxsociaux;
-    private ArrayList<TextInputEditText> textreseaux ;
-    private ArrayList<LinearLayout> affichagereseaux ;
     private API api;
 
     private User foreignUser;
@@ -88,7 +76,7 @@ public class ForeignProfileActivity extends NavigationActivity implements TabLay
 
         String foreignUserEmail = (String) getIntent().getSerializableExtra("ForeignUser");
 
-        User foreignUser = api.getUserWithEmail(foreignUserEmail);
+        foreignUser = api.getUserWithEmail(foreignUserEmail);
 
         if(foreignUser == null) Log.d("NULLWARNING", "foreignUser is null in ForeignProfileActivity");
 
@@ -109,10 +97,6 @@ public class ForeignProfileActivity extends NavigationActivity implements TabLay
         name.setText(String.valueOf(foreignUser.getName()));
         edit = findViewById(R.id.floating_action_button);
         edit.setVisibility(View.GONE);
-
-        login.setText(String.valueOf(foreignUser.getLogin()));
-        email.setText(String.valueOf(foreignUser.getEmail()));
-
     }
 
     @Override
