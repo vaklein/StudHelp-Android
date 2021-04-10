@@ -198,6 +198,12 @@ public class LoginActivity extends AppCompatActivity {
                     GlobalVariables.setLogin(login.getText().toString());
                     GlobalVariables.setEmail(object.getString("email"));
                     GlobalVariables.setName(object.getString("name"));
+
+                    // Doing all the synchronous queries
+                    ArrayList<Course> loadCourses = new ArrayList<>();
+                    GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_courses.php", loadCourses, Course.class); // getting all the courses
+                    GlobalVariables.setCourses(loadCourses);
+
                     //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
                     //startActivity(edit_profil);
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
