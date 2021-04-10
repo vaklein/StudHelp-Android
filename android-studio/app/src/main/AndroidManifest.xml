@@ -12,10 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_2_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.P4group12">
-        <activity android:name=".Interface.AdvertisementsListActivity"
-            android:label="Liste des annonces"
-            android:parentActivityName=".Interface.CourseListActivity" />
-
 
         <!--
          <uses-library
@@ -29,7 +25,7 @@
 
                 <!--#############################################################-->
                 <!--#############################################################-->
-                <!--######################## METADATAs #########################-->
+                <!--######################## METADATAS #########################-->
                 <!--#############################################################-->
                 <!--#############################################################-->
         <meta-data
@@ -66,17 +62,19 @@
         <!--#########################################################################################-->
 
 
-                      <!-- ############# CourseListActivity ############## -->
+                        <!-- ############# HomeListActivity ############## -->
                 <!--#############################################################-->
 
         <activity
-            android:name=".Interface.CourseListActivity"
-            android:label="@string/title_activity_course_list" />
+            android:name=".Interface.HomeActivity"
+            android:label="HomeActivity" />
+
 
                         <!-- ############# EditPasswordActivity ############## -->
                 <!--#############################################################-->
         <activity
             android:name=".Interface.MyAdvertisementsActivity" />
+
 
 
                         <!-- ############# ProfileActivity ############## -->
@@ -87,12 +85,12 @@
 
 
         <!--#################################-->
-        <!--# 2) activities with no go back #-->
+        <!--# 2) activities with go back #-->
         <!--#################################-->
 
 
 
-        <!-- ############# AddAdvertisementActivity ############## -->
+                    <!-- ############# AddAdvertisementActivity ############## -->
                 <!--#############################################################-->
         <activity
             android:name=".Interface.AddAdvertisementActivity"
@@ -105,14 +103,28 @@
         <activity
             android:name=".Interface.ForeignProfileActivity"
             android:label="Vision d'un profil"
-            android:parentActivityName=".Interface.AdvertisementView" />
+            android:parentActivityName=".Interface.AdvertisementViewActivity" />
 
-                       <!-- ############# AdvertisementView ############## -->
+                <!-- ############# AdvertisementsListActivity ############## -->
+            <!--#############################################################-->
+        <activity android:name=".Interface.AdvertisementsListActivity"
+            android:label="Liste des annonces"
+            android:parentActivityName=".Interface.SearchActivity" />
+
+                <!-- ############# SearchListActivity ############## -->
+            <!--#############################################################-->
+
+        <activity
+            android:name=".Interface.SearchActivity"
+            android:label="@string/title_activity_course_list"
+            android:parentActivityName=".Interface.HomeActivity"/>
+
+                       <!-- ############# AdvertisementViewActivity ############## -->
                 <!--#############################################################-->
         <activity
-            android:name=".Interface.AdvertisementView"
+            android:name=".Interface.AdvertisementViewActivity"
             android:label="AdvertisementView"
-            android:parentActivityName=".Interface.AdvertisementView"/>
+            android:parentActivityName=".Interface.AdvertisementViewActivity"/>
 
 
                    <!-- ############# SignupActivity ############## -->

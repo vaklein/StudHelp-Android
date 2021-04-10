@@ -30,11 +30,15 @@ public class Course implements Serializable {
         return this.code;
     }
 
+    public String getUniversity(){
+        return this.university;
+    }
+
     public String getName(){
         return this.name;
     }
 
-    public String getUniversity(){
-        return this.university;
-    }
+    public String getFaculty() { return this.fac; }
+
+    public String getQuarter() { return this.quadri; }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -10,7 +11,10 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true">
+            android:fitsSystemWindows="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+            android:focusable="true">
 
 
             <!-- Screen content -->
@@ -18,11 +22,14 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/courseRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="634dp"
+                android:layout_height="fill_parent"
                 android:layout_below="@+id/show_fav_switch"
                 android:layout_marginTop="5dp"
                 android:padding="4dp"
-                android:scrollbars="vertical" />
+                android:scrollbars="vertical"
+                android:focusableInTouchMode="true"
+                android:clickable="true"
+                android:focusable="true"/>
 
 
             <!--
@@ -35,22 +42,27 @@
                 android:divider="@color/light_salmon"
                 android:dividerHeight="5dp"
                 android:layout_below="@+id/searchView"/>-->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/searchViewCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp">
             <SearchView
                 android:id="@+id/searchView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:layout_margin="15dp"
-                android:queryHint="Code de cours, nom du cours, professeur, ..."
+                android:layout_margin="2dp"
+                android:queryHint="@string/query_hint_string"
                 android:iconifiedByDefault="false"
-
                 />
+            </com.google.android.material.card.MaterialCardView>
 
             <Switch
                 android:id="@+id/show_fav_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/searchView"
+                android:layout_below="@+id/searchViewCard"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="15dp"

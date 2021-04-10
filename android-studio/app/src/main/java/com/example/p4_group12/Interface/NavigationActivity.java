@@ -8,10 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.p4_group12.R;
@@ -47,6 +45,9 @@ public class NavigationActivity extends AppCompatActivity{
                 sharedPreferences.edit().putString(LoginActivity.PREF_EMAIL, null).apply();
 
                 API.getInstance().logoutUser(sharedPreferences);
+
+                GlobalVariables.setUser(null);
+
                 Intent intentLoginActivity = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intentLoginActivity);
                 finish();
@@ -64,11 +65,17 @@ public class NavigationActivity extends AppCompatActivity{
                         startActivity(intentprofile);
                         finish();
                         break;
-                    case R.id.nav_courses:
-                        Intent intentcourses = new Intent(getApplicationContext(), CourseListActivity.class);
-                        startActivity(intentcourses);
+                    case R.id.nav_home:
+                        Intent intentHome = new Intent(getApplicationContext(), HomeActivity.class);
+                        startActivity(intentHome);
                         finish();
                         break;
+                    /* Ça n'a plus beaucoup de sens d'afficher la liste des 42.500 cours...
+                    case R.id.nav_courses:
+                        Intent intentcourses = new Intent(getApplicationContext(), SearchActivity.class);
+                        startActivity(intentcourses);
+                        finish();
+                        break;*/
                     case R.id.nav_myadvertisements:
                         Intent intentmyadverts = new Intent(getApplicationContext(), MyAdvertisementsActivity.class);
                         startActivity(intentmyadverts);

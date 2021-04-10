@@ -17,14 +17,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Social_links;
 import com.example.p4_group12.DAO.User;
+import com.example.p4_group12.Interface.fragments.ContactsFragment;
+import com.example.p4_group12.Interface.fragments.DataFragment;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
@@ -44,7 +50,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ForeignProfileActivity extends NavigationActivity {
+public class ForeignProfileActivity extends NavigationActivity implements TabLayout.OnTabSelectedListener {
 
     private FloatingActionButton edit;
     private TextView name;
@@ -62,7 +68,12 @@ public class ForeignProfileActivity extends NavigationActivity {
     private ArrayList<LinearLayout> affichagereseaux ;
     private API api;
 
+    private User foreignUser;
 
+    private TabLayout tabLayout;
+    private Fragment fragment = null;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
 
     @SuppressLint("ResourceType")
     @Override
@@ -78,19 +89,33 @@ public class ForeignProfileActivity extends NavigationActivity {
         String foreignUserEmail = (String) getIntent().getSerializableExtra("ForeignUser");
 
         User foreignUser = api.getUserWithEmail(foreignUserEmail);
+
         if(foreignUser == null) Log.d("NULLWARNING", "foreignUser is null in ForeignProfileActivity");
 
+        tabLayout = findViewById(R.id.tabs);
+        Bundle bundle = new Bundle();
+        bundle.putString("login", String.valueOf(foreignUser.getLogin()));
+        bundle.putString("email", null);
+        fragment = new DataFragment();
+        fragment.setArguments(bundle);
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameLayout, fragment);
+
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.commit();
+        tabLayout.addOnTabSelectedListener(this);
         name = (TextView) findViewById(R.id.user_profile_name);
+        name.setText(String.valueOf(foreignUser.getName()));
+        edit = findViewById(R.id.floating_action_button);
+        edit.setVisibility(View.GONE);
+
+  /*
         login = (TextView) findViewById(R.id.user_profil_login);
         email = (TextView) findViewById(R.id.user_profil_email);
-        edit = findViewById(R.id.floating_action_button);
         discordlayout = findViewById(R.id.discord_profil_champ);
         facebooklayout = findViewById(R.id.facebook_profil_champ);
         teamslayout = findViewById(R.id.teams_profil_champ);
-        noNetworkString = findViewById(R.id.no_network_profil);
-        noNetworkString.setText(getText(R.string.no_social_network_other_user));
-        textreseauxsociaux = findViewById(R.id.textreseauxsociaux);
-        textreseauxsociaux.setText(R.string.social_network_other_user);
         facebooktext = findViewById(R.id.facebook_text);
         discordtext = findViewById(R.id.discord_text);
         teamstext = findViewById(R.id.teams_text);
@@ -145,11 +170,47 @@ public class ForeignProfileActivity extends NavigationActivity {
         });
 
 
-        name.setText(String.valueOf(foreignUser.getName()));
+
         login.setText(String.valueOf(foreignUser.getLogin()));
         email.setText(String.valueOf(foreignUser.getEmail()));
 
-        edit.setVisibility(View.GONE);
+
+*/
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        Bundle bundle = new Bundle();
+        switch (tab.getPosition()) {
+            case 0:
+                bundle.putString("login", String.valueOf(foreignUser.getLogin()));
+                bundle.putString("email", null);
+                fragment = new DataFragment();
+                fragment.setArguments(bundle);
+                break;
+
+            case 1:
+                bundle.putString("email", String.valueOf(foreignUser.getEmail()));
+                bundle.putString("type", "foreign");
+                fragment = new ContactsFragment();
+                fragment.setArguments(bundle);
+                break;
+        }
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameLayout, fragment);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
 
     }
 }

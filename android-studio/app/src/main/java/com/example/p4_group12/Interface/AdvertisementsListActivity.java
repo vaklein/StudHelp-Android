@@ -1,6 +1,5 @@
 package com.example.p4_group12.Interface;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -8,26 +7,20 @@ import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.Interface.adapter.AdvertisementListAdapter;
-import com.example.p4_group12.Interface.adapter.CourseListAdapter;
-import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.R;
+
 import com.example.p4_group12.database.API;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import java.io.BufferedWriter;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import android.util.Log;
-import android.widget.Toast;
 
 public class AdvertisementsListActivity extends NavigationActivity {
     private RecyclerView advertisementRecyclerView;
@@ -38,6 +31,7 @@ public class AdvertisementsListActivity extends NavigationActivity {
     private API api;
 
 
+    private TextView noAdvertisment;
     private Course currentCourse;
 
     @Override
@@ -55,7 +49,10 @@ public class AdvertisementsListActivity extends NavigationActivity {
         ArrayList<Advertisement> advertisementsList = api.getCourseAdvertisements(currentCourse);
 
         mTextView = (TextView) findViewById(R.id.text);
-
+        noAdvertisment = findViewById(R.id.no_advertisements);
+        if(advertisementsList.size()==0){
+            noAdvertisment.setVisibility(View.VISIBLE);
+        }
         advertisementRecyclerView = findViewById(R.id.advertisementRecyclerView);
         advertisementRecyclerView.setHasFixedSize(true);
         advertisementLayoutManager = new LinearLayoutManager(this);
@@ -82,7 +79,7 @@ public class AdvertisementsListActivity extends NavigationActivity {
             @Override
             public void OnAdvertisementClick(int position) {
                 Advertisement clickedAdvertisement = advertisementsList.get(position);
-                Intent advertisementView = new Intent(getApplicationContext(), AdvertisementView.class);
+                Intent advertisementView = new Intent(getApplicationContext(), AdvertisementViewActivity.class);
                 advertisementView.putExtra("ClickedAdvertisement", clickedAdvertisement);
                 startActivityForResult(advertisementView, 1);
             }

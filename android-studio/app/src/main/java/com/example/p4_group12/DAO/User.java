@@ -15,6 +15,10 @@ public class User {
         this.social_links = null;
     }
 
+    public User(String email){
+        this.email = email;
+    }
+
     public User(String name, String login, String email, String password) {
         this.name = name;
         this.login = login;

@@ -5,11 +5,15 @@ public class Social_links {
     private String teams;
     private String facebook;
 
+    public Social_links(){
+    }
+
     public Social_links(String discord,String teams,String facebook){
         this.discord=discord;
         this.facebook=facebook;
         this.teams=teams;
     }
+
     public String getDiscord() {
         return discord;
     }

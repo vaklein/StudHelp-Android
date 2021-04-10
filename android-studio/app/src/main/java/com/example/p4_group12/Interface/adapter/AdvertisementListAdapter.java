@@ -8,8 +8,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
+import com.example.p4_group12.DAO.User;
 import com.example.p4_group12.R;
+import com.example.p4_group12.database.API;
 
 import java.util.ArrayList;
 
@@ -75,7 +78,9 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
     public void onBindViewHolder(@NonNull AdvertisementListViewHolder holder, int position) {
         Advertisement currentAdvertisement = advertisementList.get(position);
 
-        holder.usernameTextView.setText(currentAdvertisement.getEmailAddress());
+        User onlyUser = API.getInstance().getUserWithEmail(currentAdvertisement.getEmailAddress());
+
+        holder.usernameTextView.setText(onlyUser.getName());
         holder.advertisementTitleTextView.setText(currentAdvertisement.getTitle());
         holder.advertisementDescriptionTextView.setText(currentAdvertisement.getDescription());
     }

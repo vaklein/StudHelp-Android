@@ -1,5 +1,6 @@
 package com.example.p4_group12.Interface;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -7,13 +8,16 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.Settings;
 import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.SearchView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.R;
@@ -25,7 +29,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class CourseListActivity extends NavigationActivity{
+public class SearchActivity extends NavigationActivity{
     private RecyclerView courseRecyclerView;
     private RecyclerView.LayoutManager courseLayoutManager;
     private CourseListAdapter courseListAdapter;
@@ -36,8 +40,9 @@ public class CourseListActivity extends NavigationActivity{
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private ArrayList<Course> courseList;
+    private String currentCategory;
 
-    private String currentQuerry = "";
+    private String currentQuery = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +64,22 @@ public class CourseListActivity extends NavigationActivity{
         courseRecyclerView = findViewById(R.id.courseRecyclerView);
         searchView = findViewById(R.id.searchView);
         favoriteSwitch = findViewById(R.id.show_fav_switch);
+
+        currentCategory = (String) getIntent().getSerializableExtra("ClickedCategory");
+        if(currentCategory == null) Log.d("NULLWARNING", "Category is null in SearchActivity");
+
+        if (currentCategory.equals("search all")) {
+            courseList = GlobalVariables.getCourses();
+            setTitleToolbar("Recherche dans tous les cours");
+            searchView.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            imm.showSoftInput(searchView, InputMethodManager.SHOW_IMPLICIT);
+        } else {
+            courseList = filterFaculties(GlobalVariables.getCourses(), currentCategory);
+            setTitleToolbar("Recherche dans les cours de la faculté " + currentCategory);
+        }
+
+        // Building the recycler view
         courseListAdapter = new CourseListAdapter(courseList, favoritesID);
         courseRecyclerView.setHasFixedSize(true);
         courseLayoutManager = new LinearLayoutManager(this);
@@ -71,16 +92,16 @@ public class CourseListActivity extends NavigationActivity{
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if(true){
-                    currentQuerry = query;
+                    currentQuery = query;
                     courseListAdapter.getFilter().filter(query);
                 }else{
-                    Toast.makeText(CourseListActivity.this, "No Match found",Toast.LENGTH_LONG).show();
+                    Toast.makeText(SearchActivity.this, "No Match found",Toast.LENGTH_LONG).show();
                 }
                 return false;
             }
             @Override
             public boolean onQueryTextChange(String newText) {
-                currentQuerry = newText;
+                currentQuery = newText;
                 courseListAdapter.getFilter().filter(newText);
                 return false;
             }
@@ -90,8 +111,8 @@ public class CourseListActivity extends NavigationActivity{
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean activated) {
                 Log.v("Jules", searchView.getQuery().toString());
-                if(activated) courseListAdapter.favoriteFilter(currentQuerry);
-                else courseListAdapter.resetFavoriteFilter(currentQuerry);//courseListAdapter.getFilter().filter(searchView.getQuery());
+                if(activated) courseListAdapter.favoriteFilter(currentQuery);
+                else courseListAdapter.resetFavoriteFilter(currentQuery);//courseListAdapter.getFilter().filter(searchView.getQuery());
 
                 // courseList = courseListAdapter.courseList;
             }
@@ -103,7 +124,6 @@ public class CourseListActivity extends NavigationActivity{
         courseListAdapter.setCourseClickListener(new CourseListAdapter.OnCourseClickListener() {
             @Override
             public void OnCourseClick(int position) {
-                Log.v("Jules", courseList.toString());
                 Course clickedCourse = courseList.get(position);
                 // Toast.makeText(getApplication().getBaseContext(), clickedCourse.getName(), Toast.LENGTH_LONG).show();
                 Intent advertisementsListAct = new Intent(getApplicationContext(), AdvertisementsListActivity.class);
@@ -114,5 +134,15 @@ public class CourseListActivity extends NavigationActivity{
 
 
 
+    }
+
+    private ArrayList<Course> filterFaculties(ArrayList<Course> courses, String faculty) {
+        ArrayList<Course> filtered = new ArrayList<>();
+        for (Course course : courses) {
+            if (course.getFaculty().equals(faculty)) {
+                filtered.add(course);
+            }
+        }
+        return filtered;
     }
 }

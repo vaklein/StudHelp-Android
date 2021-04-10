@@ -3,18 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <RelativeLayout
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    android:clickable="true"
+    android:focusable="true">
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="30dp"
-            android:gravity="center_horizontal">
+            android:layout_marginTop="20dp"
+            android:paddingBottom="60dp"
+            android:gravity="center_horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+            android:focusable="true">
 
             <com.google.android.material.textfield.TextInputLayout
+                app:errorTextColor="@color/design_default_color_error"
+                app:boxStrokeErrorColor="@color/design_default_color_error"
                 android:id="@+id/advertisement_title"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
@@ -33,6 +45,8 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                app:errorTextColor="@color/design_default_color_error"
+                app:boxStrokeErrorColor="@color/design_default_color_error"
                 android:id="@+id/advertisement_description"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
@@ -54,25 +68,68 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/advertisement_type_picker"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            <TextView
+                android:id="@+id/add_advertisement_type_title_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/advertisement_type_hint"
-                android:layout_marginRight="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp">
+                android:text="@string/add_advertisement_type_title"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                />
 
-                <AutoCompleteTextView
-                    android:id="@+id/advertisement_type_picker_textview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:editable="false"
-                    android:inputType="none"
-                    />
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/add_advertisement_type_chip_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"/>
 
-            </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/add_advertisement_cycle_title_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_advertisement_cycle_title"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/add_advertisement_cycle_chip_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"/>
+
+            <TextView
+                android:id="@+id/add_advertisement_object_title_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_advertisement_object_title"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/add_advertisement_object_chip_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"/>
+
+            <TextView
+                android:id="@+id/chip_group_unckecked_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:textColor="@color/design_default_color_error"
+                android:visibility="gone"
+                />
 
             <Button
                 android:id="@+id/add_advertisement_button"
@@ -82,9 +139,6 @@
                 android:text="@string/add_advertisement_button"
                 android:layout_marginTop="25dp" />
         </LinearLayout>
-    </RelativeLayout>
-
-
-
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

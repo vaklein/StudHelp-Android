@@ -1,5 +1,7 @@
 package com.example.p4_group12.DAO;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 

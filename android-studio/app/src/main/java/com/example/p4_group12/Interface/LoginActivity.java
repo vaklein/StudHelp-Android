@@ -4,12 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.Toast;
 
+
+import com.example.p4_group12.BuildConfig;
+import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.DAO.User;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
@@ -18,6 +22,8 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
     private Button sign_up;
@@ -50,7 +56,14 @@ public class LoginActivity extends AppCompatActivity {
             API api =  API.setToken(getSharedPreferences(PREFS_NAME,MODE_PRIVATE));
             GlobalVariables.setUser(api.getUserWithEmail(already_email));
 
-            Intent intent = new Intent(LoginActivity.this, CourseListActivity.class);
+
+            // Doing all the synchronous queries
+            ArrayList<Course> loadCourses = api.getCourses();
+            GlobalVariables.setCourses(loadCourses);
+
+            //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
+            //startActivity(edit_profil);
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             intent.putExtra("FavList", false);
             startActivity(intent);
             loadingDialog.getDialog().cancel();
@@ -99,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
                         //startActivity(edit_profil);
-                        Intent intent = new Intent(LoginActivity.this, CourseListActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         intent.putExtra("FavList", false);
                         startActivity(intent);
                         LoginActivity.this.finish();

@@ -5,8 +5,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="10dp"
-    android:layout_marginBottom="5dp"
-    >
+    android:layout_marginBottom="5dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,8 +16,6 @@
             android:id="@+id/code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
             android:layout_marginStart="15dp"
             android:text="Code"
             android:textSize="15sp" />
@@ -29,33 +26,32 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/code"
             android:layout_marginStart="15dp"
-            android:text="Course name"
+            android:layout_marginEnd="45dp"
+            android:gravity="start"
+            android:foregroundGravity="left"
+            android:text="Course name (and it might be a very long course name)"
             android:textColor="@color/bittersweet"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:singleLine="true"
-            android:maxWidth="250dp"/>
-
-        <TextView
-            android:id="@+id/teacher"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/course_name"
-            android:layout_alignParentRight="true"
-            android:text="Teacher"
-            android:textSize="15sp" />
-
+            android:textStyle="bold"/>
         <CheckBox
             android:id="@+id/favoriteCourseCheckBox"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
             android:button="@drawable/sl_course_favorite"
             app:buttonTint="@color/myrtic_green" />
 
+        <TextView
+            android:id="@+id/teacher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/course_name"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:text="FAC"
+            android:textSize="15sp" />
 
     </RelativeLayout>
 

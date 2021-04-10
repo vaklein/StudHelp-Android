@@ -46,15 +46,18 @@ android {
 }
 
 dependencies {
-
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.wear:wear:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.wear:wear:1.1.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.viewpager:viewpager:1.0.0'
     testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-
-    implementation 'com.google.android.material:material:1.1.0'
-    compileOnly 'com.google.android.wearable:wearable:2.6.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation 'com.google.android.material:material:1.3.0'
+    compileOnly 'com.google.android.wearable:wearable:2.8.1'
+    // The next dependency is useful for the image's carousel
+    implementation 'com.github.jama5262:CarouselView:1.1.0'
+    // Used to load an url image to an imageView
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }

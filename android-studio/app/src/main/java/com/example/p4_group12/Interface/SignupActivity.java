@@ -89,7 +89,7 @@ public class SignupActivity extends AppCompatActivity {
                         }else{
                             GlobalVariables.setUser(user);
                             // TODO make the connection permanent
-                            Intent intent = new Intent(SignupActivity.this, CourseListActivity.class);
+                            Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
                             intent.putExtra("FavList", false);
                             startActivity(intent);
                             loadingDialog.getDialog().cancel();

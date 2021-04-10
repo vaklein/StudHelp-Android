@@ -1,6 +1,5 @@
 package com.example.p4_group12.Interface.adapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +42,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         // Here goes the elements of each item of the recyclerview item
         private TextView codeTextView;
         private TextView courseNameTextView;
-        private TextView teacherTextView;
+        private TextView facultyTextView;
         private CheckBox favoriteCheckBox;
         private API api;
 
@@ -52,7 +51,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
             super(itemView);
             codeTextView = itemView.findViewById(R.id.code);
             courseNameTextView = itemView.findViewById(R.id.course_name);
-            teacherTextView = itemView.findViewById(R.id.teacher);
+            facultyTextView = itemView.findViewById(R.id.teacher);
             favoriteCheckBox = itemView.findViewById(R.id.favoriteCourseCheckBox);
 
             this.api = API.getInstance();
@@ -92,8 +91,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
 
         holder.codeTextView.setText(currentCourse.getCode());
         holder.courseNameTextView.setText(currentCourse.getName());
-        // TODO remove it from the layout
-        // holder.teacherTextView.setText(currentCourse.getTeacher());
+        holder.facultyTextView.setText(currentCourse.getFaculty());
         if(favoritesID.contains(currentCourse.getID())) {
             holder.favoriteCheckBox.setChecked(true);
         }
@@ -129,7 +127,8 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
 
                 for (Course course : allCourses) {
                     if ((course.getCode().toLowerCase().trim().contains(queryString) ||
-                            course.getName().toLowerCase().trim().contains(queryString)) &&
+                            course.getName().toLowerCase().trim().contains(queryString) ||
+                            course.getFaculty().toLowerCase().trim().contains(queryString)) &&
                             (!showOnlyFav  || favoritesID.contains(course.getID()))) {
                         filteredCourses.add(course);
                     }

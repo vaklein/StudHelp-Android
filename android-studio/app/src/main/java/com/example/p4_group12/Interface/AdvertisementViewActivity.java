@@ -4,37 +4,55 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.User;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
-import java.util.ArrayList;
 
-public class AdvertisementView extends NavigationActivity {
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+import com.jama.carouselview.CarouselScrollListener;
+import com.jama.carouselview.CarouselView;
+import com.jama.carouselview.CarouselViewListener;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.lang.Integer.max;
+
+public class AdvertisementViewActivity extends NavigationActivity {
     private TextView advertisementTitle;
-    private TextView advertisementOwner;
     private TextView advertisementDescription;
-    private TextView advertisementType;
+    private ChipGroup advertisementTags;
     private ImageView profilePicture;
     private Advertisement currentAdvertisement;
     private ImageButton deleteButton;
     private Button contactButton;
     private API api;
+    private CarouselView carousel;
+
+    /*
+    * All infos about the carousel implementation are here :
+    * https://github.com/jama5262/CarouselView
+    *
+    * Another version is here but it is based on the first link and we won't use it
+    * https://androidexample365.com/a-super-simple-and-customizable-image-carousel-view-for-android/
+    */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,10 +74,16 @@ public class AdvertisementView extends NavigationActivity {
 
         advertisementTitle = findViewById(R.id.advertisement_title_view);
         advertisementDescription = findViewById(R.id.advertisement_description_view);
-        advertisementType = findViewById(R.id.advertisement_type_view);
+        advertisementTags = findViewById(R.id.advertisement_tags_view);
         advertisementTitle.setText(currentAdvertisement.getTitle());
         advertisementDescription.setText(currentAdvertisement.getDescription());
-        advertisementType.setText(currentAdvertisement.getType());
+
+        for (String type : currentAdvertisement.getTags()) {
+            Chip chip = new Chip(this);
+            chip.setText(type);
+            chip.setCheckable(false);
+            advertisementTags.addView(chip);
+        }
 
         contactButton = findViewById(R.id.contactAdvertiserButton);
         Log.v("Jules", "The current ad is " + String.valueOf(currentAdvertisement));
@@ -110,6 +134,22 @@ public class AdvertisementView extends NavigationActivity {
                 alert.show();
             }
         });
+
+        carousel = findViewById(R.id.advertisement_view_carousel);
+
+        if (currentAdvertisement.hasImages()) {
+            carousel.setSize(currentAdvertisement.getImages().size());
+            carousel.setCarouselViewListener(new CarouselViewListener() {
+                @Override
+                public void onBindView(View view, int position) {
+                    ImageView imageView = view.findViewById(R.id.carousel_item_imageView);
+                    Picasso.get().load(currentAdvertisement.getImages().get(position)).into(imageView);
+                }
+            });
+            carousel.show();
+        } else {
+            carousel.setVisibility(View.GONE);
+        }
     }
 
 }

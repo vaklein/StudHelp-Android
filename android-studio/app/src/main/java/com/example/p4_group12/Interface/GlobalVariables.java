@@ -1,15 +1,37 @@
 package com.example.p4_group12.Interface;
 
+import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.DAO.Social_links;
 import com.example.p4_group12.DAO.User;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class GlobalVariables {
+
 
     private static User user;
 
+    private static ArrayList<Course> courseArrayList;
+    private static final ArrayList<String> faculties = new ArrayList<>();
+
     public static void setUser(User user){ GlobalVariables.user = user; }
 
+
     public static User getUser(){ return user; }
+
+    public static ArrayList<Course> getCourses() { return courseArrayList; }
+    public static void setCourses(ArrayList<Course> courses) {
+        courseArrayList = courses;
+        for (Course course : courseArrayList) {
+            if (!faculties.contains(course.getFaculty()) && !course.getFaculty().isEmpty()) {
+                faculties.add(course.getFaculty());
+            }
+        }
+        Collections.sort(faculties);
+    }
+
+    public static ArrayList<String> getFaculties() { return faculties; }
 
 }
 

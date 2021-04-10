@@ -2,7 +2,6 @@ package com.example.p4_group12.Interface;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -12,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
-import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.Interface.adapter.AdvertisementListAdapter;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
@@ -53,7 +51,7 @@ public class MyAdvertisementsActivity extends NavigationActivity{
             @Override
             public void OnAdvertisementClick(int position) {
                 Advertisement clickedAdvertisement = advertisementsList.get(position);
-                Intent advertisementView = new Intent(getApplicationContext(), AdvertisementView.class);
+                Intent advertisementView = new Intent(getApplicationContext(), AdvertisementViewActivity.class);
                 advertisementView.putExtra("ClickedAdvertisement", clickedAdvertisement);
                 startActivityForResult(advertisementView, 1);
             }

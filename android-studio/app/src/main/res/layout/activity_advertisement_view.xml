@@ -35,6 +35,14 @@
                 android:maxLines="2"
                 />
 
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/advertisement_tags_view"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"/>
+
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -43,27 +51,35 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/advertisement_type_view"
-                        android:textSize="15sp"
-                        android:id="@+id/advertisement_type_view"
-                        android:layout_marginLeft="15dp"
-                        android:textStyle="bold"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginStart="15dp"
                         android:id="@+id/advertisement_description_view"
                         android:text="@string/advertisement_view_description_text"
                         android:textSize="15sp"/>
+
+                    <com.jama.carouselview.CarouselView
+                        android:layout_margin="15dp"
+                        android:id="@+id/advertisement_view_carousel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:enableSnapping="true"
+                        app:scaleOnScroll="false"
+                        app:setAutoPlay="true"
+                        app:setAutoPlayDelay="5000"
+                        app:carouselOffset="center"
+                        app:indicatorAnimationType="drop"
+                        app:indicatorRadius="5"
+                        app:indicatorPadding="5"
+                        app:indicatorSelectedColor="@color/bittersweet"
+                        app:indicatorUnselectedColor="@color/light_salmon"
+                        app:size="10"
+                        app:spacing="10"
+                        app:resource="@layout/carousel_item"/>
 
                 </LinearLayout>
 
