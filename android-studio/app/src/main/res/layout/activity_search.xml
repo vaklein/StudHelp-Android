@@ -22,7 +22,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/courseRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="634dp"
+                android:layout_height="fill_parent"
                 android:layout_below="@+id/show_fav_switch"
                 android:layout_marginTop="5dp"
                 android:padding="4dp"
