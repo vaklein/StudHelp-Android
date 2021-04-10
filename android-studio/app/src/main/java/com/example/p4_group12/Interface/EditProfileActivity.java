@@ -53,6 +53,7 @@ public class EditProfileActivity extends NavigationActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        api = API.getInstance();
         // Use this to set the correct layout instead of setContentView cfr NavigationActivity/drawer_layout
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); //Remember this is the FrameLayout area within your activity_main.xml
         getLayoutInflater().inflate(R.layout.activity_edit_profile, contentFrameLayout);
@@ -66,14 +67,17 @@ public class EditProfileActivity extends NavigationActivity {
         new_nameField = (TextInputLayout) findViewById(R.id.name);
         new_loginField = (TextInputLayout) findViewById(R.id.teams);
         loadingDialog = new LoadingDialog(this, "Modification en cours...");
+
+        if(GlobalVariables.getUser().getSocial_links() == null){
+            GlobalVariables.getUser().setSocial_links(api.getSocialLinksOfUser(GlobalVariables.getUser()));
+        }
+
         facebook_text = (TextInputEditText) findViewById(R.id.facebook_text);
         facebook_text.setText(GlobalVariables.getUser().getSocial_links().getFacebook());
         discord_text = findViewById(R.id.discord_text);
         discord_text.setText(GlobalVariables.getUser().getSocial_links().getDiscord());
         teams_text = findViewById(R.id.teams_text);
         teams_text.setText(GlobalVariables.getUser().getSocial_links().getTeams());
-
-        api = API.getInstance();
 
 
         edit_password.setOnClickListener(new View.OnClickListener() {
@@ -87,11 +91,11 @@ public class EditProfileActivity extends NavigationActivity {
             @Override
             public void onClick(View view) {
                 GlobalVariables.getUser().getSocial_links().setAllSocialLinks(discord_text.getText().toString(), facebook_text.getText().toString(), teams_text.getText().toString());
-                api.updateSocialLinks(GlobalVariables.getUser());
+                API.getInstance().updateSocialLinks(GlobalVariables.getUser());
 
                 new_loginField.setErrorEnabled(false);
                 if (!new_name.getText().toString().isEmpty() || !new_login.getText().toString().isEmpty()) {
-                    Boolean apiResponse = api.editNameAndLogin(GlobalVariables.getUser(), new_name.getText().toString(), new_login.getText().toString());
+                    Boolean apiResponse = API.getInstance().editNameAndLogin(GlobalVariables.getUser(), new_name.getText().toString(), new_login.getText().toString());
 
                     if(apiResponse == null){ // error
                         Toast.makeText(EditProfileActivity.this, "Une erreur est survenue lors de la modification de votre nom, veuilliez réessayer", Toast.LENGTH_LONG).show();

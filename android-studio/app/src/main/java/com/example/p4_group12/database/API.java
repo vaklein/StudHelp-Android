@@ -69,16 +69,16 @@ public class API {
         protected String doInBackground(Void... voids) {
             try {
                 // Sending the request
-                URL url = new URL(urlWebService);
+                URL url = new URL(this.urlWebService);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestProperty("Authorization","Bearer "+ key); // Setting the bearer token for the request
-                // Log.d("Gwen", this.requestType);
+                 Log.d("Gwen", this.requestType);
                 httpURLConnection.setRequestMethod(this.requestType);  //setting the request type
-                // Log.d("Gwen", this.requestType);
+                 Log.d("Gwen", this.requestType);
 
-                if(this.requestType == "GET") httpURLConnection.setRequestProperty("Accept", "application/json");
-                if(this.requestType == "GET") httpURLConnection.setRequestProperty("Content-Type", "application/json");
-                if(this.requestType == "POST" || this.requestType == "PUT" || this.requestType == "DELETE") httpURLConnection.setDoOutput(true);
+                if(this.requestType.equals("GET")) httpURLConnection.setRequestProperty("Accept", "application/json");
+                if(this.requestType.equals("GET")) httpURLConnection.setRequestProperty("Content-Type", "application/json");
+                if(this.requestType.equals("POST") || this.requestType.equals("PUT") || this.requestType.equals("DELETE")) httpURLConnection.setDoOutput(true);
 
                 if(data.length() > 0){
                     OutputStream OS = httpURLConnection.getOutputStream();
@@ -335,12 +335,12 @@ public class API {
             String data = "";
             // Probably a better way to do it but can't find it
             if(!newLogin.equals("") && !newName.equals("")){
-                data =  URLEncoder.encode("login", "UTF-8") + "=" + URLEncoder.encode(!newLogin.equals("")? newLogin : user.getLogin(), "UTF-8") + "&" +
-                        URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(!newName.equals("")? newName : user.getName(), "UTF-8");
+                data =  URLEncoder.encode("login", "UTF-8") + "=" + URLEncoder.encode(newLogin, "UTF-8") + "&" +
+                        URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(newName, "UTF-8");
             }else if(!newLogin.equals("")){
-                data =  URLEncoder.encode("login", "UTF-8") + "=" + URLEncoder.encode(!newLogin.equals("")? newLogin : user.getLogin(), "UTF-8");
+                data =  URLEncoder.encode("login", "UTF-8") + "=" + URLEncoder.encode(newLogin, "UTF-8");
             }else if(!newName.equals("")){
-                data = URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(!newName.equals("")? newName : user.getName(), "UTF-8");
+                data = URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(newName, "UTF-8");
             }
 
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + user.getEmail(), data, "PUT");
