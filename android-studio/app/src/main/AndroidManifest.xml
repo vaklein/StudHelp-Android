@@ -103,7 +103,7 @@
         <activity
             android:name=".Interface.ForeignProfileActivity"
             android:label="Vision d'un profil"
-            android:parentActivityName=".Interface.AdvertisementView" />
+            android:parentActivityName=".Interface.AdvertisementViewActivity" />
 
                 <!-- ############# AdvertisementsListActivity ############## -->
             <!--#############################################################-->
@@ -119,12 +119,12 @@
             android:label="@string/title_activity_course_list"
             android:parentActivityName=".Interface.HomeActivity"/>
 
-                       <!-- ############# AdvertisementView ############## -->
+                       <!-- ############# AdvertisementViewActivity ############## -->
                 <!--#############################################################-->
         <activity
-            android:name=".Interface.AdvertisementView"
+            android:name=".Interface.AdvertisementViewActivity"
             android:label="AdvertisementView"
-            android:parentActivityName=".Interface.AdvertisementView"/>
+            android:parentActivityName=".Interface.AdvertisementViewActivity"/>
 
 
                    <!-- ############# SignupActivity ############## -->

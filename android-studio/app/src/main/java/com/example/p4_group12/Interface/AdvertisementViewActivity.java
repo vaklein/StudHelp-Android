@@ -25,7 +25,7 @@ import com.google.android.material.chip.ChipGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdvertisementView extends NavigationActivity {
+public class AdvertisementViewActivity extends NavigationActivity {
     private TextView advertisementTitle;
     private TextView advertisementDescription;
     private ChipGroup advertisementTags;
