@@ -1,5 +1,6 @@
 package com.example.p4_group12.Interface;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.Settings;
 import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.SearchView;
@@ -55,21 +57,25 @@ public class SearchActivity extends NavigationActivity{
         HashSet<Integer> favoritesID = new HashSet<>();
 
         mTextView = (TextView) findViewById(R.id.text);
-
-        currentCategory = (String) getIntent().getSerializableExtra("ClickedCategory");
-        if(currentCategory == null) Log.d("NULLWARNING", "Category is null in SearchActivity");
-        setTitleToolbar("Cours de la faculté " + currentCategory);
-
-        if (currentCategory.equals("search all")) {
-            courseList = GlobalVariables.getCourses();
-        } else {
-            courseList = filterFaculties(GlobalVariables.getCourses(), currentCategory);
-        }
-
-        // Building the recycler view
         courseRecyclerView = findViewById(R.id.courseRecyclerView);
         searchView = findViewById(R.id.searchView);
         favoriteSwitch = findViewById(R.id.show_fav_switch);
+
+        currentCategory = (String) getIntent().getSerializableExtra("ClickedCategory");
+        if(currentCategory == null) Log.d("NULLWARNING", "Category is null in SearchActivity");
+
+        if (currentCategory.equals("search all")) {
+            courseList = GlobalVariables.getCourses();
+            setTitleToolbar("Recherche dans tous les cours");
+            searchView.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            imm.showSoftInput(searchView, InputMethodManager.SHOW_IMPLICIT);
+        } else {
+            courseList = filterFaculties(GlobalVariables.getCourses(), currentCategory);
+            setTitleToolbar("Recherche dans les cours de la faculté " + currentCategory);
+        }
+
+        // Building the recycler view
         courseListAdapter = new CourseListAdapter(courseList, favoritesID);
         courseRecyclerView.setHasFixedSize(true);
         courseLayoutManager = new LinearLayoutManager(this);
