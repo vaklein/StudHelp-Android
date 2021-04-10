@@ -15,6 +15,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.p4_group12.R;
+import com.example.p4_group12.database.API;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -42,10 +43,10 @@ public class NavigationActivity extends AppCompatActivity{
         deconnexion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getSharedPreferences(LoginActivity.PREFS_NAME,MODE_PRIVATE)
-                        .edit()
-                        .putString(LoginActivity.PREF_EMAIL, null)
-                        .apply();
+                SharedPreferences sharedPreferences = getSharedPreferences(LoginActivity.PREFS_NAME,MODE_PRIVATE);
+                sharedPreferences.edit().putString(LoginActivity.PREF_EMAIL, null).apply();
+
+                API.getInstance().logoutUser(sharedPreferences);
                 Intent intentLoginActivity = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intentLoginActivity);
                 finish();

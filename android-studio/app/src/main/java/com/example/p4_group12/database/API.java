@@ -127,6 +127,14 @@ public class API {
                 .apply();
     }
 
+    private static void revokeToken(SharedPreferences sharedPreferences){
+        sharedPreferences.edit()
+                .putString("API_key", null)
+                .apply();
+        key = null;
+        INSTANCE = null;
+    }
+
     public static API setToken(SharedPreferences sharedPreferences){
         INSTANCE = new API(sharedPreferences.getString("API_key", null));
         return INSTANCE;
@@ -177,6 +185,19 @@ public class API {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void logoutUser(SharedPreferences sharedPreferences){
+        SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/logout", "", "POST");
+        try {
+            String response = getJSON.execute().get();
+            Log.d("Gwen", response);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        revokeToken(sharedPreferences);
     }
 
     public User getUserWithEmail(String email){
