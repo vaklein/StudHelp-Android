@@ -11,7 +11,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
@@ -21,9 +24,15 @@ import com.example.p4_group12.database.DatabaseContact;
 import com.example.p4_group12.database.GetObjectFromDB;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.jama.carouselview.CarouselScrollListener;
+import com.jama.carouselview.CarouselView;
+import com.jama.carouselview.CarouselViewListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.Integer.max;
 
 public class AdvertisementViewActivity extends NavigationActivity {
     private TextView advertisementTitle;
@@ -33,6 +42,15 @@ public class AdvertisementViewActivity extends NavigationActivity {
     private Advertisement currentAdvertisement;
     private ImageButton deleteButton;
     private Button contactButton;
+    private CarouselView carousel;
+
+    /*
+    * All infos about the carousel implementation are here :
+    * https://github.com/jama5262/CarouselView
+    *
+    * Another version is here but it is based on the first link and we won't use it
+    * https://androidexample365.com/a-super-simple-and-customizable-image-carousel-view-for-android/
+    */
 
 
     @Override
@@ -115,6 +133,22 @@ public class AdvertisementViewActivity extends NavigationActivity {
                 alert.show();
             }
         });
+
+        carousel = findViewById(R.id.advertisement_view_carousel);
+
+        if (currentAdvertisement.hasImages()) {
+            carousel.setSize(currentAdvertisement.getImages().size());
+            carousel.setCarouselViewListener(new CarouselViewListener() {
+                @Override
+                public void onBindView(View view, int position) {
+                    ImageView imageView = view.findViewById(R.id.carousel_item_imageView);
+                    Picasso.get().load(currentAdvertisement.getImages().get(position)).into(imageView);
+                }
+            });
+            carousel.show();
+        } else {
+            carousel.setVisibility(View.GONE);
+        }
     }
 
 }
