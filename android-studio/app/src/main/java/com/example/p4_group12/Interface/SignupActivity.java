@@ -13,7 +13,6 @@ import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.User;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
-import com.example.p4_group12.database.DatabaseContact;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 

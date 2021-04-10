@@ -62,10 +62,8 @@ public class AddAdvertisementActivity extends NavigationActivity {
 
         this.api = API.getInstance();
 
-        if (!GlobalVariables.getSocialNetwokCharged()) {
+        if (GlobalVariables.getUser().getSocial_links() != null) {
             GlobalVariables.getUser().setSocial_links(api.getSocialLinksOfUser(GlobalVariables.getUser()));
-
-            GlobalVariables.setSocialNetwokCharged(true); // TODO remove when finding where it is used
         }
         if (!GlobalVariables.getUser().hasASocialNetwork()){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
