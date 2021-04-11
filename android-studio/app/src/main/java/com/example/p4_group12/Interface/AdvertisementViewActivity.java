@@ -4,6 +4,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -103,38 +105,6 @@ public class AdvertisementViewActivity extends NavigationActivity {
             });
         }
 
-        // delete advertisement
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Confirmation");
-        builder.setMessage("Etes vous sûr de vouloir supprimer cette annonce ?");
-        builder.setPositiveButton("OUI", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent();
-                api.deleteAdvertisment(currentAdvertisement);
-                setResult(1, intent);
-                finish();
-                dialog.dismiss();
-            }
-        });
-        builder.setNegativeButton("NON", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Do nothing
-                dialog.dismiss();
-            }
-        });
-        deleteButton = findViewById(R.id.delete_button);
-        if(GlobalVariables.getUser().getEmail().equals(currentAdvertisement.getEmailAddress())){
-            deleteButton.setVisibility(View.VISIBLE);
-        }
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog alert = builder.create();
-                alert.show();
-            }
-        });
-
         carousel = findViewById(R.id.advertisement_view_carousel);
 
         if (currentAdvertisement.hasImages()) {
@@ -152,4 +122,48 @@ public class AdvertisementViewActivity extends NavigationActivity {
         }
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem register = menu.findItem(R.id.action_delete);
+        if(GlobalVariables.getUser().getEmail().equals(currentAdvertisement.getEmailAddress())) {
+            register.setVisible(true);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.delete_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.action_delete:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Confirmation");
+                builder.setMessage("Etes vous sûr de vouloir supprimer cette annonce ?");
+                builder.setPositiveButton("OUI", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent();
+                        api.deleteAdvertisment(currentAdvertisement);
+                        setResult(1, intent);
+                        finish();
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton("NON", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
