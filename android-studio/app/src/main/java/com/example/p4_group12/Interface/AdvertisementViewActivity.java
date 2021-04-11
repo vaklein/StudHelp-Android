@@ -89,9 +89,19 @@ public class AdvertisementViewActivity extends NavigationActivity {
         Log.v("Jules", "The current ad is " + String.valueOf(currentAdvertisement));
         Log.v("Jules", "The email of this ad is " + String.valueOf(currentAdvertisement.getEmailAddress()));
         if (GlobalVariables.getUser().getEmail().equals(currentAdvertisement.getEmailAddress())) {
-            Log.v("Jules", "There should be no button as the user is the owner");
-            contactButton.setVisibility(View.GONE);
+            contactButton.setText(R.string.updateAdvertisement);
+            Log.v("Jules", "My advertisement button");
+            contactButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent updateAdvertisement = new Intent(getApplicationContext(), EditAdvertisementActivity.class);
+                    updateAdvertisement.putExtra("toEditAdvertisement", currentAdvertisement);
+                    startActivityForResult(updateAdvertisement,0);
+                }
+            });
+            //contactButton.setVisibility(View.GONE);
         } else {
+            contactButton.setText(R.string.contacter_l_annonceur);
             Log.v("Jules", "The button must be there the user is not the owner");
             contactButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -152,4 +162,23 @@ public class AdvertisementViewActivity extends NavigationActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 1
+        if(resultCode == 1){
+            Intent advertisementList = new Intent(getApplicationContext(), AdvertisementViewActivity.class);
+            advertisementList.putExtra("ClickedAdvertisement", currentAdvertisement);
+            startActivity(advertisementList);
+            finish();
+        }
+        if(resultCode == 2) {
+            Intent advertisementList = new Intent(getApplicationContext(), AdvertisementViewActivity.class);
+            Advertisement ad = (Advertisement) data.getSerializableExtra("Advertisement");
+            advertisementList.putExtra("ClickedAdvertisement", ad);
+            Log.v("Lucas",ad.toString());
+            startActivity(advertisementList);
+            finish();
+        }
+    }
 }

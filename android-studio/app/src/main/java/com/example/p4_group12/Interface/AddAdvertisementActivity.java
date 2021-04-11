@@ -67,6 +67,7 @@ public class AddAdvertisementActivity extends NavigationActivity {
         advertisementTitleText = findViewById(R.id.advertisement_title_text);
         advertisementDescriptionText = findViewById(R.id.advertisement_description_text);
         submitAdvertisement = findViewById(R.id.add_advertisement_button);
+        submitAdvertisement.setText(R.string.add_advertisement_button);
         currentAdvertisement = (Advertisement) getIntent().getSerializableExtra("ClickedAdvertisement");
         chipGroupError = findViewById(R.id.chip_group_unckecked_error);
         typeChipGroup = findViewById(R.id.add_advertisement_type_chip_group);

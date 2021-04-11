@@ -5,6 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Advertisement  implements Serializable {
+    @Override
+    public String toString() {
+        return "Advertisement{" +
+                "ID=" + ID +
+                ", mail='" + mail + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", type='" + type + '\'' +
+                ", courseID=" + courseID +
+                ", tags=" + tags +
+                ", images=" + images +
+                '}';
+    }
+
     private int ID;
     private String mail;
     private String title;
@@ -13,6 +27,42 @@ public class Advertisement  implements Serializable {
     private int courseID;
     private List<String> tags;
     private List<String> images;
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setCourseID(int courseID) {
+        this.courseID = courseID;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
 
     public Advertisement(int ID, String mail, String title, String description, String type, int courseID) {
         this.ID = ID;
@@ -59,5 +109,6 @@ public class Advertisement  implements Serializable {
     public boolean hasImages() { return !images.isEmpty(); }
 
     public List<String> getImages() { return images; }
+
 
 }

@@ -63,5 +63,7 @@
     <string name="add_advertisement_type_title">Type de l\'annonce</string>
     <string name="add_advertisement_object_title">Objet(s) de l\'annonce</string>
     <string name="add_advertisement_cycle_title">Cycle(s) correspondant(s) à l\'annonce</string>
+    <string name="contacter_l_annonceur">Contacter l\'annonceur</string>
+    <string name="updateAdvertisement">Modifier mon annonce</string>
 
 </resources>

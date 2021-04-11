@@ -39,6 +39,7 @@ import java.util.concurrent.ExecutionException;
 
 public class API {
 
+
     // Class to use to do a request to the API
     // To perform a Sync request use getJSON.execute().get() to get the response from the server
     // To perform a Async request just use getJSON.execute()
@@ -316,6 +317,21 @@ public class API {
     public void deleteAdvertisment(Advertisement advertisement){
         SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement/" + advertisement.getID(), "", "DELETE");
         getJSON.execute(); // Making the request Async
+    }
+
+    public void updateAdvertisement(Advertisement advertisement){
+        try{
+            String data = URLEncoder.encode("course_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(advertisement.getCourseID()), "UTF-8") + "&" +
+                    URLEncoder.encode("title", "UTF-8") + "=" + URLEncoder.encode(advertisement.getTitle(), "UTF-8") + "&" +
+                    URLEncoder.encode("user_email", "UTF-8") + "=" + URLEncoder.encode(advertisement.getEmailAddress(), "UTF-8") + "&" +
+                    URLEncoder.encode("type", "UTF-8") + "=" + URLEncoder.encode(advertisement.getType(), "UTF-8") + "&" +
+                    URLEncoder.encode("description", "UTF-8") + "=" + URLEncoder.encode(advertisement.getDescription(), "UTF-8");
+
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement/" + advertisement.getID(), data, "PUT");
+            getJSON.execute(); // Making the request Async
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     public ArrayList<Advertisement> getAdvertisementsOfUser(User user){

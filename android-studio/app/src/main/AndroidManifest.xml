@@ -150,7 +150,12 @@
             android:label="Modifier mon mot de passe"
             android:parentActivityName=".Interface.EditProfileActivity"/>
 
-
+        <!-- ############# EditAdvertisementActivity ############## -->
+        <!--#############################################################-->
+        <activity
+            android:name=".Interface.EditAdvertisementActivity"
+            android:label="Modifier mon mot de passe"
+            android:parentActivityName=".Interface.EditAdvertisementActivity"/>
     </application>
 
 </manifest>
