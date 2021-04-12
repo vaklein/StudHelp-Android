@@ -36,7 +36,7 @@ android {
             buildConfigField "String", "DB_URL", "\"https://db.valentinklein.eu:8182/PROD/\""
         }
         debug {
-            buildConfigField "String", "DB_URL", "\"https://db.valentinklein.eu:8182/DEV_Laravel/public/api\""
+            buildConfigField "String", "DB_URL", "\"https://db.valentinklein.eu:8183/api\""
         }
     }
     compileOptions {
