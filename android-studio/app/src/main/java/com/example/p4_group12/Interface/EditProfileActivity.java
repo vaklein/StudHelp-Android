@@ -1,35 +1,17 @@
 package com.example.p4_group12.Interface;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
 
 
 public class EditProfileActivity extends NavigationActivity {
@@ -42,8 +24,10 @@ public class EditProfileActivity extends NavigationActivity {
     private TextInputLayout new_nameField;
     private TextInputLayout new_loginField;
     private LoadingDialog loadingDialog;
-    private TextInputLayout facebook;
-    private TextInputEditText facebook_text;
+    private TextInputLayout phone;
+    private TextInputEditText phone_text;
+    private TextInputLayout public_email;
+    private TextInputEditText public_email_text;
     private TextInputLayout discord;
     private TextInputEditText discord_text;
     private TextInputLayout teams;
@@ -72,8 +56,10 @@ public class EditProfileActivity extends NavigationActivity {
             GlobalVariables.getUser().setSocial_links(api.getSocialLinksOfUser(GlobalVariables.getUser()));
         }
 
-        facebook_text = (TextInputEditText) findViewById(R.id.facebook_text);
-        facebook_text.setText(GlobalVariables.getUser().getSocial_links().getFacebook());
+        phone_text = (TextInputEditText) findViewById(R.id.phone_text);
+        phone_text.setText(GlobalVariables.getUser().getSocial_links().getPhone());
+        public_email_text = (TextInputEditText) findViewById(R.id.email_public_text);
+        public_email_text.setText(GlobalVariables.getUser().getSocial_links().getPublicEmail());
         discord_text = findViewById(R.id.discord_text);
         discord_text.setText(GlobalVariables.getUser().getSocial_links().getDiscord());
         teams_text = findViewById(R.id.teams_text);
@@ -90,7 +76,7 @@ public class EditProfileActivity extends NavigationActivity {
         backup_profil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GlobalVariables.getUser().getSocial_links().setAllSocialLinks(discord_text.getText().toString(), facebook_text.getText().toString(), teams_text.getText().toString());
+                GlobalVariables.getUser().getSocial_links().setAllSocialLinks(phone_text.getText().toString(), public_email_text.getText().toString(), teams_text.getText().toString(), discord_text.getText().toString());
                 API.getInstance().updateSocialLinks(GlobalVariables.getUser());
 
                 new_loginField.setErrorEnabled(false);

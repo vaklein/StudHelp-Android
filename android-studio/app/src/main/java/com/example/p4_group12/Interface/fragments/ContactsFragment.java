@@ -15,15 +15,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Social_links;
 import com.example.p4_group12.DAO.User;
 import com.example.p4_group12.Interface.GlobalVariables;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
 import com.google.android.material.card.MaterialCardView;
-
-import java.util.ArrayList;
 
 public class ContactsFragment extends Fragment {
     @Nullable
@@ -32,11 +29,13 @@ public class ContactsFragment extends Fragment {
         View result = inflater.inflate(R.layout.fragment_contacts, container, false);
 
         MaterialCardView discordlayout = result.findViewById(R.id.discord_profil_champ);
-        MaterialCardView facebooklayout = result.findViewById(R.id.facebook_profil_champ);
+        MaterialCardView phonelayout = result.findViewById(R.id.phone_profil_champ);
+        MaterialCardView publicemaillayout = result.findViewById(R.id.email_profil_champ);
         MaterialCardView teamslayout = result.findViewById(R.id.teams_profil_champ);
 
         TextView noNetworkString = result.findViewById(R.id.no_network_profil);
-        TextView facebooktext = result.findViewById(R.id.facebook_text);
+        TextView phonetext = result.findViewById(R.id.phone_text);
+        TextView publicemailtext = result.findViewById(R.id.email_public_frag_text);
         TextView teamstext = result.findViewById(R.id.teams_text);
         TextView discordtext = result.findViewById(R.id.discord_text);
 
@@ -53,7 +52,7 @@ public class ContactsFragment extends Fragment {
             }
         }
 
-        if(!s.getDiscord().equals("")){
+        if(!s.getDiscord().equals("") && s.getDiscord() != null){
             SpannableString content = new SpannableString(s.getDiscord());
             content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
             discordtext.setText(content);
@@ -68,10 +67,8 @@ public class ContactsFragment extends Fragment {
                 clipboard.setPrimaryClip(clip);
             }
         });
-        if(!s.getTeams().equals("")){
-            SpannableString content = new SpannableString(s.getTeams());
-            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-            teamstext.setText(content);
+        if(!s.getTeams().equals("") && s.getTeams() != null){
+            teamstext.setText("msteams://teams.microsoft.com/l/chat/0/0?users="+s.getTeams());
             teamslayout.setVisibility(View.VISIBLE);
             noNetworkString.setVisibility(View.GONE);
         }
@@ -83,18 +80,33 @@ public class ContactsFragment extends Fragment {
                 clipboard.setPrimaryClip(clip);
             }
         });
-        if(!s.getFacebook().equals("")){
-            SpannableString content = new SpannableString(s.getFacebook());
+        if(!s.getPhone().equals("") && s.getPhone() != null){
+            SpannableString content = new SpannableString(s.getPhone());
             content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-            facebooktext.setText(content);
-            facebooklayout.setVisibility(View.VISIBLE);
+            phonetext.setText(content);
+            phonelayout.setVisibility(View.VISIBLE);
             noNetworkString.setVisibility(View.GONE);
         }
-        facebooktext.setOnClickListener(new View.OnClickListener() {
+        phonetext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Facebook contact", s.getFacebook());
+                ClipData clip = ClipData.newPlainText("Facebook contact", s.getPhone());
+                clipboard.setPrimaryClip(clip);
+            }
+        });
+        if(!s.getPublicEmail().equals("") && s.getPublicEmail() != null){
+            SpannableString content = new SpannableString(s.getPublicEmail());
+            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+            publicemailtext.setText(content);
+            publicemaillayout.setVisibility(View.VISIBLE);
+            noNetworkString.setVisibility(View.GONE);
+        }
+        phonetext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Facebook contact", s.getPublicEmail());
                 clipboard.setPrimaryClip(clip);
             }
         });

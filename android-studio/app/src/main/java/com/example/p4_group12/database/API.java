@@ -377,7 +377,8 @@ public class API {
         try{
             String data = URLEncoder.encode("discord", "UTF-8") + "=" + URLEncoder.encode(user.getSocial_links().getDiscord(), "UTF-8") + "&" +
                     URLEncoder.encode("teams", "UTF-8") + "=" + URLEncoder.encode(user.getSocial_links().getTeams(), "UTF-8") + "&" +
-                    URLEncoder.encode("facebook", "UTF-8") + "=" + URLEncoder.encode(user.getSocial_links().getFacebook(), "UTF-8");
+                    URLEncoder.encode("phone", "UTF-8") + "=" + URLEncoder.encode(user.getSocial_links().getPhone(), "UTF-8") + "&" +
+                    URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(user.getSocial_links().getPublicEmail(), "UTF-8");
 
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/social_links/" + user.getEmail(), data, "PUT");
             getJSON.execute(); // Making the request Async

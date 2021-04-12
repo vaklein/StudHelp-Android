@@ -25,7 +25,7 @@ public class GettableObjectFactory {
             return new User(dbObject.getString("name"), dbObject.getString("login"), dbObject.getString("email"), dbObject.getString("picture"), dbObject.getString("description"));
         }
         else if(objectClass.getCanonicalName().equals(Social_links.class.getCanonicalName())){
-            return new Social_links(dbObject.getString("discord"),dbObject.getString("teams"),dbObject.getString("facebook"));
+            return new Social_links(dbObject.getString("phone"),dbObject.getString("email"),dbObject.getString("teams"),dbObject.getString("discord"));
         }
         else throw new NoSuchElementException();
     }
