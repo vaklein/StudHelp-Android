@@ -65,5 +65,8 @@
     <string name="add_advertisement_cycle_title">Cycle(s) correspondant(s) à l\'annonce</string>
     <string name="contacter_l_annonceur">Contacter l\'annonceur</string>
     <string name="updateAdvertisement">Modifier mon annonce</string>
+    <string name="notification_channel_id">myCanal</string>
+    <string name="notification_channel_title">myTitle</string>
+    <string name="notification_channel_desc">This is the test canal</string>
 
 </resources>

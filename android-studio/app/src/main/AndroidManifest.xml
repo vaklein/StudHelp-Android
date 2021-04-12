@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- <uses-feature android:name="android.hardware.type.watch" /> -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -35,7 +36,7 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <!--#############################################################-->
+                <!--#############################################################-->
                 <!--#############################################################-->
                 <!--######################## LIBRARIES #########################-->
                 <!--#############################################################-->
@@ -43,6 +44,25 @@
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" /> <!-- Required to use Apache library -->
+
+                <!--#############################################################-->
+                <!--#############################################################-->
+                <!--######################## SERVICES ###########################-->
+                <!--#############################################################-->
+                <!--#############################################################-->
+
+        <service android:name=".MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+                <!--#############################################################-->
+                <!--#############################################################-->
+                <!--######################## MAIN ACTIVITY #########################-->
+                <!--#############################################################-->
+                <!--#############################################################-->
+
         <activity android:name=".Interface.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
