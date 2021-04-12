@@ -359,7 +359,7 @@ public class API {
                 data = URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(newName, "UTF-8");
             }
 
-            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + user.getEmail(), data, "PUT");
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/profile/" + user.getEmail(), data, "PUT");
             String response = getJSON.execute().get();
             Log.d("Gwen", response);
 
