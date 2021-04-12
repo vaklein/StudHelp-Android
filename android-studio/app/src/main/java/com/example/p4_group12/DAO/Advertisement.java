@@ -12,7 +12,7 @@ public class Advertisement  implements Serializable {
                 ", mail='" + mail + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", type='" + type + '\'' +
+                ", type='" + "types are deprecated, please see the tags" + '\'' +
                 ", courseID=" + courseID +
                 ", tags=" + tags +
                 ", images=" + images +
@@ -25,7 +25,7 @@ public class Advertisement  implements Serializable {
     private String description;
     private String type;
     private int courseID;
-    private List<String> tags;
+    private List<Tag> tags;
     private List<String> images;
 
     public void setID(int ID) {
@@ -56,7 +56,7 @@ public class Advertisement  implements Serializable {
         this.courseID = courseID;
     }
 
-    public void setTags(List<String> tags) {
+    public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
 
@@ -64,14 +64,13 @@ public class Advertisement  implements Serializable {
         this.images = images;
     }
 
-    public Advertisement(int ID, String mail, String title, String description, String type, int courseID) {
+    public Advertisement(int ID, String mail, String title, String description, List<Tag> tags, int courseID) {
         this.ID = ID;
         this.mail = mail;
         this.title = title;
         this.description = description;
-        this.type = type;
         this.courseID = courseID;
-        this.tags = new ArrayList<>();
+        this.tags = tags;
 
         /* This is a testing version, it should be updated with an argument in the creator binding
         * list to List<String> each String being the url to the image in the database
@@ -80,8 +79,6 @@ public class Advertisement  implements Serializable {
         images.add(("https://db.valentinklein.eu:8182/advertisement_images/test1"));
         images.add(("https://db.valentinklein.eu:8182/advertisement_images/test2"));
         images.add(("https://db.valentinklein.eu:8182/advertisement_images/test3"));
-
-        tags.add(type);
     }
 
     public int getID(){
@@ -104,7 +101,7 @@ public class Advertisement  implements Serializable {
 
     public int getCourseID() { return this.courseID; }
 
-    public List<String> getTags() { return this.tags; }
+    public List<Tag> getTags() { return this.tags; }
 
     public boolean hasImages() { return !images.isEmpty(); }
 

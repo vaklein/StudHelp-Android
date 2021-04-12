@@ -54,10 +54,10 @@ public class SearchActivity extends NavigationActivity{
         // ArrayList<Course> test = DatabaseContact.get_courses(); Request to the server
 
         mTextView = (TextView) findViewById(R.id.text);
+        courseList = GlobalVariables.getCourses();
 
         // Doing all the synchronous queries
         API api = API.getInstance();
-        courseList = api.getCourses();
         HashSet<Integer> favoritesID = api.getFavoriteCoursesIdsOfUser(GlobalVariables.getUser());
 
         // Building the recycler view
@@ -77,6 +77,7 @@ public class SearchActivity extends NavigationActivity{
         } else {
             courseList = filterFaculties(GlobalVariables.getCourses(), currentCategory);
             setTitleToolbar("Recherche dans les cours de la faculté " + currentCategory);
+            searchView.setQueryHint("Code ou nom de cours dans la faculté " + currentCategory);
         }
 
         // Building the recycler view

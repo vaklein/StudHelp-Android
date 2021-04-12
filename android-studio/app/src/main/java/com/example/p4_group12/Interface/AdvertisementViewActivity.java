@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
+import com.example.p4_group12.DAO.Tag;
 import com.example.p4_group12.DAO.User;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
@@ -34,6 +35,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Integer.getInteger;
 import static java.lang.Integer.max;
 
 public class AdvertisementViewActivity extends NavigationActivity {
@@ -63,8 +65,13 @@ public class AdvertisementViewActivity extends NavigationActivity {
         getLayoutInflater().inflate(R.layout.activity_advertisement_view, contentFrameLayout);
 
         currentAdvertisement = (Advertisement) getIntent().getSerializableExtra("ClickedAdvertisement");
+        int n = (int) getIntent().getSerializableExtra("Number of tags");
+        List<Tag> tags = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            tags.add((Tag) getIntent().getSerializableExtra("tag"+i));
+        }
+        currentAdvertisement.setTags(tags);
         if(currentAdvertisement == null) Log.d("NULLWARNING", "Course is null in AdvertisementListActivity");
-        setTitleToolbar("");
 
         api = API.getInstance();
 
@@ -80,19 +87,16 @@ public class AdvertisementViewActivity extends NavigationActivity {
         advertisementTitle.setText(currentAdvertisement.getTitle());
         advertisementDescription.setText(currentAdvertisement.getDescription());
 
-        for (String type : currentAdvertisement.getTags()) {
+        for (Tag tag : currentAdvertisement.getTags()) {
             Chip chip = new Chip(this);
-            chip.setText(type);
+            chip.setText(tag.getTagValue());
             chip.setCheckable(false);
             advertisementTags.addView(chip);
         }
 
         contactButton = findViewById(R.id.contactAdvertiserButton);
-        Log.v("Jules", "The current ad is " + String.valueOf(currentAdvertisement));
-        Log.v("Jules", "The email of this ad is " + String.valueOf(currentAdvertisement.getEmailAddress()));
         if (GlobalVariables.getUser().getEmail().equals(currentAdvertisement.getEmailAddress())) {
             contactButton.setText(R.string.updateAdvertisement);
-            Log.v("Jules", "My advertisement button");
             contactButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -104,7 +108,6 @@ public class AdvertisementViewActivity extends NavigationActivity {
             //contactButton.setVisibility(View.GONE);
         } else {
             contactButton.setText(R.string.contacter_l_annonceur);
-            Log.v("Jules", "The button must be there the user is not the owner");
             contactButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

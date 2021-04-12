@@ -18,6 +18,7 @@ import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.DAO.Social_links;
+import com.example.p4_group12.DAO.Tag;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
 import com.google.android.material.chip.Chip;
@@ -180,22 +181,14 @@ public class AddAdvertisementActivity extends NavigationActivity {
                 List<Integer> checkedObjectsIDs = objectChipGroup.getCheckedChipIds();
 
                 if (isCorrectlyFilled(checkedTypeID, checkedCyclesIDs, checkedObjectsIDs)) {
-
-                    // TODO : move the next line but for the moment it ensures to still be able to add the type
-                    String type = (String) ((Chip) typeChipGroup.findViewById(checkedTypeID)).getText();
-
-                    api.addNewAdvertisement(course.getID(), advertisementTitleText.getText().toString(), advertisementDescriptionText.getText().toString(), GlobalVariables.getUser().getEmail(), type);
-                    // TODO : Should insert the tags here
-                    /*
+                    int advertisementId = api.addNewAdvertisement(course.getID(), advertisementTitleText.getText().toString(), advertisementDescriptionText.getText().toString(), GlobalVariables.getUser().getEmail(), "Types are deprecated");
+                    api.addNewTag(new Tag(advertisementId, "type", (String) ((Chip) typeChipGroup.findViewById(checkedTypeID)).getText()));
                     for (int i : checkedCyclesIDs) {
-                        // This is the text of the checked chips
-                        (String) ((Chip) cycleChipGroup.findViewById(i)).getText();
+                        api.addNewTag(new Tag(advertisementId, "cycle", (String) ((Chip) cycleChipGroup.findViewById(i)).getText()));
                     }
                     for (int i : checkedObjectsIDs){
-                        // This is the text of the checked chips
-                        (String) ((Chip) objectChipGroup.findViewById(i)).getText();
+                        api.addNewTag(new Tag(advertisementId, "object", (String) ((Chip) objectChipGroup.findViewById(i)).getText()));
                     }
-                    */
 
                     Intent intent = new Intent();
                     setResult(1, intent);

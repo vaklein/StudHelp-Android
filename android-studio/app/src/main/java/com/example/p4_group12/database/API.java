@@ -1,20 +1,16 @@
 package com.example.p4_group12.database;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.DAO.GettableObjectFactory;
 import com.example.p4_group12.DAO.Social_links;
+import com.example.p4_group12.DAO.Tag;
 import com.example.p4_group12.DAO.User;
-import com.example.p4_group12.Interface.GlobalVariables;
-import com.example.p4_group12.Interface.LoginActivity;
-import com.example.p4_group12.Interface.SignupActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +31,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class API {
@@ -299,7 +296,7 @@ public class API {
         }
     }
 
-    public void addNewAdvertisement(int courseId, String title, String description, String email, String type){
+    public int addNewAdvertisement(int courseId, String title, String description, String email, String type){
         try{
             String data = URLEncoder.encode("course_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(courseId), "UTF-8") + "&" +
                     URLEncoder.encode("title", "UTF-8") + "=" + URLEncoder.encode(title, "UTF-8") + "&" +
@@ -308,10 +305,39 @@ public class API {
                     URLEncoder.encode("description", "UTF-8") + "=" + URLEncoder.encode(description, "UTF-8");
 
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement", data, "POST");
+            String response = getJSON.execute().get(); // Making the request Async
+            JSONObject jsonObject = new JSONObject(response);
+            return Integer.parseInt(jsonObject.getString("id"));
+        } catch (UnsupportedEncodingException | InterruptedException | ExecutionException | JSONException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public void addNewTag(Tag tag) {
+        try {
+            String data = URLEncoder.encode("advertisement_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(tag.getAdvertisementId()), "UTF-8") + "&" +
+                    URLEncoder.encode("tag_type", "UTF-8") + "=" + URLEncoder.encode(tag.getTagType(), "UTF-8") + "&" +
+                    URLEncoder.encode("tag_value", "UTF-8") + "=" + URLEncoder.encode(tag.getTagValue(), "UTF-8");
+
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement/tags", data, "POST");
             getJSON.execute(); // Making the request Async
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Tag> getAdvertisementTags(int advertisementId) {
+        ArrayList<Tag> tags = new ArrayList<>();
+        try{
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement/tags/" + advertisementId, "", "GET");
+            String response = getJSON.execute().get();
+            Log.v("Jules", "Tags json is : " + response);
+            loadIntoArrayList(response, tags, Tag.class);
+        } catch (InterruptedException  | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException  e) {
+            e.printStackTrace();
+        }
+        return tags;
     }
 
     public void deleteAdvertisment(Advertisement advertisement){

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.Course;
+import com.example.p4_group12.DAO.Tag;
 import com.example.p4_group12.Interface.adapter.AdvertisementListAdapter;
 import com.example.p4_group12.R;
 
@@ -81,6 +82,12 @@ public class AdvertisementsListActivity extends NavigationActivity {
                 Advertisement clickedAdvertisement = advertisementsList.get(position);
                 Intent advertisementView = new Intent(getApplicationContext(), AdvertisementViewActivity.class);
                 advertisementView.putExtra("ClickedAdvertisement", clickedAdvertisement);
+                int i = 0;
+                for (Tag tag : clickedAdvertisement.getTags()) {
+                    advertisementView.putExtra("tag"+i, tag);
+                    i++;
+                }
+                advertisementView.putExtra("Number of tags", i);
                 startActivityForResult(advertisementView, 1);
             }
         });
