@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,7 +20,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.p4_group12.DAO.Social_links;
 import com.example.p4_group12.DAO.User;
+import com.example.p4_group12.Interface.EditProfileActivity;
 import com.example.p4_group12.Interface.GlobalVariables;
+import com.example.p4_group12.Interface.ProfileActivity;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
 import com.google.android.material.card.MaterialCardView;
@@ -67,6 +70,7 @@ public class ContactsFragment extends Fragment {
                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("Discord contact", s.getDiscord());
                 clipboard.setPrimaryClip(clip);
+                Toast.makeText(getContext(), "Copié !", Toast.LENGTH_LONG).show();
             }
         });
         if(!s.getTeams().equals("") && s.getTeams() != null){
