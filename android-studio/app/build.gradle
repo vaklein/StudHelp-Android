@@ -38,6 +38,7 @@ android {
         }
         debug {
             buildConfigField "String", "DB_URL", "\"https://db.valentinklein.eu:8183/api\""
+            buildConfigField "String", "STORAGE_URL", "\"https://db.valentinklein.eu:8183//storage/\""
         }
     }
     compileOptions {
@@ -62,4 +63,5 @@ dependencies {
     implementation 'com.github.jama5262:CarouselView:1.1.0'
     // Used to load an url image to an imageView
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'jp.wasabeef:picasso-transformations:2.2.1'
 }

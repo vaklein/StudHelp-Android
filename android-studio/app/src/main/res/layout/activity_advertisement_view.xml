@@ -33,6 +33,7 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginLeft="15dp"
                 android:maxLines="2"
+                android:ellipsize="end"
                 />
 
             <com.google.android.material.chip.ChipGroup

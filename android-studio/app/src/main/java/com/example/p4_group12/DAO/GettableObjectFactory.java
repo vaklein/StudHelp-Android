@@ -22,7 +22,7 @@ public class GettableObjectFactory {
             return new Advertisement(Integer.parseInt(dbObject.getString("id")), dbObject.getString("user_email"), dbObject.getString("title"), dbObject.getString("description"), dbObject.getString("type"), Integer.parseInt(dbObject.getString("course_id")));
         }
         else if(objectClass.getCanonicalName().equals(User.class.getCanonicalName())) {
-            return new User(dbObject.getString("name"), dbObject.getString("login"), dbObject.getString("email"));
+            return new User(dbObject.getString("name"), dbObject.getString("login"), dbObject.getString("email"), dbObject.getString("picture"), dbObject.getString("description"));
         }
         else if(objectClass.getCanonicalName().equals(Social_links.class.getCanonicalName())){
             return new Social_links(dbObject.getString("discord"),dbObject.getString("teams"),dbObject.getString("facebook"));

@@ -12,6 +12,7 @@ import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,10 +52,13 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+
 public class ForeignProfileActivity extends NavigationActivity implements TabLayout.OnTabSelectedListener {
 
     private FloatingActionButton edit;
     private TextView name;
+    private ImageView picture;
     private API api;
 
     private User foreignUser;
@@ -84,6 +89,7 @@ public class ForeignProfileActivity extends NavigationActivity implements TabLay
         Bundle bundle = new Bundle();
         bundle.putString("login", String.valueOf(foreignUser.getLogin()));
         bundle.putString("email", null);
+        bundle.putString("description", foreignUser.getDescription());
         fragment = new DataFragment();
         fragment.setArguments(bundle);
         fragmentManager = getSupportFragmentManager();
@@ -93,6 +99,10 @@ public class ForeignProfileActivity extends NavigationActivity implements TabLay
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
         tabLayout.addOnTabSelectedListener(this);
+        if (foreignUser.getPicture() != "null") {
+            picture = (ImageView) findViewById(R.id.user_profile_photo);
+            Picasso.get().load(BuildConfig.STORAGE_URL + foreignUser.getPicture()).transform(new CropCircleTransformation()).into(picture);
+        }
         name = (TextView) findViewById(R.id.user_profile_name);
         name.setText(String.valueOf(foreignUser.getName()));
         edit = findViewById(R.id.floating_action_button);
@@ -106,10 +116,10 @@ public class ForeignProfileActivity extends NavigationActivity implements TabLay
             case 0:
                 bundle.putString("login", foreignUser.getLogin());
                 bundle.putString("email", null);
+                bundle.putString("description", foreignUser.getDescription());
                 fragment = new DataFragment();
                 fragment.setArguments(bundle);
                 break;
-
             case 1:
                 bundle.putString("email", foreignUser.getEmail());
                 bundle.putString("type", "foreign");

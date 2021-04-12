@@ -77,7 +77,7 @@ public class SignupActivity extends AppCompatActivity {
                 passwordField.setErrorEnabled(false);
                 confirmPasswordField.setErrorEnabled(false);
                 if (isCorrectlyFil() && isPasswordPowerfull() && isPasswordConfirmed()) {
-                    User user = new User(name.getText().toString(), login.getText().toString(), email.getText().toString());
+                    User user = new User(name.getText().toString(), login.getText().toString(), email.getText().toString(), null, null);
 
                     loadingDialog.getDialog().show();
                     JSONObject apiResponse = API.registerUser(user,password.getText().toString(), confirmPassword.getText().toString());

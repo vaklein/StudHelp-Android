@@ -9,6 +9,7 @@ import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -24,13 +25,17 @@ import com.example.p4_group12.database.API;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class ProfileActivity extends NavigationActivity implements TabLayout.OnTabSelectedListener {
 
     private FloatingActionButton edit;
     private TextView name;
+    private ImageView picture;
 
     private API api;
 
@@ -53,6 +58,7 @@ public class ProfileActivity extends NavigationActivity implements TabLayout.OnT
         Bundle bundle = new Bundle();
         bundle.putString("login", GlobalVariables.getUser().getLogin());
         bundle.putString("email", GlobalVariables.getUser().getEmail());
+        bundle.putString("description", GlobalVariables.getUser().getDescription());
         fragment = new DataFragment();
         fragment.setArguments(bundle);
         fragmentManager = getSupportFragmentManager();
@@ -63,6 +69,10 @@ public class ProfileActivity extends NavigationActivity implements TabLayout.OnT
         fragmentTransaction.commit();
         tabLayout.addOnTabSelectedListener(this);
 
+        if (GlobalVariables.getUser().getPicture() != "null") {
+            picture = (ImageView) findViewById(R.id.user_profile_photo);
+            Picasso.get().load(BuildConfig.STORAGE_URL + GlobalVariables.getUser().getPicture()).transform(new CropCircleTransformation()).into(picture);
+        }
         name = (TextView) findViewById(R.id.user_profile_name);
         edit = findViewById(R.id.floating_action_button);
 
@@ -75,6 +85,7 @@ public class ProfileActivity extends NavigationActivity implements TabLayout.OnT
             }
         });
 
+
     }
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
@@ -83,6 +94,7 @@ public class ProfileActivity extends NavigationActivity implements TabLayout.OnT
             case 0:
                 bundle.putString("login", GlobalVariables.getUser().getLogin());
                 bundle.putString("email", GlobalVariables.getUser().getEmail());
+                bundle.putString("description", GlobalVariables.getUser().getDescription());
                 fragment = new DataFragment();
                 fragment.setArguments(bundle);
                 break;
