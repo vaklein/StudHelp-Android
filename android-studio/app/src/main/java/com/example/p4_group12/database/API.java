@@ -198,6 +198,20 @@ public class API {
         revokeToken(sharedPreferences);
     }
 
+    public static void sendToken(String email, String token){
+        try{
+            String data = URLEncoder.encode("firebase_token", "UTF-8") + "=" + URLEncoder.encode(token, "UTF-8");
+
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/firebase_token/" + email, data, "PUT");
+            getJSON.execute();
+
+        } catch (UnsupportedEncodingException e) {
+            Log.d("Gwen", "error when sending the token");
+            return;
+        }
+
+    }
+
     public User getUserWithEmail(String email){
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + email, "", "GET");

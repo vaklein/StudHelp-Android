@@ -6,18 +6,23 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
+import com.example.p4_group12.Interface.GlobalVariables;
 import com.example.p4_group12.Interface.HomeActivity;
+import com.example.p4_group12.database.API;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String CANAL = "NotifCanal";
+    public static final String PREFS_NAME = "MyPrefsFile";
+
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
@@ -63,6 +68,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onNewToken(String s) {
         super.onNewToken(s);
-        Log.d("NEW_TOKEN",s);
+
+        if(GlobalVariables.getUser() != null){
+            API.getInstance().sendToken(GlobalVariables.getUser().getEmail(), s);
+        }
     }
 }
