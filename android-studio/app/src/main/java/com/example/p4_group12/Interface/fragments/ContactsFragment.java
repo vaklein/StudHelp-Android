@@ -98,18 +98,17 @@ public class ContactsFragment extends Fragment {
             }
         });
         if(!s.getPublicEmail().equals("") && s.getPublicEmail() != null){
-            SpannableString content = new SpannableString(s.getPublicEmail());
-            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-            publicemailtext.setText(content);
+            publicemailtext.setText(s.getPublicEmail());
             publicemaillayout.setVisibility(View.VISIBLE);
             noNetworkString.setVisibility(View.GONE);
         }
-        phonetext.setOnClickListener(new View.OnClickListener() {
+        publicemailtext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Facebook contact", s.getPublicEmail());
-                clipboard.setPrimaryClip(clip);
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("plain/text");
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[] { s.getPublicEmail() });
+                startActivity(intent);
             }
         });
         return result;
