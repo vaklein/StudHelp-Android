@@ -3,6 +3,8 @@ package com.example.p4_group12.Interface.fragments;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
@@ -68,16 +70,16 @@ public class ContactsFragment extends Fragment {
             }
         });
         if(!s.getTeams().equals("") && s.getTeams() != null){
-            teamstext.setText("msteams://teams.microsoft.com/l/chat/0/0?users="+s.getTeams());
+            teamstext.setText("https://teams.microsoft.com/l/chat/0/0?users="+s.getTeams());
             teamslayout.setVisibility(View.VISIBLE);
             noNetworkString.setVisibility(View.GONE);
         }
         teamstext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Teams contact", s.getTeams());
-                clipboard.setPrimaryClip(clip);
+                Uri uri = Uri.parse("https://teams.microsoft.com/l/chat/0/0?users="+s.getTeams()); // missing 'http://' will cause crashed
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
             }
         });
         if(!s.getPhone().equals("") && s.getPhone() != null){
