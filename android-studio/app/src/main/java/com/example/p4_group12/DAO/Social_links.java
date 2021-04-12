@@ -11,10 +11,14 @@ public class Social_links {
     }
 
     public Social_links(String phone, String publicEmail, String teams,String discord){
-        this.phone=phone;
-        this.publicEmail=publicEmail;
-        this.teams=teams;
-        this.discord=discord;
+        if (phone != "null") this.phone=phone;
+        else this.phone = "";
+        if (publicEmail != "null") this.publicEmail=publicEmail;
+        else this.publicEmail = "";
+        if (teams != "null") this.teams=teams;
+        else this.teams = "";
+        if (discord != "null") this.discord=discord;
+        else this.discord = "";
     }
 
     public String getPhone() {
