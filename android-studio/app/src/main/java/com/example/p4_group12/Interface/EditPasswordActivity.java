@@ -76,11 +76,10 @@ public class EditPasswordActivity extends NavigationActivity {
                     api = API.getInstance();
                     Boolean apiRetValue = api.updatePassword(GlobalVariables.getUser(), new_password.getText().toString(), password_confirmation.getText().toString(), previous_password.getText().toString());
                     if(apiRetValue == null) {
-                        Toast.makeText(EditPasswordActivity.this, "Une erreur est survenue, veuilliez réessayer", Toast.LENGTH_LONG).show();
+                        Toast.makeText(EditPasswordActivity.this, "Une erreur est survenue, veuillez réessayer", Toast.LENGTH_LONG).show();
                     }else if(!apiRetValue){
                         previous_passwordField.setError("Mauvais mot de passe");
                     }else{
-                        GlobalVariables.getUser().setPassword(new_password.getText().toString());
                         Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
                         startActivity(edit_profil);
                         EditPasswordActivity.this.finish();

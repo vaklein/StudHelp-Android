@@ -27,10 +27,10 @@ public class GettableObjectFactory {
             return new Advertisement(Integer.parseInt(dbObject.getString("id")), dbObject.getString("user_email"), dbObject.getString("title"), dbObject.getString("description"), tags, Integer.parseInt(dbObject.getString("course_id")));
         }
         else if(objectClass.getCanonicalName().equals(User.class.getCanonicalName())) {
-            return new User(dbObject.getString("name"), dbObject.getString("login"), dbObject.getString("email"));
+            return new User(dbObject.getString("name"), dbObject.getString("login"), dbObject.getString("email"), dbObject.getString("picture"), dbObject.getString("description"));
         }
         else if(objectClass.getCanonicalName().equals(Social_links.class.getCanonicalName())){
-            return new Social_links(dbObject.getString("discord"),dbObject.getString("teams"),dbObject.getString("facebook"));
+            return new Social_links(dbObject.getString("phone"),dbObject.getString("email"),dbObject.getString("teams"),dbObject.getString("discord"));
         }
         else if(objectClass.getCanonicalName().equals(Tag.class.getCanonicalName())) {
             return new Tag(Integer.parseInt(dbObject.getString("advertisement_id")), dbObject.getString("tag_type"), dbObject.getString("tag_value"));

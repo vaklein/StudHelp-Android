@@ -25,8 +25,9 @@
     <string name="personal_information_underline"><u>Mes données personelles :</u></string>
     <string name="social_network_public_advertissemnt">Ces données seront publiques, tous les utilisateurs pour y accéder.</string>
     <string name="teams">Email de votre compte Teams</string>
-    <string name="facebook">Nom et prénom</string>
-    <string name="discord">Pseudo et #Tag</string>
+    <string name="phone">Numéro de téléphone</string>
+    <string name="email_public">Email privé</string>
+    <string name="discord">Pseudo#Tag</string>
     <string name="deconnexion">Se déconnecter</string>
 
 
