@@ -106,7 +106,7 @@ public class LoginActivity extends AppCompatActivity {
                                         .apply();
                                 API.saveToken(getSharedPreferences(PREFS_NAME, MODE_PRIVATE)); // saving the API key in the shared prefs
                             }
-                            GlobalVariables.setUser(new User(jsonObject.getString("name"), jsonObject.getString("login"), jsonObject.getString("email"), jsonObject.getString("password")));
+                            GlobalVariables.setUser(new User(jsonObject.getString("name"), jsonObject.getString("login"), jsonObject.getString("email")));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

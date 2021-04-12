@@ -77,10 +77,10 @@ public class SignupActivity extends AppCompatActivity {
                 passwordField.setErrorEnabled(false);
                 confirmPasswordField.setErrorEnabled(false);
                 if (isCorrectlyFil() && isPasswordPowerfull() && isPasswordConfirmed()) {
-                    User user = new User(name.getText().toString(), login.getText().toString(), email.getText().toString(), password.getText().toString());
+                    User user = new User(name.getText().toString(), login.getText().toString(), email.getText().toString());
 
                     loadingDialog.getDialog().show();
-                    JSONObject apiResponse = API.registerUser(user, confirmPassword.getText().toString());
+                    JSONObject apiResponse = API.registerUser(user,password.getText().toString(), confirmPassword.getText().toString());
                     // TODO create a line in SOCIAL_LINKS (might be better to do that in the back end)
 
                     try {
