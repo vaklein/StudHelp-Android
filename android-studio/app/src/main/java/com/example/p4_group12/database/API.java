@@ -73,7 +73,7 @@ public class API {
                 httpURLConnection.setRequestMethod(this.requestType);  //setting the request type
 
                 if(this.requestType.equals("GET") || this.requestType.equals("PUT") ) httpURLConnection.setRequestProperty("Accept", "application/json");
-                if(this.requestType.equals("GET") || this.requestType.equals("PUT") ) httpURLConnection.setRequestProperty("Content-Type", "application/json");
+                if(this.requestType.equals("GET") ) httpURLConnection.setRequestProperty("Content-Type", "application/json");
                 if(this.requestType.equals("POST") || this.requestType.equals("PUT") || this.requestType.equals("DELETE")) httpURLConnection.setDoOutput(true);
 
                 if(data.length() > 0){
