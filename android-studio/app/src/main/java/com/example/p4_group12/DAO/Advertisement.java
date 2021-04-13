@@ -64,7 +64,7 @@ public class Advertisement  implements Serializable {
         this.images = images;
     }
 
-    public Advertisement(int ID, String mail, String title, String description, List<Tag> tags, int courseID) {
+    public Advertisement(int ID, String mail, String title, String description, List<Tag> tags, int courseID, List<String> images) {
         this.ID = ID;
         this.mail = mail;
         this.title = title;
@@ -75,10 +75,7 @@ public class Advertisement  implements Serializable {
         /* This is a testing version, it should be updated with an argument in the creator binding
         * list to List<String> each String being the url to the image in the database
         */
-        this.images = new ArrayList<>();
-        images.add(("https://db.valentinklein.eu:8182/advertisement_images/test1"));
-        images.add(("https://db.valentinklein.eu:8182/advertisement_images/test2"));
-        images.add(("https://db.valentinklein.eu:8182/advertisement_images/test3"));
+        this.images = images;
     }
 
     public int getID(){

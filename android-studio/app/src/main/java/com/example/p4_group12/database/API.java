@@ -351,6 +351,23 @@ public class API {
         }
         return tags;
     }
+    public ArrayList<String> getAdvertisementPictures(int advertisementId) {
+        ArrayList<String> pictures = new ArrayList<>();
+        try{
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement/pictures/" + advertisementId, "", "GET");
+            String response = getJSON.execute().get();
+            Log.v("Jules", "Tags json is : " + response);
+
+            JSONArray jsonArray = new JSONArray(response);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+                pictures.add(obj.getString("picture"));
+            }
+        } catch (InterruptedException  | ExecutionException | JSONException  e) {
+            e.printStackTrace();
+        }
+        return pictures;
+    }
 
     public void deleteAdvertisment(Advertisement advertisement){
         SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement/" + advertisement.getID(), "", "DELETE");

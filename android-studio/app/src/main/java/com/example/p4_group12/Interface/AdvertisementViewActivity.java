@@ -33,6 +33,7 @@ import com.jama.carouselview.CarouselViewListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import static java.lang.Integer.getInteger;
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
@@ -121,14 +122,14 @@ public class AdvertisementViewActivity extends NavigationActivity {
         }
 
         carousel = findViewById(R.id.advertisement_view_carousel);
-
+        System.out.println(currentAdvertisement.getImages().toString());
         if (currentAdvertisement.hasImages()) {
             carousel.setSize(currentAdvertisement.getImages().size());
             carousel.setCarouselViewListener(new CarouselViewListener() {
                 @Override
                 public void onBindView(View view, int position) {
                     ImageView imageView = view.findViewById(R.id.carousel_item_imageView);
-                    Picasso.get().load(currentAdvertisement.getImages().get(position)).into(imageView);
+                    Picasso.get().load(BuildConfig.STORAGE_URL + currentAdvertisement.getImages().get(position)).into(imageView);
                 }
             });
             carousel.show();
