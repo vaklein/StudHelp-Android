@@ -81,7 +81,9 @@ public class EditProfileActivity extends NavigationActivity {
 
                 new_loginField.setErrorEnabled(false);
                 if (!new_name.getText().toString().isEmpty() || !new_login.getText().toString().isEmpty()) {
-                    Boolean apiResponse = API.getInstance().editNameAndLogin(GlobalVariables.getUser(), new_name.getText().toString(), new_login.getText().toString());
+                    String requestName = new_name.getText().toString().equals(GlobalVariables.getUser().getName()) ? new_name.getText().toString() : "";
+                    String requestLogin = new_login.getText().toString().equals(GlobalVariables.getUser().getLogin()) ? new_login.getText().toString() : "";
+                    Boolean apiResponse = API.getInstance().editNameAndLogin(GlobalVariables.getUser(), requestName, requestLogin);
 
                     if(apiResponse == null){ // error
                         Toast.makeText(EditProfileActivity.this, "Une erreur est survenue lors de la modification de votre nom, veuilliez réessayer", Toast.LENGTH_LONG).show();

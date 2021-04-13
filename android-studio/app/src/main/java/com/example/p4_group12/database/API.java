@@ -70,12 +70,10 @@ public class API {
                 URL url = new URL(this.urlWebService);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestProperty("Authorization","Bearer "+ key); // Setting the bearer token for the request
-                 Log.d("Gwen", this.requestType);
                 httpURLConnection.setRequestMethod(this.requestType);  //setting the request type
-                 Log.d("Gwen", this.requestType);
 
-                if(this.requestType.equals("GET")) httpURLConnection.setRequestProperty("Accept", "application/json");
-                if(this.requestType.equals("GET")) httpURLConnection.setRequestProperty("Content-Type", "application/json");
+                if(this.requestType.equals("GET") || this.requestType.equals("PUT") ) httpURLConnection.setRequestProperty("Accept", "application/json");
+                if(this.requestType.equals("GET") || this.requestType.equals("PUT") ) httpURLConnection.setRequestProperty("Content-Type", "application/json");
                 if(this.requestType.equals("POST") || this.requestType.equals("PUT") || this.requestType.equals("DELETE")) httpURLConnection.setDoOutput(true);
 
                 if(data.length() > 0){
@@ -401,9 +399,8 @@ public class API {
 
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/profile/" + user.getEmail(), data, "PUT");
             String response = getJSON.execute().get();
-            Log.d("Gwen", response);
 
-            JSONObject jsonObject = (JSONObject) new JSONObject(response);
+            JSONObject jsonObject = new JSONObject(response);
             return jsonObject != null && !jsonObject.has("error");
 
 
