@@ -6,9 +6,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.Course;
+import com.example.p4_group12.DAO.Tag;
 import com.example.p4_group12.Interface.adapter.AdvertisementListAdapter;
 import com.example.p4_group12.R;
-import com.example.p4_group12.database.GetObjectFromDB;
+
+import com.example.p4_group12.database.API;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.content.Intent;
@@ -26,6 +29,9 @@ public class AdvertisementsListActivity extends NavigationActivity {
     private AdvertisementListAdapter advertisementListAdapter;
     private TextView mTextView;
     private FloatingActionButton newAdvertisementButton;
+    private API api;
+
+
     private TextView noAdvertisment;
     private Course currentCourse;
 
@@ -36,17 +42,12 @@ public class AdvertisementsListActivity extends NavigationActivity {
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); //Remember this is the FrameLayout area within your activity_main.xml
         getLayoutInflater().inflate(R.layout.activity_advertisments_list, contentFrameLayout);
 
-
-        ArrayList<Advertisement> advertisementsList = new ArrayList<Advertisement>();
-        GetObjectFromDB query = new GetObjectFromDB(advertisementsList, Advertisement .class);
-
         currentCourse = (Course) getIntent().getSerializableExtra("ClickedCourse");
         if(currentCourse == null) Log.d("NULLWARNING", "Course is null in AdvertisementListActivity");
         setTitleToolbar(currentCourse.getName());
 
-
-        // doing the query
-        GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_course_advertisment.php?courseID="+Integer.toString(currentCourse.getID()), advertisementsList, Advertisement.class);
+        this.api = API.getInstance();
+        ArrayList<Advertisement> advertisementsList = api.getCourseAdvertisements(currentCourse);
 
         mTextView = (TextView) findViewById(R.id.text);
         noAdvertisment = findViewById(R.id.no_advertisements);
@@ -81,6 +82,12 @@ public class AdvertisementsListActivity extends NavigationActivity {
                 Advertisement clickedAdvertisement = advertisementsList.get(position);
                 Intent advertisementView = new Intent(getApplicationContext(), AdvertisementViewActivity.class);
                 advertisementView.putExtra("ClickedAdvertisement", clickedAdvertisement);
+                int i = 0;
+                for (Tag tag : clickedAdvertisement.getTags()) {
+                    advertisementView.putExtra("tag"+i, tag);
+                    i++;
+                }
+                advertisementView.putExtra("Number of tags", i);
                 startActivityForResult(advertisementView, 1);
             }
         });

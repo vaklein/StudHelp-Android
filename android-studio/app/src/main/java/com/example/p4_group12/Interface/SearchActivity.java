@@ -18,13 +18,11 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.p4_group12.BuildConfig;
-import com.example.p4_group12.DAO.Advertisement;
+
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.R;
 import com.example.p4_group12.Interface.adapter.CourseListAdapter;
-import com.example.p4_group12.database.DatabaseContact;
-import com.example.p4_group12.database.GetObjectFromDB;
+import com.example.p4_group12.database.API;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -41,8 +39,8 @@ public class SearchActivity extends NavigationActivity{
     private MaterialToolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
+    private ArrayList<Course> courseList;
     private String currentCategory;
-    ArrayList<Course> courseList = new ArrayList<>();
 
     private String currentQuery = "";
 
@@ -54,9 +52,15 @@ public class SearchActivity extends NavigationActivity{
         getLayoutInflater().inflate(R.layout.activity_search, contentFrameLayout);
         setTitleToolbar("Cours");
         // ArrayList<Course> test = DatabaseContact.get_courses(); Request to the server
-        HashSet<Integer> favoritesID = new HashSet<>();
 
         mTextView = (TextView) findViewById(R.id.text);
+        courseList = GlobalVariables.getCourses();
+
+        // Doing all the synchronous queries
+        API api = API.getInstance();
+        HashSet<Integer> favoritesID = api.getFavoriteCoursesIdsOfUser(GlobalVariables.getUser());
+
+        // Building the recycler view
         courseRecyclerView = findViewById(R.id.courseRecyclerView);
         searchView = findViewById(R.id.searchView);
         favoriteSwitch = findViewById(R.id.show_fav_switch);
@@ -73,6 +77,7 @@ public class SearchActivity extends NavigationActivity{
         } else {
             courseList = filterFaculties(GlobalVariables.getCourses(), currentCategory);
             setTitleToolbar("Recherche dans les cours de la faculté " + currentCategory);
+            searchView.setQueryHint("Code ou nom de cours dans la faculté " + currentCategory);
         }
 
         // Building the recycler view
@@ -83,10 +88,6 @@ public class SearchActivity extends NavigationActivity{
         courseRecyclerView.setLayoutManager(courseLayoutManager);
 
         courseRecyclerView.setAdapter(courseListAdapter);
-
-        // Getting the favorite course list of the user
-        DatabaseContact.getUserFavoriteCourseIds(GlobalVariables.getEmail(), favoritesID, courseListAdapter);
-
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

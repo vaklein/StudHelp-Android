@@ -11,28 +11,18 @@ import android.widget.Button;
 import android.widget.Switch;
 import android.widget.Toast;
 
+
 import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.DAO.User;
 import com.example.p4_group12.R;
-import com.example.p4_group12.database.GetObjectFromDB;
+import com.example.p4_group12.database.API;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
@@ -58,20 +48,17 @@ public class LoginActivity extends AppCompatActivity {
 
         loadingDialog = new LoadingDialog(this, "Connexion en cours...");
 
-        SharedPreferences pref = getSharedPreferences(PREFS_NAME,MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences(PREFS_NAME,MODE_PRIVATE); // We only get the email. We might need to get the API token or the password
         String already_email = pref.getString(PREF_EMAIL, null);
         if (already_email != null) {
             loadingDialog.getDialog().show();
-            ArrayList<User> onlyUser = new ArrayList<>();
-            GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_user_from_email.php?UserEmail="+already_email, onlyUser, User.class);
-            User user = onlyUser.get(0);
-            GlobalVariables.setLogin(user.getLogin());
-            GlobalVariables.setEmail(user.getEmail());
-            GlobalVariables.setName(user.getName());
+
+            API api =  API.setToken(getSharedPreferences(PREFS_NAME,MODE_PRIVATE));
+            GlobalVariables.setUser(api.getUserWithEmail(already_email));
+
 
             // Doing all the synchronous queries
-            ArrayList<Course> loadCourses = new ArrayList<>();
-            GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_courses.php", loadCourses, Course.class); // getting all the courses
+            ArrayList<Course> loadCourses = api.getCourses();
             GlobalVariables.setCourses(loadCourses);
 
             //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
@@ -91,20 +78,6 @@ public class LoginActivity extends AppCompatActivity {
         passwordField = (TextInputLayout) findViewById(R.id.password);
         rememberMe = findViewById(R.id.rememberme);
 
-
-        /*
-        // TEST ELEMENTS
-        this.rootButton = findViewById(R.id.root_button);
-        rootButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent CourseList = new Intent(getApplicationContext(), CourseListActivity.class);
-                startActivity(CourseList);
-            }
-        });
-        // TEST END
-        */
-
         sign_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,7 +91,35 @@ public class LoginActivity extends AppCompatActivity {
                 loginField.setErrorEnabled(false);
                 passwordField.setErrorEnabled(false);
                 if (isCorrectlyFil()) {
-                    new AsyncLogin().execute(login.getText().toString(),password.getText().toString());
+                    JSONObject jsonObject = API.loginUser(login.getText().toString(), password.getText().toString());
+
+                    if(jsonObject == null) Toast.makeText(LoginActivity.this, "OOPs! Réessayer", Toast.LENGTH_LONG).show();
+                    else if (jsonObject.has("message")) {
+                        loginField.setError("Identifiant/Mot de passe incorrect");
+                        passwordField.setError("Identifiant/Mot de passe incorrect");
+                    } else {
+                        try {
+                            if (rememberMe.isChecked()) {
+                                getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+                                        .edit()
+                                        .putString(PREF_EMAIL, jsonObject.getString("email"))
+                                        .apply();
+                                API.saveToken(getSharedPreferences(PREFS_NAME, MODE_PRIVATE)); // saving the API key in the shared prefs
+                            }
+                            GlobalVariables.setUser(new User(jsonObject.getString("name"), jsonObject.getString("login"), jsonObject.getString("email"), jsonObject.getString("picture"), jsonObject.getString("description")));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        ArrayList<Course> loadCourses = API.getInstance().getCourses();
+                        GlobalVariables.setCourses(loadCourses);
+                        //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
+                        //startActivity(edit_profil);
+                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                        intent.putExtra("FavList", false);
+                        startActivity(intent);
+                        LoginActivity.this.finish();
+                    }
                 }
             }
         });
@@ -135,88 +136,6 @@ public class LoginActivity extends AppCompatActivity {
             passwordField.setError("Champs obligatoire");
         }
         return filled;
-    }
-    class AsyncLogin extends AsyncTask<String, Void, String> { // Il faut lancer un autre thread car une requete sur le main thread peut faire crasher l'app
-
-        // a modifier en executor si on veut update l'app, asynctask deprecated
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            loadingDialog.getDialog().show();
-        }
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                URL url = new URL(BuildConfig.DB_URL + "connect.php");
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                httpURLConnection.setRequestMethod("POST");  //POST request
-                httpURLConnection.setDoOutput(true);
-                OutputStream OS = httpURLConnection.getOutputStream();
-                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
-                String data = URLEncoder.encode("login", "UTF-8") + "=" + URLEncoder.encode(params[0], "UTF-8") + "&" +
-                        URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(params[1], "UTF-8");//Build form answer
-                bufferedWriter.write(data); //Send data
-                bufferedWriter.flush();
-                bufferedWriter.close();
-                OS.close();
-                InputStream IS = httpURLConnection.getInputStream(); //DB answer
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(IS));
-                String json;
-                StringBuilder result = new StringBuilder();
-                while ((json = bufferedReader.readLine()) != null) {
-                    result.append(json + "\n");
-                }
-                IS.close();
-                httpURLConnection.disconnect();
-                return result.toString();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-                return null;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            loadingDialog.getDialog().cancel();
-            try {
-                JSONObject response = new JSONObject(result);
-                JSONObject object = response.getJSONObject("response");
-                if (object.getBoolean("error")) {
-                    loginField.setError("Identifiant/Mot de passe incorrect");
-                    passwordField.setError("Identifiant/Mot de passe incorrect");
-                } else if (object.getBoolean("Logged")) {
-                    if (rememberMe.isChecked()) {
-                        getSharedPreferences(PREFS_NAME,MODE_PRIVATE)
-                                .edit()
-                                .putString(PREF_EMAIL, object.getString("email"))
-                                .apply();
-                    }
-                    GlobalVariables.setLogin(login.getText().toString());
-                    GlobalVariables.setEmail(object.getString("email"));
-                    GlobalVariables.setName(object.getString("name"));
-
-                    // Doing all the synchronous queries
-                    ArrayList<Course> loadCourses = new ArrayList<>();
-                    GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_courses.php", loadCourses, Course.class); // getting all the courses
-                    GlobalVariables.setCourses(loadCourses);
-
-                    //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
-                    //startActivity(edit_profil);
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    intent.putExtra("FavList", false);
-                    startActivity(intent);
-                    LoginActivity.this.finish();
-                }else{
-                    Toast.makeText(LoginActivity.this, "OOPs! Réessayer", Toast.LENGTH_LONG).show();
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
 }

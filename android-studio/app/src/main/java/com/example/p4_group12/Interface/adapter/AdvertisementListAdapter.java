@@ -12,7 +12,7 @@ import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.User;
 import com.example.p4_group12.R;
-import com.example.p4_group12.database.GetObjectFromDB;
+import com.example.p4_group12.database.API;
 
 import java.util.ArrayList;
 
@@ -78,10 +78,9 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
     public void onBindViewHolder(@NonNull AdvertisementListViewHolder holder, int position) {
         Advertisement currentAdvertisement = advertisementList.get(position);
 
-        ArrayList<User> onlyUser = new ArrayList<>();
-        GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_user_from_email.php?UserEmail="+currentAdvertisement.getEmailAddress(), onlyUser, User.class);
+        User onlyUser = API.getInstance().getUserWithEmail(currentAdvertisement.getEmailAddress());
 
-        holder.usernameTextView.setText(onlyUser.get(0).getName());
+        holder.usernameTextView.setText(onlyUser.getName());
         holder.advertisementTitleTextView.setText(currentAdvertisement.getTitle());
         holder.advertisementDescriptionTextView.setText(currentAdvertisement.getDescription());
     }

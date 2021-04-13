@@ -6,19 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.Course;
-import com.example.p4_group12.DAO.Social_links;
-import com.example.p4_group12.DAO.Tag;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
 import com.google.android.material.chip.Chip;
@@ -28,19 +23,17 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-
-public class AddAdvertisementActivity extends NavigationActivity {
+public class EditAdvertisementActivity extends NavigationActivity{
     private TextInputEditText advertisementTitleText;
     private TextInputEditText advertisementDescriptionText;
     private TextInputLayout advertisementTitle;
     private TextInputLayout advertisementDescription;
     private Button submitAdvertisement;
-    private Advertisement currentAdvertisement;
     private Course course;
     private API api;
     private TextView chipGroupError;
+    private Advertisement toEditAdvertisement;
 
     private ChipGroup typeChipGroup;
     List<String> types = new ArrayList<>();
@@ -61,15 +54,18 @@ public class AddAdvertisementActivity extends NavigationActivity {
         // Use this to set the correct layout instead of setContentView cfr NavigationActivity/drawer_layout
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); //Remember this is the FrameLayout area within your activity_main.xml
         getLayoutInflater().inflate(R.layout.activity_add_advertisement, contentFrameLayout);
-        course = (Course) getIntent().getSerializableExtra("CurrentCourse");
-        setTitleToolbar("Nouvelle annonce dans " + course.getName());
+        Log.v("Jules", "My advertisement button");
+        toEditAdvertisement = (Advertisement) getIntent().getSerializableExtra("toEditAdvertisement");
+        Log.v("Jules", "My advertisement button");
+        setTitleToolbar("Modifier votre annonce");
         advertisementTitle = findViewById(R.id.advertisement_title);
         advertisementDescription = findViewById(R.id.advertisement_description);
         advertisementTitleText = findViewById(R.id.advertisement_title_text);
+        advertisementTitleText.setText(toEditAdvertisement.getTitle());
         advertisementDescriptionText = findViewById(R.id.advertisement_description_text);
+        advertisementDescriptionText.setText(toEditAdvertisement.getDescription());
         submitAdvertisement = findViewById(R.id.add_advertisement_button);
-        submitAdvertisement.setText(R.string.add_advertisement_button);
-        currentAdvertisement = (Advertisement) getIntent().getSerializableExtra("ClickedAdvertisement");
+        submitAdvertisement.setText(R.string.updateAdvertisement);
         chipGroupError = findViewById(R.id.chip_group_unckecked_error);
         typeChipGroup = findViewById(R.id.add_advertisement_type_chip_group);
         cycleChipGroup = findViewById(R.id.add_advertisement_cycle_chip_group);
@@ -181,17 +177,28 @@ public class AddAdvertisementActivity extends NavigationActivity {
                 List<Integer> checkedObjectsIDs = objectChipGroup.getCheckedChipIds();
 
                 if (isCorrectlyFilled(checkedTypeID, checkedCyclesIDs, checkedObjectsIDs)) {
-                    int advertisementId = api.addNewAdvertisement(course.getID(), advertisementTitleText.getText().toString(), advertisementDescriptionText.getText().toString(), GlobalVariables.getUser().getEmail(), "Types are deprecated");
-                    api.addNewTag(new Tag(advertisementId, "type", (String) ((Chip) typeChipGroup.findViewById(checkedTypeID)).getText()));
+
+                    // TODO : move the next line but for the moment it ensures to still be able to add the type
+                    String type = (String) ((Chip) typeChipGroup.findViewById(checkedTypeID)).getText();
+                    toEditAdvertisement.setTitle(advertisementTitleText.getText().toString());
+                    toEditAdvertisement.setDescription(advertisementDescriptionText.getText().toString());
+                    toEditAdvertisement.setType(type);
+                    api.updateAdvertisement(toEditAdvertisement);
+                    // TODO : Should insert the tags here
+                    /*
                     for (int i : checkedCyclesIDs) {
-                        api.addNewTag(new Tag(advertisementId, "cycle", (String) ((Chip) cycleChipGroup.findViewById(i)).getText()));
+                        // This is the text of the checked chips
+                        (String) ((Chip) cycleChipGroup.findViewById(i)).getText();
                     }
                     for (int i : checkedObjectsIDs){
-                        api.addNewTag(new Tag(advertisementId, "object", (String) ((Chip) objectChipGroup.findViewById(i)).getText()));
+                        // This is the text of the checked chips
+                        (String) ((Chip) objectChipGroup.findViewById(i)).getText();
                     }
+                    */
 
                     Intent intent = new Intent();
-                    setResult(1, intent);
+                    intent.putExtra("Advertisement",toEditAdvertisement);
+                    setResult(2, intent);
                     finish();
                 }
             }
@@ -240,10 +247,5 @@ public class AddAdvertisementActivity extends NavigationActivity {
             chipGroupError.setVisibility(View.GONE);
         }
         return filled;
-    }
-
-    private static String formatFieldForSqlPostRequest(String field){
-        // We might want to replace other char if we find other bugs
-        return field.replace("'", "''");
     }
 }

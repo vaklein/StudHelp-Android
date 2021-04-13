@@ -29,12 +29,13 @@
                 android:visibility="visible" />
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/facebook_profil_champ"
+                android:id="@+id/phone_profil_champ"
                 style="@style/CardViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:layout_marginBottom="15dp"
                 android:visibility="gone"
                 app:strokeColor="@color/myrtic_green"
                 app:strokeWidth="1dp">
@@ -45,20 +46,60 @@
                     android:padding="5dp">
 
                     <ImageView
-                        android:id="@+id/logo_facebook"
+                        android:id="@+id/logo_phone"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/ic_logo_facebook" />
+                        android:src="@drawable/ic_baseline_phone" />
 
                     <TextView
-                        android:id="@+id/facebook_text"
+                        android:id="@+id/phone_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_toRightOf="@+id/logo_facebook"
+                        android:layout_toRightOf="@+id/logo_phone"
                         android:singleLine="true"
-                        android:text="@string/facebook"
+                        android:text="@string/phone"
+                        android:textSize="18sp"
+                        android:clickable="true"
+                        android:autoLink="phone"
+                        android:inputType="number"
+                        android:background="?android:attr/selectableItemBackground"/>
+                </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/CardViewStyle"
+                android:id="@+id/email_profil_champ"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginRight="20dp"
+                app:strokeColor="@color/myrtic_green"
+                app:strokeWidth="1dp"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/logo_email"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_baseline_email_24" />
+
+                    <TextView
+                        android:id="@+id/email_public_frag_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/logo_email"
+                        android:singleLine="true"
+                        android:text="@string/email_public"
                         android:textSize="18sp"
                         android:clickable="true"
                         android:background="?android:attr/selectableItemBackground"/>
@@ -71,7 +112,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
                 android:layout_marginRight="20dp"
                 app:strokeColor="@color/myrtic_green"
                 app:strokeWidth="1dp"
@@ -96,9 +137,9 @@
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@+id/logo_teams"
                         android:singleLine="true"
-                        android:text="@string/facebook"
+                        android:text="@string/teams"
                         android:textSize="18sp"
-                        android:clickable="true"
+                        android:linksClickable="true"
                         android:background="?android:attr/selectableItemBackground"/>
                 </RelativeLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -109,7 +150,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="15dp"
                 android:layout_marginRight="20dp"
                 app:strokeColor="@color/myrtic_green"
                 app:strokeWidth="1dp"

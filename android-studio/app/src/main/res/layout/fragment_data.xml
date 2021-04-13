@@ -6,18 +6,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.p4_group12.Interface.fragments.DataFragment">
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_anchor="@+id/relativeLayout"
-        app:layout_anchorGravity="center">
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="25dp">
+            android:paddingTop="25dp">
 
             <com.google.android.material.card.MaterialCardView
                 style="@style/CardViewStyle"
@@ -86,6 +84,38 @@
                         android:textSize="18sp" />
                 </RelativeLayout>
             </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
+                style="@style/CardViewStyle"
+                android:id="@+id/descriptionCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="20dp"
+                app:strokeColor="@color/myrtic_green"
+                app:strokeWidth="1dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/description_icon"
+                        android:layout_width="50dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_baseline_description_24" />
+
+                    <TextView
+                        android:id="@+id/user_profil_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/description_icon"
+                        android:text="Description"
+                        android:textSize="18sp" />
+                </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
-    </RelativeLayout>
+    </ScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

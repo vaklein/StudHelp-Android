@@ -12,6 +12,7 @@ import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,12 +28,12 @@ import com.example.p4_group12.DAO.User;
 import com.example.p4_group12.Interface.fragments.ContactsFragment;
 import com.example.p4_group12.Interface.fragments.DataFragment;
 import com.example.p4_group12.R;
-import com.example.p4_group12.database.DatabaseContact;
-import com.example.p4_group12.database.GetObjectFromDB;
+import com.example.p4_group12.database.API;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,22 +52,14 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+
 public class ForeignProfileActivity extends NavigationActivity implements TabLayout.OnTabSelectedListener {
 
     private FloatingActionButton edit;
     private TextView name;
-    private TextView login;
-    private TextView email;
-    private MaterialCardView discordlayout;
-    private MaterialCardView teamslayout;
-    private MaterialCardView facebooklayout;
-    private TextView noNetworkString;
-    private TextView facebooktext;
-    private TextView discordtext;
-    private TextView teamstext;
-    private TextView textreseauxsociaux;
-    private ArrayList<TextInputEditText> textreseaux ;
-    private ArrayList<LinearLayout> affichagereseaux ;
+    private ImageView picture;
+    private API api;
 
     private User foreignUser;
 
@@ -84,17 +77,19 @@ public class ForeignProfileActivity extends NavigationActivity implements TabLay
         getLayoutInflater().inflate(R.layout.activity_profile, contentFrameLayout);
         setTitleToolbar("Profil");
 
+        api = API.getInstance();
+
         String foreignUserEmail = (String) getIntent().getSerializableExtra("ForeignUser");
-        ArrayList<User> onlyUser = new ArrayList<>();
-        GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_user_from_email.php?UserEmail="+foreignUserEmail, onlyUser, User.class);
-        Log.v("Jules", "This is the list of user for the mail address" + onlyUser.toString());
-        foreignUser = onlyUser.get(0);
+
+        foreignUser = api.getUserWithEmail(foreignUserEmail);
+
         if(foreignUser == null) Log.d("NULLWARNING", "foreignUser is null in ForeignProfileActivity");
 
         tabLayout = findViewById(R.id.tabs);
         Bundle bundle = new Bundle();
         bundle.putString("login", String.valueOf(foreignUser.getLogin()));
         bundle.putString("email", null);
+        bundle.putString("description", foreignUser.getDescription());
         fragment = new DataFragment();
         fragment.setArguments(bundle);
         fragmentManager = getSupportFragmentManager();
@@ -104,79 +99,14 @@ public class ForeignProfileActivity extends NavigationActivity implements TabLay
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
         tabLayout.addOnTabSelectedListener(this);
+        if (foreignUser.getPicture() != "null") {
+            picture = (ImageView) findViewById(R.id.user_profile_photo);
+            Picasso.get().load(BuildConfig.STORAGE_URL + foreignUser.getPicture()).transform(new CropCircleTransformation()).into(picture);
+        }
         name = (TextView) findViewById(R.id.user_profile_name);
         name.setText(String.valueOf(foreignUser.getName()));
         edit = findViewById(R.id.floating_action_button);
         edit.setVisibility(View.GONE);
-
-  /*
-        login = (TextView) findViewById(R.id.user_profil_login);
-        email = (TextView) findViewById(R.id.user_profil_email);
-        discordlayout = findViewById(R.id.discord_profil_champ);
-        facebooklayout = findViewById(R.id.facebook_profil_champ);
-        teamslayout = findViewById(R.id.teams_profil_champ);
-        facebooktext = findViewById(R.id.facebook_text);
-        discordtext = findViewById(R.id.discord_text);
-        teamstext = findViewById(R.id.teams_text);
-
-
-        //ArrayList<String> reseaux = DatabaseContact.get_social_links(GlobalVariables.getEmail());
-        ArrayList<Social_links> reseaux = new ArrayList<>();
-        GetObjectFromDB.getJSON(BuildConfig.DB_URL + "get_social_links.php?UserEmail="+foreignUser.getEmail(),reseaux,Social_links.class);
-        Social_links s=reseaux.get(0);
-        if(!s.getDiscord().equals("")){
-            SpannableString content = new SpannableString(s.getDiscord());
-            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-            discordtext.setText(content);
-            discordlayout.setVisibility(View.VISIBLE);
-            noNetworkString.setVisibility(View.GONE);
-        }
-        discordtext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Discord contact", s.getDiscord());
-                clipboard.setPrimaryClip(clip);
-            }
-        });
-        if(!s.getTeams().equals("")){
-            SpannableString content = new SpannableString(s.getTeams());
-            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-            teamstext.setText(content);
-            teamslayout.setVisibility(View.VISIBLE);
-            noNetworkString.setVisibility(View.GONE);
-        }
-        teamstext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Teams contact", s.getTeams());
-                clipboard.setPrimaryClip(clip);
-            }
-        });
-        if(!s.getFacebook().equals("")){
-            SpannableString content = new SpannableString(s.getFacebook());
-            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-            facebooktext.setText(content);
-            facebooklayout.setVisibility(View.VISIBLE);
-            noNetworkString.setVisibility(View.GONE);
-        }
-        facebooktext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Facebook contact", s.getFacebook());
-                clipboard.setPrimaryClip(clip);
-            }
-        });
-
-
-
-        login.setText(String.valueOf(foreignUser.getLogin()));
-        email.setText(String.valueOf(foreignUser.getEmail()));
-
-
-*/
     }
 
     @Override
@@ -184,14 +114,14 @@ public class ForeignProfileActivity extends NavigationActivity implements TabLay
         Bundle bundle = new Bundle();
         switch (tab.getPosition()) {
             case 0:
-                bundle.putString("login", String.valueOf(foreignUser.getLogin()));
+                bundle.putString("login", foreignUser.getLogin());
                 bundle.putString("email", null);
+                bundle.putString("description", foreignUser.getDescription());
                 fragment = new DataFragment();
                 fragment.setArguments(bundle);
                 break;
-
             case 1:
-                bundle.putString("email", String.valueOf(foreignUser.getEmail()));
+                bundle.putString("email", foreignUser.getEmail());
                 bundle.putString("type", "foreign");
                 fragment = new ContactsFragment();
                 fragment.setArguments(bundle);

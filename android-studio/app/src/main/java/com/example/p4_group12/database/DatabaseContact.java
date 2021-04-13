@@ -455,7 +455,7 @@ public class DatabaseContact {
                     httpURLConnection.setDoOutput(true);
                     OutputStream OS = httpURLConnection.getOutputStream();
                     BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
-                    String data = URLEncoder.encode("user_email", "UTF-8") + "=" + URLEncoder.encode(GlobalVariables.getEmail(), "UTF-8") + "&" +
+                    String data = URLEncoder.encode("user_email", "UTF-8") + "=" + URLEncoder.encode(GlobalVariables.getUser().getEmail(), "UTF-8") + "&" +
                             URLEncoder.encode("discord", "UTF-8") + "=" + URLEncoder.encode(discord, "UTF-8") + "&" +
                             URLEncoder.encode("teams", "UTF-8") + "=" + URLEncoder.encode(teams, "UTF-8") + "&" +
                             URLEncoder.encode("facebook", "UTF-8") + "=" + URLEncoder.encode(facebook, "UTF-8");//Build form answer

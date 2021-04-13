@@ -25,8 +25,9 @@
     <string name="personal_information_underline"><u>Mes données personelles :</u></string>
     <string name="social_network_public_advertissemnt">Ces données seront publiques, tous les utilisateurs pour y accéder.</string>
     <string name="teams">Email de votre compte Teams</string>
-    <string name="facebook">Nom et prénom</string>
-    <string name="discord">Pseudo et #Tag</string>
+    <string name="phone">Numéro de téléphone</string>
+    <string name="email_public">Email privé</string>
+    <string name="discord">Pseudo#Tag</string>
     <string name="deconnexion">Se déconnecter</string>
 
 
@@ -63,5 +64,10 @@
     <string name="add_advertisement_type_title">Type de l\'annonce</string>
     <string name="add_advertisement_object_title">Objet(s) de l\'annonce</string>
     <string name="add_advertisement_cycle_title">Cycle(s) correspondant(s) à l\'annonce</string>
+    <string name="contacter_l_annonceur">Contacter l\'annonceur</string>
+    <string name="updateAdvertisement">Modifier mon annonce</string>
+    <string name="notification_channel_id">myCanal</string>
+    <string name="notification_channel_title">myTitle</string>
+    <string name="notification_channel_desc">This is the test canal</string>
 
 </resources>

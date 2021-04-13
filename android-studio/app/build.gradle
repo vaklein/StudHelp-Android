@@ -1,11 +1,12 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
 }
 
 android {
     signingConfigs {
         release {
-        storeFile file('C:\\Users\\Valentin\\Documents\\Projet 4\\Projet-4\\android-studio\\keystore.jks')
+        storeFile file('keystore.jks')
             storePassword '4BnxxQzPUpYRojJT'
             keyPassword '4BnxxQzPUpYRojJT'
             keyAlias 'key0'
@@ -36,7 +37,8 @@ android {
             buildConfigField "String", "DB_URL", "\"https://db.valentinklein.eu:8182/PROD/\""
         }
         debug {
-            buildConfigField "String", "DB_URL", "\"https://db.valentinklein.eu:8182/\""
+            buildConfigField "String", "DB_URL", "\"https://db.valentinklein.eu:8183/api\""
+            buildConfigField "String", "STORAGE_URL", "\"https://db.valentinklein.eu:8183//storage/\""
         }
     }
     compileOptions {
@@ -51,6 +53,7 @@ dependencies {
     implementation 'androidx.wear:wear:1.1.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.viewpager:viewpager:1.0.0'
+    implementation 'com.google.firebase:firebase-messaging:21.1.0'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -60,4 +63,5 @@ dependencies {
     implementation 'com.github.jama5262:CarouselView:1.1.0'
     // Used to load an url image to an imageView
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'jp.wasabeef:picasso-transformations:2.2.1'
 }
