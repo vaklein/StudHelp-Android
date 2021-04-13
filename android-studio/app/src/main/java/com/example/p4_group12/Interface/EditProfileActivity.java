@@ -21,6 +21,7 @@ public class EditProfileActivity extends NavigationActivity {
     private Button backup_profil;
     private TextInputEditText new_name;
     private TextInputEditText new_login;
+    private TextInputEditText new_description;
     private TextInputLayout new_nameField;
     private TextInputLayout new_loginField;
     private LoadingDialog loadingDialog;
@@ -48,6 +49,13 @@ public class EditProfileActivity extends NavigationActivity {
         new_name.setText(GlobalVariables.getUser().getName());
         new_login = (TextInputEditText) findViewById(R.id.login_text);
         new_login.setText(GlobalVariables.getUser().getLogin());
+        new_description = (TextInputEditText) findViewById(R.id.description_text);
+        if (GlobalVariables.getUser().getDescription() == "null")
+            new_description.setHint(getResources().getString(R.string.descriptionHint1)
+                                    + "\n" + getResources().getString(R.string.descriptionHint2)
+                                    + "\n" + getResources().getString(R.string.descriptionHint3)
+                                    + "\n" + getResources().getString(R.string.descriptionHint4));
+        else new_description.setText(GlobalVariables.getUser().getDescription());
         new_nameField = (TextInputLayout) findViewById(R.id.name);
         new_loginField = (TextInputLayout) findViewById(R.id.teams);
         loadingDialog = new LoadingDialog(this, "Modification en cours...");
@@ -81,17 +89,18 @@ public class EditProfileActivity extends NavigationActivity {
 
                 new_loginField.setErrorEnabled(false);
                 if (!new_name.getText().toString().isEmpty() || !new_login.getText().toString().isEmpty()) {
-                    String requestName = new_name.getText().toString().equals(GlobalVariables.getUser().getName()) ? new_name.getText().toString() : "";
-                    String requestLogin = new_login.getText().toString().equals(GlobalVariables.getUser().getLogin()) ? new_login.getText().toString() : "";
-                    Boolean apiResponse = API.getInstance().editNameAndLogin(GlobalVariables.getUser(), requestName, requestLogin);
+                    String requestName = new_name.getText().toString().equals(GlobalVariables.getUser().getName()) ? "" : new_name.getText().toString() ;
+                    String requestLogin = new_login.getText().toString().equals(GlobalVariables.getUser().getLogin()) ? "" : new_login.getText().toString();
+                    String requestDescription = new_description.getText().toString().equals(GlobalVariables.getUser().getDescription()) ? "" : new_description.getText().toString();
+                    Boolean apiResponse = API.getInstance().editNameAndLoginAndDescription(GlobalVariables.getUser(), requestName, requestLogin, requestDescription);
 
                     if(apiResponse == null){ // error
                         Toast.makeText(EditProfileActivity.this, "Une erreur est survenue lors de la modification de votre nom, veuilliez réessayer", Toast.LENGTH_LONG).show();
                     }else if(apiResponse){
-                        Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
+                        Intent profile = new Intent(getApplicationContext(), ProfileActivity.class);
                         if (!new_name.getText().toString().isEmpty()) GlobalVariables.getUser().setName(new_name.getText().toString());
                         if(!new_login.getText().toString().isEmpty()) GlobalVariables.getUser().setLogin(new_login.getText().toString());
-                        startActivity(edit_profil);
+                        startActivity(profile);
                         EditProfileActivity.this.finish();
                     }else{
                         new_loginField.setError("Identifiant déjà utilisé");

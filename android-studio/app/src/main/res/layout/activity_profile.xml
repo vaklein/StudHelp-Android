@@ -17,7 +17,9 @@
             android:layout_height="120dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:background="@drawable/profile_circular_imageview"
+            android:adjustViewBounds="true"
+            android:scaleY="1.70"
+            android:scaleX="1.70"
             android:elevation="5dp"
             android:padding="20dp"
             android:src="@drawable/ic_baseline_login_24" />

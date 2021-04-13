@@ -23,7 +23,7 @@
     <string name="no_social_network_advertisment">Vous n\'avez pas encore ajouté de réseau social.</string>
     <string name="no_social_network_other_user">Cette personne n\'est pas contactable car elle n\'a pas encore ajouté ses réseaux sociaux.</string>
     <string name="personal_information_underline"><u>Mes données personelles :</u></string>
-    <string name="social_network_public_advertissemnt">Ces données seront publiques, tous les utilisateurs pour y accéder.</string>
+    <string name="social_network_public_advertissemnt">Ces données seront publiques, tous les utilisateurs pourront y accéder.</string>
     <string name="teams">Email de votre compte Teams</string>
     <string name="phone">Numéro de téléphone</string>
     <string name="email_public">Email privé</string>
@@ -73,5 +73,9 @@
     <string name="advertisement_course_card_view_fac_text">FAC</string>
     <string name="advertisement_list_filter_title_text">Filtres de recherche</string>
     <string name="myadvertisements_hint">Toutes vos annonces sont affichées ici.</string>
+    <string name="descriptionHint1">Votre age ?</string>
+    <string name="descriptionHint2">Quelles sont vos études ? (bac/master)</string>
+    <string name="descriptionHint3">En quoi ? (SINF, Eco,..)</string>
+    <string name="descriptionHint4">Vos moyens de payement ?</string>
 
 </resources>

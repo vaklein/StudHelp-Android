@@ -401,7 +401,7 @@ public class API {
         return allUserAds;
     }
 
-    public Boolean editNameAndLogin(User user, String newName, String newLogin){
+    public Boolean editNameAndLoginAndDescription(User user, String newName, String newLogin, String newDescription){
         try{
             String data = "";
             // Probably a better way to do it but can't find it
@@ -419,8 +419,6 @@ public class API {
 
             JSONObject jsonObject = new JSONObject(response);
             return jsonObject != null && !jsonObject.has("error");
-
-
         } catch (UnsupportedEncodingException | ExecutionException | InterruptedException | JSONException e) {
             e.printStackTrace();
             return null;

@@ -23,8 +23,8 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:src="@drawable/ic_baseline_login_24"
-                android:scaleX="1.5"
-                android:scaleY="1.5"
+                android:scaleX="0.85"
+                android:scaleY="0.85"
                 android:visibility="gone"/>
 
             <TextView
