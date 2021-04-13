@@ -12,6 +12,8 @@ import com.example.p4_group12.R;
 
 import com.example.p4_group12.database.API;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.content.Intent;
@@ -21,12 +23,19 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import android.util.Log;
 
 public class AdvertisementsListActivity extends NavigationActivity {
     private RecyclerView advertisementRecyclerView;
     private RecyclerView.LayoutManager advertisementLayoutManager;
     private AdvertisementListAdapter advertisementListAdapter;
+    private TextView courseCode;
+    private TextView courseFac;
+    private ChipGroup filters;
+    private final List<Chip> filterChips = new ArrayList<>();
+    private final ArrayList<String> tagNames = new ArrayList<>();
     private TextView mTextView;
     private FloatingActionButton newAdvertisementButton;
     private API api;
@@ -49,6 +58,9 @@ public class AdvertisementsListActivity extends NavigationActivity {
         this.api = API.getInstance();
         ArrayList<Advertisement> advertisementsList = api.getCourseAdvertisements(currentCourse);
 
+        filters = findViewById(R.id.advertisement_list_filter_chip_group);
+        courseCode = findViewById(R.id.advertisement_course_card_view_code);
+        courseFac = findViewById(R.id.advertisement_course_card_view_fac);
         mTextView = (TextView) findViewById(R.id.text);
         noAdvertisment = findViewById(R.id.no_advertisements);
         if(advertisementsList.size()==0){
@@ -57,13 +69,43 @@ public class AdvertisementsListActivity extends NavigationActivity {
         advertisementRecyclerView = findViewById(R.id.advertisementRecyclerView);
         advertisementRecyclerView.setHasFixedSize(true);
         advertisementLayoutManager = new LinearLayoutManager(this);
-        // advertisementListAdapter = new AdvertisementListAdapter(this.get_advertisements());
         advertisementListAdapter = new AdvertisementListAdapter(advertisementsList);
-
         advertisementRecyclerView.setLayoutManager(advertisementLayoutManager);
         advertisementRecyclerView.setAdapter(advertisementListAdapter);
 
+        // Gestion des champs textes affichés
+        courseCode.setText(currentCourse.getCode());
+        courseFac.setText(currentCourse.getFaculty());
 
+        // Gestion des filtres de recherche
+        tagNames.add("Offre");
+        tagNames.add("Demande");
+        tagNames.add("Bachelier");
+        tagNames.add("Master");
+        tagNames.add("Livre/Syllabus");
+        tagNames.add("Synthèse");
+        tagNames.add("Aide");
+        tagNames.add("Matériel");
+        tagNames.add("Autres");
+        for (String type : tagNames) {
+            Chip chip = new Chip(this);
+            chip.setText(type);
+            chip.setCheckable(true);
+            filterChips.add(chip);
+            filters.addView(chip);
+        }
+        filters.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(ChipGroup group, int checkedId) {
+                Chip chip = group.findViewById(checkedId);
+                if (chip != null) {
+                    chip.setChecked(!chip.isChecked());
+                    // TODO : ici il faut update la liste des annonces affichées
+                }
+            }
+        });
+
+        // Gestion du bouton pour créer une nouvelle annonce
         newAdvertisementButton = findViewById(R.id.new_advertisement_button);
         newAdvertisementButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +118,7 @@ public class AdvertisementsListActivity extends NavigationActivity {
             }
         });
 
+        // Gestion du clique sur une annonce du recyclerview
         advertisementListAdapter.setAdvertisementClickListener(new AdvertisementListAdapter.OnAdvertisementClickListener() {
             @Override
             public void OnAdvertisementClick(int position) {
@@ -92,6 +135,8 @@ public class AdvertisementsListActivity extends NavigationActivity {
             }
         });
     }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -103,4 +148,5 @@ public class AdvertisementsListActivity extends NavigationActivity {
             finish();
         }
     }
+
 }

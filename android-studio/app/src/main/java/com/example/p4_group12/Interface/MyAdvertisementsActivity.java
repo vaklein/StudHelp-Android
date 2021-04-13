@@ -15,17 +15,28 @@ import com.example.p4_group12.DAO.Tag;
 import com.example.p4_group12.Interface.adapter.AdvertisementListAdapter;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MyAdvertisementsActivity extends NavigationActivity{
     private RecyclerView advertisementRecyclerView;
     private RecyclerView.LayoutManager advertisementLayoutManager;
     private AdvertisementListAdapter advertisementListAdapter;
+    private TextView courseCode;
+    private TextView courseFac;
+    private ChipGroup filters;
+    private final List<Chip> filterChips = new ArrayList<>();
+    private final ArrayList<String> tagNames = new ArrayList<>();
     private TextView mTextView;
     private FloatingActionButton newAdvertisementButton;
     private API api;
+
+    public MyAdvertisementsActivity() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,17 +48,51 @@ public class MyAdvertisementsActivity extends NavigationActivity{
 
         api = API.getInstance();
         ArrayList<Advertisement> advertisementsList = api.getAdvertisementsOfUser(GlobalVariables.getUser());
-
         mTextView = (TextView) findViewById(R.id.text);
-
+        filters = findViewById(R.id.advertisement_list_filter_chip_group);
+        courseCode = findViewById(R.id.advertisement_course_card_view_code);
+        courseFac = findViewById(R.id.advertisement_course_card_view_fac);
         advertisementRecyclerView = findViewById(R.id.advertisementRecyclerView);
         advertisementRecyclerView.setHasFixedSize(true);
         advertisementLayoutManager = new LinearLayoutManager(this);
         // advertisementListAdapter = new AdvertisementListAdapter(this.get_advertisements());
         advertisementListAdapter = new AdvertisementListAdapter(advertisementsList);
-
         advertisementRecyclerView.setLayoutManager(advertisementLayoutManager);
         advertisementRecyclerView.setAdapter(advertisementListAdapter);
+
+        // Gestion des champs textes affichés
+        courseCode.setText(R.string.myadvertisements_hint);
+        courseFac.setVisibility(View.GONE);
+
+        // Gestion des filtres de recherche
+        tagNames.add("Offre");
+        tagNames.add("Demande");
+        tagNames.add("Bachelier");
+        tagNames.add("Master");
+        tagNames.add("Livre/Syllabus");
+        tagNames.add("Synthèse");
+        tagNames.add("Aide");
+        tagNames.add("Matériel");
+        tagNames.add("Autres");
+        for (String type : tagNames) {
+            Chip chip = new Chip(this);
+            chip.setText(type);
+            chip.setCheckable(true);
+            filterChips.add(chip);
+            filters.addView(chip);
+        }
+        filters.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(ChipGroup group, int checkedId) {
+                Chip chip = group.findViewById(checkedId);
+                if (chip != null) {
+                    chip.setChecked(!chip.isChecked());
+                    // TODO : ici il faut update la liste des publications affichées
+                }
+            }
+        });
+
+        // Gestion du clique sur une annonce
         advertisementListAdapter.setAdvertisementClickListener(new AdvertisementListAdapter.OnAdvertisementClickListener() {
             @Override
             public void OnAdvertisementClick(int position) {
@@ -64,11 +109,12 @@ public class MyAdvertisementsActivity extends NavigationActivity{
             }
         });
 
-        //Can't add new advertisements in this section -> invisible
+        // Can't add new advertisements in this section -> invisible
         newAdvertisementButton = findViewById(R.id.new_advertisement_button);
         newAdvertisementButton.setVisibility(View.INVISIBLE);
-
     }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

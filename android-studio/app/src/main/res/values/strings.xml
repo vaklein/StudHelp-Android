@@ -69,5 +69,9 @@
     <string name="notification_channel_id">myCanal</string>
     <string name="notification_channel_title">myTitle</string>
     <string name="notification_channel_desc">This is the test canal</string>
+    <string name="advertisement_course_card_view_code_text">Code du cours</string>
+    <string name="advertisement_course_card_view_fac_text">FAC</string>
+    <string name="advertisement_list_filter_title_text">Filtres de recherche</string>
+    <string name="myadvertisements_hint">Toutes vos annonces sont affichées ici.</string>
 
 </resources>
