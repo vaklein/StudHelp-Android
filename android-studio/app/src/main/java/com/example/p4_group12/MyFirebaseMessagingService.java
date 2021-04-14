@@ -1,5 +1,6 @@
 package com.example.p4_group12;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -19,6 +20,10 @@ import com.example.p4_group12.database.API;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String CANAL = "NotifCanal";
     public static final String PREFS_NAME = "MyPrefsFile";
@@ -29,7 +34,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
 
         String myMessage = remoteMessage.getNotification().getBody(); // message received from Firebase
-        Log.d("FirebaseMessage", "message receive : " + myMessage);
+        String notificationTitle = remoteMessage.getNotification().getTitle();
+        int advertisement_id = Integer.parseInt(remoteMessage.getNotification().getClickAction()); // Use this to launch the right intent
+
+        Log.d("FirebaseMessage", "message received : " + myMessage);
 
         //action : diriger le user vers une activity quand il click sur la notif
         Intent intent = new Intent(getApplicationContext(), HomeActivity.class); // TODO : set to the activity we want
@@ -38,7 +46,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         // création de la notif visuel
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CANAL); //construit une nouvelle notif
-        notificationBuilder.setContentTitle("nouvelle notif");//titre de la notif
+        notificationBuilder.setContentTitle(notificationTitle);//titre de la notif
         notificationBuilder.setContentText(myMessage); //contenue de la notif
 
         // ajout de l'action
