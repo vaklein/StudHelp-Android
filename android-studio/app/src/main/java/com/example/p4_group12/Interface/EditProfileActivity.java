@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.p4_group12.R;
@@ -18,7 +19,7 @@ public class EditProfileActivity extends NavigationActivity {
 
     private Button edit_password;
     private FloatingActionButton edit_picture;
-    private Button backup_profil;
+    private ImageButton saveProfile;
     private TextInputEditText new_name;
     private TextInputEditText new_login;
     private TextInputEditText new_description;
@@ -44,7 +45,8 @@ public class EditProfileActivity extends NavigationActivity {
         getLayoutInflater().inflate(R.layout.activity_edit_profile, contentFrameLayout);
         setTitleToolbar("Profil");
         edit_password = findViewById(R.id.edit_password);
-        backup_profil = findViewById(R.id.backup);
+        saveProfile = findViewById(R.id.edit_profile_save);
+        saveProfile.setVisibility(View.VISIBLE);
         new_name = (TextInputEditText) findViewById(R.id.name_text);
         new_name.setText(GlobalVariables.getUser().getName());
         new_login = (TextInputEditText) findViewById(R.id.login_text);
@@ -81,7 +83,7 @@ public class EditProfileActivity extends NavigationActivity {
                 startActivity(edit_pw);
             }
         });
-        backup_profil.setOnClickListener(new View.OnClickListener() {
+        saveProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 GlobalVariables.getUser().getSocial_links().setAllSocialLinks(phone_text.getText().toString(), public_email_text.getText().toString(), teams_text.getText().toString(), discord_text.getText().toString());
