@@ -89,9 +89,9 @@ public class EditProfileActivity extends NavigationActivity {
 
                 new_loginField.setErrorEnabled(false);
                 if (!new_name.getText().toString().isEmpty() || !new_login.getText().toString().isEmpty()) {
-                    String requestName = new_name.getText().toString().equals(GlobalVariables.getUser().getName()) ? "" : new_name.getText().toString() ;
-                    String requestLogin = new_login.getText().toString().equals(GlobalVariables.getUser().getLogin()) ? "" : new_login.getText().toString();
-                    String requestDescription = new_description.getText().toString().equals(GlobalVariables.getUser().getDescription()) ? "" : new_description.getText().toString();
+                    String requestName = new_name.getText().toString().equals(GlobalVariables.getUser().getName()) ? null : new_name.getText().toString() ;
+                    String requestLogin = new_login.getText().toString().equals(GlobalVariables.getUser().getLogin()) ? null : new_login.getText().toString();
+                    String requestDescription = new_description.getText().toString().equals(GlobalVariables.getUser().getDescription()) ? null : new_description.getText().toString();
                     Boolean apiResponse = API.getInstance().editNameAndLoginAndDescription(GlobalVariables.getUser(), requestName, requestLogin, requestDescription);
 
                     if(apiResponse == null){ // error
@@ -100,6 +100,8 @@ public class EditProfileActivity extends NavigationActivity {
                         Intent profile = new Intent(getApplicationContext(), ProfileActivity.class);
                         if (!new_name.getText().toString().isEmpty()) GlobalVariables.getUser().setName(new_name.getText().toString());
                         if(!new_login.getText().toString().isEmpty()) GlobalVariables.getUser().setLogin(new_login.getText().toString());
+                        if(new_description.getText().toString().isEmpty()) GlobalVariables.getUser().setDescription("null");
+                        else GlobalVariables.getUser().setDescription(new_description.getText().toString());
                         startActivity(profile);
                         EditProfileActivity.this.finish();
                     }else{

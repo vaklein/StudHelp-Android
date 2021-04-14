@@ -405,15 +405,17 @@ public class API {
         try{
             String data = "";
             // Probably a better way to do it but can't find it
-            if(!newLogin.equals("") && !newName.equals("")){
-                data =  URLEncoder.encode("login", "UTF-8") + "=" + URLEncoder.encode(newLogin, "UTF-8") + "&" +
-                        URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(newName, "UTF-8");
-            }else if(!newLogin.equals("")){
+            if(newLogin != null){
                 data =  URLEncoder.encode("login", "UTF-8") + "=" + URLEncoder.encode(newLogin, "UTF-8");
-            }else if(!newName.equals("")){
-                data = URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(newName, "UTF-8");
             }
-
+            if(newName != null){
+                if (data == "") data = URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(newName, "UTF-8");
+                else data += "&" + URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(newName, "UTF-8");
+            }
+            if(newDescription != null) {
+                if (data == "") data = URLEncoder.encode("description", "UTF-8") + "=" + URLEncoder.encode(newDescription, "UTF-8");
+                else data += "&" + URLEncoder.encode("description", "UTF-8") + "=" + URLEncoder.encode(newDescription, "UTF-8");
+            }
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/profile/" + user.getEmail(), data, "PUT");
             String response = getJSON.execute().get();
 
