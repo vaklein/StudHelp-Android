@@ -344,7 +344,7 @@ public class API {
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement/tags/" + advertisementId, "", "GET");
             String response = getJSON.execute().get();
-            Log.v("Jules", "Tags json is : " + response);
+            //Log.v("Jules", "Tags json is : " + response);
             loadIntoArrayList(response, tags, Tag.class);
         } catch (InterruptedException  | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException  e) {
             e.printStackTrace();
@@ -356,7 +356,7 @@ public class API {
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement/pictures/" + advertisementId, "", "GET");
             String response = getJSON.execute().get();
-            Log.v("Jules", "Tags json is : " + response);
+            //Log.v("Jules", "Tags json is : " + response);
 
             JSONArray jsonArray = new JSONArray(response);
             for (int i = 0; i < jsonArray.length(); i++) {
