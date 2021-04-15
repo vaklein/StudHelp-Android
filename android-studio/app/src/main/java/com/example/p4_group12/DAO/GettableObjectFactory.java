@@ -24,7 +24,7 @@ public class GettableObjectFactory {
         else if(objectClass.getCanonicalName().equals(Advertisement.class.getCanonicalName())){
             List<Tag> tags = API.getInstance().getAdvertisementTags(Integer.parseInt(dbObject.getString("id")));
             List<String> pictures = API.getInstance().getAdvertisementPictures(Integer.parseInt(dbObject.getString("id")));
-            for (Tag tag : tags) Log.v("Jules", "Tag = " + tag.getTagValue());
+            //for (Tag tag : tags) Log.v("Jules", "Tag = " + tag.getTagValue());
             return new Advertisement(Integer.parseInt(dbObject.getString("id")), dbObject.getString("user_email"), dbObject.getString("title"), dbObject.getString("description"), tags, Integer.parseInt(dbObject.getString("course_id")), pictures);
         }
         else if(objectClass.getCanonicalName().equals(User.class.getCanonicalName())) {
