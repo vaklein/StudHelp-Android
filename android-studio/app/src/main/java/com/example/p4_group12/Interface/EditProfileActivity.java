@@ -1,12 +1,18 @@
 package com.example.p4_group12.Interface;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
@@ -19,7 +25,6 @@ public class EditProfileActivity extends NavigationActivity {
 
     private Button edit_password;
     private FloatingActionButton edit_picture;
-    private ImageButton saveProfile;
     private TextInputEditText new_name;
     private TextInputEditText new_login;
     private TextInputEditText new_description;
@@ -45,8 +50,6 @@ public class EditProfileActivity extends NavigationActivity {
         getLayoutInflater().inflate(R.layout.activity_edit_profile, contentFrameLayout);
         setTitleToolbar("Profil");
         edit_password = findViewById(R.id.edit_password);
-        saveProfile = findViewById(R.id.edit_profile_save);
-        saveProfile.setVisibility(View.VISIBLE);
         new_name = (TextInputEditText) findViewById(R.id.name_text);
         new_name.setText(GlobalVariables.getUser().getName());
         new_login = (TextInputEditText) findViewById(R.id.login_text);
@@ -83,35 +86,41 @@ public class EditProfileActivity extends NavigationActivity {
                 startActivity(edit_pw);
             }
         });
-        saveProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                GlobalVariables.getUser().getSocial_links().setAllSocialLinks(phone_text.getText().toString(), public_email_text.getText().toString(), teams_text.getText().toString(), discord_text.getText().toString());
-                API.getInstance().updateSocialLinks(GlobalVariables.getUser());
+    }
 
-                new_loginField.setErrorEnabled(false);
-                if (!new_name.getText().toString().isEmpty() || !new_login.getText().toString().isEmpty()) {
-                    String requestName = new_name.getText().toString().equals(GlobalVariables.getUser().getName()) ? null : new_name.getText().toString() ;
-                    String requestLogin = new_login.getText().toString().equals(GlobalVariables.getUser().getLogin()) ? null : new_login.getText().toString();
-                    String requestDescription = new_description.getText().toString().equals(GlobalVariables.getUser().getDescription()) ? null : new_description.getText().toString();
-                    Boolean apiResponse = API.getInstance().editNameAndLoginAndDescription(GlobalVariables.getUser(), requestName, requestLogin, requestDescription);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.save_menu, menu);
+        return true;
+    }
 
-                    if(apiResponse == null){ // error
-                        Toast.makeText(EditProfileActivity.this, "Une erreur est survenue lors de la modification de votre nom, veuilliez réessayer", Toast.LENGTH_LONG).show();
-                    }else if(apiResponse){
-                        Intent profile = new Intent(getApplicationContext(), ProfileActivity.class);
-                        if (!new_name.getText().toString().isEmpty()) GlobalVariables.getUser().setName(new_name.getText().toString());
-                        if(!new_login.getText().toString().isEmpty()) GlobalVariables.getUser().setLogin(new_login.getText().toString());
-                        if(new_description.getText().toString().isEmpty()) GlobalVariables.getUser().setDescription("null");
-                        else GlobalVariables.getUser().setDescription(new_description.getText().toString());
-                        startActivity(profile);
-                        EditProfileActivity.this.finish();
-                    }else{
-                        new_loginField.setError("Identifiant déjà utilisé");
-                    }
-                }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        GlobalVariables.getUser().getSocial_links().setAllSocialLinks(phone_text.getText().toString(), public_email_text.getText().toString(), teams_text.getText().toString(), discord_text.getText().toString());
+        API.getInstance().updateSocialLinks(GlobalVariables.getUser());
 
+        new_loginField.setErrorEnabled(false);
+        if (!new_name.getText().toString().isEmpty() || !new_login.getText().toString().isEmpty()) {
+            String requestName = new_name.getText().toString().equals(GlobalVariables.getUser().getName()) ? null : new_name.getText().toString() ;
+            String requestLogin = new_login.getText().toString().equals(GlobalVariables.getUser().getLogin()) ? null : new_login.getText().toString();
+            String requestDescription = new_description.getText().toString().equals(GlobalVariables.getUser().getDescription()) ? null : new_description.getText().toString();
+            Boolean apiResponse = API.getInstance().editNameAndLoginAndDescription(GlobalVariables.getUser(), requestName, requestLogin, requestDescription);
+
+            if(apiResponse == null){ // error
+                Toast.makeText(EditProfileActivity.this, "Une erreur est survenue lors de la modification de votre nom, veuilliez réessayer", Toast.LENGTH_LONG).show();
+            }else if(apiResponse){
+                Intent profile = new Intent(getApplicationContext(), ProfileActivity.class);
+                if (!new_name.getText().toString().isEmpty()) GlobalVariables.getUser().setName(new_name.getText().toString());
+                if(!new_login.getText().toString().isEmpty()) GlobalVariables.getUser().setLogin(new_login.getText().toString());
+                if(new_description.getText().toString().isEmpty()) GlobalVariables.getUser().setDescription("null");
+                else GlobalVariables.getUser().setDescription(new_description.getText().toString());
+                startActivity(profile);
+                EditProfileActivity.this.finish();
+            }else{
+                new_loginField.setError("Identifiant déjà utilisé");
             }
-        });
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
