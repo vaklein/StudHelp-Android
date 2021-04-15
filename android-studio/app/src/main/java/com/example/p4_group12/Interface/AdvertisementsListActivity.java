@@ -3,7 +3,6 @@ package com.example.p4_group12.Interface;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.DAO.Tag;
@@ -31,6 +30,8 @@ public class AdvertisementsListActivity extends NavigationActivity {
     private RecyclerView advertisementRecyclerView;
     private RecyclerView.LayoutManager advertisementLayoutManager;
     private AdvertisementListAdapter advertisementListAdapter;
+    private ArrayList<Advertisement> advertisementsListComplete;
+    private ArrayList<Advertisement> advertisementsListToShow;
     private TextView courseCode;
     private TextView courseFac;
     private ChipGroup filters;
@@ -41,7 +42,7 @@ public class AdvertisementsListActivity extends NavigationActivity {
     private API api;
 
 
-    private TextView noAdvertisment;
+    private TextView noAdvertisement;
     private Course currentCourse;
 
     @Override
@@ -56,21 +57,22 @@ public class AdvertisementsListActivity extends NavigationActivity {
         setTitleToolbar(currentCourse.getName());
 
         this.api = API.getInstance();
-        ArrayList<Advertisement> advertisementsList = api.getCourseAdvertisements(currentCourse);
+        advertisementsListComplete = api.getCourseAdvertisements(currentCourse);
+        advertisementsListToShow = advertisementsListComplete;
 
         filters = findViewById(R.id.advertisement_list_filter_chip_group);
         courseCode = findViewById(R.id.advertisement_course_card_view_code);
         courseFac = findViewById(R.id.advertisement_course_card_view_fac);
         mTextView = (TextView) findViewById(R.id.text);
-        noAdvertisment = findViewById(R.id.no_advertisements);
-        if(advertisementsList.size()==0){
-            noAdvertisment.setVisibility(View.VISIBLE);
+        noAdvertisement = findViewById(R.id.no_advertisements);
+        if(advertisementsListToShow.size()==0){
+            noAdvertisement.setVisibility(View.VISIBLE);
         }
         advertisementRecyclerView = findViewById(R.id.advertisementRecyclerView);
-        advertisementRecyclerView.setHasFixedSize(true);
+        //advertisementRecyclerView.setHasFixedSize(true);
         advertisementLayoutManager = new LinearLayoutManager(this);
-        advertisementListAdapter = new AdvertisementListAdapter(advertisementsList);
         advertisementRecyclerView.setLayoutManager(advertisementLayoutManager);
+        advertisementListAdapter = new AdvertisementListAdapter(advertisementsListToShow);
         advertisementRecyclerView.setAdapter(advertisementListAdapter);
 
         // Gestion des champs textes affichés
@@ -94,13 +96,33 @@ public class AdvertisementsListActivity extends NavigationActivity {
             filterChips.add(chip);
             filters.addView(chip);
         }
+        Log.v("Jules", "Advertisement list activity");
         filters.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(ChipGroup group, int checkedId) {
+                Log.v("Jules", "CHECKED MEC");
                 Chip chip = group.findViewById(checkedId);
                 if (chip != null) {
                     chip.setChecked(!chip.isChecked());
-                    // TODO : ici il faut update la liste des annonces affichées
+                    /*
+                    Log.v("Jules", "checked chip is " + chip.getText().toString());
+                    List<Integer> checkedChipIds = filters.getCheckedChipIds();
+                    List<String> checkedChipStrings = new ArrayList<>();
+                    for (int i : checkedChipIds) {
+                        checkedChipStrings.add((String) ((Chip) filters.findViewById(i)).getText());
+                    }
+                    Log.v("Jules", "LIST OF CHECKED CHIPS :  " + Arrays.toString(checkedChipStrings.toArray()));
+                    for (Advertisement ad : advertisementsListComplete) {
+                        if (!advertisementsListToShow.contains(ad) && isThereCommonTag(checkedChipStrings, ad.getTags())) {
+                            advertisementsListToShow.add(ad);
+                            advertisementListAdapter.notifyItemInserted(advertisementsListToShow.size()-1);
+                        } else if (!advertisementsListToShow.contains(ad) && isThereCommonTag(checkedChipStrings, ad.getTags())) {
+                            int i = advertisementsListToShow.indexOf(ad);
+                            advertisementsListToShow.remove(ad);
+                            advertisementListAdapter.notifyItemRemoved(i);
+                        }
+                    }
+                    */
                 }
             }
         });
@@ -122,7 +144,7 @@ public class AdvertisementsListActivity extends NavigationActivity {
         advertisementListAdapter.setAdvertisementClickListener(new AdvertisementListAdapter.OnAdvertisementClickListener() {
             @Override
             public void OnAdvertisementClick(int position) {
-                Advertisement clickedAdvertisement = advertisementsList.get(position);
+                Advertisement clickedAdvertisement = advertisementsListToShow.get(position);
                 Intent advertisementView = new Intent(getApplicationContext(), AdvertisementViewActivity.class);
                 advertisementView.putExtra("ClickedAdvertisement", clickedAdvertisement);
                 int i = 0;
@@ -134,6 +156,17 @@ public class AdvertisementsListActivity extends NavigationActivity {
                 startActivityForResult(advertisementView, 1);
             }
         });
+    }
+
+    private boolean isThereCommonTag(List<String> checkedChipStrings, List<Tag> tags) {
+        for (String checkedTag : checkedChipStrings) {
+            for (Tag tag : tags) {
+                if (tag.getTagValue().equals(checkedTag)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 
