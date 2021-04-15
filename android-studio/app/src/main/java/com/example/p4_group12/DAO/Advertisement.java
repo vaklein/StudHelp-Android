@@ -1,10 +1,12 @@
 package com.example.p4_group12.DAO;
 
+import androidx.annotation.Nullable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Advertisement  implements Serializable {
+public class Advertisement  implements Serializable, Comparable {
     @Override
     public String toString() {
         return "Advertisement{" +
@@ -104,5 +106,19 @@ public class Advertisement  implements Serializable {
 
     public List<String> getImages() { return images; }
 
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (!obj.getClass().getCanonicalName().equals(Advertisement.class.getCanonicalName())) {
+            return false;
+        }
+        return this.getID() == ((Advertisement)obj).getID();
+    }
 
+    @Override
+    public int compareTo(Object o) {
+        if (!o.getClass().getCanonicalName().equals(Advertisement.class.getCanonicalName())) {
+            throw new Error();
+        }
+        return this.getID() - ((Advertisement)o).getID();
+    }
 }

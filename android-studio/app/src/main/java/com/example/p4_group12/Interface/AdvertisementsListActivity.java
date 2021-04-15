@@ -22,9 +22,14 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import android.util.Log;
+
+import static java.util.Collections.sort;
 
 public class AdvertisementsListActivity extends NavigationActivity {
     private RecyclerView advertisementRecyclerView;
@@ -36,7 +41,6 @@ public class AdvertisementsListActivity extends NavigationActivity {
     private TextView courseFac;
     private ChipGroup filters;
     private final List<Chip> filterChips = new ArrayList<>();
-    private final ArrayList<String> tagNames = new ArrayList<>();
     private TextView mTextView;
     private FloatingActionButton newAdvertisementButton;
     private API api;
@@ -58,7 +62,7 @@ public class AdvertisementsListActivity extends NavigationActivity {
 
         this.api = API.getInstance();
         advertisementsListComplete = api.getCourseAdvertisements(currentCourse);
-        advertisementsListToShow = advertisementsListComplete;
+        advertisementsListToShow = (ArrayList<Advertisement>) advertisementsListComplete.clone();
 
         filters = findViewById(R.id.advertisement_list_filter_chip_group);
         courseCode = findViewById(R.id.advertisement_course_card_view_code);
@@ -80,52 +84,37 @@ public class AdvertisementsListActivity extends NavigationActivity {
         courseFac.setText(currentCourse.getFaculty());
 
         // Gestion des filtres de recherche
-        tagNames.add("Offre");
-        tagNames.add("Demande");
-        tagNames.add("Bachelier");
-        tagNames.add("Master");
-        tagNames.add("Livre/Syllabus");
-        tagNames.add("Synthèse");
-        tagNames.add("Aide");
-        tagNames.add("Matériel");
-        tagNames.add("Autres");
-        for (String type : tagNames) {
+        for (String type : Tag.getAllTagsName()) {
             Chip chip = new Chip(this);
             chip.setText(type);
             chip.setCheckable(true);
-            filterChips.add(chip);
-            filters.addView(chip);
-        }
-        Log.v("Jules", "Advertisement list activity");
-        filters.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(ChipGroup group, int checkedId) {
-                Log.v("Jules", "CHECKED MEC");
-                Chip chip = group.findViewById(checkedId);
-                if (chip != null) {
-                    chip.setChecked(!chip.isChecked());
-                    /*
+            chip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     Log.v("Jules", "checked chip is " + chip.getText().toString());
                     List<Integer> checkedChipIds = filters.getCheckedChipIds();
+                    Log.v("Jules", "Number of checked chips : " + checkedChipIds.size());
+                    if (checkedChipIds.isEmpty()) {
+                        advertisementsListToShow.clear();
+                        advertisementsListToShow.addAll(advertisementsListComplete);
+                        advertisementListAdapter.notifyDataSetChanged();
+                        return;
+                    }
                     List<String> checkedChipStrings = new ArrayList<>();
                     for (int i : checkedChipIds) {
                         checkedChipStrings.add((String) ((Chip) filters.findViewById(i)).getText());
                     }
-                    Log.v("Jules", "LIST OF CHECKED CHIPS :  " + Arrays.toString(checkedChipStrings.toArray()));
-                    for (Advertisement ad : advertisementsListComplete) {
-                        if (!advertisementsListToShow.contains(ad) && isThereCommonTag(checkedChipStrings, ad.getTags())) {
-                            advertisementsListToShow.add(ad);
-                            advertisementListAdapter.notifyItemInserted(advertisementsListToShow.size()-1);
-                        } else if (!advertisementsListToShow.contains(ad) && isThereCommonTag(checkedChipStrings, ad.getTags())) {
-                            int i = advertisementsListToShow.indexOf(ad);
-                            advertisementsListToShow.remove(ad);
-                            advertisementListAdapter.notifyItemRemoved(i);
-                        }
-                    }
-                    */
+                    Log.v("Jules", "LIST OF CHECKED CHIPS :  " + checkedChipStrings.toString());
+                    advertisementsListToShow.clear();
+                    advertisementsListToShow.addAll(filterListOnCheckedChips(advertisementsListComplete, checkedChipStrings));
+                    Log.v("Jules", "Advertisements titles to show : " + advertisementsListToShow.toString());
+                    advertisementListAdapter.notifyDataSetChanged();
                 }
-            }
-        });
+            });
+            filterChips.add(chip);
+            filters.addView(chip);
+        }
+        Log.v("Jules", "Advertisement list activity");
 
         // Gestion du bouton pour créer une nouvelle annonce
         newAdvertisementButton = findViewById(R.id.new_advertisement_button);
@@ -158,18 +147,6 @@ public class AdvertisementsListActivity extends NavigationActivity {
         });
     }
 
-    private boolean isThereCommonTag(List<String> checkedChipStrings, List<Tag> tags) {
-        for (String checkedTag : checkedChipStrings) {
-            for (Tag tag : tags) {
-                if (tag.getTagValue().equals(checkedTag)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -180,6 +157,18 @@ public class AdvertisementsListActivity extends NavigationActivity {
             startActivity(advertisementList);
             finish();
         }
+    }
+
+    private List<Advertisement> filterListOnCheckedChips(List<Advertisement> ads, List<String> checkedChipStrings) {
+        List<Advertisement> filteredList = new ArrayList<>();
+        for (Advertisement ad : ads) {
+            for (Tag tag : ad.getTags()) {
+                if (checkedChipStrings.contains(tag.getTagValue())) {
+                    filteredList.add(ad);
+                }
+            }
+        }
+        return filteredList;
     }
 
 }
