@@ -124,7 +124,6 @@ public class AdvertisementsListActivity extends NavigationActivity {
             filterChips.add(chip);
             filters.addView(chip);
         }
-        Log.v("Jules", "Advertisement list activity");
 
         // Gestion du bouton pour créer une nouvelle annonce
         newAdvertisementButton = findViewById(R.id.new_advertisement_button);
