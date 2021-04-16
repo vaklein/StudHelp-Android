@@ -25,7 +25,9 @@ public class GettableObjectFactory {
             List<Tag> tags = API.getInstance().getAdvertisementTags(Integer.parseInt(dbObject.getString("id")));
             List<String> pictures = API.getInstance().getAdvertisementPictures(Integer.parseInt(dbObject.getString("id")));
             //for (Tag tag : tags) Log.v("Jules", "Tag = " + tag.getTagValue());
-            return new Advertisement(Integer.parseInt(dbObject.getString("id")), dbObject.getString("user_email"), dbObject.getString("title"), dbObject.getString("description"), tags, Integer.parseInt(dbObject.getString("course_id")), pictures);
+            String creationDate = dbObject.getString("created_at").substring(0,9);
+            String lastUpdateDate = dbObject.getString("updated_at").substring(0,9);
+            return new Advertisement(Integer.parseInt(dbObject.getString("id")), dbObject.getString("user_email"), dbObject.getString("title"), dbObject.getString("description"), tags, Integer.parseInt(dbObject.getString("course_id")), pictures, creationDate, lastUpdateDate);
         }
         else if(objectClass.getCanonicalName().equals(User.class.getCanonicalName())) {
             return new User(dbObject.getString("name"), dbObject.getString("login"), dbObject.getString("email"), dbObject.getString("picture"), dbObject.getString("description"));

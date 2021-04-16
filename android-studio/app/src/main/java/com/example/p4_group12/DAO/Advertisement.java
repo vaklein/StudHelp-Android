@@ -29,6 +29,8 @@ public class Advertisement  implements Serializable, Comparable {
     private int courseID;
     private List<Tag> tags;
     private List<String> images;
+    private String creationDate;
+    private String lastUpdateDate;
 
     public void setID(int ID) {
         this.ID = ID;
@@ -66,18 +68,16 @@ public class Advertisement  implements Serializable, Comparable {
         this.images = images;
     }
 
-    public Advertisement(int ID, String mail, String title, String description, List<Tag> tags, int courseID, List<String> images) {
+    public Advertisement(int ID, String mail, String title, String description, List<Tag> tags, int courseID, List<String> images, String creationDate, String lastUpdateDate) {
         this.ID = ID;
         this.mail = mail;
         this.title = title;
         this.description = description;
         this.courseID = courseID;
         this.tags = tags;
-
-        /* This is a testing version, it should be updated with an argument in the creator binding
-        * list to List<String> each String being the url to the image in the database
-        */
         this.images = images;
+        this.creationDate = creationDate;
+        this.lastUpdateDate = lastUpdateDate;
     }
 
     public int getID(){
@@ -105,6 +105,14 @@ public class Advertisement  implements Serializable, Comparable {
     public boolean hasImages() { return !images.isEmpty(); }
 
     public List<String> getImages() { return images; }
+
+    public String getCreationDate() {
+        return creationDate;
+    }
+
+    public String getLastUpdateDate() {
+        return lastUpdateDate;
+    }
 
     @Override
     public boolean equals(@Nullable Object obj) {

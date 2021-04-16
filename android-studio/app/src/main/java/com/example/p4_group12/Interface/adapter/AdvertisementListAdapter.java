@@ -1,5 +1,6 @@
 package com.example.p4_group12.Interface.adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
         private TextView usernameTextView;
         private TextView advertisementTitleTextView;
         private TextView advertisementDescriptionTextView;
+        private TextView advertisementDateTextView;
 
 
         public AdvertisementListViewHolder(@NonNull View itemView, OnAdvertisementClickListener advertisementClickListener) {
@@ -46,6 +48,7 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
             usernameTextView = itemView.findViewById(R.id.username);
             advertisementTitleTextView = itemView.findViewById(R.id.advertisement_title_view);
             advertisementDescriptionTextView = itemView.findViewById(R.id.advertisement_description_recycler);
+            advertisementDateTextView = itemView.findViewById(R.id.advertisement_item_date);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -74,6 +77,7 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
         return  clh;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull AdvertisementListViewHolder holder, int position) {
         Advertisement currentAdvertisement = advertisementList.get(position);
@@ -83,6 +87,7 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
         holder.usernameTextView.setText(onlyUser.getName());
         holder.advertisementTitleTextView.setText(currentAdvertisement.getTitle());
         holder.advertisementDescriptionTextView.setText(currentAdvertisement.getDescription());
+        holder.advertisementDateTextView.setText("Créée le " + currentAdvertisement.getCreationDate());
     }
 
     @Override

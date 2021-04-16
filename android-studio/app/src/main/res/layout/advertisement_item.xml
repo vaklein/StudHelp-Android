@@ -24,6 +24,16 @@
             android:textSize="15sp" />
 
         <TextView
+            android:id="@+id/advertisement_item_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="15dp"
+            android:text="@string/advertisement_item_date_string"
+            android:textSize="15sp" />
+
+        <TextView
             android:id="@+id/advertisement_title_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -35,6 +35,13 @@
                 android:maxLines="2"
                 android:ellipsize="end"
                 />
+            <TextView
+                android:id="@+id/advertisement_view_last_update_date_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dernière modification le 0000-00-00"
+                android:layout_marginStart="15dp"
+                />
 
             <com.google.android.material.chip.ChipGroup
                 android:layout_width="match_parent"

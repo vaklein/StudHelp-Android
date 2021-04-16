@@ -1,5 +1,6 @@
 package com.example.p4_group12.Interface;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -49,6 +50,7 @@ public class AdvertisementViewActivity extends NavigationActivity {
     private Button contactButton;
     private API api;
     private CarouselView carousel;
+    private TextView lastUpdateDate;
 
     /*
     * All infos about the carousel implementation are here :
@@ -58,6 +60,7 @@ public class AdvertisementViewActivity extends NavigationActivity {
     * https://androidexample365.com/a-super-simple-and-customizable-image-carousel-view-for-android/
     */
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,8 +90,10 @@ public class AdvertisementViewActivity extends NavigationActivity {
         advertisementTitle = findViewById(R.id.advertisement_title_view);
         advertisementDescription = findViewById(R.id.advertisement_description_view);
         advertisementTags = findViewById(R.id.advertisement_tags_view);
+        lastUpdateDate = findViewById(R.id.advertisement_view_last_update_date_text_view);
         advertisementTitle.setText(currentAdvertisement.getTitle());
         advertisementDescription.setText(currentAdvertisement.getDescription());
+        lastUpdateDate.setText("Dernière modification le "+ currentAdvertisement.getLastUpdateDate());
 
         for (Tag tag : currentAdvertisement.getTags()) {
             Chip chip = new Chip(this);
