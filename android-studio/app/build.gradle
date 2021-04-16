@@ -29,12 +29,17 @@ android {
 
     buildTypes {
         release {
-            buildConfigField "String", "DB_URL", "\"https://db.valentinklein.eu:8182/PROD/\""
+            buildConfigField "String", "DB_URL", "\"https://db.valentinklein.eu:8182/PROD_Laravel/public/api\""
+            buildConfigField "String", "STORAGE_URL", "\"https://db.valentinklein.eu:8182/PROD_Laravel//storage/\""
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         releaseDebug {
-            buildConfigField "String", "DB_URL", "\"https://db.valentinklein.eu:8182/PROD/\""
+            debuggable true
+            signingConfig signingConfigs.release
+            buildConfigField "String", "DB_URL", "\"https://db.valentinklein.eu:8182/PROD_Laravel/public/api\""
+            buildConfigField "String", "STORAGE_URL", "\"https://db.valentinklein.eu:8182/PROD_Laravel//storage/\""
         }
         debug {
             buildConfigField "String", "DB_URL", "\"https://db.valentinklein.eu:8183/api\""
