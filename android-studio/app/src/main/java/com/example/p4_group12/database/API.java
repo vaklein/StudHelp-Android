@@ -36,7 +36,6 @@ import java.util.concurrent.ExecutionException;
 
 public class API {
 
-
     // Class to use to do a request to the API
     // To perform a Sync request use getJSON.execute().get() to get the response from the server
     // To perform a Async request just use getJSON.execute()
@@ -326,17 +325,25 @@ public class API {
         return -1;
     }
 
-    public void addNewTag(Tag tag) {
+    public int addNewTag(Tag tag) {
         try {
             String data = URLEncoder.encode("advertisement_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(tag.getAdvertisementId()), "UTF-8") + "&" +
                     URLEncoder.encode("tag_type", "UTF-8") + "=" + URLEncoder.encode(tag.getTagType(), "UTF-8") + "&" +
                     URLEncoder.encode("tag_value", "UTF-8") + "=" + URLEncoder.encode(tag.getTagValue(), "UTF-8");
 
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement/tags", data, "POST");
-            getJSON.execute(); // Making the request Async
-        } catch (UnsupportedEncodingException e) {
+            String response = getJSON.execute().get(); // Making the request Async
+            JSONObject jsonObject = new JSONObject(response);
+            return Integer.parseInt(jsonObject.getString("id"));
+        } catch (UnsupportedEncodingException | ExecutionException | InterruptedException | JSONException e) {
             e.printStackTrace();
         }
+        return -1;
+    }
+
+    public void removeTag(Tag tag) {
+        SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement/tags/" + tag.getId(), "", "DELETE");
+        getJSON.execute(); // Making the request Async
     }
 
     public List<Tag> getAdvertisementTags(int advertisementId) {
@@ -379,7 +386,7 @@ public class API {
             String data = URLEncoder.encode("course_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(advertisement.getCourseID()), "UTF-8") + "&" +
                     URLEncoder.encode("title", "UTF-8") + "=" + URLEncoder.encode(advertisement.getTitle(), "UTF-8") + "&" +
                     URLEncoder.encode("user_email", "UTF-8") + "=" + URLEncoder.encode(advertisement.getEmailAddress(), "UTF-8") + "&" +
-                    URLEncoder.encode("type", "UTF-8") + "=" + URLEncoder.encode(advertisement.getType(), "UTF-8") + "&" +
+                    URLEncoder.encode("type", "UTF-8") + "=" + URLEncoder.encode("Types are deprecated", "UTF-8") + "&" +
                     URLEncoder.encode("description", "UTF-8") + "=" + URLEncoder.encode(advertisement.getDescription(), "UTF-8");
 
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement/" + advertisement.getID(), data, "PUT");

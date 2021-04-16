@@ -41,6 +41,7 @@ public class SearchActivity extends NavigationActivity{
     private DrawerLayout drawerLayout;
     private ArrayList<Course> courseList;
     private String currentCategory;
+    private API api;
 
     private String currentQuery = "";
 
@@ -57,7 +58,7 @@ public class SearchActivity extends NavigationActivity{
         courseList = GlobalVariables.getCourses();
 
         // Doing all the synchronous queries
-        API api = API.getInstance();
+        api = API.getInstance();
         HashSet<Integer> favoritesID = api.getFavoriteCoursesIdsOfUser(GlobalVariables.getUser());
 
         // Building the recycler view

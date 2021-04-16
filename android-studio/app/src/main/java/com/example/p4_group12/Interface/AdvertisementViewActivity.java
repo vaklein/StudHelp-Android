@@ -105,7 +105,7 @@ public class AdvertisementViewActivity extends NavigationActivity {
                 public void onClick(View view) {
                     Intent updateAdvertisement = new Intent(getApplicationContext(), EditAdvertisementActivity.class);
                     updateAdvertisement.putExtra("toEditAdvertisement", currentAdvertisement);
-                    startActivityForResult(updateAdvertisement,0);
+                    startActivityForResult(updateAdvertisement,2);
                 }
             });
             //contactButton.setVisibility(View.GONE);

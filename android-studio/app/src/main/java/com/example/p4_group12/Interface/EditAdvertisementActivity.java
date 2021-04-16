@@ -14,6 +14,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.Course;
+import com.example.p4_group12.DAO.Tag;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
 import com.google.android.material.chip.Chip;
@@ -34,6 +35,7 @@ public class EditAdvertisementActivity extends NavigationActivity{
     private API api;
     private TextView chipGroupError;
     private Advertisement toEditAdvertisement;
+    private List<String> tagStrings = new ArrayList<>();
 
     private ChipGroup typeChipGroup;
     List<String> types = new ArrayList<>();
@@ -70,6 +72,10 @@ public class EditAdvertisementActivity extends NavigationActivity{
         typeChipGroup = findViewById(R.id.add_advertisement_type_chip_group);
         cycleChipGroup = findViewById(R.id.add_advertisement_cycle_chip_group);
         objectChipGroup = findViewById(R.id.add_advertisement_object_chip_group);
+        typeChipGroup.setSingleSelection(true);
+        typeChipGroup.setSelectionRequired(true);
+        objectChipGroup.setSelectionRequired(true);
+        cycleChipGroup.setSelectionRequired(true);
 
         this.api = API.getInstance();
 
@@ -99,6 +105,11 @@ public class EditAdvertisementActivity extends NavigationActivity{
             builder.show();
         }
 
+        for (Tag tag : toEditAdvertisement.getTags()) {
+            tagStrings.add(tag.getTagValue());
+        }
+        Log.v("Jules", "tagStrings = " + tagStrings.toString());
+
         // Types
         types.add("Offre");
         types.add("Demande");
@@ -106,11 +117,12 @@ public class EditAdvertisementActivity extends NavigationActivity{
             Chip chip = new Chip(this);
             chip.setText(type);
             chip.setCheckable(true);
+            if (tagStrings.contains(type)) {
+                chip.setChecked(true);
+            }
             typeChips.add(chip);
             typeChipGroup.addView(chip);
         }
-        typeChipGroup.setSingleSelection(true);
-        typeChipGroup.setSelectionRequired(true);
         typeChipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(ChipGroup group, int checkedId) {
@@ -128,10 +140,12 @@ public class EditAdvertisementActivity extends NavigationActivity{
             Chip chip = new Chip(this);
             chip.setText(type);
             chip.setCheckable(true);
+            if (tagStrings.contains(type)) {
+                chip.setChecked(true);
+            }
             cycleChips.add(chip);
             cycleChipGroup.addView(chip);
         }
-        cycleChipGroup.setSelectionRequired(true);
         cycleChipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(ChipGroup group, int checkedId) {
@@ -152,10 +166,12 @@ public class EditAdvertisementActivity extends NavigationActivity{
             Chip chip = new Chip(this);
             chip.setText(type);
             chip.setCheckable(true);
+            if (tagStrings.contains(type)) {
+                chip.setChecked(true);
+            }
             objectChips.add(chip);
             objectChipGroup.addView(chip);
         }
-        objectChipGroup.setSelectionRequired(true);
         objectChipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(ChipGroup group, int checkedId) {
@@ -177,27 +193,96 @@ public class EditAdvertisementActivity extends NavigationActivity{
                 List<Integer> checkedObjectsIDs = objectChipGroup.getCheckedChipIds();
 
                 if (isCorrectlyFilled(checkedTypeID, checkedCyclesIDs, checkedObjectsIDs)) {
-
-                    // TODO : move the next line but for the moment it ensures to still be able to add the type
-                    String type = (String) ((Chip) typeChipGroup.findViewById(checkedTypeID)).getText();
-                    toEditAdvertisement.setTitle(advertisementTitleText.getText().toString());
-                    toEditAdvertisement.setDescription(advertisementDescriptionText.getText().toString());
-                    toEditAdvertisement.setType(type);
+                    // Update default fields of an ad
                     api.updateAdvertisement(toEditAdvertisement);
-                    // TODO : Should insert the tags here
-                    /*
+
+                    // Get back the initial tags
+                    Tag initType = null;
+                    List<Tag> initCycles = new ArrayList<>();
+                    List<Tag> initObjects = new ArrayList<>();
+                    for (Tag tag : toEditAdvertisement.getTags()) {
+                        switch (tag.getTagType()) {
+                            case "type":
+                                initType = tag;
+                                break;
+                            case "cycle":
+                                initCycles.add(tag);
+                                break;
+                            case "object":
+                                initObjects.add(tag);
+                                break;
+                        }
+                    }
+
+                    List<Tag> newCycles = new ArrayList<>();
+                    List<Tag> newObjects = new ArrayList<>();
+                    Tag newType = new Tag(-1, toEditAdvertisement.getID(), "type", (String) ((Chip) typeChipGroup.findViewById(checkedTypeID)).getText());
                     for (int i : checkedCyclesIDs) {
-                        // This is the text of the checked chips
-                        (String) ((Chip) cycleChipGroup.findViewById(i)).getText();
+                        newCycles.add(new Tag(-1, toEditAdvertisement.getID(), "cycle", (String) ((Chip) cycleChipGroup.findViewById(i)).getText()));
                     }
                     for (int i : checkedObjectsIDs){
-                        // This is the text of the checked chips
-                        (String) ((Chip) objectChipGroup.findViewById(i)).getText();
+                        newObjects.add(new Tag(-1, toEditAdvertisement.getID(), "object", (String) ((Chip) objectChipGroup.findViewById(i)).getText()));
                     }
-                    */
+
+                    // Print the initial tags and the new ones
+                    assert initType != null;
+                    StringBuilder s = new StringBuilder(initType.getTagValue());
+                    for (Tag t : initCycles) { s.append(" ").append(t.getTagValue()); }
+                    for (Tag t : initObjects) { s.append(" ").append(t.getTagValue()); }
+                    Log.v("init values", s.toString());
+                    StringBuilder s1 = new StringBuilder(newType.getTagValue());
+                    for (Tag t : newCycles) { s1.append(" ").append(t.getTagValue()); }
+                    for (Tag t : newObjects) { s1.append(" ").append(t.getTagValue()); }
+                    Log.v("new values", s1.toString());
+
+                    // Update type
+                    if (!initType.equals(newType)) {
+                        api.addNewTag(newType);
+                        api.removeTag(initType);
+                    }
+
+                    // Remove unchecked cycles
+                    for (Tag initCycle : initCycles) {
+                        if (!newCycles.contains(initCycle)) {
+                            Log.v("removed tag", initCycle.getTagValue());
+                            api.removeTag(initCycle);
+                        }
+                    }
+                    // Remove unchecked objects
+                    for (Tag initObject : initObjects) {
+                        if (!newObjects.contains(initObject)) {
+                            Log.v("removed tag", initObject.getTagValue());
+                            api.removeTag(initObject);
+                        }
+                    }
+
+                    // Add new cycles
+                    for (Tag newCycle : newCycles) {
+                        if (!initCycles.contains(newCycle)) {
+                            Log.v("added tag", newCycle.getTagValue());
+                            api.addNewTag(newCycle);
+                        }
+                    }
+                    // Add new objects
+                    for (Tag newObject : newObjects) {
+                        if (!initCycles.contains(newObject)) {
+                            Log.v("added tag", newObject.getTagValue());
+                            api.addNewTag(newObject);
+                        }
+                    }
+
+
+                    toEditAdvertisement.setTitle(advertisementTitleText.getText().toString());
+                    toEditAdvertisement.setDescription(advertisementDescriptionText.getText().toString());
 
                     Intent intent = new Intent();
                     intent.putExtra("Advertisement",toEditAdvertisement);
+                    int i = 0;
+                    for (Tag tag : toEditAdvertisement.getTags()) {
+                        intent.putExtra("tag"+i, tag);
+                        i++;
+                    }
+                    intent.putExtra("Number of tags", i);
                     setResult(2, intent);
                     finish();
                 }

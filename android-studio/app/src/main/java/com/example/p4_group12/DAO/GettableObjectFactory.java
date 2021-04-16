@@ -34,7 +34,7 @@ public class GettableObjectFactory {
             return new Social_links(dbObject.getString("phone"),dbObject.getString("email"),dbObject.getString("teams"),dbObject.getString("discord"));
         }
         else if(objectClass.getCanonicalName().equals(Tag.class.getCanonicalName())) {
-            return new Tag(Integer.parseInt(dbObject.getString("advertisement_id")), dbObject.getString("tag_type"), dbObject.getString("tag_value"));
+            return new Tag(Integer.parseInt(dbObject.getString("id")), Integer.parseInt(dbObject.getString("advertisement_id")), dbObject.getString("tag_type"), dbObject.getString("tag_value"));
         }
         else throw new NoSuchElementException();
     }

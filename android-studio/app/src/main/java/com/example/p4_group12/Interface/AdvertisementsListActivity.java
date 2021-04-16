@@ -60,7 +60,8 @@ public class AdvertisementsListActivity extends NavigationActivity {
         if(currentCourse == null) Log.d("NULLWARNING", "Course is null in AdvertisementListActivity");
         setTitleToolbar(currentCourse.getName());
 
-        this.api = API.getInstance();
+        api = API.getInstance();
+        if (api == null) Log.v("Jules", "API is : null" );
         advertisementsListComplete = api.getCourseAdvertisements(currentCourse);
         advertisementsListToShow = (ArrayList<Advertisement>) advertisementsListComplete.clone();
 

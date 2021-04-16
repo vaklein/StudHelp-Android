@@ -182,12 +182,12 @@ public class AddAdvertisementActivity extends NavigationActivity {
 
                 if (isCorrectlyFilled(checkedTypeID, checkedCyclesIDs, checkedObjectsIDs)) {
                     int advertisementId = api.addNewAdvertisement(course.getID(), advertisementTitleText.getText().toString(), advertisementDescriptionText.getText().toString(), GlobalVariables.getUser().getEmail(), "Types are deprecated");
-                    api.addNewTag(new Tag(advertisementId, "type", (String) ((Chip) typeChipGroup.findViewById(checkedTypeID)).getText()));
+                    api.addNewTag(new Tag(-1, advertisementId, "type", (String) ((Chip) typeChipGroup.findViewById(checkedTypeID)).getText()));
                     for (int i : checkedCyclesIDs) {
-                        api.addNewTag(new Tag(advertisementId, "cycle", (String) ((Chip) cycleChipGroup.findViewById(i)).getText()));
+                        api.addNewTag(new Tag(-1, advertisementId, "cycle", (String) ((Chip) cycleChipGroup.findViewById(i)).getText()));
                     }
                     for (int i : checkedObjectsIDs){
-                        api.addNewTag(new Tag(advertisementId, "object", (String) ((Chip) objectChipGroup.findViewById(i)).getText()));
+                        api.addNewTag(new Tag(-1, advertisementId, "object", (String) ((Chip) objectChipGroup.findViewById(i)).getText()));
                     }
 
                     Intent intent = new Intent();
