@@ -27,6 +27,8 @@ public class GettableObjectFactory {
             //for (Tag tag : tags) Log.v("Jules", "Tag = " + tag.getTagValue());
             String creationDate = dbObject.getString("created_at").substring(0,9);
             String lastUpdateDate = dbObject.getString("updated_at").substring(0,9);
+            Log.v("Creation date", creationDate);
+            Log.v("Update date", lastUpdateDate);
             return new Advertisement(Integer.parseInt(dbObject.getString("id")), dbObject.getString("user_email"), dbObject.getString("title"), dbObject.getString("description"), tags, Integer.parseInt(dbObject.getString("course_id")), pictures, creationDate, lastUpdateDate);
         }
         else if(objectClass.getCanonicalName().equals(User.class.getCanonicalName())) {

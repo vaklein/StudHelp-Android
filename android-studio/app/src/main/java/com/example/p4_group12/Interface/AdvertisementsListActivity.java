@@ -72,6 +72,9 @@ public class AdvertisementsListActivity extends NavigationActivity {
         noAdvertisement = findViewById(R.id.no_advertisements);
         if(advertisementsListToShow.size()==0){
             noAdvertisement.setVisibility(View.VISIBLE);
+            findViewById(R.id.advertisement_list_filter_title).setVisibility(View.GONE);
+            filters.setVisibility(View.GONE);
+
         }
         advertisementRecyclerView = findViewById(R.id.advertisementRecyclerView);
         //advertisementRecyclerView.setHasFixedSize(true);
@@ -110,6 +113,12 @@ public class AdvertisementsListActivity extends NavigationActivity {
                     advertisementsListToShow.addAll(filterListOnCheckedChips(advertisementsListComplete, checkedChipStrings));
                     Log.v("Jules", "Advertisements titles to show : " + advertisementsListToShow.toString());
                     advertisementListAdapter.notifyDataSetChanged();
+                    if(advertisementsListToShow.size()==0){
+                        noAdvertisement.setVisibility(View.VISIBLE);
+                        noAdvertisement.setText("Aucune annonce ne correspond à votre recherche");
+                    } else {
+                        noAdvertisement.setVisibility(View.GONE);
+                    }
                 }
             });
             filterChips.add(chip);
