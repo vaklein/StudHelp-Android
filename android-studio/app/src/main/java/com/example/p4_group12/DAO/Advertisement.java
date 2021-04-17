@@ -28,6 +28,7 @@ public class Advertisement  implements Serializable, Comparable {
     private String type;
     private int courseID;
     private List<Tag> tags;
+    private List<String> tagValues = new ArrayList<>();
     private List<String> images;
     private String creationDate;
     private String lastUpdateDate;
@@ -75,6 +76,9 @@ public class Advertisement  implements Serializable, Comparable {
         this.description = description;
         this.courseID = courseID;
         this.tags = tags;
+        for (Tag tag : tags) {
+            tagValues.add(tag.getTagValue());
+        }
         this.images = images;
         this.creationDate = creationDate;
         this.lastUpdateDate = lastUpdateDate;
@@ -101,6 +105,10 @@ public class Advertisement  implements Serializable, Comparable {
     public int getCourseID() { return this.courseID; }
 
     public List<Tag> getTags() { return this.tags; }
+
+    public List<String> getTagValues() {
+        return tagValues;
+    }
 
     public boolean hasImages() { return !images.isEmpty(); }
 
@@ -129,4 +137,5 @@ public class Advertisement  implements Serializable, Comparable {
         }
         return this.getID() - ((Advertisement)o).getID();
     }
+
 }

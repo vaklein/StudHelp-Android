@@ -15,6 +15,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -56,6 +57,7 @@ public class AdvertisementsListActivity extends NavigationActivity {
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); //Remember this is the FrameLayout area within your activity_main.xml
         getLayoutInflater().inflate(R.layout.activity_advertisments_list, contentFrameLayout);
 
+
         currentCourse = (Course) getIntent().getSerializableExtra("ClickedCourse");
         if(currentCourse == null) Log.d("NULLWARNING", "Course is null in AdvertisementListActivity");
         setTitleToolbar(currentCourse.getName());
@@ -93,6 +95,7 @@ public class AdvertisementsListActivity extends NavigationActivity {
             chip.setText(type);
             chip.setCheckable(true);
             chip.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("SetTextI18n")
                 @Override
                 public void onClick(View v) {
                     Log.v("Jules", "checked chip is " + chip.getText().toString());
@@ -171,10 +174,15 @@ public class AdvertisementsListActivity extends NavigationActivity {
     private List<Advertisement> filterListOnCheckedChips(List<Advertisement> ads, List<String> checkedChipStrings) {
         List<Advertisement> filteredList = new ArrayList<>();
         for (Advertisement ad : ads) {
-            for (Tag tag : ad.getTags()) {
-                if (checkedChipStrings.contains(tag.getTagValue()) && !filteredList.contains(ad)) {
-                    filteredList.add(ad);
+            boolean addAd = true;
+            for (String chipTag : checkedChipStrings) {
+                if (!ad.getTagValues().contains(chipTag)) {
+                    addAd = false;
+                    break;
                 }
+            }
+            if (addAd) {
+                filteredList.add(ad);
             }
         }
         return filteredList;
