@@ -249,10 +249,14 @@ public class API {
             String response = getJSON.execute().get();
 
             JSONObject jsonObject = new JSONArray(response).getJSONObject(0);
-            if(jsonObject == null) return null;
+            if(jsonObject == null) {
+                Log.v("Jules", "[Bad thing] Error on JSON get for the user");
+                return null;
+            }
             else if(!jsonObject.has("error")){
                 return (User) GettableObjectFactory.getObject(jsonObject, User.class);
             }
+            Log.v("Jules", "[Bad thing] Error on JSON get for the user");
             return null;
 
         } catch (ExecutionException | InterruptedException | JSONException e) {
@@ -350,7 +354,7 @@ public class API {
                     URLEncoder.encode("description", "UTF-8") + "=" + URLEncoder.encode(description, "UTF-8");
 
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement", data, "POST");
-            String response = getJSON.execute().get(); // Making the request Async
+            String response = getJSON.execute().get(); // Making the request Sync
             JSONObject jsonObject = new JSONObject(response);
             return Integer.parseInt(jsonObject.getString("id"));
         } catch (UnsupportedEncodingException | InterruptedException | ExecutionException | JSONException e) {

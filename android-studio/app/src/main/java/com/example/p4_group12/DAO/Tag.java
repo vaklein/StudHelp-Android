@@ -2,6 +2,7 @@ package com.example.p4_group12.DAO;
 
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.io.Serializable;
@@ -52,6 +53,12 @@ public class Tag implements Serializable {
 
     public int getId() {
         return id;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return getTagValue();
     }
 
     @Override

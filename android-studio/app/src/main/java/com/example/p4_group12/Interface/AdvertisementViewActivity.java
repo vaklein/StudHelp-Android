@@ -210,11 +210,22 @@ public class AdvertisementViewActivity extends NavigationActivity {
             finish();
         }
         if(resultCode == 2) {
-            Intent advertisementList = new Intent(getApplicationContext(), AdvertisementViewActivity.class);
+            Intent advertisementView = new Intent(getApplicationContext(), AdvertisementViewActivity.class);
             Advertisement ad = (Advertisement) data.getSerializableExtra("Advertisement");
-            advertisementList.putExtra("ClickedAdvertisement", ad);
+            int n = (int) data.getSerializableExtra("Number of tags");
+            List<Tag> tags = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                tags.add((Tag) data.getSerializableExtra("tag"+i));
+            }
+            advertisementView.putExtra("ClickedAdvertisement", ad);
+            int i = 0;
+            for (Tag tag : tags) {
+                advertisementView.putExtra("tag"+i, tag);
+                i++;
+            }
+            advertisementView.putExtra("Number of tags", i);
             Log.v("Lucas",ad.toString());
-            startActivity(advertisementList);
+            startActivity(advertisementView);
             finish();
         }
     }

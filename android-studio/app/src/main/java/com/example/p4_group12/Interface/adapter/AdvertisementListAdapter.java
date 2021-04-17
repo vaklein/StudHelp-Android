@@ -1,6 +1,7 @@
 package com.example.p4_group12.Interface.adapter;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +17,8 @@ import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
 
 import java.util.ArrayList;
-
-
+import java.util.HashMap;
+import java.util.List;
 
 
 // Followed https://www.youtube.com/watch?v=17NbUcEts9c for the code and xml layout
@@ -25,6 +26,7 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
 
     private ArrayList<Advertisement> advertisementList;
     private OnAdvertisementClickListener advertisementClickListener;
+    private final HashMap<String, User> usersMemory = new HashMap<>();
 
     public interface OnAdvertisementClickListener {
         void OnAdvertisementClick(int position);
@@ -82,9 +84,17 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
     public void onBindViewHolder(@NonNull AdvertisementListViewHolder holder, int position) {
         Advertisement currentAdvertisement = advertisementList.get(position);
 
-        User onlyUser = API.getInstance().getUserWithEmail(currentAdvertisement.getEmailAddress());
+        User user = usersMemory.getOrDefault(currentAdvertisement.getEmailAddress(), null);
+        if (user == null) {
+            user = API.getInstance().getUserWithEmail(currentAdvertisement.getEmailAddress());
+            if (user == null) {
+                Log.v("Jules" , "Problem ID is " + currentAdvertisement.getID());
+            }
+            assert user != null;
+            usersMemory.put(user.getEmail(), user);
+        }
 
-        holder.usernameTextView.setText(onlyUser.getName());
+        holder.usernameTextView.setText(user.getName());
         holder.advertisementTitleTextView.setText(currentAdvertisement.getTitle());
         holder.advertisementDescriptionTextView.setText(currentAdvertisement.getDescription());
         holder.advertisementDateTextView.setText("Créée le " + currentAdvertisement.getCreationDate());

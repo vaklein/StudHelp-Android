@@ -172,7 +172,7 @@ public class AdvertisementsListActivity extends NavigationActivity {
         List<Advertisement> filteredList = new ArrayList<>();
         for (Advertisement ad : ads) {
             for (Tag tag : ad.getTags()) {
-                if (checkedChipStrings.contains(tag.getTagValue())) {
+                if (checkedChipStrings.contains(tag.getTagValue()) && !filteredList.contains(ad)) {
                     filteredList.add(ad);
                 }
             }
