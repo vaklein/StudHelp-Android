@@ -216,12 +216,19 @@ public class EditAdvertisementActivity extends NavigationActivity{
 
                     List<Tag> newCycles = new ArrayList<>();
                     List<Tag> newObjects = new ArrayList<>();
+                    List<Tag> updatedTags = new ArrayList<>();
+
                     Tag newType = new Tag(-1, toEditAdvertisement.getID(), "type", (String) ((Chip) typeChipGroup.findViewById(checkedTypeID)).getText());
+                    updatedTags.add(newType);
                     for (int i : checkedCyclesIDs) {
-                        newCycles.add(new Tag(-1, toEditAdvertisement.getID(), "cycle", (String) ((Chip) cycleChipGroup.findViewById(i)).getText()));
+                        Tag t = new Tag(-1, toEditAdvertisement.getID(), "cycle", (String) ((Chip) cycleChipGroup.findViewById(i)).getText());
+                        newCycles.add(t);
+                        updatedTags.add(t);
                     }
-                    for (int i : checkedObjectsIDs){
-                        newObjects.add(new Tag(-1, toEditAdvertisement.getID(), "object", (String) ((Chip) objectChipGroup.findViewById(i)).getText()));
+                    for (int i : checkedObjectsIDs) {
+                        Tag t = new Tag(-1, toEditAdvertisement.getID(), "object", (String) ((Chip) objectChipGroup.findViewById(i)).getText());
+                        newObjects.add(t);
+                        updatedTags.add(t);
                     }
 
                     // Print the initial tags and the new ones
@@ -265,15 +272,17 @@ public class EditAdvertisementActivity extends NavigationActivity{
                     }
                     // Add new objects
                     for (Tag newObject : newObjects) {
-                        if (!initCycles.contains(newObject)) {
+                        if (!initObjects.contains(newObject)) {
                             Log.v("added tag", newObject.getTagValue());
                             api.addNewTag(newObject);
                         }
                     }
 
 
+                    toEditAdvertisement.setTags(updatedTags);
                     toEditAdvertisement.setTitle(advertisementTitleText.getText().toString());
                     toEditAdvertisement.setDescription(advertisementDescriptionText.getText().toString());
+
 
                     Intent intent = new Intent();
                     intent.putExtra("Advertisement",toEditAdvertisement);
