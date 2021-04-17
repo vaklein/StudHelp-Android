@@ -126,9 +126,20 @@ public class AdvertisementViewActivity extends NavigationActivity {
             });
         }
 
+        /* List of 4 images for development purpose
+        List<String> devImages = new ArrayList<>();
+        devImages.add("advertisements/ArBqYBaleyuw0aCD1SEtwlBrKKSXI58zw88HOE0m.jpg");
+        devImages.add("advertisements/ArBqYBaleyuw0aCD1SEtwlBrKKSXI58zw88HOE0m.jpg");
+        devImages.add("advertisements/ArBqYBaleyuw0aCD1SEtwlBrKKSXI58zw88HOE0m.jpg");
+        devImages.add("advertisements/ArBqYBaleyuw0aCD1SEtwlBrKKSXI58zw88HOE0m.jpg");
+        currentAdvertisement.setImages(devImages);
+        */
+
         carousel = findViewById(R.id.advertisement_view_carousel);
         System.out.println(currentAdvertisement.getImages().toString());
         if (currentAdvertisement.hasImages()) {
+            // As long as we don't find a way to stop autoplay when the user swipe the carousel the user experience is better without autoplay
+            carousel.setAutoPlay(false);
             carousel.setSize(currentAdvertisement.getImages().size());
             carousel.setCarouselViewListener(new CarouselViewListener() {
                 @Override
