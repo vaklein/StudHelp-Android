@@ -80,7 +80,7 @@
                         app:setAutoPlay="true"
                         app:setAutoPlayDelay="5000"
                         app:carouselOffset="center"
-                        app:indicatorAnimationType="drop"
+                        app:indicatorAnimationType="worm"
                         app:indicatorRadius="5"
                         app:indicatorPadding="5"
                         app:indicatorSelectedColor="@color/bittersweet"
