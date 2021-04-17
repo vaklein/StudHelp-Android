@@ -4,26 +4,31 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.Toast;
 
 
-import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.DAO.User;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class LoginActivity extends AppCompatActivity {
     private Button sign_up;
@@ -35,8 +40,14 @@ public class LoginActivity extends AppCompatActivity {
     private LoadingDialog loadingDialog;
     // to remember that the user is already connected
     private Switch rememberMe;
-    public static final String PREFS_NAME = "MyPrefsFile";
+    public static final String PREFS_NAME = "Email";
     public static final String PREF_EMAIL = null;
+    public static final String PREF_ARRAY = "Array";
+    public static final String PREF_TOKEN_DATE_ARRAY = null;
+    public static final String PREF_DATE = "data";
+    public static final String PREF_COURSE_ARRAY_LIST = null;
+    String date_courses_data = "test";
+
     // Test values
     //private Button rootButton;
 
@@ -48,23 +59,37 @@ public class LoginActivity extends AppCompatActivity {
 
         loadingDialog = new LoadingDialog(this, "Connexion en cours...");
 
-        SharedPreferences pref = getSharedPreferences(PREFS_NAME,MODE_PRIVATE); // We only get the email. We might need to get the API token or the password
-        String already_email = pref.getString(PREF_EMAIL, null);
+        SharedPreferences pref_email = getSharedPreferences(PREFS_NAME,MODE_PRIVATE); // We only get the email. We might need to get the API token or the password
+        String already_email = pref_email.getString(PREF_EMAIL, null);
+        SharedPreferences pref_date = getSharedPreferences(PREF_DATE,MODE_PRIVATE); // We only get the email. We might need to get the API token or the password
+        String token_date_array = pref_date.getString(PREF_TOKEN_DATE_ARRAY, "1900-01-01 00:00:00");
+
         if (already_email != null) {
             loadingDialog.getDialog().show();
 
             API api =  API.setToken(getSharedPreferences(PREFS_NAME,MODE_PRIVATE));
+            Log.v("jerem", "result email:"+api.getUserWithEmail(already_email));
+            Log.v("jerem", "result email 2:"+already_email);
             GlobalVariables.setUser(api.getUserWithEmail(already_email));
-
+            date_courses_data = API.tokenUpdateCourses();
 
             // Doing all the synchronous queries
-            ArrayList<Course> loadCourses = api.getCourses();
-            GlobalVariables.setCourses(loadCourses);
+            Log.v("jerem", "result :"+date_courses_data);
+            Log.v("jerem", "result list :"+pref_date.getString(PREF_TOKEN_DATE_ARRAY, null));
+            SharedPreferences pref = getSharedPreferences(PREF_ARRAY,MODE_PRIVATE); // We only get the email. We might need to get the API token or the password
+            Log.v("jerem", "result list :"+pref.getString(PREF_COURSE_ARRAY_LIST, null));
+
+            try {
+                loadData(token_date_array, date_courses_data);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
             //startActivity(edit_profil);
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             intent.putExtra("FavList", false);
+            intent.putExtra("notif", 0);
             startActivity(intent);
             loadingDialog.getDialog().cancel();
             LoginActivity.this.finish();
@@ -100,6 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         try {
                             if (rememberMe.isChecked()) {
+                                Log.v("jeremE", jsonObject.getString("email"));
                                 getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
                                         .edit()
                                         .putString(PREF_EMAIL, jsonObject.getString("email"))
@@ -110,13 +136,19 @@ public class LoginActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        date_courses_data = API.tokenUpdateCourses();
+                        Log.v("jerem", "result : "+date_courses_data);
 
-                        ArrayList<Course> loadCourses = API.getInstance().getCourses();
-                        GlobalVariables.setCourses(loadCourses);
+                        try {
+                            loadData(token_date_array, date_courses_data);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                         //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
                         //startActivity(edit_profil);
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         intent.putExtra("FavList", false);
+                        intent.putExtra("notif", 0);
                         startActivity(intent);
                         LoginActivity.this.finish();
                     }
@@ -138,4 +170,44 @@ public class LoginActivity extends AppCompatActivity {
         return filled;
     }
 
+    private void loadData(String token_date_array, String date_courses_data) throws ParseException {
+        Date date_local = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(token_date_array);
+        Date date_database = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date_courses_data);
+        Log.v("jerem1", date_local.toString());
+        Log.v("jerem1", date_database.toString());
+        if (date_local.before(date_database)){ // case where the user don't have de last version of courses
+            ArrayList<Course> loadCourses = API.getInstance().getCourses();
+            GlobalVariables.setCourses(loadCourses);
+            // creating a new variable for gson.
+            Gson gson = new Gson();
+            // getting data from gson and storing it in a string.
+            String json = gson.toJson(loadCourses);
+
+            getSharedPreferences(PREF_ARRAY, MODE_PRIVATE)
+                    .edit()
+                    .putString(PREF_COURSE_ARRAY_LIST, json)
+                    .apply();
+            getSharedPreferences(PREF_DATE, MODE_PRIVATE)
+                    .edit()
+                    .putString(PREF_TOKEN_DATE_ARRAY, date_courses_data)
+                    .apply();
+        }
+        else{
+            SharedPreferences pref = getSharedPreferences(PREFS_NAME,MODE_PRIVATE); // We only get the email. We might need to get the API token or the password
+            // creating a variable for gson.
+            Gson gson = new Gson();
+
+            // below line is to get to string present from our
+            // shared prefs if not present setting it as null.
+            SharedPreferences pref_array = getSharedPreferences(PREF_ARRAY,MODE_PRIVATE); // We only get the email. We might need to get the API token or the password
+            String json = pref_array.getString(PREF_COURSE_ARRAY_LIST, null);
+
+            // below line is to get the type of our array list.
+            Type type = new TypeToken<ArrayList<Course>>(){}.getType();
+
+            // in below line we are getting data from gson
+            // and saving it to our array list
+            GlobalVariables.setCourses(gson.fromJson(json, type));
+        }
+    }
 }

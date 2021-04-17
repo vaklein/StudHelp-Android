@@ -97,6 +97,7 @@ public class NavigationActivity extends AppCompatActivity{
                         break;
                     case R.id.nav_home:
                         Intent intentHome = new Intent(getApplicationContext(), HomeActivity.class);
+                        intentHome.putExtra("notif", 0);
                         startActivity(intentHome);
                         finish();
                         break;

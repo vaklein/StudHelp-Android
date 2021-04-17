@@ -16,6 +16,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.p4_group12.Interface.GlobalVariables;
 import com.example.p4_group12.Interface.HomeActivity;
+import com.example.p4_group12.Interface.LoginActivity;
 import com.example.p4_group12.database.API;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -33,6 +34,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
+
         String myMessage = remoteMessage.getNotification().getBody(); // message received from Firebase
         String notificationTitle = remoteMessage.getNotification().getTitle();
         int advertisement_id = Integer.parseInt(remoteMessage.getNotification().getClickAction()); // Use this to launch the right intent
@@ -40,7 +42,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d("FirebaseMessage", "message received : " + myMessage);
 
         //action : diriger le user vers une activity quand il click sur la notif
-        Intent intent = new Intent(getApplicationContext(), HomeActivity.class); // TODO : set to the activity we want
+
+        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.putExtra("notif", 1);
+        intent.putExtra("id", advertisement_id);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
 
@@ -48,6 +54,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CANAL); //construit une nouvelle notif
         notificationBuilder.setContentTitle(notificationTitle);//titre de la notif
         notificationBuilder.setContentText(myMessage); //contenue de la notif
+        notificationBuilder.setAutoCancel(true); // undisplay the notification
+
 
         // ajout de l'action
         notificationBuilder.setContentIntent(pendingIntent);
@@ -57,7 +65,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationBuilder.setVibrate(vibrationPattern);
 
         // icone de la notif
-        notificationBuilder.setSmallIcon(R.drawable.ic_logo_discord); //TODO : set to the logo af the application
+        notificationBuilder.setSmallIcon(R.drawable.ic_logo_notif); //TODO : set to the logo af the application
 
         // envoyer une notif
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);

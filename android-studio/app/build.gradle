@@ -69,4 +69,5 @@ dependencies {
     // Used to load an url image to an imageView
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'jp.wasabeef:picasso-transformations:2.2.1'
+    implementation 'com.google.code.gson:gson:2.8.5'
 }

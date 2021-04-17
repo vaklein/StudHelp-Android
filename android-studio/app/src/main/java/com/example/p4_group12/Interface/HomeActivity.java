@@ -13,9 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.p4_group12.DAO.Advertisement;
+import com.example.p4_group12.DAO.Tag;
 import com.example.p4_group12.Interface.adapter.AdvertisementListAdapter;
 import com.example.p4_group12.Interface.adapter.CategoryListAdapter;
 import com.example.p4_group12.R;
+import com.example.p4_group12.database.API;
 
 import java.util.ArrayList;
 
@@ -25,6 +27,7 @@ public class HomeActivity extends NavigationActivity{
     private RecyclerView.LayoutManager categoryLayoutManager;
     private CategoryListAdapter categoryListAdapter;
     private ArrayList<String> categoryList;
+    private int notif;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,22 @@ public class HomeActivity extends NavigationActivity{
         setTitleToolbar("Outil de recherche");
 
         searchBarButton = findViewById(R.id.search_bar_button);
+
+        notif = (int) getIntent().getSerializableExtra("notif");
+        if (notif == 1){
+            int advertisment_id = (int) getIntent().getSerializableExtra("id");
+            Log.v("jerem", "adv : "+advertisment_id);
+            Advertisement add = API.getInstance().getAdvertisment(advertisment_id);
+            Intent advertisementView = new Intent(getApplicationContext(), AdvertisementViewActivity.class);
+            advertisementView.putExtra("ClickedAdvertisement", add);
+            int i = 0;
+            for (Tag tag : add.getTags()) {
+                advertisementView.putExtra("tag"+i, tag);
+                i++;
+            }
+            advertisementView.putExtra("Number of tags", i);
+            startActivityForResult(advertisementView, 1);
+        }
 
         searchBarButton.setOnClickListener(new View.OnClickListener() {
             @Override

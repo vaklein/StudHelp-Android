@@ -168,6 +168,20 @@ public class API {
         INSTANCE = new API(sharedPreferences.getString("API_key", null));
         return INSTANCE;
     }
+    public static String tokenUpdateCourses(){
+        try{
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/globalvariables/course_list_update", "", "GET");
+            String response = getJSON.execute().get();
+            Log.v("jerem", "try :" + response);
+            JSONObject jsonObject = new JSONArray(response).getJSONObject(0);
+            return jsonObject.getString("value");
+
+        } catch (ExecutionException | InterruptedException | JSONException e) {
+            e.printStackTrace();
+            Log.v("jerem", "catch :");
+            return null;
+        }
+    }
 
     public static JSONObject registerUser(User user, String password, String passwordConfirmation){
         try {
@@ -329,6 +343,19 @@ public class API {
             e.printStackTrace();
         }
         return allAds;
+    }
+    public Advertisement getAdvertisment(int id){
+        ArrayList<Advertisement> allAds = new ArrayList<>();
+        try{
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement/" + id, "", "GET");
+            String response = getJSON.execute().get();
+            loadIntoArrayList(response, allAds, Advertisement.class);
+        } catch (InterruptedException  | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException  e) {
+            e.printStackTrace();
+        }
+        Log.v("jerem", "adv received : "+ allAds);
+        Log.v("jerem", "adv received : "+ allAds.get(0));
+        return allAds.get(0);
     }
 
     public Social_links getSocialLinksOfUser(User user){
