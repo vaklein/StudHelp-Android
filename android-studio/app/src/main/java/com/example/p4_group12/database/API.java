@@ -1,9 +1,11 @@
 package com.example.p4_group12.database;
 
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.android.internal.http.multipart.MultipartEntity;
 import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.Course;
@@ -18,6 +20,8 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -102,6 +106,36 @@ public class API {
                 return null;
             } catch (IOException e) {
                 e.printStackTrace();
+                return null;
+            }
+        }
+    }
+
+    private static class SyncSendFile extends AsyncTask<Void, Void, String> {
+
+        private MultipartUtility multipart;
+
+        public SyncSendFile(MultipartUtility multipart){
+            this.multipart = multipart;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+                String response = multipart.finish(); // response from server.
+                return response;
+            } catch (Exception e) {
+                Log.e("TAG", "multipart post error " + e);
                 return null;
             }
         }
@@ -437,7 +471,14 @@ public class API {
             return null;
         }
     }
-
+    public void setProfilePicture(User user, File picture) throws IOException, ExecutionException, InterruptedException {
+        String charset = "UTF-8";
+        MultipartUtility multipart = new MultipartUtility(BuildConfig.DB_URL + "/user/picture", charset, key);
+        multipart.addFormField("email", user.getEmail());
+        multipart.addFilePart("picture", picture);
+        SyncSendFile request = new SyncSendFile(multipart);
+        request.execute().get();
+    }
     public void updateSocialLinks(User user){
         try{
             String data = URLEncoder.encode("discord", "UTF-8") + "=" + URLEncoder.encode(user.getSocial_links().getDiscord(), "UTF-8") + "&" +
