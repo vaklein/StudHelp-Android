@@ -62,7 +62,9 @@ public class AdvertisementsListActivity extends NavigationActivity {
 
         api = API.getInstance();
         if (api == null) Log.v("Jules", "API is null in AdvertisementListActivity");
+        Log.v("AdvertisementLoading", "start");
         advertisementsListComplete = api.getCourseAdvertisements(currentCourse);
+        Log.v("AdvertisementLoading", "finish");
         advertisementsListToShow = (ArrayList<Advertisement>) advertisementsListComplete.clone();
 
         filters = findViewById(R.id.advertisement_list_filter_chip_group);

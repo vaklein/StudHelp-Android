@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
+
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import androidx.annotation.NonNull;
@@ -19,8 +21,10 @@ import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 
 // Followed https://www.youtube.com/watch?v=17NbUcEts9c for the code and xml layout
@@ -88,6 +92,7 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
 
         User user = usersMemory.getOrDefault(currentAdvertisement.getEmailAddress(), null);
         if (user == null) {
+            Log.v("Jules", "User email is : " + currentAdvertisement.getEmailAddress());
             user = API.getInstance().getUserWithEmail(currentAdvertisement.getEmailAddress());
             if (user == null) {
                 Log.v("Jules" , "Problem ID is " + currentAdvertisement.getID());
@@ -99,9 +104,8 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
         holder.usernameTextView.setText(user.getName());
         holder.advertisementTitleTextView.setText(currentAdvertisement.getTitle());
         holder.advertisementDescriptionTextView.setText(currentAdvertisement.getDescription());
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat SDF = new SimpleDateFormat("EEE, d MMM yyyy");
-        Log.v("Dateee", SDF.format(currentAdvertisement.getCreationDate()));
-        holder.advertisementDateTextView.setText("Créée le " + SDF.format(currentAdvertisement.getCreationDate()));
+        Log.v("Dateee", DateFormat.getDateInstance(DateFormat.FULL, Locale.FRANCE).format(currentAdvertisement.getCreationDate()));
+        holder.advertisementDateTextView.setText("Créée le " + DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.FRANCE).format(currentAdvertisement.getCreationDate()));
     }
 
     @Override
