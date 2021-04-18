@@ -106,6 +106,9 @@ public class AdvertisementsListActivity extends NavigationActivity {
                         advertisementsListToShow.clear();
                         advertisementsListToShow.addAll(advertisementsListComplete);
                         advertisementListAdapter.notifyDataSetChanged();
+                        if (!advertisementsListComplete.isEmpty()) {
+                            noAdvertisement.setVisibility(View.GONE);
+                        }
                         return;
                     }
                     List<String> checkedChipStrings = new ArrayList<>();
