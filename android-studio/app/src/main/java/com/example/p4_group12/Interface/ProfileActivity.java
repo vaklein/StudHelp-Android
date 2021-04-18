@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
@@ -83,7 +84,7 @@ public class ProfileActivity extends NavigationActivity implements TabLayout.OnT
             @Override
             public void onClick(View view) {
                 Intent edit_profil = new Intent(getApplicationContext(), EditProfileActivity.class);
-                startActivity(edit_profil);
+                startActivityForResult(edit_profil,1);
             }
         });
 
@@ -130,5 +131,15 @@ public class ProfileActivity extends NavigationActivity implements TabLayout.OnT
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1) {
+            Intent profil = new Intent(getApplicationContext(), ProfileActivity.class);
+            startActivity(profil);
+            finish();
+        }
     }
 }

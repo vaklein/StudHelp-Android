@@ -5,7 +5,10 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- <uses-feature android:name="android.hardware.type.watch" /> -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-feature android:name="android.hardware.camera"
+        android:required="false" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -103,6 +106,10 @@
         <activity
             android:name=".Interface.ProfileActivity"
             android:label="Mon profil" />
+
+        <activity
+            android:name=".Interface.MyBookmarksActivity"
+            android:label="Mes signets" />
 
 
         <!--#################################-->

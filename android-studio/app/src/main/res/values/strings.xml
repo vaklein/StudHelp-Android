@@ -29,6 +29,8 @@
     <string name="email_public">Email privé</string>
     <string name="discord">Pseudo#Tag</string>
     <string name="deconnexion">Se déconnecter</string>
+    <string name="my_bookmarks">Mes signets</string>
+    <string name="no_bookmarks">Vous n\' avez pas de signet pour le moment</string>
 
 
     <!-- tests strings -->
@@ -82,5 +84,6 @@
     <string name="go_to_favourites_courses_string">Voir mes cours favoris</string>
     <string name="edit_profile_picture">Changer photo</string>
     <string name="no_private_advertisment">Vous n\'avez pas encore posté d\'annonce</string>
+    <string name="add_picture_button">Ajouter une photo</string>
 
 </resources>

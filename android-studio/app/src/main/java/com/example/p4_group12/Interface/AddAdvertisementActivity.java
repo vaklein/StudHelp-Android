@@ -1,23 +1,31 @@
 package com.example.p4_group12.Interface;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.FileProvider;
 
-import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.Course;
-import com.example.p4_group12.DAO.Social_links;
 import com.example.p4_group12.DAO.Tag;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
@@ -26,9 +34,17 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.json.JSONException;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 
 public class AddAdvertisementActivity extends NavigationActivity {
@@ -36,11 +52,13 @@ public class AddAdvertisementActivity extends NavigationActivity {
     private TextInputEditText advertisementDescriptionText;
     private TextInputLayout advertisementTitle;
     private TextInputLayout advertisementDescription;
-    private Button submitAdvertisement;
     private Advertisement currentAdvertisement;
     private Course course;
     private API api;
     private TextView chipGroupError;
+    private Button addPictureButton;
+    Bitmap imageBitmap;
+    ImageView picture;
 
     private ChipGroup typeChipGroup;
     List<String> types = new ArrayList<>();
@@ -67,13 +85,13 @@ public class AddAdvertisementActivity extends NavigationActivity {
         advertisementDescription = findViewById(R.id.advertisement_description);
         advertisementTitleText = findViewById(R.id.advertisement_title_text);
         advertisementDescriptionText = findViewById(R.id.advertisement_description_text);
-        submitAdvertisement = findViewById(R.id.add_advertisement_button);
-        submitAdvertisement.setText(R.string.add_advertisement_button);
         currentAdvertisement = (Advertisement) getIntent().getSerializableExtra("ClickedAdvertisement");
         chipGroupError = findViewById(R.id.chip_group_unckecked_error);
         typeChipGroup = findViewById(R.id.add_advertisement_type_chip_group);
         cycleChipGroup = findViewById(R.id.add_advertisement_cycle_chip_group);
         objectChipGroup = findViewById(R.id.add_advertisement_object_chip_group);
+        addPictureButton = findViewById(R.id.add_picture_button);
+        picture = findViewById(R.id.add_advertisment_picture);
 
         this.api = API.getInstance();
 
@@ -97,7 +115,7 @@ public class AddAdvertisementActivity extends NavigationActivity {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     dialogInterface.dismiss();
                     Intent modifyProfile = new Intent(getApplicationContext(),EditProfileActivity.class);
-                    startActivity(modifyProfile);
+                    startActivityForResult(modifyProfile,2);
                 }
             });
             builder.show();
@@ -170,35 +188,60 @@ public class AddAdvertisementActivity extends NavigationActivity {
             }
         });
 
-        submitAdvertisement.setOnClickListener(new View.OnClickListener() {
+
+        addPictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dispatchTakePictureIntent();
 
-                int checkedTypeID = typeChipGroup.getCheckedChipId();
-
-                List<Integer> checkedCyclesIDs = cycleChipGroup.getCheckedChipIds();
-
-                List<Integer> checkedObjectsIDs = objectChipGroup.getCheckedChipIds();
-
-                if (isCorrectlyFilled(checkedTypeID, checkedCyclesIDs, checkedObjectsIDs)) {
-                    int advertisementId = api.addNewAdvertisement(course.getID(), advertisementTitleText.getText().toString(), advertisementDescriptionText.getText().toString(), GlobalVariables.getUser().getEmail(), "Types are deprecated");
-                    api.addNewTag(new Tag(-1, advertisementId, "type", (String) ((Chip) typeChipGroup.findViewById(checkedTypeID)).getText()));
-                    for (int i : checkedCyclesIDs) {
-                        api.addNewTag(new Tag(-1, advertisementId, "cycle", (String) ((Chip) cycleChipGroup.findViewById(i)).getText()));
-                    }
-                    for (int i : checkedObjectsIDs){
-                        api.addNewTag(new Tag(-1, advertisementId, "object", (String) ((Chip) objectChipGroup.findViewById(i)).getText()));
-                    }
-
-                    Intent intent = new Intent();
-                    setResult(1, intent);
-                    finish();
-                }
             }
         });
-
     }
 
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        } catch (ActivityNotFoundException e) {
+            // display error state to the user
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            this.imageBitmap = (Bitmap) extras.get("data");
+            picture.setImageBitmap(this.imageBitmap);
+        }
+        if(requestCode == 2) {
+            Intent advertisement = new Intent(getApplicationContext(), AddAdvertisementActivity.class);
+            advertisement.putExtra("CurrentCourse", course);
+            advertisement.putExtra("ClickedAdvertisement", currentAdvertisement);
+            startActivity(advertisement);
+            finish();
+        }
+    }
+
+    String currentPhotoPath;
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
     @SuppressLint("ResourceAsColor")
     private boolean isCorrectlyFilled(int checkedType, List<Integer> checkedCycles, List<Integer> checkedObjects) {
         boolean filled = true;
@@ -245,5 +288,58 @@ public class AddAdvertisementActivity extends NavigationActivity {
     private static String formatFieldForSqlPostRequest(String field){
         // We might want to replace other char if we find other bugs
         return field.replace("'", "''");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.save_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int checkedTypeID = typeChipGroup.getCheckedChipId();
+
+        List<Integer> checkedCyclesIDs = cycleChipGroup.getCheckedChipIds();
+
+        List<Integer> checkedObjectsIDs = objectChipGroup.getCheckedChipIds();
+
+        if (isCorrectlyFilled(checkedTypeID, checkedCyclesIDs, checkedObjectsIDs)) {
+            int advertisementId = api.addNewAdvertisement(course.getID(), advertisementTitleText.getText().toString(), advertisementDescriptionText.getText().toString(), GlobalVariables.getUser().getEmail(), "Types are deprecated");
+            api.addNewTag(new Tag(-1, advertisementId, "type", (String) ((Chip) typeChipGroup.findViewById(checkedTypeID)).getText()));
+            for (int i : checkedCyclesIDs) {
+                api.addNewTag(new Tag(-1, advertisementId, "cycle", (String) ((Chip) cycleChipGroup.findViewById(i)).getText()));
+            }
+            for (int i : checkedObjectsIDs){
+                api.addNewTag(new Tag(-1, advertisementId, "object", (String) ((Chip) objectChipGroup.findViewById(i)).getText()));
+            }
+
+            if(imageBitmap != null) {
+                File test = null;
+                try {
+                    test = createImageFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try (FileOutputStream out = new FileOutputStream(test)) {
+                    imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                    // PNG is a lossless format, the compression factor (100) is ignored
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    api.setAdvertisementPicture(advertisementId,test);
+                } catch (IOException | ExecutionException | InterruptedException | JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Intent intent = new Intent();
+            setResult(1, intent);
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
