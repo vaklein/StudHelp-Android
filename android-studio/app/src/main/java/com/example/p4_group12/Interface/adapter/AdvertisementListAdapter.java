@@ -95,7 +95,7 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
             Log.v("Jules", "User email is : " + currentAdvertisement.getEmailAddress());
             user = API.getInstance().getUserWithEmail(currentAdvertisement.getEmailAddress());
             if (user == null) {
-                Log.v("Jules" , "Problem ID is " + currentAdvertisement.getID());
+                Log.v("Jules", "Problem ID is " + currentAdvertisement.getID());
             }
             assert user != null;
             usersMemory.put(user.getEmail(), user);
@@ -104,8 +104,17 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
         holder.usernameTextView.setText(user.getName());
         holder.advertisementTitleTextView.setText(currentAdvertisement.getTitle());
         holder.advertisementDescriptionTextView.setText(currentAdvertisement.getDescription());
-        Log.v("Dateee", DateFormat.getDateInstance(DateFormat.FULL, Locale.FRANCE).format(currentAdvertisement.getCreationDate()));
-        holder.advertisementDateTextView.setText("Créée le " + DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.FRANCE).format(currentAdvertisement.getCreationDate()));
+        Date now = new Date();
+        long timeDiff = now.getTime() - currentAdvertisement.getCreationDate().getTime();
+        long oneHour = 3600000;
+        Log.v("Jules", "timediff is : " + timeDiff);
+        if (timeDiff < oneHour) { // Less than an hour
+            holder.advertisementDateTextView.setText("Il y a moins d'une heure");
+        } else if (timeDiff < oneHour*24) {
+            holder.advertisementDateTextView.setText("Il y a moins d'un jour");
+        } else {
+            holder.advertisementDateTextView.setText("Le " + DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.FRANCE).format(currentAdvertisement.getCreationDate()));
+        }
     }
 
     @Override
