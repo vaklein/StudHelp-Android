@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
@@ -75,6 +76,11 @@ public class SearchActivity extends NavigationActivity{
             searchView.requestFocus();
             InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             imm.showSoftInput(searchView, InputMethodManager.SHOW_IMPLICIT);
+        } else if (currentCategory.equals("favourites courses")) {
+            courseList = api.getFavoriteCoursesOfUser(GlobalVariables.getUser());
+            Log.v("Jules", "size is " + courseList.size());
+            setTitleToolbar("Recherche dans les cours favoris");
+            favoriteSwitch.setVisibility(View.GONE);
         } else {
             courseList = filterFaculties(GlobalVariables.getCourses(), currentCategory);
             setTitleToolbar("Recherche dans les cours de la faculté " + currentCategory);

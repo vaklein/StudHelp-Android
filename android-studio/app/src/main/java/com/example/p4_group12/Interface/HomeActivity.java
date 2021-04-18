@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 public class HomeActivity extends NavigationActivity{
     private CardView searchBarButton;
+    private CardView goToFavouritesButton;
     private RecyclerView categoryRecyclerView;
     private RecyclerView.LayoutManager categoryLayoutManager;
     private CategoryListAdapter categoryListAdapter;
@@ -59,6 +60,17 @@ public class HomeActivity extends NavigationActivity{
             public void onClick(View view) {
                 Intent searchActivity = new Intent(getApplicationContext(), SearchActivity.class);
                 searchActivity.putExtra("ClickedCategory", "search all");
+                startActivity(searchActivity);
+            }
+        });
+
+        goToFavouritesButton = findViewById(R.id.go_to_favourites_button);
+
+        goToFavouritesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent searchActivity = new Intent(getApplicationContext(), SearchActivity.class);
+                searchActivity.putExtra("ClickedCategory", "favourites courses");
                 startActivity(searchActivity);
             }
         });

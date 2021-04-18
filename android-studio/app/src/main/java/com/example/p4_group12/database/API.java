@@ -309,6 +309,21 @@ public class API {
         return favoriteIDs;
     }
 
+    /*
+    * Todo : this function should be optimized with the data base queries
+    */
+    public ArrayList<Course> getFavoriteCoursesOfUser(User user){
+        ArrayList<Course> favCourses = new ArrayList<>();
+        ArrayList<Course> allCourses = getCourses();
+        HashSet<Integer> favIds = getFavoriteCoursesIdsOfUser(user);
+        for (Course course : allCourses) {
+            if (favIds.contains(course.getID())) {
+                favCourses.add(course);
+            }
+        }
+        return favCourses;
+    }
+
     public void addNewFavoriteToUser(User user, Course course){
         try{
             String data = URLEncoder.encode("user_email", "UTF-8") + "=" + URLEncoder.encode(user.getEmail(), "UTF-8") + "&" +
