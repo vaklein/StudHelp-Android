@@ -1,9 +1,15 @@
 package com.example.p4_group12.DAO;
 
+import android.annotation.SuppressLint;
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Advertisement  implements Serializable, Comparable {
@@ -30,8 +36,8 @@ public class Advertisement  implements Serializable, Comparable {
     private List<Tag> tags;
     private List<String> tagValues = new ArrayList<>();
     private List<String> images;
-    private String creationDate;
-    private String lastUpdateDate;
+    private Date creationDate;
+    private Date lastUpdateDate;
 
     public void setID(int ID) {
         this.ID = ID;
@@ -69,7 +75,7 @@ public class Advertisement  implements Serializable, Comparable {
         this.images = images;
     }
 
-    public Advertisement(int ID, String mail, String title, String description, List<Tag> tags, int courseID, List<String> images, String creationDate, String lastUpdateDate) {
+    public Advertisement(int ID, String mail, String title, String description, List<Tag> tags, int courseID, List<String> images, String creationDate, String lastUpdateDate) throws ParseException {
         this.ID = ID;
         this.mail = mail;
         this.title = title;
@@ -80,8 +86,9 @@ public class Advertisement  implements Serializable, Comparable {
             tagValues.add(tag.getTagValue());
         }
         this.images = images;
-        this.creationDate = creationDate;
-        this.lastUpdateDate = lastUpdateDate;
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        this.creationDate = SDF.parse(creationDate);
+        this.lastUpdateDate = SDF.parse(lastUpdateDate);
     }
 
     public int getID(){
@@ -114,11 +121,11 @@ public class Advertisement  implements Serializable, Comparable {
 
     public List<String> getImages() { return images; }
 
-    public String getCreationDate() {
+    public Date getCreationDate() {
         return creationDate;
     }
 
-    public String getLastUpdateDate() {
+    public Date getLastUpdateDate() {
         return lastUpdateDate;
     }
 

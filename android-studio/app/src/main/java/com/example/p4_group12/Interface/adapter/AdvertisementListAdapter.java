@@ -5,7 +5,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
+import java.text.SimpleDateFormat;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -97,7 +99,9 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
         holder.usernameTextView.setText(user.getName());
         holder.advertisementTitleTextView.setText(currentAdvertisement.getTitle());
         holder.advertisementDescriptionTextView.setText(currentAdvertisement.getDescription());
-        holder.advertisementDateTextView.setText("Créée le " + currentAdvertisement.getCreationDate());
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat SDF = new SimpleDateFormat("EEE, d MMM yyyy");
+        Log.v("Dateee", SDF.format(currentAdvertisement.getCreationDate()));
+        holder.advertisementDateTextView.setText("Créée le " + SDF.format(currentAdvertisement.getCreationDate()));
     }
 
     @Override

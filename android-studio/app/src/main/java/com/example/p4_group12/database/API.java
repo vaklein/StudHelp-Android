@@ -33,6 +33,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -281,7 +282,7 @@ public class API {
             Log.v("Jules", "[Bad thing] Error on JSON get for the user");
             return null;
 
-        } catch (ExecutionException | InterruptedException | JSONException e) {
+        } catch (ExecutionException | InterruptedException | JSONException | ParseException e) {
             e.printStackTrace();
             return null;
         }
@@ -293,7 +294,7 @@ public class API {
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/course", "", "GET");
             String response = getJSON.execute().get();
             loadIntoArrayList(response, allCourses, Course.class);
-        } catch (InterruptedException  | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException  e) {
+        } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
             e.printStackTrace();
         }
         return allCourses;
@@ -362,7 +363,7 @@ public class API {
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/course/" + course.getID() + "/advertisement", "", "GET");
             String response = getJSON.execute().get();
             loadIntoArrayList(response, allAds, Advertisement.class);
-        } catch (InterruptedException  | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException  e) {
+        } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
             e.printStackTrace();
         }
         return allAds;
@@ -373,7 +374,7 @@ public class API {
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement/" + id, "", "GET");
             String response = getJSON.execute().get();
             loadIntoArrayList(response, allAds, Advertisement.class);
-        } catch (InterruptedException  | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException  e) {
+        } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
             e.printStackTrace();
         }
         Log.v("jerem", "adv received : "+ allAds);
@@ -389,7 +390,7 @@ public class API {
             JSONObject jsonObject = (JSONObject) new JSONArray(response).get(0);
             if(jsonObject == null) return null;
             return (Social_links) GettableObjectFactory.getObject(jsonObject, Social_links.class);
-        } catch (InterruptedException  | ExecutionException | JSONException e) {
+        } catch (InterruptedException | ExecutionException | JSONException | ParseException e) {
             e.printStackTrace();
             return null;
         }
@@ -441,7 +442,7 @@ public class API {
             String response = getJSON.execute().get();
             //Log.v("Jules", "Tags json is : " + response);
             loadIntoArrayList(response, tags, Tag.class);
-        } catch (InterruptedException  | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException  e) {
+        } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
             e.printStackTrace();
         }
         return tags;
@@ -490,7 +491,7 @@ public class API {
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + user.getEmail() + "/advertisement", "", "GET");
             String response = getJSON.execute().get();
             loadIntoArrayList(response, allUserAds, Advertisement.class);
-        } catch (InterruptedException  | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException  e) {
+        } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
             e.printStackTrace();
         }
         return allUserAds;
@@ -560,7 +561,7 @@ public class API {
     /**
      * Here we get the JSON given by the DB and we get the courses from it in order to add them into the course list
      */
-    private static void loadIntoArrayList(String json, ArrayList gettableObjectArrayList, Class objectClass) throws JSONException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    private static void loadIntoArrayList(String json, ArrayList gettableObjectArrayList, Class objectClass) throws JSONException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ParseException {
         JSONArray jsonArray = new JSONArray(json);
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject obj = jsonArray.getJSONObject(i);

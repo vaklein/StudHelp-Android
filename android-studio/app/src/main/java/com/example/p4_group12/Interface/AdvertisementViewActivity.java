@@ -33,6 +33,7 @@ import com.jama.carouselview.CarouselView;
 import com.jama.carouselview.CarouselViewListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -93,7 +94,8 @@ public class AdvertisementViewActivity extends NavigationActivity {
         lastUpdateDate = findViewById(R.id.advertisement_view_last_update_date_text_view);
         advertisementTitle.setText(currentAdvertisement.getTitle());
         advertisementDescription.setText(currentAdvertisement.getDescription());
-        lastUpdateDate.setText("Dernière modification le "+ currentAdvertisement.getLastUpdateDate());
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat SDF = new SimpleDateFormat("EEE, d MMM yyyy");
+        lastUpdateDate.setText("Dernière modification le "+ SDF.format(currentAdvertisement.getLastUpdateDate()));
 
         for (Tag tag : currentAdvertisement.getTags()) {
             Chip chip = new Chip(this);

@@ -7,6 +7,7 @@ import com.example.p4_group12.database.API;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -17,7 +18,7 @@ import java.util.NoSuchElementException;
  */
 public class GettableObjectFactory {
 
-    public static Object getObject(JSONObject dbObject, Class objectClass) throws JSONException {
+    public static Object getObject(JSONObject dbObject, Class objectClass) throws JSONException, ParseException {
         if(objectClass.getCanonicalName().equals(Course.class.getCanonicalName())){
             return new Course(Integer.parseInt(dbObject.getString("id")), dbObject.getString("code"), dbObject.getString("university"), dbObject.getString("name"), dbObject.getString("fac"), dbObject.getString("quadri"));
         }
@@ -25,11 +26,11 @@ public class GettableObjectFactory {
             List<Tag> tags = API.getInstance().getAdvertisementTags(Integer.parseInt(dbObject.getString("id")));
             List<String> pictures = API.getInstance().getAdvertisementPictures(Integer.parseInt(dbObject.getString("id")));
             //for (Tag tag : tags) Log.v("Jules", "Tag = " + tag.getTagValue());
-            Log.v("Creation date", dbObject.getString("created_at"));
-            Log.v("Update date", dbObject.getString("updated_at"));
-            String creationDate = dbObject.getString("created_at").substring(0,10);
-            String lastUpdateDate = dbObject.getString("updated_at").substring(0,10);
-            return new Advertisement(Integer.parseInt(dbObject.getString("id")), dbObject.getString("user_email"), dbObject.getString("title"), dbObject.getString("description"), tags, Integer.parseInt(dbObject.getString("course_id")), pictures, creationDate, lastUpdateDate);
+            String goodFormatCreationDate = dbObject.getString("created_at").substring(0, 10) + " " + dbObject.getString("created_at").substring(11,19);
+            String goodFormatUpdatedDate = dbObject.getString("created_at").substring(0, 10) + " " + dbObject.getString("created_at").substring(11,19);
+            Log.v("Creation date", goodFormatUpdatedDate);
+            Log.v("Update date", goodFormatUpdatedDate);
+            return new Advertisement(Integer.parseInt(dbObject.getString("id")), dbObject.getString("user_email"), dbObject.getString("title"), dbObject.getString("description"), tags, Integer.parseInt(dbObject.getString("course_id")), pictures, goodFormatCreationDate, goodFormatUpdatedDate);
         }
         else if(objectClass.getCanonicalName().equals(User.class.getCanonicalName())) {
             return new User(dbObject.getString("name"), dbObject.getString("login"), dbObject.getString("email"), dbObject.getString("picture"), dbObject.getString("description"));
