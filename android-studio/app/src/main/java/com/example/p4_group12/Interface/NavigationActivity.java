@@ -39,23 +39,26 @@ public class NavigationActivity extends AppCompatActivity{
         setContentView(R.layout.drawer_layout);
 
         // Sending the token when the user is logged in
-        // Putting this here because it's created once and right after the log in
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        if (!task.isSuccessful()) {
-                            // Fetching FCM registration token failed"
-                            return;
+        // Putting this here because it's created once and right after the log in WRONG !!!!!!
+        if(!GlobalVariables.tokenAlreadySent()){
+            FirebaseMessaging.getInstance().getToken()
+                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
+                            if (!task.isSuccessful()) {
+                                // Fetching FCM registration token failed"
+                                return;
+                            }
+
+                            // Get new FCM registration token
+                            String token = task.getResult();
+
+                            // Sending the token to the DB
+                            API.getInstance().sendToken(GlobalVariables.getUser().getEmail(), token);
                         }
-
-                        // Get new FCM registration token
-                        String token = task.getResult();
-
-                        // Sending the token to the DB
-                        API.getInstance().sendToken(GlobalVariables.getUser().getEmail(), token);
-                    }
-                });
+                    });
+            GlobalVariables.switchBooleanToken();
+        }
 
 
         toolbar = findViewById(R.id.toolbar);
@@ -77,6 +80,7 @@ public class NavigationActivity extends AppCompatActivity{
                 API.getInstance().logoutUser(sharedPreferences);
 
                 GlobalVariables.setUser(null);
+                GlobalVariables.switchBooleanToken();
 
                 Intent intentLoginActivity = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intentLoginActivity);
@@ -112,6 +116,10 @@ public class NavigationActivity extends AppCompatActivity{
                         startActivity(intentmyadverts);
                         finish();
                         break;
+                    case R.id.nav_mybookmarks:
+                        Intent intentMyBookmarks = new Intent(getApplicationContext(), MyBookmarksActivity.class);
+                        startActivity(intentMyBookmarks);
+                        finish();
                     default:
                         break;
                 }

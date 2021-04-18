@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 import android.util.Log;
@@ -64,6 +65,7 @@ public class AdvertisementsListActivity extends NavigationActivity {
         if (api == null) Log.v("Jules", "API is null in AdvertisementListActivity");
         advertisementsListComplete = api.getCourseAdvertisements(currentCourse);
         advertisementsListToShow = (ArrayList<Advertisement>) advertisementsListComplete.clone();
+        HashSet<Integer> bookmarksIds = api.getBookmarksIdsOfUser(GlobalVariables.getUser());
 
         filters = findViewById(R.id.advertisement_list_filter_chip_group);
         courseCode = findViewById(R.id.advertisement_course_card_view_code);
@@ -79,7 +81,7 @@ public class AdvertisementsListActivity extends NavigationActivity {
         //advertisementRecyclerView.setHasFixedSize(true);
         advertisementLayoutManager = new LinearLayoutManager(this);
         advertisementRecyclerView.setLayoutManager(advertisementLayoutManager);
-        advertisementListAdapter = new AdvertisementListAdapter(advertisementsListToShow);
+        advertisementListAdapter = new AdvertisementListAdapter(advertisementsListToShow, bookmarksIds);
         advertisementRecyclerView.setAdapter(advertisementListAdapter);
 
         // Gestion des champs textes affichés

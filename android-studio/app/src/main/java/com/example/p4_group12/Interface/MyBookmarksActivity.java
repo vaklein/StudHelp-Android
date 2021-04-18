@@ -11,9 +11,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
-import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.DAO.Tag;
 import com.example.p4_group12.Interface.adapter.AdvertisementListAdapter;
 import com.example.p4_group12.R;
@@ -23,58 +21,61 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
-public class MyAdvertisementsActivity extends NavigationActivity{
-    private RecyclerView advertisementRecyclerView;
-    private RecyclerView.LayoutManager advertisementLayoutManager;
-    private AdvertisementListAdapter advertisementListAdapter;
-    private ArrayList<Advertisement> advertisementsListComplete;
-    private ArrayList<Advertisement> advertisementsListToShow;
-    private TextView courseCode;
-    private TextView courseFac;
+import static android.view.View.GONE;
+
+public class MyBookmarksActivity extends NavigationActivity{
+
+    private RecyclerView bookamrksRecyclerView;
+    private RecyclerView.LayoutManager bookmarksLayoutManager;
+    private AdvertisementListAdapter bookmarksListAdapter;
+    private ArrayList<Advertisement> bookmarksListComplete;
+    private ArrayList<Advertisement> bookmarksListToShow;
+
     private ChipGroup filters;
     private final List<Chip> filterChips = new ArrayList<>();
+
     private TextView mTextView;
     private FloatingActionButton newAdvertisementButton;
     private TextView noAdvertisement;
+
+
     private API api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Use this to set the correct layout instead of setContentView cfr NavigationActivity/drawer_layout
-        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); //Remember this is the FrameLayout area within your activity_main.xml
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_advertisments_list, contentFrameLayout);
-        setTitleToolbar("Mes annonces");
+        setTitleToolbar(getResources().getString(R.string.my_bookmarks));
 
         api = API.getInstance();
-        if (api == null) Log.v("Jules", "API is null in MyAdvertisementActivity");
-        advertisementsListComplete = api.getAdvertisementsOfUser(GlobalVariables.getUser());
-        advertisementsListToShow = (ArrayList<Advertisement>) advertisementsListComplete.clone();
-        HashSet<Integer> bookmarksIds = api.getBookmarksIdsOfUser(GlobalVariables.getUser());
+        if(api != null){
+            bookmarksListComplete = api.getBookmarksOfUser(GlobalVariables.getUser());
+            bookmarksListToShow = (ArrayList<Advertisement>) bookmarksListComplete.clone();
+        }
 
         filters = findViewById(R.id.advertisement_list_filter_chip_group);
-        courseCode = findViewById(R.id.advertisement_course_card_view_code);
-        courseFac = findViewById(R.id.advertisement_course_card_view_fac);
+
         mTextView = (TextView) findViewById(R.id.text);
         noAdvertisement = findViewById(R.id.no_advertisements);
-        if (advertisementsListToShow.size() == 0) {
+        if (bookmarksListToShow.size() == 0) {
             noAdvertisement.setVisibility(View.VISIBLE);
-            findViewById(R.id.advertisement_list_filter_title).setVisibility(View.GONE);
-            filters.setVisibility(View.GONE);
+            noAdvertisement.setText(R.string.no_bookmarks);
+            findViewById(R.id.advertisement_list_filter_title).setVisibility(GONE);
+            filters.setVisibility(GONE);
         }
-        advertisementRecyclerView = findViewById(R.id.advertisementRecyclerView);
-        //advertisementRecyclerView.setHasFixedSize(true);
-        advertisementLayoutManager = new LinearLayoutManager(this);
-        advertisementRecyclerView.setLayoutManager(advertisementLayoutManager);
-        advertisementListAdapter = new AdvertisementListAdapter(advertisementsListToShow, bookmarksIds);
-        advertisementRecyclerView.setAdapter(advertisementListAdapter);
+
+        bookamrksRecyclerView = findViewById(R.id.advertisementRecyclerView);
+        bookmarksLayoutManager = new LinearLayoutManager(this);
+        bookamrksRecyclerView.setLayoutManager(bookmarksLayoutManager);
+        bookmarksListAdapter = new AdvertisementListAdapter(bookmarksListToShow);
+        bookamrksRecyclerView.setAdapter(bookmarksListAdapter);
 
         // Gestion des champs textes affichés
-        courseCode.setText(R.string.myadvertisements_hint);
-        courseFac.setVisibility(View.GONE);
+        findViewById(R.id.advertisement_course_card_view_code).setVisibility(GONE);
+        findViewById(R.id.advertisement_course_card_view_fac).setVisibility(GONE);
 
         // Gestion des filtres de recherche
         for (String type : Tag.getAllTagsName()) {
@@ -89,9 +90,9 @@ public class MyAdvertisementsActivity extends NavigationActivity{
                     List<Integer> checkedChipIds = filters.getCheckedChipIds();
                     Log.v("Jules", "Number of checked chips : " + checkedChipIds.size());
                     if (checkedChipIds.isEmpty()) {
-                        advertisementsListToShow.clear();
-                        advertisementsListToShow.addAll(advertisementsListComplete);
-                        advertisementListAdapter.notifyDataSetChanged();
+                        bookmarksListToShow.clear();
+                        bookmarksListToShow.addAll(bookmarksListComplete);
+                        bookmarksListAdapter.notifyDataSetChanged();
                         return;
                     }
                     List<String> checkedChipStrings = new ArrayList<>();
@@ -99,15 +100,15 @@ public class MyAdvertisementsActivity extends NavigationActivity{
                         checkedChipStrings.add((String) ((Chip) filters.findViewById(i)).getText());
                     }
                     Log.v("Jules", "LIST OF CHECKED CHIPS :  " + checkedChipStrings.toString());
-                    advertisementsListToShow.clear();
-                    advertisementsListToShow.addAll(filterListOnCheckedChips(advertisementsListComplete, checkedChipStrings));
-                    Log.v("Jules", "Advertisements titles to show : " + advertisementsListToShow.toString());
-                    advertisementListAdapter.notifyDataSetChanged();
-                    if(advertisementsListToShow.size()==0){
+                    bookmarksListToShow.clear();
+                    bookmarksListToShow.addAll(filterListOnCheckedChips(bookmarksListComplete, checkedChipStrings));
+                    Log.v("Jules", "Advertisements titles to show : " + bookmarksListToShow.toString());
+                    bookmarksListAdapter.notifyDataSetChanged();
+                    if(bookmarksListToShow.size()==0){
                         noAdvertisement.setVisibility(View.VISIBLE);
                         noAdvertisement.setText("Aucune annonce ne correspond à votre recherche");
                     } else {
-                        noAdvertisement.setVisibility(View.GONE);
+                        noAdvertisement.setVisibility(GONE);
                     }
                 }
             });
@@ -120,10 +121,10 @@ public class MyAdvertisementsActivity extends NavigationActivity{
         newAdvertisementButton.setVisibility(View.INVISIBLE);
 
         // Gestion du clic sur une annonce
-        advertisementListAdapter.setAdvertisementClickListener(new AdvertisementListAdapter.OnAdvertisementClickListener() {
+        bookmarksListAdapter.setAdvertisementClickListener(new AdvertisementListAdapter.OnAdvertisementClickListener() {
             @Override
             public void OnAdvertisementClick(int position) {
-                Advertisement clickedAdvertisement = advertisementsListToShow.get(position);
+                Advertisement clickedAdvertisement = bookmarksListToShow.get(position);
                 Intent advertisementView = new Intent(getApplicationContext(), AdvertisementViewActivity.class);
                 advertisementView.putExtra("ClickedAdvertisement", clickedAdvertisement);
                 int i = 0;
@@ -164,5 +165,5 @@ public class MyAdvertisementsActivity extends NavigationActivity{
         }
         return filteredList;
     }
-
 }
+

@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 import java.text.SimpleDateFormat;
@@ -15,11 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.User;
+import com.example.p4_group12.Interface.GlobalVariables;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -28,7 +31,9 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
 
     private ArrayList<Advertisement> advertisementList;
     private OnAdvertisementClickListener advertisementClickListener;
+    private HashSet<Integer> bookmarkIds;
     private final HashMap<String, User> usersMemory = new HashMap<>();
+    private boolean onlyBookmarks;
 
     public interface OnAdvertisementClickListener {
         void OnAdvertisementClick(int position);
@@ -45,6 +50,8 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
         private TextView advertisementTitleTextView;
         private TextView advertisementDescriptionTextView;
         private TextView advertisementDateTextView;
+        private CheckBox bookmarkCheckBox;
+        private API api;
 
 
         public AdvertisementListViewHolder(@NonNull View itemView, OnAdvertisementClickListener advertisementClickListener) {
@@ -53,6 +60,9 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
             advertisementTitleTextView = itemView.findViewById(R.id.advertisement_title_view);
             advertisementDescriptionTextView = itemView.findViewById(R.id.advertisement_description_recycler);
             advertisementDateTextView = itemView.findViewById(R.id.advertisement_item_date);
+            bookmarkCheckBox = itemView.findViewById(R.id.bookmarkCheckBox);
+
+            api = API.getInstance();
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -68,8 +78,15 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
         }
     }
 
-    public AdvertisementListAdapter(ArrayList<Advertisement> advertisementList){
+    public AdvertisementListAdapter(ArrayList<Advertisement> advertisementList, HashSet<Integer> bookmarkIds){
         this.advertisementList = advertisementList;
+        this.bookmarkIds = bookmarkIds;
+        onlyBookmarks = false;
+    }
+
+    public AdvertisementListAdapter(ArrayList<Advertisement> advertisementList) {
+        this.advertisementList = advertisementList;
+        onlyBookmarks = true;
     }
 
     @NonNull
@@ -102,6 +119,22 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
         @SuppressLint("SimpleDateFormat") SimpleDateFormat SDF = new SimpleDateFormat("EEE, d MMM yyyy");
         Log.v("Dateee", SDF.format(currentAdvertisement.getCreationDate()));
         holder.advertisementDateTextView.setText("Créée le " + SDF.format(currentAdvertisement.getCreationDate()));
+
+        if(onlyBookmarks || bookmarkIds.contains(currentAdvertisement.getID())){
+            holder.bookmarkCheckBox.setChecked(true);
+        }else holder.bookmarkCheckBox.setChecked(false);
+
+        holder.bookmarkCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(holder.bookmarkCheckBox.isChecked()){ // adding the ad to the bookmarks of the user
+                    holder.api.addBookmarkForUser(GlobalVariables.getUser(), currentAdvertisement);
+                }else{
+                    holder.api.removeBookmarkForUser(GlobalVariables.getUser(), currentAdvertisement);
+                }
+            }
+        });
+
     }
 
     @Override

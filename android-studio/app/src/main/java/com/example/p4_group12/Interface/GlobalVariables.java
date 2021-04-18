@@ -15,6 +15,8 @@ public class GlobalVariables {
     private static ArrayList<Course> courseArrayList;
     private static final ArrayList<String> faculties = new ArrayList<>();
 
+    private static boolean isTokenAlreadySent = false;
+
     public static void setUser(User user){ GlobalVariables.user = user; }
 
 
@@ -32,6 +34,10 @@ public class GlobalVariables {
     }
 
     public static ArrayList<String> getFaculties() { return faculties; }
+
+    public static void switchBooleanToken(){isTokenAlreadySent = !isTokenAlreadySent;}
+
+    public static boolean tokenAlreadySent(){return  isTokenAlreadySent;}
 
 }
 

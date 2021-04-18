@@ -552,6 +552,56 @@ public class API {
         }
     }
 
+    public ArrayList<Advertisement> getBookmarksOfUser(User user){
+        try{
+            ArrayList<Advertisement> out = new ArrayList<>();
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + user.getEmail() + "/bookmarks", "", "GET");
+
+            loadIntoArrayList(getJSON.execute().get(), out, Advertisement.class);
+            return  out;
+        } catch (JSONException | IllegalAccessException | InstantiationException | ParseException | InvocationTargetException | ExecutionException | NoSuchMethodException | InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public HashSet<Integer> getBookmarksIdsOfUser(User user){
+        try{
+            HashSet<Integer> out = new HashSet<>();
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + user.getEmail() + "/bookmarks", "", "GET");
+
+            String result = getJSON.execute().get();
+            Log.d("Gwen", result);
+            JSONArray jsonArray = new JSONArray(result);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+                out.add(Integer.parseInt(obj.getString("id")));
+            }
+            return out;
+        } catch (InterruptedException | ExecutionException | JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void addBookmarkForUser(User user, Advertisement advertisement){
+        try{
+            String data = URLEncoder.encode("user_email", "UTF-8") + "=" + URLEncoder.encode(user.getEmail(), "UTF-8") + "&" +
+                    URLEncoder.encode("advertisement_id", "UTF-8") + "=" + URLEncoder.encode(Integer.toString(advertisement.getID()), "UTF-8");
+
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/bookmarks", data, "POST");
+            getJSON.execute();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeBookmarkForUser(User user, Advertisement advertisement){
+        SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + user.getEmail() + "/bookmarks/" + Integer.toString(advertisement.getID()), "", "DELETE");
+        getJSON.execute();
+    }
+
     /**
      * Here we get the JSON given by the DB and we get the courses from it in order to add them into the course list
      */
