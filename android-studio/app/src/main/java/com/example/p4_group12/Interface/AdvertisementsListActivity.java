@@ -45,8 +45,6 @@ public class AdvertisementsListActivity extends NavigationActivity {
     private TextView mTextView;
     private FloatingActionButton newAdvertisementButton;
     private API api;
-
-
     private TextView noAdvertisement;
     private Course currentCourse;
 
@@ -63,7 +61,7 @@ public class AdvertisementsListActivity extends NavigationActivity {
         setTitleToolbar(currentCourse.getName());
 
         api = API.getInstance();
-        if (api == null) Log.v("Jules", "API is : null" );
+        if (api == null) Log.v("Jules", "API is null in AdvertisementListActivity");
         advertisementsListComplete = api.getCourseAdvertisements(currentCourse);
         advertisementsListToShow = (ArrayList<Advertisement>) advertisementsListComplete.clone();
 
@@ -76,7 +74,6 @@ public class AdvertisementsListActivity extends NavigationActivity {
             noAdvertisement.setVisibility(View.VISIBLE);
             findViewById(R.id.advertisement_list_filter_title).setVisibility(View.GONE);
             filters.setVisibility(View.GONE);
-
         }
         advertisementRecyclerView = findViewById(R.id.advertisementRecyclerView);
         //advertisementRecyclerView.setHasFixedSize(true);
@@ -141,7 +138,7 @@ public class AdvertisementsListActivity extends NavigationActivity {
             }
         });
 
-        // Gestion du clique sur une annonce du recyclerview
+        // Gestion du clic sur une annonce du recyclerview
         advertisementListAdapter.setAdvertisementClickListener(new AdvertisementListAdapter.OnAdvertisementClickListener() {
             @Override
             public void OnAdvertisementClick(int position) {
