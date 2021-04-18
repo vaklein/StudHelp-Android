@@ -21,7 +21,6 @@
             android:focusableInTouchMode="true"
             android:clickable="true"
             android:focusable="true">
-
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
@@ -33,6 +32,29 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
+            <ImageView
+                android:id="@+id/user_profile_photo"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:adjustViewBounds="true"
+                android:scaleY="1.70"
+                android:scaleX="1.70"
+                android:elevation="5dp"
+                android:padding="20dp"
+                android:src="@drawable/ic_baseline_login_24" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/edit_profile_picture"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_alignBottom="@id/user_profile_photo"
+                android:layout_alignParentRight="true"
+                android:textSize="10dp"
+                app:icon="@drawable/ic_baseline_upload_24"
+                android:text="@string/edit_profile_picture" />
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/name"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -40,6 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
                 android:hint="@string/name">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -148,7 +171,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginRight="20dp"
                 android:hint="@string/teams"
                 app:startIconDrawable="@drawable/ic_logo_teams"
@@ -168,7 +191,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginRight="20dp"
                 android:hint="@string/discord"
                 app:startIconDrawable="@drawable/ic_logo_discord"
@@ -181,7 +204,7 @@
                     android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/edit_password"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"

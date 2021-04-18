@@ -79,5 +79,6 @@
     <string name="descriptionHint4">Vos moyens de payement ?</string>
     <string name="advertisement_item_date_string">Créée le 00-00-0000</string>
     <string name="go_to_favourites_courses_string">Voir mes cours favoris</string>
+    <string name="edit_profile_picture">Changer photo</string>
 
 </resources>

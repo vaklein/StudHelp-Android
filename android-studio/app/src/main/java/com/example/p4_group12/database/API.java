@@ -113,10 +113,14 @@ public class API {
 
     private static class SyncSendFile extends AsyncTask<Void, Void, String> {
 
-        private MultipartUtility multipart;
+        private String requestURL;
+        private String email;
+        private File file;
 
-        public SyncSendFile(MultipartUtility multipart){
-            this.multipart = multipart;
+        public SyncSendFile(String requestURL, String email, File file){
+            this.requestURL = requestURL;
+            this.email = email;
+            this.file = file;
         }
 
         @Override
@@ -132,6 +136,10 @@ public class API {
         @Override
         protected String doInBackground(Void... voids) {
             try {
+                String charset = "UTF-8";
+                MultipartUtility multipart = new MultipartUtility(requestURL, charset, key);
+                multipart.addFormField("email", email);
+                multipart.addFilePart("picture", file);
                 String response = multipart.finish(); // response from server.
                 return response;
             } catch (Exception e) {
@@ -513,13 +521,11 @@ public class API {
             return null;
         }
     }
-    public void setProfilePicture(User user, File picture) throws IOException, ExecutionException, InterruptedException {
-        String charset = "UTF-8";
-        MultipartUtility multipart = new MultipartUtility(BuildConfig.DB_URL + "/user/picture", charset, key);
-        multipart.addFormField("email", user.getEmail());
-        multipart.addFilePart("picture", picture);
-        SyncSendFile request = new SyncSendFile(multipart);
-        request.execute().get();
+    public void setProfilePicture(User user, File picture) throws IOException, ExecutionException, InterruptedException, JSONException {
+        SyncSendFile request = new SyncSendFile(BuildConfig.DB_URL + "/user/picture", user.getEmail(), picture);
+        String response = request.execute().get();
+        JSONObject obj = new JSONObject(response);
+        user.setPicture("users/"+obj.getString("image_name"));
     }
     public void updateSocialLinks(User user){
         try{

@@ -1,30 +1,53 @@
 package com.example.p4_group12.Interface;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+import androidx.loader.content.CursorLoader;
 
+import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 
 public class EditProfileActivity extends NavigationActivity {
 
     private Button edit_password;
-    private FloatingActionButton edit_picture;
+    private MaterialButton edit_picture_button;
+    private ImageView edit_picture;
+    private File new_picture;
     private TextInputEditText new_name;
     private TextInputEditText new_login;
     private TextInputEditText new_description;
@@ -50,6 +73,12 @@ public class EditProfileActivity extends NavigationActivity {
         getLayoutInflater().inflate(R.layout.activity_edit_profile, contentFrameLayout);
         setTitleToolbar("Profil");
         edit_password = findViewById(R.id.edit_password);
+
+        if (GlobalVariables.getUser().getPicture() != "null") {
+            edit_picture = (ImageView) findViewById(R.id.user_profile_photo);
+            Picasso.get().load(BuildConfig.STORAGE_URL + GlobalVariables.getUser().getPicture()).transform(new CropCircleTransformation()).into(edit_picture);
+        }
+        edit_picture_button = findViewById(R.id.edit_profile_picture);
         new_name = (TextInputEditText) findViewById(R.id.name_text);
         new_name.setText(GlobalVariables.getUser().getName());
         new_login = (TextInputEditText) findViewById(R.id.login_text);
@@ -78,7 +107,18 @@ public class EditProfileActivity extends NavigationActivity {
         teams_text = findViewById(R.id.teams_text);
         teams_text.setText(GlobalVariables.getUser().getSocial_links().getTeams());
 
+        edit_picture_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //checking the permission
+                /*
 
+
+                 */
+                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, 100);
+            }
+        });
         edit_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,7 +127,29 @@ public class EditProfileActivity extends NavigationActivity {
             }
         });
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
+            //the image URI
+            Uri selectedImage = data.getData();
 
+            //calling the upload file method after choosing the file
+            new_picture = new File(getRealPathFromURI(selectedImage));
+            Picasso.get().load(new_picture).transform(new CropCircleTransformation()).into(edit_picture);
+        }
+    }
+
+    private String getRealPathFromURI(Uri contentUri) {
+        String[] proj = {MediaStore.Images.Media.DATA};
+        CursorLoader loader = new CursorLoader(this, contentUri, proj, null, null, null);
+        Cursor cursor = loader.loadInBackground();
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String result = cursor.getString(column_index);
+        cursor.close();
+        return result;
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -98,21 +160,33 @@ public class EditProfileActivity extends NavigationActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         GlobalVariables.getUser().getSocial_links().setAllSocialLinks(phone_text.getText().toString(), public_email_text.getText().toString(), teams_text.getText().toString(), discord_text.getText().toString());
-        API.getInstance().updateSocialLinks(GlobalVariables.getUser());
-
+        api.updateSocialLinks(GlobalVariables.getUser());
+        if (new_picture != null){
+            try {
+                api.setProfilePicture(GlobalVariables.getUser(), new_picture);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
         new_loginField.setErrorEnabled(false);
         if (!new_name.getText().toString().isEmpty() || !new_login.getText().toString().isEmpty()) {
             String requestName = new_name.getText().toString().equals(GlobalVariables.getUser().getName()) ? null : new_name.getText().toString() ;
             String requestLogin = new_login.getText().toString().equals(GlobalVariables.getUser().getLogin()) ? null : new_login.getText().toString();
             String requestDescription = new_description.getText().toString().equals(GlobalVariables.getUser().getDescription()) ? null : new_description.getText().toString();
-            Boolean apiResponse = API.getInstance().editNameAndLoginAndDescription(GlobalVariables.getUser(), requestName, requestLogin, requestDescription);
+            Boolean apiResponse = api.editNameAndLoginAndDescription(GlobalVariables.getUser(), requestName, requestLogin, requestDescription);
 
             if(apiResponse == null){ // error
                 Toast.makeText(EditProfileActivity.this, "Une erreur est survenue lors de la modification de votre nom, veuilliez réessayer", Toast.LENGTH_LONG).show();
             }else if(apiResponse){
                 Intent profile = new Intent(getApplicationContext(), ProfileActivity.class);
-                if (!new_name.getText().toString().isEmpty()) GlobalVariables.getUser().setName(new_name.getText().toString());
-                if(!new_login.getText().toString().isEmpty()) GlobalVariables.getUser().setLogin(new_login.getText().toString());
+                if (new_name !=null) GlobalVariables.getUser().setName(new_name.getText().toString());
+                if(new_login !=null) GlobalVariables.getUser().setLogin(new_login.getText().toString());
                 if(new_description.getText().toString().isEmpty()) GlobalVariables.getUser().setDescription("null");
                 else GlobalVariables.getUser().setDescription(new_description.getText().toString());
                 startActivity(profile);
