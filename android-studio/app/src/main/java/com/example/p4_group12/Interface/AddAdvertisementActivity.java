@@ -115,7 +115,7 @@ public class AddAdvertisementActivity extends NavigationActivity {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     dialogInterface.dismiss();
                     Intent modifyProfile = new Intent(getApplicationContext(),EditProfileActivity.class);
-                    startActivity(modifyProfile);
+                    startActivityForResult(modifyProfile,2);
                 }
             });
             builder.show();
@@ -215,6 +215,13 @@ public class AddAdvertisementActivity extends NavigationActivity {
             Bundle extras = data.getExtras();
             this.imageBitmap = (Bitmap) extras.get("data");
             picture.setImageBitmap(this.imageBitmap);
+        }
+        if(requestCode == 2) {
+            Intent advertisement = new Intent(getApplicationContext(), AddAdvertisementActivity.class);
+            advertisement.putExtra("CurrentCourse", course);
+            advertisement.putExtra("ClickedAdvertisement", currentAdvertisement);
+            startActivity(advertisement);
+            finish();
         }
     }
 
