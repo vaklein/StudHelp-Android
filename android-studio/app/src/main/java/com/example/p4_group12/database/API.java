@@ -352,7 +352,7 @@ public class API {
             JSONArray jsonArray = new JSONArray(response);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
-                favoriteIDs.add(Integer.parseInt(obj.getString("course_id")));
+                favoriteIDs.add(Integer.parseInt(obj.getString("id")));
             }
         } catch (InterruptedException  | ExecutionException | JSONException e) {
             e.printStackTrace();
@@ -360,19 +360,20 @@ public class API {
         return favoriteIDs;
     }
 
-    /*
-    * Todo : this function should be optimized with the data base queries
-    */
     public ArrayList<Course> getFavoriteCoursesOfUser(User user){
-        ArrayList<Course> favCourses = new ArrayList<>();
-        ArrayList<Course> allCourses = getCourses();
-        HashSet<Integer> favIds = getFavoriteCoursesIdsOfUser(user);
-        for (Course course : allCourses) {
-            if (favIds.contains(course.getID())) {
-                favCourses.add(course);
-            }
+        try{
+            ArrayList<Course> favCourse = new ArrayList<>();
+
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/favorite/" + user.getEmail(), "", "GET");
+            String response = getJSON.execute().get();
+
+            loadIntoArrayList(response, favCourse, Course.class);
+
+            return favCourse;
+        } catch (InterruptedException | ExecutionException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException | ParseException e) {
+            e.printStackTrace();
+            return null;
         }
-        return favCourses;
     }
 
     public void addNewFavoriteToUser(User user, Course course){
