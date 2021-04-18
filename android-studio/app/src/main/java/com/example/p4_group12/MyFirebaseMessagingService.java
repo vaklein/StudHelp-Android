@@ -1,5 +1,6 @@
 package com.example.p4_group12;
 
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -14,6 +15,9 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
+import com.example.p4_group12.DAO.Advertisement;
+import com.example.p4_group12.DAO.Tag;
+import com.example.p4_group12.Interface.AdvertisementViewActivity;
 import com.example.p4_group12.Interface.GlobalVariables;
 import com.example.p4_group12.Interface.HomeActivity;
 import com.example.p4_group12.Interface.LoginActivity;
@@ -22,6 +26,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -42,12 +47,20 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d("FirebaseMessage", "message received : " + myMessage);
 
         //action : diriger le user vers une activity quand il click sur la notif
+        Intent intent = new Intent(getApplicationContext(), HomeActivity.class); //TODO
 
-        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        intent.putExtra("notif", 1);
-        intent.putExtra("id", advertisement_id);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        Advertisement add = API.getInstance().getAdvertisment(advertisement_id);
+        Intent advertisementView = new Intent(getApplicationContext(), AdvertisementViewActivity.class);
+        advertisementView.putExtra("ClickedAdvertisement", add);
+        int i = 0;
+        for (Tag tag : add.getTags()) {
+            advertisementView.putExtra("tag"+i, tag);
+            i++;
+        }
+        advertisementView.putExtra("Number of tags", i);
+        advertisementView.putExtra("contactable", 1);
+
+        PendingIntent pendingIntent = PendingIntent.getActivities(this, 0, new Intent[] {intent, advertisementView}, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
         // création de la notif visuel
@@ -55,6 +68,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationBuilder.setContentTitle(notificationTitle);//titre de la notif
         notificationBuilder.setContentText(myMessage); //contenue de la notif
         notificationBuilder.setAutoCancel(true); // undisplay the notification
+        // icone de la notif
+        notificationBuilder.setSmallIcon(R.drawable.ic_logo_notif); //TODO : set to the logo af the application
 
 
         // ajout de l'action
@@ -64,8 +79,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         long[] vibrationPattern = {500, 1000};
         notificationBuilder.setVibrate(vibrationPattern);
 
-        // icone de la notif
-        notificationBuilder.setSmallIcon(R.drawable.ic_logo_notif); //TODO : set to the logo af the application
 
         // envoyer une notif
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);

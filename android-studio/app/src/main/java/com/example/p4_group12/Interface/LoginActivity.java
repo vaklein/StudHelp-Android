@@ -89,7 +89,6 @@ public class LoginActivity extends AppCompatActivity {
             //startActivity(edit_profil);
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             intent.putExtra("FavList", false);
-            intent.putExtra("notif", 0);
             startActivity(intent);
             loadingDialog.getDialog().cancel();
             LoginActivity.this.finish();
@@ -148,7 +147,6 @@ public class LoginActivity extends AppCompatActivity {
                         //startActivity(edit_profil);
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         intent.putExtra("FavList", false);
-                        intent.putExtra("notif", 0);
                         startActivity(intent);
                         LoginActivity.this.finish();
                     }
