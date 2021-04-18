@@ -72,6 +72,17 @@ public class EditProfileActivity extends NavigationActivity {
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); //Remember this is the FrameLayout area within your activity_main.xml
         getLayoutInflater().inflate(R.layout.activity_edit_profile, contentFrameLayout);
         setTitleToolbar("Profil");
+        //Demande la permission d'acceder aux images
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.parse("package:" + getPackageName()));
+            finish();
+            startActivity(intent);
+            return;
+        }
+
         edit_password = findViewById(R.id.edit_password);
 
         if (GlobalVariables.getUser().getPicture() != "null") {
