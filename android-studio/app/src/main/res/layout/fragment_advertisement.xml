@@ -6,6 +6,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/no_advertisements_frag"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:text="@string/no_private_advertisment"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -18,16 +29,6 @@
                 android:layout_marginHorizontal="10dp"
                 android:scrollbars="vertical"/>
 
-            <TextView
-                android:id="@+id/no_advertisements"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text="@string/no_advertisement_text"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:visibility="gone"/>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </RelativeLayout>

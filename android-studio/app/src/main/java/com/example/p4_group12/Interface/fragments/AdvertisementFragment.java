@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdvertisementFragment extends Fragment {
+    private TextView advertisement;
     private RecyclerView advertisementRecyclerView;
     private RecyclerView.LayoutManager advertisementLayoutManager;
     private AdvertisementListAdapter advertisementListAdapter;
@@ -58,8 +59,10 @@ public class AdvertisementFragment extends Fragment {
         Log.v("jerem", "frag foreignnnnn : " + user.getLogin());
         Log.v("jerem", "frag foreignnnnn : " + user.getEmail());
 
+        advertisement = result.findViewById(R.id.no_advertisements_frag);
         advertisementsListComplete = api.getAdvertisementsOfUser(user);
         advertisementsListToShow = (ArrayList<Advertisement>) advertisementsListComplete.clone();
+        if (advertisementsListComplete.isEmpty()) advertisement.setVisibility(View.VISIBLE);
 
         advertisementRecyclerView = result.findViewById(R.id.advertisementRecyclerView);
         advertisementLayoutManager = new LinearLayoutManager(getActivity());
