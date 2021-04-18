@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -18,6 +19,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Social_links;
+import com.example.p4_group12.Interface.fragments.AdvertisementFragment;
 import com.example.p4_group12.Interface.fragments.ContactsFragment;
 import com.example.p4_group12.Interface.fragments.DataFragment;
 import com.example.p4_group12.R;
@@ -104,6 +106,12 @@ public class ProfileActivity extends NavigationActivity implements TabLayout.OnT
                 fragment = new ContactsFragment();
                 fragment.setArguments(bundle);
                 break;
+            case 2:
+                bundle.putString("email", GlobalVariables.getUser().getEmail());
+                Log.v("jerem", "frag : " + GlobalVariables.getUser().getEmail());
+                fragment = new AdvertisementFragment();
+                fragment.setArguments(bundle);
+                break;
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -111,6 +119,8 @@ public class ProfileActivity extends NavigationActivity implements TabLayout.OnT
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
     }
+
+
 
     @Override
     public void onTabUnselected(TabLayout.Tab tab) {

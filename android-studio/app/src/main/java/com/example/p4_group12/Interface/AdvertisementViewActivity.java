@@ -55,6 +55,7 @@ public class AdvertisementViewActivity extends NavigationActivity {
     private API api;
     private CarouselView carousel;
     private TextView lastUpdateDate;
+    private int contactable;
 
     /*
     * All infos about the carousel implementation are here :
@@ -74,6 +75,8 @@ public class AdvertisementViewActivity extends NavigationActivity {
 
         currentAdvertisement = (Advertisement) getIntent().getSerializableExtra("ClickedAdvertisement");
         int n = (int) getIntent().getSerializableExtra("Number of tags");
+        contactable = (int) getIntent().getSerializableExtra("contactable"); // to know if we have to show the button "contacter". 1 = to show and 0 = not show
+
         List<Tag> tags = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             tags.add((Tag) getIntent().getSerializableExtra("tag"+i));
@@ -107,6 +110,7 @@ public class AdvertisementViewActivity extends NavigationActivity {
         }
 
         contactButton = findViewById(R.id.contactAdvertiserButton);
+        if (contactable == 0) contactButton.setVisibility(View.INVISIBLE);
         if (GlobalVariables.getUser().getEmail().equals(currentAdvertisement.getEmailAddress())) {
             contactButton.setText(R.string.updateAdvertisement);
             contactButton.setOnClickListener(new View.OnClickListener() {
@@ -123,8 +127,9 @@ public class AdvertisementViewActivity extends NavigationActivity {
             contactButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent foreignProfile = new Intent(getApplicationContext(), ForeignProfileActivity.class);
+                    Intent foreignProfile = new Intent(getApplicationContext(),  ForeignProfileActivity.class);
                     foreignProfile.putExtra("ForeignUser", currentAdvertisement.getEmailAddress());
+                    Log.v("jerem", "Foreign : "+currentAdvertisement.getEmailAddress());
                     startActivity(foreignProfile);
                 }
             });
@@ -228,6 +233,7 @@ public class AdvertisementViewActivity extends NavigationActivity {
                 i++;
             }
             advertisementView.putExtra("Number of tags", i);
+            advertisementView.putExtra("contactable", contactable);
             Log.v("Lucas",ad.toString());
             startActivity(advertisementView);
             finish();

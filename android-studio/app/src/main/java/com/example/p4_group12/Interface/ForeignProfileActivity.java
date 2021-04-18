@@ -25,6 +25,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Social_links;
 import com.example.p4_group12.DAO.User;
+import com.example.p4_group12.Interface.fragments.AdvertisementFragment;
 import com.example.p4_group12.Interface.fragments.ContactsFragment;
 import com.example.p4_group12.Interface.fragments.DataFragment;
 import com.example.p4_group12.R;
@@ -81,8 +82,8 @@ public class ForeignProfileActivity extends NavigationActivity implements TabLay
 
         String foreignUserEmail = (String) getIntent().getSerializableExtra("ForeignUser");
 
-        foreignUser = api.getUserWithEmail(foreignUserEmail);
 
+        foreignUser = api.getUserWithEmail(foreignUserEmail);
         if(foreignUser == null) Log.d("NULLWARNING", "foreignUser is null in ForeignProfileActivity");
 
         tabLayout = findViewById(R.id.tabs);
@@ -124,6 +125,11 @@ public class ForeignProfileActivity extends NavigationActivity implements TabLay
                 bundle.putString("email", foreignUser.getEmail());
                 bundle.putString("type", "foreign");
                 fragment = new ContactsFragment();
+                fragment.setArguments(bundle);
+                break;
+            case 2:
+                bundle.putString("email", foreignUser.getEmail());
+                fragment = new AdvertisementFragment();
                 fragment.setArguments(bundle);
                 break;
         }
