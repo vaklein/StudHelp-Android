@@ -1,15 +1,23 @@
 package com.example.p4_group12.Interface;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.p4_group12.DAO.Advertisement;
@@ -22,20 +30,30 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.json.JSONException;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class EditAdvertisementActivity extends NavigationActivity{
     private TextInputEditText advertisementTitleText;
     private TextInputEditText advertisementDescriptionText;
     private TextInputLayout advertisementTitle;
     private TextInputLayout advertisementDescription;
-    private Button submitAdvertisement;
     private Course course;
     private API api;
     private TextView chipGroupError;
     private Advertisement toEditAdvertisement;
     private List<String> tagStrings = new ArrayList<>();
+    private Button addPictureButton;
+    Bitmap imageBitmap;
+    ImageView picture;
 
     private ChipGroup typeChipGroup;
     List<String> types = new ArrayList<>();
@@ -66,8 +84,6 @@ public class EditAdvertisementActivity extends NavigationActivity{
         advertisementTitleText.setText(toEditAdvertisement.getTitle());
         advertisementDescriptionText = findViewById(R.id.advertisement_description_text);
         advertisementDescriptionText.setText(toEditAdvertisement.getDescription());
-        submitAdvertisement = findViewById(R.id.add_advertisement_button);
-        submitAdvertisement.setText(R.string.updateAdvertisement);
         chipGroupError = findViewById(R.id.chip_group_unckecked_error);
         typeChipGroup = findViewById(R.id.add_advertisement_type_chip_group);
         cycleChipGroup = findViewById(R.id.add_advertisement_cycle_chip_group);
@@ -76,6 +92,8 @@ public class EditAdvertisementActivity extends NavigationActivity{
         typeChipGroup.setSelectionRequired(true);
         objectChipGroup.setSelectionRequired(true);
         cycleChipGroup.setSelectionRequired(true);
+        addPictureButton = findViewById(R.id.add_picture_button);
+        picture = findViewById(R.id.add_advertisment_picture);
 
         this.api = API.getInstance();
 
@@ -181,123 +199,51 @@ public class EditAdvertisementActivity extends NavigationActivity{
                 }
             }
         });
-
-        submitAdvertisement.setOnClickListener(new View.OnClickListener() {
+        addPictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dispatchTakePictureIntent();
 
-                int checkedTypeID = typeChipGroup.getCheckedChipId();
-
-                List<Integer> checkedCyclesIDs = cycleChipGroup.getCheckedChipIds();
-
-                List<Integer> checkedObjectsIDs = objectChipGroup.getCheckedChipIds();
-
-                if (isCorrectlyFilled(checkedTypeID, checkedCyclesIDs, checkedObjectsIDs)) {
-                    // Update default fields of an ad
-                    api.updateAdvertisement(toEditAdvertisement);
-
-                    // Get back the initial tags
-                    Tag initType = null;
-                    List<Tag> initCycles = new ArrayList<>();
-                    List<Tag> initObjects = new ArrayList<>();
-                    for (Tag tag : toEditAdvertisement.getTags()) {
-                        switch (tag.getTagType()) {
-                            case "type":
-                                initType = tag;
-                                break;
-                            case "cycle":
-                                initCycles.add(tag);
-                                break;
-                            case "object":
-                                initObjects.add(tag);
-                                break;
-                        }
-                    }
-
-                    List<Tag> newCycles = new ArrayList<>();
-                    List<Tag> newObjects = new ArrayList<>();
-                    List<Tag> updatedTags = new ArrayList<>();
-
-                    Tag newType = new Tag(-1, toEditAdvertisement.getID(), "type", (String) ((Chip) typeChipGroup.findViewById(checkedTypeID)).getText());
-                    updatedTags.add(newType);
-                    for (int i : checkedCyclesIDs) {
-                        Tag t = new Tag(-1, toEditAdvertisement.getID(), "cycle", (String) ((Chip) cycleChipGroup.findViewById(i)).getText());
-                        newCycles.add(t);
-                        updatedTags.add(t);
-                    }
-                    for (int i : checkedObjectsIDs) {
-                        Tag t = new Tag(-1, toEditAdvertisement.getID(), "object", (String) ((Chip) objectChipGroup.findViewById(i)).getText());
-                        newObjects.add(t);
-                        updatedTags.add(t);
-                    }
-
-                    // Print the initial tags and the new ones
-                    assert initType != null;
-                    StringBuilder s = new StringBuilder(initType.getTagValue());
-                    for (Tag t : initCycles) { s.append(" ").append(t.getTagValue()); }
-                    for (Tag t : initObjects) { s.append(" ").append(t.getTagValue()); }
-                    Log.v("init values", s.toString());
-                    StringBuilder s1 = new StringBuilder(newType.getTagValue());
-                    for (Tag t : newCycles) { s1.append(" ").append(t.getTagValue()); }
-                    for (Tag t : newObjects) { s1.append(" ").append(t.getTagValue()); }
-                    Log.v("new values", s1.toString());
-
-                    // Update type
-                    if (!initType.equals(newType)) {
-                        api.addNewTag(newType);
-                        api.removeTag(initType);
-                    }
-
-                    // Remove unchecked cycles
-                    for (Tag initCycle : initCycles) {
-                        if (!newCycles.contains(initCycle)) {
-                            Log.v("removed tag", initCycle.getTagValue());
-                            api.removeTag(initCycle);
-                        }
-                    }
-                    // Remove unchecked objects
-                    for (Tag initObject : initObjects) {
-                        if (!newObjects.contains(initObject)) {
-                            Log.v("removed tag", initObject.getTagValue());
-                            api.removeTag(initObject);
-                        }
-                    }
-
-                    // Add new cycles
-                    for (Tag newCycle : newCycles) {
-                        if (!initCycles.contains(newCycle)) {
-                            Log.v("added tag", newCycle.getTagValue());
-                            api.addNewTag(newCycle);
-                        }
-                    }
-                    // Add new objects
-                    for (Tag newObject : newObjects) {
-                        if (!initObjects.contains(newObject)) {
-                            Log.v("added tag", newObject.getTagValue());
-                            api.addNewTag(newObject);
-                        }
-                    }
-
-
-                    toEditAdvertisement.setTags(updatedTags);
-                    toEditAdvertisement.setTitle(advertisementTitleText.getText().toString());
-                    toEditAdvertisement.setDescription(advertisementDescriptionText.getText().toString());
-
-
-                    Intent intent = new Intent();
-                    intent.putExtra("Advertisement",toEditAdvertisement);
-                    int i = 0;
-                    for (Tag tag : toEditAdvertisement.getTags()) {
-                        intent.putExtra("tag"+i, tag);
-                        i++;
-                    }
-                    intent.putExtra("Number of tags", i);
-                    setResult(2, intent);
-                    finish();
-                }
             }
         });
+    }
 
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        } catch (ActivityNotFoundException e) {
+            // display error state to the user
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            this.imageBitmap = (Bitmap) extras.get("data");
+            picture.setImageBitmap(this.imageBitmap);
+        }
+    }
+
+    String currentPhotoPath;
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 
     @SuppressLint("ResourceAsColor")
@@ -341,5 +287,149 @@ public class EditAdvertisementActivity extends NavigationActivity{
             chipGroupError.setVisibility(View.GONE);
         }
         return filled;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.save_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int checkedTypeID = typeChipGroup.getCheckedChipId();
+
+        List<Integer> checkedCyclesIDs = cycleChipGroup.getCheckedChipIds();
+
+        List<Integer> checkedObjectsIDs = objectChipGroup.getCheckedChipIds();
+
+        if (isCorrectlyFilled(checkedTypeID, checkedCyclesIDs, checkedObjectsIDs)) {
+            // Update default fields of an ad
+            api.updateAdvertisement(toEditAdvertisement);
+
+            // Get back the initial tags
+            Tag initType = null;
+            List<Tag> initCycles = new ArrayList<>();
+            List<Tag> initObjects = new ArrayList<>();
+            for (Tag tag : toEditAdvertisement.getTags()) {
+                switch (tag.getTagType()) {
+                    case "type":
+                        initType = tag;
+                        break;
+                    case "cycle":
+                        initCycles.add(tag);
+                        break;
+                    case "object":
+                        initObjects.add(tag);
+                        break;
+                }
+            }
+
+            List<Tag> newCycles = new ArrayList<>();
+            List<Tag> newObjects = new ArrayList<>();
+            List<Tag> updatedTags = new ArrayList<>();
+
+            Tag newType = new Tag(-1, toEditAdvertisement.getID(), "type", (String) ((Chip) typeChipGroup.findViewById(checkedTypeID)).getText());
+            updatedTags.add(newType);
+            for (int i : checkedCyclesIDs) {
+                Tag t = new Tag(-1, toEditAdvertisement.getID(), "cycle", (String) ((Chip) cycleChipGroup.findViewById(i)).getText());
+                newCycles.add(t);
+                updatedTags.add(t);
+            }
+            for (int i : checkedObjectsIDs) {
+                Tag t = new Tag(-1, toEditAdvertisement.getID(), "object", (String) ((Chip) objectChipGroup.findViewById(i)).getText());
+                newObjects.add(t);
+                updatedTags.add(t);
+            }
+
+            // Print the initial tags and the new ones
+            assert initType != null;
+            StringBuilder s = new StringBuilder(initType.getTagValue());
+            for (Tag t : initCycles) { s.append(" ").append(t.getTagValue()); }
+            for (Tag t : initObjects) { s.append(" ").append(t.getTagValue()); }
+            Log.v("init values", s.toString());
+            StringBuilder s1 = new StringBuilder(newType.getTagValue());
+            for (Tag t : newCycles) { s1.append(" ").append(t.getTagValue()); }
+            for (Tag t : newObjects) { s1.append(" ").append(t.getTagValue()); }
+            Log.v("new values", s1.toString());
+
+            // Update type
+            if (!initType.equals(newType)) {
+                api.addNewTag(newType);
+                api.removeTag(initType);
+            }
+
+            // Remove unchecked cycles
+            for (Tag initCycle : initCycles) {
+                if (!newCycles.contains(initCycle)) {
+                    Log.v("removed tag", initCycle.getTagValue());
+                    api.removeTag(initCycle);
+                }
+            }
+            // Remove unchecked objects
+            for (Tag initObject : initObjects) {
+                if (!newObjects.contains(initObject)) {
+                    Log.v("removed tag", initObject.getTagValue());
+                    api.removeTag(initObject);
+                }
+            }
+
+            // Add new cycles
+            for (Tag newCycle : newCycles) {
+                if (!initCycles.contains(newCycle)) {
+                    Log.v("added tag", newCycle.getTagValue());
+                    api.addNewTag(newCycle);
+                }
+            }
+            // Add new objects
+            for (Tag newObject : newObjects) {
+                if (!initObjects.contains(newObject)) {
+                    Log.v("added tag", newObject.getTagValue());
+                    api.addNewTag(newObject);
+                }
+            }
+
+
+            toEditAdvertisement.setTags(updatedTags);
+            toEditAdvertisement.setTitle(advertisementTitleText.getText().toString());
+            toEditAdvertisement.setDescription(advertisementDescriptionText.getText().toString());
+
+
+            Intent intent = new Intent();
+            intent.putExtra("Advertisement",toEditAdvertisement);
+            int i = 0;
+            for (Tag tag : toEditAdvertisement.getTags()) {
+                intent.putExtra("tag"+i, tag);
+                i++;
+            }
+
+            if(imageBitmap != null) {
+                File test = null;
+                try {
+                    test = createImageFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try (FileOutputStream out = new FileOutputStream(test)) {
+                    imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                    // PNG is a lossless format, the compression factor (100) is ignored
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    api.setAdvertisementPicture(toEditAdvertisement.getID(),test);
+                } catch (IOException | ExecutionException | InterruptedException | JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            intent.putExtra("Number of tags", i);
+            setResult(2, intent);
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

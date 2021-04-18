@@ -60,6 +60,7 @@ public class MyAdvertisementsActivity extends NavigationActivity{
         courseFac = findViewById(R.id.advertisement_course_card_view_fac);
         mTextView = (TextView) findViewById(R.id.text);
         noAdvertisement = findViewById(R.id.no_advertisements);
+        noAdvertisement.setText(R.string.no_private_advertisment);
         if (advertisementsListToShow.size() == 0) {
             noAdvertisement.setVisibility(View.VISIBLE);
             findViewById(R.id.advertisement_list_filter_title).setVisibility(View.GONE);
@@ -132,6 +133,7 @@ public class MyAdvertisementsActivity extends NavigationActivity{
                     i++;
                 }
                 advertisementView.putExtra("Number of tags", i);
+                advertisementView.putExtra("contactable", 1);
                 startActivityForResult(advertisementView, 1);
             }
         });

@@ -63,6 +63,7 @@
     <string name="nav_home_string">Recherche</string>
     <string name="firstTab">Données</string>
     <string name="secondTab">Contacts</string>
+    <string name="thirdTab">Annonces</string>
     <string name="add_advertisement_type_title">Type de l\'annonce</string>
     <string name="add_advertisement_object_title">Objet(s) de l\'annonce</string>
     <string name="add_advertisement_cycle_title">Cycle(s) correspondant(s) à l\'annonce</string>
@@ -81,5 +82,8 @@
     <string name="descriptionHint4">Vos moyens de payement ?</string>
     <string name="advertisement_item_date_string">Créée le 00-00-0000</string>
     <string name="go_to_favourites_courses_string">Voir mes cours favoris</string>
+    <string name="edit_profile_picture">Changer photo</string>
+    <string name="no_private_advertisment">Vous n\'avez pas encore posté d\'annonce</string>
+    <string name="add_picture_button">Ajouter une photo</string>
 
 </resources>

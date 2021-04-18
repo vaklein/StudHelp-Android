@@ -63,7 +63,9 @@ public class AdvertisementsListActivity extends NavigationActivity {
 
         api = API.getInstance();
         if (api == null) Log.v("Jules", "API is null in AdvertisementListActivity");
+        Log.v("AdvertisementLoading", "start");
         advertisementsListComplete = api.getCourseAdvertisements(currentCourse);
+        Log.v("AdvertisementLoading", "finish");
         advertisementsListToShow = (ArrayList<Advertisement>) advertisementsListComplete.clone();
         HashSet<Integer> bookmarksIds = api.getBookmarksIdsOfUser(GlobalVariables.getUser());
 
@@ -153,6 +155,7 @@ public class AdvertisementsListActivity extends NavigationActivity {
                     i++;
                 }
                 advertisementView.putExtra("Number of tags", i);
+                advertisementView.putExtra("contactable", 1);
                 startActivityForResult(advertisementView, 1);
             }
         });

@@ -89,7 +89,6 @@ public class LoginActivity extends AppCompatActivity {
             //startActivity(edit_profil);
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             intent.putExtra("FavList", false);
-            intent.putExtra("notif", 0);
             startActivity(intent);
             loadingDialog.getDialog().cancel();
             LoginActivity.this.finish();
@@ -148,7 +147,6 @@ public class LoginActivity extends AppCompatActivity {
                         //startActivity(edit_profil);
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         intent.putExtra("FavList", false);
-                        intent.putExtra("notif", 0);
                         startActivity(intent);
                         LoginActivity.this.finish();
                     }
@@ -175,7 +173,7 @@ public class LoginActivity extends AppCompatActivity {
         Date date_database = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date_courses_data);
         Log.v("jerem1", date_local.toString());
         Log.v("jerem1", date_database.toString());
-        if (date_local.before(date_database)){ // case where the user don't have de last version of courses
+        if (date_local.before(date_database)){ // case where the user don't have the last version of courses
             ArrayList<Course> loadCourses = API.getInstance().getCourses();
             GlobalVariables.setCourses(loadCourses);
             // creating a new variable for gson.

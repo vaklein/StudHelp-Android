@@ -33,10 +33,14 @@ import com.jama.carouselview.CarouselView;
 import com.jama.carouselview.CarouselViewListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
 import static java.lang.Integer.getInteger;
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 import static java.lang.Integer.max;
@@ -52,6 +56,7 @@ public class AdvertisementViewActivity extends NavigationActivity {
     private API api;
     private CarouselView carousel;
     private TextView lastUpdateDate;
+    private int contactable;
 
     /*
     * All infos about the carousel implementation are here :
@@ -71,6 +76,8 @@ public class AdvertisementViewActivity extends NavigationActivity {
 
         currentAdvertisement = (Advertisement) getIntent().getSerializableExtra("ClickedAdvertisement");
         int n = (int) getIntent().getSerializableExtra("Number of tags");
+        contactable = (int) getIntent().getSerializableExtra("contactable"); // to know if we have to show the button "contacter". 1 = to show and 0 = not show
+
         List<Tag> tags = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             tags.add((Tag) getIntent().getSerializableExtra("tag"+i));
@@ -94,8 +101,8 @@ public class AdvertisementViewActivity extends NavigationActivity {
         lastUpdateDate = findViewById(R.id.advertisement_view_last_update_date_text_view);
         advertisementTitle.setText(currentAdvertisement.getTitle());
         advertisementDescription.setText(currentAdvertisement.getDescription());
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat SDF = new SimpleDateFormat("EEE, d MMM yyyy");
-        lastUpdateDate.setText("Dernière modification le "+ SDF.format(currentAdvertisement.getLastUpdateDate()));
+        lastUpdateDate.setText("Dernière modification le "+ DateFormat.getDateTimeInstance(
+                DateFormat.MEDIUM, DateFormat.SHORT, Locale.FRANCE).format(currentAdvertisement.getCreationDate()));
 
         for (Tag tag : currentAdvertisement.getTags()) {
             Chip chip = new Chip(this);
@@ -105,6 +112,7 @@ public class AdvertisementViewActivity extends NavigationActivity {
         }
 
         contactButton = findViewById(R.id.contactAdvertiserButton);
+        if (contactable == 0) contactButton.setVisibility(View.INVISIBLE);
         if (GlobalVariables.getUser().getEmail().equals(currentAdvertisement.getEmailAddress())) {
             contactButton.setText(R.string.updateAdvertisement);
             contactButton.setOnClickListener(new View.OnClickListener() {
@@ -121,8 +129,9 @@ public class AdvertisementViewActivity extends NavigationActivity {
             contactButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent foreignProfile = new Intent(getApplicationContext(), ForeignProfileActivity.class);
+                    Intent foreignProfile = new Intent(getApplicationContext(),  ForeignProfileActivity.class);
                     foreignProfile.putExtra("ForeignUser", currentAdvertisement.getEmailAddress());
+                    Log.v("jerem", "Foreign : "+currentAdvertisement.getEmailAddress());
                     startActivity(foreignProfile);
                 }
             });
@@ -226,6 +235,7 @@ public class AdvertisementViewActivity extends NavigationActivity {
                 i++;
             }
             advertisementView.putExtra("Number of tags", i);
+            advertisementView.putExtra("contactable", contactable);
             Log.v("Lucas",ad.toString());
             startActivity(advertisementView);
             finish();
