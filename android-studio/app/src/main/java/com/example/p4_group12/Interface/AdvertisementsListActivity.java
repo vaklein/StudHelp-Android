@@ -151,6 +151,7 @@ public class AdvertisementsListActivity extends NavigationActivity {
                     i++;
                 }
                 advertisementView.putExtra("Number of tags", i);
+                advertisementView.putExtra("contactable", 1);
                 startActivityForResult(advertisementView, 1);
             }
         });

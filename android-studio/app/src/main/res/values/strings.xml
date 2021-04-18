@@ -61,6 +61,7 @@
     <string name="nav_home_string">Recherche</string>
     <string name="firstTab">Données</string>
     <string name="secondTab">Contacts</string>
+    <string name="thirdTab">Anonces</string>
     <string name="add_advertisement_type_title">Type de l\'annonce</string>
     <string name="add_advertisement_object_title">Objet(s) de l\'annonce</string>
     <string name="add_advertisement_cycle_title">Cycle(s) correspondant(s) à l\'annonce</string>

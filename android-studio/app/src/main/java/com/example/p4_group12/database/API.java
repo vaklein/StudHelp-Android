@@ -377,8 +377,6 @@ public class API {
         } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
             e.printStackTrace();
         }
-        Log.v("jerem", "adv received : "+ allAds);
-        Log.v("jerem", "adv received : "+ allAds.get(0));
         return allAds.get(0);
     }
 

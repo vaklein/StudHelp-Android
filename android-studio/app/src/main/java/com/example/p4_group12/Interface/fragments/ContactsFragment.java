@@ -74,7 +74,9 @@ public class ContactsFragment extends Fragment {
             }
         });
         if(!s.getTeams().equals("") && s.getTeams() != null){
-            teamstext.setText("https://teams.microsoft.com/l/chat/0/0?users="+s.getTeams());
+            SpannableString content = new SpannableString(s.getTeams());
+            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+            teamstext.setText(content);
             teamslayout.setVisibility(View.VISIBLE);
             noNetworkString.setVisibility(View.GONE);
         }
@@ -102,7 +104,9 @@ public class ContactsFragment extends Fragment {
             }
         });
         if(!s.getPublicEmail().equals("") && s.getPublicEmail() != null){
-            publicemailtext.setText(s.getPublicEmail());
+            SpannableString content = new SpannableString(s.getPublicEmail());
+            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+            publicemailtext.setText(content);
             publicemaillayout.setVisibility(View.VISIBLE);
             noNetworkString.setVisibility(View.GONE);
         }
