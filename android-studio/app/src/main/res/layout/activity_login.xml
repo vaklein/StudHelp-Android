@@ -82,7 +82,8 @@
                 android:layout_marginTop="10dp"
                 android:text="@string/rememberme"
                 android:thumbTint="@color/myrtic_green"
-                android:trackTint="@color/myrtic_green"/>
+                android:trackTint="@color/myrtic_green"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
 
             <Button
                 android:id="@+id/connexion"

@@ -30,7 +30,7 @@
     <string name="discord">Pseudo#Tag</string>
     <string name="deconnexion">Se déconnecter</string>
     <string name="my_bookmarks">Mes signets</string>
-    <string name="no_bookmarks">Vous n\' avez pas de signet pour le moment</string>
+    <string name="no_bookmarks">Vous n\'avez pas de signet pour le moment</string>
 
 
     <!-- tests strings -->
@@ -74,7 +74,7 @@
     <string name="notification_channel_desc">This is the test canal</string>
     <string name="advertisement_course_card_view_code_text">Code du cours</string>
     <string name="advertisement_course_card_view_fac_text">FAC</string>
-    <string name="advertisement_list_filter_title_text">Filtres de recherche</string>
+    <string name="advertisement_list_filter_title_text">Filtres de recherche\nSélectionnez les conditions que les annonces affichées doivent remplir</string>
     <string name="myadvertisements_hint">Toutes vos annonces sont affichées ici.</string>
     <string name="descriptionHint1">Votre age ?</string>
     <string name="descriptionHint2">Quelles sont vos études ? (bac/master)</string>
@@ -85,5 +85,6 @@
     <string name="edit_profile_picture">Changer photo</string>
     <string name="no_private_advertisment">Vous n\'avez pas encore posté d\'annonce</string>
     <string name="add_picture_button">Ajouter une photo</string>
+    <string name="no_courses_text">Il n\'y a pas de cours dans cette catégorie</string>
 
 </resources>

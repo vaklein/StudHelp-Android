@@ -16,23 +16,6 @@
             android:clickable="true"
             android:focusable="true">
 
-
-            <!-- Screen content -->
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/courseRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:layout_below="@+id/show_fav_switch"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginHorizontal="10dp"
-                android:scrollbars="vertical"
-                android:focusableInTouchMode="true"
-                android:clickable="true"
-                android:focusable="true"/>
-
-
             <!--
             Inspired by :
             https://www.tutorialspoint.com/how-to-use-searchview-in-android
@@ -49,15 +32,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp">
-            <SearchView
-                android:id="@+id/searchView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:layout_margin="2dp"
-                android:queryHint="@string/query_hint_string"
-                android:iconifiedByDefault="false"
-                />
+                <SearchView
+                    android:id="@+id/searchView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:layout_margin="2dp"
+                    android:queryHint="@string/query_hint_string"
+                    android:iconifiedByDefault="false"
+                    />
             </com.google.android.material.card.MaterialCardView>
 
             <Switch
@@ -66,11 +49,40 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/searchViewCard"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="1dp"
                 android:layout_marginEnd="15dp"
                 android:text="@string/favorites_switch_text"
                 android:thumbTint="@color/myrtic_green"
-                android:trackTint="@color/myrtic_green"/>
+                android:trackTint="@color/myrtic_green"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+
+            <!-- Screen content -->
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/courseRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_below="@+id/show_fav_switch"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginHorizontal="10dp"
+                android:scrollbars="vertical"
+                android:focusableInTouchMode="true"
+                android:clickable="true"
+                android:focusable="true"/>
+
+            <TextView
+                android:id="@+id/no_courses"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textAlignment="center"
+                android:text="@string/no_courses_text"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                />
+
         </RelativeLayout>
 
 

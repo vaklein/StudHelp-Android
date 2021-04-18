@@ -59,7 +59,7 @@ public class AdvertisementsListActivity extends NavigationActivity {
 
         currentCourse = (Course) getIntent().getSerializableExtra("ClickedCourse");
         if(currentCourse == null) Log.d("NULLWARNING", "Course is null in AdvertisementListActivity");
-        setTitleToolbar(currentCourse.getName());
+        setTitleToolbar("Annonces pour le cours " + currentCourse.getName());
 
         api = API.getInstance();
         if (api == null) Log.v("Jules", "API is null in AdvertisementListActivity");
