@@ -13,6 +13,7 @@ import com.example.p4_group12.DAO.GettableObjectFactory;
 import com.example.p4_group12.DAO.Social_links;
 import com.example.p4_group12.DAO.Tag;
 import com.example.p4_group12.DAO.User;
+import com.example.p4_group12.Interface.GlobalVariables;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -140,6 +141,47 @@ public class API {
                 String charset = "UTF-8";
                 MultipartUtility multipart = new MultipartUtility(requestURL, charset, key);
                 multipart.addFormField("email", email);
+                multipart.addFilePart("picture", file);
+                String response = multipart.finish(); // response from server.
+                return response;
+            } catch (Exception e) {
+                Log.e("TAG", "multipart post error " + e);
+                return null;
+            }
+        }
+    }
+
+    private static class SyncSendFileAdvertisement extends AsyncTask<Void, Void, String> {
+
+        private String requestURL;
+        private String email;
+        private File file;
+        private String ad_id;
+
+        public SyncSendFileAdvertisement(String requestURL, String email, File file , String ad_id){
+            this.requestURL = requestURL;
+            this.email = email;
+            this.file = file;
+            this.ad_id=ad_id;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+                String charset = "UTF-8";
+                MultipartUtility multipart = new MultipartUtility(requestURL, charset, key);
+                multipart.addFormField("email", email);
+                multipart.addFormField("advertisement_id",ad_id );
                 multipart.addFilePart("picture", file);
                 String response = multipart.finish(); // response from server.
                 return response;
@@ -481,6 +523,12 @@ public class API {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setAdvertisementPicture(int ad_id, File picture) throws IOException, ExecutionException, InterruptedException, JSONException {
+        SyncSendFileAdvertisement request = new SyncSendFileAdvertisement(BuildConfig.DB_URL + "/advertisement/pictures", GlobalVariables.getUser().getEmail(), picture,String.valueOf(ad_id));
+        String response = request.execute().get();
+        JSONObject obj = new JSONObject(response);
     }
 
     public ArrayList<Advertisement> getAdvertisementsOfUser(User user){
