@@ -107,18 +107,7 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
     public void onBindViewHolder(@NonNull AdvertisementListViewHolder holder, int position) {
         Advertisement currentAdvertisement = advertisementList.get(position);
 
-        User user = usersMemory.getOrDefault(currentAdvertisement.getEmailAddress(), null);
-        if (user == null) {
-            Log.v("Jules", "User email is : " + currentAdvertisement.getEmailAddress());
-            user = API.getInstance().getUserWithEmail(currentAdvertisement.getEmailAddress());
-            if (user == null) {
-                Log.v("Jules", "Problem ID is " + currentAdvertisement.getID());
-            }
-            assert user != null;
-            usersMemory.put(user.getEmail(), user);
-        }
-
-        holder.usernameTextView.setText(user.getName());
+        holder.usernameTextView.setText(currentAdvertisement.getUserFullname());
         holder.advertisementTitleTextView.setText(currentAdvertisement.getTitle());
         holder.advertisementDescriptionTextView.setText(currentAdvertisement.getDescription());
 

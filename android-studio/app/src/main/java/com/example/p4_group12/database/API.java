@@ -682,7 +682,7 @@ public class API {
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + user.getEmail() + "/bookmarks", "", "GET");
 
             String result = getJSON.execute().get();
-            Log.d("Gwen", result);
+            // Log.d("Gwen", result);
             JSONArray jsonArray = new JSONArray(result);
 
             for (int i = 0; i < jsonArray.length(); i++) {

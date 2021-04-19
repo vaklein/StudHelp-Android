@@ -24,6 +24,7 @@ public class Advertisement  implements Serializable, Comparable {
         return "Advertisement{" +
                 "ID=" + ID +
                 ", mail='" + mail + '\'' +
+                ", user fullname=" + userFullname + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", type='" + "types are deprecated, please see the tags" + '\'' +
@@ -35,6 +36,7 @@ public class Advertisement  implements Serializable, Comparable {
 
     private int ID;
     private String mail;
+    private String userFullname;
     private String title;
     private String description;
     private String type;
@@ -81,9 +83,10 @@ public class Advertisement  implements Serializable, Comparable {
         this.images = images;
     }
 
-    public Advertisement(int ID, String mail, String title, String description, List<Tag> tags, int courseID, List<String> images, String creationDate, String lastUpdateDate) throws ParseException {
+    public Advertisement(int ID, String mail, String userFullname, String title, String description, List<Tag> tags, int courseID, List<String> images, String creationDate, String lastUpdateDate) throws ParseException {
         this.ID = ID;
         this.mail = mail;
+        this.userFullname = userFullname;
         this.title = title;
         this.description = description;
         this.courseID = courseID;
@@ -114,6 +117,8 @@ public class Advertisement  implements Serializable, Comparable {
     public String getEmailAddress(){
         return this.mail;
     }
+
+    public String getUserFullname() {return this.userFullname; }
 
     public String getTitle(){
         return this.title;
