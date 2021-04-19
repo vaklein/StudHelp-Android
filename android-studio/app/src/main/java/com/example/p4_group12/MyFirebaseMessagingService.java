@@ -36,13 +36,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        Log.d("FirebaseMessage", "message received 1");
 
-        String myMessage = remoteMessage.getNotification().getBody(); // message received from Firebase
-        Log.d("FirebaseMessage", "message received 2");
-        String notificationTitle = remoteMessage.getNotification().getTitle();
-        Log.d("FirebaseMessage", "message received 3");
-        int advertisement_id = Integer.parseInt(remoteMessage.getNotification().getClickAction()); // Use this to launch the right intent
+        String myMessage = remoteMessage.getData().get("body"); // message received from Firebase
+        String notificationTitle = remoteMessage.getData().get("title");
+        int advertisement_id = Integer.parseInt(remoteMessage.getData().get("notification_id")); // Use this to launch the right intent
 
         Log.d("FirebaseMessage", "message received : " + myMessage);
 
