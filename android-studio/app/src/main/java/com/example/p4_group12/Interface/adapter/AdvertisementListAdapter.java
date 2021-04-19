@@ -127,10 +127,13 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
         long oneHour = 3600000;
         Log.v("Jules", "timediff is : " + timeDiff);
         if (timeDiff < oneHour) { // Less than an hour
-            if (timeDiff/60000 == 0) {
+            int minutes = (int) (timeDiff/60000);
+            if (minutes == 0) {
                 holder.advertisementDateTextView.setText("À l'instant");
+            } else if (minutes == 1) {
+                holder.advertisementDateTextView.setText("Il y a " + minutes + " minute");
             } else {
-                holder.advertisementDateTextView.setText("Il y a " + timeDiff/60000 + " minutes");
+                holder.advertisementDateTextView.setText("Il y a " + minutes + " minutes");
             }
         } else if (timeDiff < oneHour*24) {
             int hours = (int) (timeDiff/oneHour);
