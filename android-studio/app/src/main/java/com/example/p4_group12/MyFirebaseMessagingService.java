@@ -32,23 +32,31 @@ import java.util.Set;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String CANAL = "NotifCanal";
-    public static final String PREFS_NAME = "MyPrefsFile";
-
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-
+        Log.d("FirebaseMessage", "message received 1");
 
         String myMessage = remoteMessage.getNotification().getBody(); // message received from Firebase
+        Log.d("FirebaseMessage", "message received 2");
         String notificationTitle = remoteMessage.getNotification().getTitle();
+        Log.d("FirebaseMessage", "message received 3");
         int advertisement_id = Integer.parseInt(remoteMessage.getNotification().getClickAction()); // Use this to launch the right intent
 
         Log.d("FirebaseMessage", "message received : " + myMessage);
 
-        //action : diriger le user vers une activity quand il click sur la notif
-        Intent intent = new Intent(getApplicationContext(), HomeActivity.class); //TODO
+        // création de la notif visuel
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CANAL); //construit une nouvelle notif
+        notificationBuilder.setContentTitle(notificationTitle);//titre de la notif
+        notificationBuilder.setContentText(myMessage); //contenue de la notif
+        notificationBuilder.setAutoCancel(true); // undisplay the notification
+        // icone de la notif
+        notificationBuilder.setSmallIcon(R.drawable.ic_baseline_notifications_active);
 
+
+        //action : diriger le user vers une activity quand il click sur la notif
+        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         Advertisement add = API.getInstance().getAdvertisment(advertisement_id);
         Intent advertisementView = new Intent(getApplicationContext(), AdvertisementViewActivity.class);
         advertisementView.putExtra("ClickedAdvertisement", add);
@@ -60,20 +68,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         advertisementView.putExtra("Number of tags", i);
         advertisementView.putExtra("contactable", 1);
 
-        PendingIntent pendingIntent = PendingIntent.getActivities(this, 0, new Intent[] {intent, advertisementView}, PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-        // création de la notif visuel
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CANAL); //construit une nouvelle notif
-        notificationBuilder.setContentTitle(notificationTitle);//titre de la notif
-        notificationBuilder.setContentText(myMessage); //contenue de la notif
-        notificationBuilder.setAutoCancel(true); // undisplay the notification
-        // icone de la notif
-        notificationBuilder.setSmallIcon(R.drawable.ic_logo_notif); //TODO : set to the logo af the application
-
-
+        PendingIntent pendingIntent = PendingIntent.getActivities(getApplicationContext(), 0, new Intent[] {intent, advertisementView}, PendingIntent.FLAG_CANCEL_CURRENT);
         // ajout de l'action
         notificationBuilder.setContentIntent(pendingIntent);
+
 
         //vibration quand recoit une notif
         long[] vibrationPattern = {500, 1000};
@@ -92,8 +90,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             notificationManager.createNotificationChannel(channel);
             notificationBuilder.setChannelId(channelId);
         }
-        notificationManager.notify(1, notificationBuilder.build());
+        notificationManager.notify(0, notificationBuilder.build());
     }
+
     @Override
     public void onNewToken(String s) {
         super.onNewToken(s);
