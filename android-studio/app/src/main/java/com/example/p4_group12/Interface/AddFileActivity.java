@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -62,7 +63,7 @@ public class AddFileActivity extends NavigationActivity {
     private Button addFileButton;
     private TextView requirements;
     private TextView fileText;
-    private ImageView delFile;
+    private ImageButton delFile;
     private LinearLayout fileDelLayout;
     private File file;
 
