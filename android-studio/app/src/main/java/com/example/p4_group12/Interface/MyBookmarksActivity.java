@@ -39,6 +39,8 @@ public class MyBookmarksActivity extends NavigationActivity{
     private TextView mTextView;
     private FloatingActionButton newAdvertisementButton;
     private TextView noAdvertisement;
+    private TextView headerText;
+    private TextView courseFac;
 
 
     private API api;
@@ -73,9 +75,12 @@ public class MyBookmarksActivity extends NavigationActivity{
         bookmarksListAdapter = new AdvertisementListAdapter(bookmarksListToShow);
         bookamrksRecyclerView.setAdapter(bookmarksListAdapter);
 
-        // Gestion des champs textes affichés
-        findViewById(R.id.advertisement_course_card_view_code).setVisibility(GONE);
+        // Gestion des champs textes affichés et du FAB
         findViewById(R.id.advertisement_course_card_view_fac).setVisibility(GONE);
+        findViewById(R.id.plus_button).setVisibility(GONE);
+
+        headerText = findViewById(R.id.advertisement_course_card_view_code);
+        headerText.setText(R.string.my_bookmarks_hint);
 
         // Gestion des filtres de recherche
         for (String type : Tag.getAllTagsName()) {
