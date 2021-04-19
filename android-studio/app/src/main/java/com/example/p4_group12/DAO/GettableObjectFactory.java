@@ -27,8 +27,8 @@ public class GettableObjectFactory {
             List<String> pictures = API.getInstance().getAdvertisementPictures(Integer.parseInt(dbObject.getString("id")));
             //for (Tag tag : tags) Log.v("Jules", "Tag = " + tag.getTagValue());
             String goodFormatCreationDate = dbObject.getString("created_at").substring(0, 10) + " " + dbObject.getString("created_at").substring(11,19);
-            String goodFormatUpdatedDate = dbObject.getString("created_at").substring(0, 10) + " " + dbObject.getString("created_at").substring(11,19);
-            Log.v("Creation date", goodFormatUpdatedDate);
+            String goodFormatUpdatedDate = dbObject.getString("updated_at").substring(0, 10) + " " + dbObject.getString("updated_at").substring(11,19);
+            Log.v("Creation date", goodFormatCreationDate);
             Log.v("Update date", goodFormatUpdatedDate);
             return new Advertisement(Integer.parseInt(dbObject.getString("id")), dbObject.getString("user_email"), dbObject.getString("title"), dbObject.getString("description"), tags, Integer.parseInt(dbObject.getString("course_id")), pictures, goodFormatCreationDate, goodFormatUpdatedDate);
         }
