@@ -134,7 +134,8 @@ public class MyBookmarksActivity extends NavigationActivity{
                 }
                 advertisementView.putExtra("Number of tags", i);
                 advertisementView.putExtra("contactable", 1);
-                startActivityForResult(advertisementView, 1);
+                startActivity(advertisementView);
+                //startActivityForResult(advertisementView, 1); a décommenter si on peut select/deselect le signet
             }
         });
     }
@@ -144,8 +145,8 @@ public class MyBookmarksActivity extends NavigationActivity{
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 1
         if(requestCode == 1) {
-            Intent MyadvertisementList = new Intent(getApplicationContext(), MyAdvertisementsActivity.class);
-            startActivity(MyadvertisementList);
+            Intent MyBookmarksActivity = new Intent(getApplicationContext(), MyBookmarksActivity.class);
+            startActivity(MyBookmarksActivity);
             finish();
         }
     }
