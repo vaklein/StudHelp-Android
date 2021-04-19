@@ -6,11 +6,17 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class Advertisement  implements Serializable, Comparable {
     @Override
@@ -86,9 +92,19 @@ public class Advertisement  implements Serializable, Comparable {
             tagValues.add(tag.getTagValue());
         }
         this.images = images;
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        this.creationDate = SDF.parse(creationDate);
-        this.lastUpdateDate = SDF.parse(lastUpdateDate);
+
+
+        Log.v("TimeLogs", "Creation is " + creationDate);
+        this.creationDate = getLocaleDateFromString(creationDate);
+        this.lastUpdateDate = getLocaleDateFromString(lastUpdateDate);
+    }
+
+    private Date getLocaleDateFromString(String str) throws ParseException {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdfDefault = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        sdfDefault.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return sdfDefault.parse(str);
+
+
     }
 
     public int getID(){
