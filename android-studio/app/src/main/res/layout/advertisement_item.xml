@@ -39,7 +39,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/username"
             android:layout_marginStart="15dp"
-            android:text="Advertisement title"
+            android:layout_marginEnd="50dp"
+            android:text="Advertisement title (it could be a very long one)"
             android:textColor="@color/bittersweet"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -50,7 +51,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/advertisement_title_view"
             android:layout_marginStart="15dp"
-            android:text="This is the description of an advertisement"
+            android:layout_marginEnd="50dp"
+            android:text="This is the description of an advertisement. It could be a very long one too"
             android:textSize="15sp"
             android:lines="1"/>
 
