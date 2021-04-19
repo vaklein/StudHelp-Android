@@ -405,6 +405,7 @@ public class API {
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/course/" + course.getID() + "/advertisement", "", "GET");
             String response = getJSON.execute().get();
+            Log.v("responseJSON", "Str is : "+response);
             loadIntoArrayList(response, allAds, Advertisement.class);
         } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
             e.printStackTrace();
