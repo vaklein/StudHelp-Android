@@ -5,11 +5,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,7 +40,12 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
@@ -72,16 +81,6 @@ public class EditProfileActivity extends NavigationActivity {
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); //Remember this is the FrameLayout area within your activity_main.xml
         getLayoutInflater().inflate(R.layout.activity_edit_profile, contentFrameLayout);
         setTitleToolbar("Profil");
-        //Demande la permission d'acceder aux images
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                    Uri.parse("package:" + getPackageName()));
-            finish();
-            startActivity(intent);
-            return;
-        }
 
         edit_password = findViewById(R.id.edit_password);
 
@@ -121,13 +120,9 @@ public class EditProfileActivity extends NavigationActivity {
         edit_picture_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //checking the permission
-                /*
-
-
-                 */
-                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, 100);
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, 99);
             }
         });
         edit_password.setOnClickListener(new View.OnClickListener() {
@@ -141,13 +136,18 @@ public class EditProfileActivity extends NavigationActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
-            //the image URI
-            Uri selectedImage = data.getData();
-
-            //calling the upload file method after choosing the file
-            new_picture = new File(getRealPathFromURI(selectedImage));
-            Picasso.get().load(new_picture).transform(new CropCircleTransformation()).into(edit_picture);
+        if (resultCode == RESULT_OK && requestCode == 99) { //retour de l'upload de photo
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                Bitmap imageBitmap = BitmapFactory.decodeStream(imageStream);
+                new_picture = createImageFile();
+                FileOutputStream out = new FileOutputStream(new_picture);
+                imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+                Picasso.get().load(new_picture).transform(new CropCircleTransformation()).into(edit_picture);
+            } catch(IOException e){
+                e.printStackTrace();
+            }
         }
     }
 
@@ -207,5 +207,23 @@ public class EditProfileActivity extends NavigationActivity {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    String currentPhotoPath;
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 }
