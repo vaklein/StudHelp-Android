@@ -112,7 +112,6 @@ public class AdvertisementViewActivity extends NavigationActivity {
         }
 
         contactButton = findViewById(R.id.contactAdvertiserButton);
-        if (contactable == 0) contactButton.setVisibility(View.INVISIBLE);
         if (GlobalVariables.getUser().getEmail().equals(currentAdvertisement.getEmailAddress())) {
             contactButton.setText(R.string.updateAdvertisement);
             contactButton.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +124,7 @@ public class AdvertisementViewActivity extends NavigationActivity {
             });
             //contactButton.setVisibility(View.GONE);
         } else {
+            if (contactable == 0) contactButton.setVisibility(View.INVISIBLE);
             contactButton.setText(R.string.contacter_l_annonceur);
             contactButton.setOnClickListener(new View.OnClickListener() {
                 @Override
