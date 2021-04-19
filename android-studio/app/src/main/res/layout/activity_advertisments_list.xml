@@ -89,15 +89,77 @@
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </RelativeLayout>
-
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/container_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/plus_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:srcCompat="@drawable/ic_plus_24"/>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/new_advertisement_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:srcCompat="@drawable/ic_plus_24"/>
+        android:layout_marginEnd="16dp"
+        android:clickable="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/container_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_pen" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/new_file_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="15dp"
+        android:clickable="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/new_advertisement_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_baseline_insert_drive_file_24" />
+
+    <TextView
+        android:id="@+id/add_advertisement_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp"
+        android:background="@drawable/round"
+        android:text="Ajouter une annonce"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/new_advertisement_button"
+        app:layout_constraintEnd_toStartOf="@+id/new_advertisement_button"
+        app:layout_constraintTop_toTopOf="@+id/new_advertisement_button" />
+
+    <TextView
+        android:id="@+id/add_file_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp"
+        android:text="Ajouter une synthese"
+        android:textStyle="bold"
+        android:background="@drawable/round"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/new_file_button"
+        app:layout_constraintEnd_toStartOf="@+id/new_file_button"
+        app:layout_constraintTop_toTopOf="@+id/new_file_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
