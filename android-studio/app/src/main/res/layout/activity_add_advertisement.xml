@@ -144,6 +144,10 @@
                     android:layout_marginStart="20dp"
                      />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
                 <Button
                 android:id="@+id/add_picture_button"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -152,6 +156,16 @@
                 android:layout_marginTop="25dp"
                     android:layout_marginStart="20dp"
                 android:text="@string/add_picture_button" />
+                <Button
+                    android:id="@+id/add_picturefromgalery_button"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/add_pictureFromGalery_button" />
+            </LinearLayout>
+
         </LinearLayout>
         </LinearLayout>
     </ScrollView>

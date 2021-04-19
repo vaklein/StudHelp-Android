@@ -84,7 +84,8 @@
     <string name="go_to_favourites_courses_string">Voir mes cours favoris</string>
     <string name="edit_profile_picture">Changer photo</string>
     <string name="no_private_advertisment">Vous n\'avez pas encore posté d\'annonce</string>
-    <string name="add_picture_button">Ajouter une photo</string>
+    <string name="add_picture_button">Prendre une photo</string>
     <string name="no_courses_text">Il n\'y a pas de cours dans cette catégorie</string>
+    <string name="add_pictureFromGalery_button">Ajouter une photo</string>
 
 </resources>
