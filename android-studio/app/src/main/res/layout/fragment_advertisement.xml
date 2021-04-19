@@ -11,7 +11,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="20dp"
             android:text="@string/no_private_advertisment"
             android:textSize="14sp"
             android:textStyle="bold"
