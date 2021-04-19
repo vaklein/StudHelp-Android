@@ -44,6 +44,7 @@ public class AdvertisementFragment extends Fragment {
     private AdvertisementListAdapter advertisementListAdapter;
     private ArrayList<Advertisement> advertisementsListComplete;
     private ArrayList<Advertisement> advertisementsListToShow;
+    private String emailValue;
 
     @Nullable
     @Override
@@ -52,7 +53,7 @@ public class AdvertisementFragment extends Fragment {
 
         API api = API.getInstance();
         Log.v("jerem", "frag foreign 1 : ");
-        String emailValue = this.getArguments().getString("email");
+        emailValue = this.getArguments().getString("email");
         Log.v("jerem", "frag foreign : " + emailValue);
         User user = api.getUserWithEmail(emailValue);
         Log.v("jerem", "frag foreignnnnn : " + user);
@@ -94,9 +95,9 @@ public class AdvertisementFragment extends Fragment {
         if(requestCode == 1) {
             Fragment fragment = new AdvertisementFragment();
             Bundle bundle = new Bundle();
-            bundle.putString("email", GlobalVariables.getUser().getEmail());
+            bundle.putString("email", emailValue);
             fragment.setArguments(bundle);
-            Log.v("jerem", "frag test :" + GlobalVariables.getUser().getEmail());
+            Log.v("jerem", "frag test refresh :" + emailValue);
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.frameLayout, fragment);
