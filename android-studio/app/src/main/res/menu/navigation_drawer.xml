@@ -21,5 +21,11 @@
             android:icon="@drawable/ic_pen"
             android:title="@string/myadvertisements"
             />
+
+        <item
+            android:id="@+id/nav_mybookmarks"
+            android:icon="@drawable/ic_baseline_bookmarks_24"
+            android:title="@string/my_bookmarks"
+            />
     </group>
 </menu>

@@ -37,6 +37,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -100,7 +101,8 @@ public class AdvertisementViewActivity extends NavigationActivity {
         lastUpdateDate = findViewById(R.id.advertisement_view_last_update_date_text_view);
         advertisementTitle.setText(currentAdvertisement.getTitle());
         advertisementDescription.setText(currentAdvertisement.getDescription());
-        lastUpdateDate.setText("Dernière modification le "+ DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.FRANCE).format(currentAdvertisement.getCreationDate()));
+        lastUpdateDate.setText("Dernière modification le "+ DateFormat.getDateTimeInstance(
+                DateFormat.MEDIUM, DateFormat.SHORT, Locale.FRANCE).format(currentAdvertisement.getCreationDate()));
 
         for (Tag tag : currentAdvertisement.getTags()) {
             Chip chip = new Chip(this);

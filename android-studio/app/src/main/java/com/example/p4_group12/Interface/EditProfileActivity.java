@@ -195,12 +195,12 @@ public class EditProfileActivity extends NavigationActivity {
             if(apiResponse == null){ // error
                 Toast.makeText(EditProfileActivity.this, "Une erreur est survenue lors de la modification de votre nom, veuilliez réessayer", Toast.LENGTH_LONG).show();
             }else if(apiResponse){
-                Intent profile = new Intent(getApplicationContext(), ProfileActivity.class);
+
                 if (new_name !=null) GlobalVariables.getUser().setName(new_name.getText().toString());
                 if(new_login !=null) GlobalVariables.getUser().setLogin(new_login.getText().toString());
                 if(new_description.getText().toString().isEmpty()) GlobalVariables.getUser().setDescription("null");
                 else GlobalVariables.getUser().setDescription(new_description.getText().toString());
-                startActivity(profile);
+
                 EditProfileActivity.this.finish();
             }else{
                 new_loginField.setError("Identifiant déjà utilisé");

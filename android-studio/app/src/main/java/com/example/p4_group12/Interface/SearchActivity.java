@@ -1,5 +1,6 @@
 package com.example.p4_group12.Interface;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ public class SearchActivity extends NavigationActivity{
     private CourseListAdapter courseListAdapter;
     private SearchView searchView;
     private TextView mTextView;
+    private TextView noCourses;
     private Switch favoriteSwitch;
     private MaterialToolbar toolbar;
     private NavigationView navigationView;
@@ -46,6 +48,7 @@ public class SearchActivity extends NavigationActivity{
 
     private String currentQuery = "";
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +69,7 @@ public class SearchActivity extends NavigationActivity{
         courseRecyclerView = findViewById(R.id.courseRecyclerView);
         searchView = findViewById(R.id.searchView);
         favoriteSwitch = findViewById(R.id.show_fav_switch);
+        noCourses = findViewById(R.id.no_courses);
 
         currentCategory = (String) getIntent().getSerializableExtra("ClickedCategory");
         if(currentCategory == null) Log.d("NULLWARNING", "Category is null in SearchActivity");
@@ -78,6 +82,12 @@ public class SearchActivity extends NavigationActivity{
             imm.showSoftInput(searchView, InputMethodManager.SHOW_IMPLICIT);
         } else if (currentCategory.equals("favourites courses")) {
             courseList = api.getFavoriteCoursesOfUser(GlobalVariables.getUser());
+            if (courseList.isEmpty()) {
+                noCourses.setVisibility(View.VISIBLE);
+                noCourses.setText("Vous n'avez pas encore de cours favoris.\n" +
+                        "Cochez l'étoile appartenant à un cours pour l'ajouter à vos favoris,\n" +
+                        "vous retrouvez alors ici l'ensemble de ces cours.");
+            }
             Log.v("Jules", "size is " + courseList.size());
             setTitleToolbar("Recherche dans les cours favoris");
             favoriteSwitch.setVisibility(View.GONE);

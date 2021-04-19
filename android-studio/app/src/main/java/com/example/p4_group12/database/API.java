@@ -13,6 +13,7 @@ import com.example.p4_group12.DAO.GettableObjectFactory;
 import com.example.p4_group12.DAO.Social_links;
 import com.example.p4_group12.DAO.Tag;
 import com.example.p4_group12.DAO.User;
+import com.example.p4_group12.Interface.GlobalVariables;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -140,6 +141,47 @@ public class API {
                 String charset = "UTF-8";
                 MultipartUtility multipart = new MultipartUtility(requestURL, charset, key);
                 multipart.addFormField("email", email);
+                multipart.addFilePart("picture", file);
+                String response = multipart.finish(); // response from server.
+                return response;
+            } catch (Exception e) {
+                Log.e("TAG", "multipart post error " + e);
+                return null;
+            }
+        }
+    }
+
+    private static class SyncSendFileAdvertisement extends AsyncTask<Void, Void, String> {
+
+        private String requestURL;
+        private String email;
+        private File file;
+        private String ad_id;
+
+        public SyncSendFileAdvertisement(String requestURL, String email, File file , String ad_id){
+            this.requestURL = requestURL;
+            this.email = email;
+            this.file = file;
+            this.ad_id=ad_id;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+                String charset = "UTF-8";
+                MultipartUtility multipart = new MultipartUtility(requestURL, charset, key);
+                multipart.addFormField("email", email);
+                multipart.addFormField("advertisement_id",ad_id );
                 multipart.addFilePart("picture", file);
                 String response = multipart.finish(); // response from server.
                 return response;
@@ -310,7 +352,7 @@ public class API {
             JSONArray jsonArray = new JSONArray(response);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
-                favoriteIDs.add(Integer.parseInt(obj.getString("course_id")));
+                favoriteIDs.add(Integer.parseInt(obj.getString("id")));
             }
         } catch (InterruptedException  | ExecutionException | JSONException e) {
             e.printStackTrace();
@@ -318,19 +360,20 @@ public class API {
         return favoriteIDs;
     }
 
-    /*
-    * Todo : this function should be optimized with the data base queries
-    */
     public ArrayList<Course> getFavoriteCoursesOfUser(User user){
-        ArrayList<Course> favCourses = new ArrayList<>();
-        ArrayList<Course> allCourses = getCourses();
-        HashSet<Integer> favIds = getFavoriteCoursesIdsOfUser(user);
-        for (Course course : allCourses) {
-            if (favIds.contains(course.getID())) {
-                favCourses.add(course);
-            }
+        try{
+            ArrayList<Course> favCourse = new ArrayList<>();
+
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/favorite/" + user.getEmail(), "", "GET");
+            String response = getJSON.execute().get();
+
+            loadIntoArrayList(response, favCourse, Course.class);
+
+            return favCourse;
+        } catch (InterruptedException | ExecutionException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException | ParseException e) {
+            e.printStackTrace();
+            return null;
         }
-        return favCourses;
     }
 
     public void addNewFavoriteToUser(User user, Course course){
@@ -483,6 +526,12 @@ public class API {
         }
     }
 
+    public void setAdvertisementPicture(int ad_id, File picture) throws IOException, ExecutionException, InterruptedException, JSONException {
+        SyncSendFileAdvertisement request = new SyncSendFileAdvertisement(BuildConfig.DB_URL + "/advertisement/pictures", GlobalVariables.getUser().getEmail(), picture,String.valueOf(ad_id));
+        String response = request.execute().get();
+        JSONObject obj = new JSONObject(response);
+    }
+
     public ArrayList<Advertisement> getAdvertisementsOfUser(User user){
         ArrayList<Advertisement> allUserAds = new ArrayList<>();
         try{
@@ -554,6 +603,56 @@ public class API {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public ArrayList<Advertisement> getBookmarksOfUser(User user){
+        try{
+            ArrayList<Advertisement> out = new ArrayList<>();
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + user.getEmail() + "/bookmarks", "", "GET");
+
+            loadIntoArrayList(getJSON.execute().get(), out, Advertisement.class);
+            return  out;
+        } catch (JSONException | IllegalAccessException | InstantiationException | ParseException | InvocationTargetException | ExecutionException | NoSuchMethodException | InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public HashSet<Integer> getBookmarksIdsOfUser(User user){
+        try{
+            HashSet<Integer> out = new HashSet<>();
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + user.getEmail() + "/bookmarks", "", "GET");
+
+            String result = getJSON.execute().get();
+            Log.d("Gwen", result);
+            JSONArray jsonArray = new JSONArray(result);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+                out.add(Integer.parseInt(obj.getString("id")));
+            }
+            return out;
+        } catch (InterruptedException | ExecutionException | JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void addBookmarkForUser(User user, Advertisement advertisement){
+        try{
+            String data = URLEncoder.encode("user_email", "UTF-8") + "=" + URLEncoder.encode(user.getEmail(), "UTF-8") + "&" +
+                    URLEncoder.encode("advertisement_id", "UTF-8") + "=" + URLEncoder.encode(Integer.toString(advertisement.getID()), "UTF-8");
+
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/bookmarks", data, "POST");
+            getJSON.execute();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeBookmarkForUser(User user, Advertisement advertisement){
+        SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + user.getEmail() + "/bookmarks/" + Integer.toString(advertisement.getID()), "", "DELETE");
+        getJSON.execute();
     }
 
     /**

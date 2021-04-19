@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
@@ -17,12 +18,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.User;
+import com.example.p4_group12.Interface.GlobalVariables;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,7 +35,9 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
 
     private ArrayList<Advertisement> advertisementList;
     private OnAdvertisementClickListener advertisementClickListener;
+    private HashSet<Integer> bookmarkIds;
     private final HashMap<String, User> usersMemory = new HashMap<>();
+    private boolean onlyBookmarks;
 
     public interface OnAdvertisementClickListener {
         void OnAdvertisementClick(int position);
@@ -49,6 +54,8 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
         private TextView advertisementTitleTextView;
         private TextView advertisementDescriptionTextView;
         private TextView advertisementDateTextView;
+        private CheckBox bookmarkCheckBox;
+        private API api;
 
 
         public AdvertisementListViewHolder(@NonNull View itemView, OnAdvertisementClickListener advertisementClickListener) {
@@ -57,6 +64,9 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
             advertisementTitleTextView = itemView.findViewById(R.id.advertisement_title_view);
             advertisementDescriptionTextView = itemView.findViewById(R.id.advertisement_description_recycler);
             advertisementDateTextView = itemView.findViewById(R.id.advertisement_item_date);
+            bookmarkCheckBox = itemView.findViewById(R.id.bookmarkCheckBox);
+
+            api = API.getInstance();
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -72,8 +82,15 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
         }
     }
 
-    public AdvertisementListAdapter(ArrayList<Advertisement> advertisementList){
+    public AdvertisementListAdapter(ArrayList<Advertisement> advertisementList, HashSet<Integer> bookmarkIds){
         this.advertisementList = advertisementList;
+        this.bookmarkIds = bookmarkIds;
+        onlyBookmarks = false;
+    }
+
+    public AdvertisementListAdapter(ArrayList<Advertisement> advertisementList) {
+        this.advertisementList = advertisementList;
+        onlyBookmarks = true;
     }
 
     @NonNull
@@ -95,7 +112,7 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
             Log.v("Jules", "User email is : " + currentAdvertisement.getEmailAddress());
             user = API.getInstance().getUserWithEmail(currentAdvertisement.getEmailAddress());
             if (user == null) {
-                Log.v("Jules" , "Problem ID is " + currentAdvertisement.getID());
+                Log.v("Jules", "Problem ID is " + currentAdvertisement.getID());
             }
             assert user != null;
             usersMemory.put(user.getEmail(), user);
@@ -104,8 +121,33 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
         holder.usernameTextView.setText(user.getName());
         holder.advertisementTitleTextView.setText(currentAdvertisement.getTitle());
         holder.advertisementDescriptionTextView.setText(currentAdvertisement.getDescription());
-        Log.v("Dateee", DateFormat.getDateInstance(DateFormat.FULL, Locale.FRANCE).format(currentAdvertisement.getCreationDate()));
-        holder.advertisementDateTextView.setText("Créée le " + DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.FRANCE).format(currentAdvertisement.getCreationDate()));
+
+        Date now = new Date();
+        long timeDiff = now.getTime() - currentAdvertisement.getCreationDate().getTime();
+        long oneHour = 3600000;
+        Log.v("Jules", "timediff is : " + timeDiff);
+        if (timeDiff < oneHour) { // Less than an hour
+            holder.advertisementDateTextView.setText("Il y a moins d'une heure");
+        } else if (timeDiff < oneHour*24) {
+            holder.advertisementDateTextView.setText("Il y a moins d'un jour");
+        } else {
+            holder.advertisementDateTextView.setText("Le " + DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.FRANCE).format(currentAdvertisement.getCreationDate()));
+        }
+
+        if(onlyBookmarks || bookmarkIds.contains(currentAdvertisement.getID())){
+            holder.bookmarkCheckBox.setChecked(true);
+        }else holder.bookmarkCheckBox.setChecked(false);
+
+        holder.bookmarkCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(holder.bookmarkCheckBox.isChecked()){ // adding the ad to the bookmarks of the user
+                    holder.api.addBookmarkForUser(GlobalVariables.getUser(), currentAdvertisement);
+                }else{
+                    holder.api.removeBookmarkForUser(GlobalVariables.getUser(), currentAdvertisement);
+                }
+            }
+        });
     }
 
     @Override

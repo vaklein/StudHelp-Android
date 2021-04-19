@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 import android.util.Log;
@@ -58,7 +59,7 @@ public class AdvertisementsListActivity extends NavigationActivity {
 
         currentCourse = (Course) getIntent().getSerializableExtra("ClickedCourse");
         if(currentCourse == null) Log.d("NULLWARNING", "Course is null in AdvertisementListActivity");
-        setTitleToolbar(currentCourse.getName());
+        setTitleToolbar("Annonces pour le cours " + currentCourse.getName());
 
         api = API.getInstance();
         if (api == null) Log.v("Jules", "API is null in AdvertisementListActivity");
@@ -66,6 +67,7 @@ public class AdvertisementsListActivity extends NavigationActivity {
         advertisementsListComplete = api.getCourseAdvertisements(currentCourse);
         Log.v("AdvertisementLoading", "finish");
         advertisementsListToShow = (ArrayList<Advertisement>) advertisementsListComplete.clone();
+        HashSet<Integer> bookmarksIds = api.getBookmarksIdsOfUser(GlobalVariables.getUser());
 
         filters = findViewById(R.id.advertisement_list_filter_chip_group);
         courseCode = findViewById(R.id.advertisement_course_card_view_code);
@@ -81,7 +83,7 @@ public class AdvertisementsListActivity extends NavigationActivity {
         //advertisementRecyclerView.setHasFixedSize(true);
         advertisementLayoutManager = new LinearLayoutManager(this);
         advertisementRecyclerView.setLayoutManager(advertisementLayoutManager);
-        advertisementListAdapter = new AdvertisementListAdapter(advertisementsListToShow);
+        advertisementListAdapter = new AdvertisementListAdapter(advertisementsListToShow, bookmarksIds);
         advertisementRecyclerView.setAdapter(advertisementListAdapter);
 
         // Gestion des champs textes affichés
@@ -104,6 +106,9 @@ public class AdvertisementsListActivity extends NavigationActivity {
                         advertisementsListToShow.clear();
                         advertisementsListToShow.addAll(advertisementsListComplete);
                         advertisementListAdapter.notifyDataSetChanged();
+                        if (!advertisementsListComplete.isEmpty()) {
+                            noAdvertisement.setVisibility(View.GONE);
+                        }
                         return;
                     }
                     List<String> checkedChipStrings = new ArrayList<>();
