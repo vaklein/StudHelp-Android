@@ -68,6 +68,17 @@ public class LoginActivity extends AppCompatActivity {
             loadingDialog.getDialog().show();
 
             API api =  API.setToken(getSharedPreferences(PREFS_NAME,MODE_PRIVATE));
+            if (api.getUserWithEmail(already_email) == null) {
+                SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME,MODE_PRIVATE);
+                sharedPreferences.edit().putString(PREF_EMAIL, null).apply();
+
+                GlobalVariables.setUser(null);
+                GlobalVariables.switchBooleanToken();
+
+                Intent intentLoginActivity = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intentLoginActivity);
+                finish();
+            }
             Log.v("jerem", "result email:"+api.getUserWithEmail(already_email));
             Log.v("jerem", "result email 2:"+already_email);
             GlobalVariables.setUser(api.getUserWithEmail(already_email));
@@ -169,6 +180,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loadData(String token_date_array, String date_courses_data) throws ParseException {
+        if (date_courses_data == null) {
+
+            Log.v("Jules", "is null");
+        }
         Date date_local = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(token_date_array);
         Date date_database = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date_courses_data);
         Log.v("jerem1", date_local.toString());
