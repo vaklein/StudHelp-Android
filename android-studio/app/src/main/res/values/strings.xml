@@ -87,5 +87,7 @@
     <string name="add_picture_button">Prendre une photo</string>
     <string name="no_courses_text">Il n\'y a pas de cours dans cette catégorie</string>
     <string name="add_pictureFromGalery_button">Ajouter une photo</string>
+    <string name="file_title_hint">Titre de la synthese</string>
+    <string name="add_file_button">Ajouter une synthese</string>
 
 </resources>

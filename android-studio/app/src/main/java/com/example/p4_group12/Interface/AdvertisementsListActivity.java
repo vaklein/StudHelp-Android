@@ -19,13 +19,12 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -48,7 +47,12 @@ public class AdvertisementsListActivity extends NavigationActivity {
     private API api;
     private TextView noAdvertisement;
     private Course currentCourse;
+    private FloatingActionButton mMainAddFab, mAddAdvertisementFab, mAddFileFab;
+    private TextView mAddAdvertisementText, mAddFileText;
+    private Animation mFabOpenAnim;
+    private Animation mFabCloseAnim;
 
+    private boolean isOpen;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,13 +136,62 @@ public class AdvertisementsListActivity extends NavigationActivity {
             filters.addView(chip);
         }
 
+        mMainAddFab = findViewById(R.id.plus_button);
+        mAddAdvertisementFab = findViewById(R.id.new_advertisement_button);
+        mAddFileFab = findViewById(R.id.new_file_button);
+
+        mAddAdvertisementText = findViewById(R.id.add_advertisement_text);
+        mAddFileText = findViewById(R.id.add_file_text);
+
+        mFabOpenAnim = AnimationUtils.loadAnimation(AdvertisementsListActivity.this, R.anim.fab_open);
+        mFabCloseAnim = AnimationUtils.loadAnimation(AdvertisementsListActivity.this, R.anim.fab_close);
+
+        isOpen = false;
+
+        mMainAddFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(isOpen){
+
+                    mAddAdvertisementFab.setAnimation(mFabCloseAnim);
+                    mAddFileFab.setAnimation(mFabCloseAnim);
+
+                    mAddAdvertisementText.setVisibility(View.INVISIBLE);
+                    mAddFileText.setVisibility(View.INVISIBLE);
+
+                    isOpen = false;
+                } else {
+
+                    mAddAdvertisementFab.setAnimation(mFabOpenAnim);
+                    mAddFileFab.setAnimation(mFabOpenAnim);
+
+                    mAddAdvertisementText.setVisibility(View.VISIBLE);
+                    mAddFileText.setVisibility(View.VISIBLE);
+
+                    isOpen = true;
+                }
+
+            }
+        });
         // Gestion du bouton pour créer une nouvelle annonce
-        newAdvertisementButton = findViewById(R.id.new_advertisement_button);
-        newAdvertisementButton.setOnClickListener(new View.OnClickListener() {
+        mAddAdvertisementFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Toast.makeText(getApplication().getBaseContext(), clickedCourse.getName(), Toast.LENGTH_LONG).show();
                 Intent newAdvertisement = new Intent(getApplicationContext(), AddAdvertisementActivity.class);
+                newAdvertisement.putExtra("CurrentCourse", currentCourse);
+                startActivityForResult(newAdvertisement, 1); // 1 for finish
+                //startActivity(newAdvertisement);
+            }
+        });
+
+        // Gestion du bouton pour créer une nouvelle synthese
+        mAddFileFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Toast.makeText(getApplication().getBaseContext(), clickedCourse.getName(), Toast.LENGTH_LONG).show();
+                Intent newAdvertisement = new Intent(getApplicationContext(), AddFileActivity.class);
                 newAdvertisement.putExtra("CurrentCourse", currentCourse);
                 startActivityForResult(newAdvertisement, 1); // 1 for finish
                 //startActivity(newAdvertisement);

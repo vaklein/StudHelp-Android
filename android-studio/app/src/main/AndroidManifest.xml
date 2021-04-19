@@ -184,6 +184,13 @@
             android:name=".Interface.EditAdvertisementActivity"
             android:label="Modifier mon mot de passe"
             android:parentActivityName=".Interface.EditAdvertisementActivity"/>
+
+        <!-- ############# AddFileActivity ############## -->
+        <!--#############################################################-->
+        <activity
+            android:name=".Interface.AddFileActivity"
+            android:label="Ajouter un fichier"
+            android:parentActivityName=".Interface.AdvertisementsListActivity"/>
     </application>
 
 </manifest>
