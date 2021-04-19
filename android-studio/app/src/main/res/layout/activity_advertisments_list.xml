@@ -68,11 +68,12 @@
             android:layout_below="@+id/advertisement_course_card_view">
 
             <androidx.recyclerview.widget.RecyclerView
+                android:paddingBottom="75dp"
+                android:clipToPadding="false"
                 android:id="@+id/advertisementRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="10dp"
-                android:layout_marginBottom="75dp"
                 android:scrollbars="vertical"/>
 
             <TextView

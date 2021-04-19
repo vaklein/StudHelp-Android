@@ -145,7 +145,7 @@ public class AdvertisementViewActivity extends NavigationActivity {
         devImages.add("advertisements/ArBqYBaleyuw0aCD1SEtwlBrKKSXI58zw88HOE0m.jpg");
         currentAdvertisement.setImages(devImages);
         */
-
+        currentAdvertisement.setImages(api.getAdvertisementPictures(currentAdvertisement.getID()));
         carousel = findViewById(R.id.advertisement_view_carousel);
         System.out.println(currentAdvertisement.getImages().toString());
         if (currentAdvertisement.hasImages()) {

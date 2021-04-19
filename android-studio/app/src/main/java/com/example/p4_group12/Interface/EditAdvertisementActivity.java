@@ -5,6 +5,8 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -33,8 +35,10 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.json.JSONException;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,6 +58,7 @@ public class EditAdvertisementActivity extends NavigationActivity{
     private Button addPictureButton;
     Bitmap imageBitmap;
     ImageView picture;
+    private Button addPictureFromGalery;
 
     private ChipGroup typeChipGroup;
     List<String> types = new ArrayList<>();
@@ -94,6 +99,7 @@ public class EditAdvertisementActivity extends NavigationActivity{
         cycleChipGroup.setSelectionRequired(true);
         addPictureButton = findViewById(R.id.add_picture_button);
         picture = findViewById(R.id.add_advertisment_picture);
+        addPictureFromGalery = findViewById(R.id.add_picturefromgalery_button);
 
         this.api = API.getInstance();
 
@@ -206,6 +212,16 @@ public class EditAdvertisementActivity extends NavigationActivity{
 
             }
         });
+
+        addPictureFromGalery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+
+                startActivityForResult(photoPickerIntent, 99);
+            }
+        });
     }
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -225,6 +241,16 @@ public class EditAdvertisementActivity extends NavigationActivity{
             Bundle extras = data.getExtras();
             this.imageBitmap = (Bitmap) extras.get("data");
             picture.setImageBitmap(this.imageBitmap);
+        }
+        if (resultCode == RESULT_OK && requestCode == 99) { //retour de l'upload de photo
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                imageBitmap = BitmapFactory.decodeStream(imageStream);
+                picture.setImageBitmap(imageBitmap);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 

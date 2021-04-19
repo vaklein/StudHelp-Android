@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -38,8 +39,10 @@ import org.json.JSONException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -59,6 +62,7 @@ public class AddAdvertisementActivity extends NavigationActivity {
     private Button addPictureButton;
     Bitmap imageBitmap;
     ImageView picture;
+    private Button addPictureFromGalery;
 
     private ChipGroup typeChipGroup;
     List<String> types = new ArrayList<>();
@@ -92,7 +96,7 @@ public class AddAdvertisementActivity extends NavigationActivity {
         objectChipGroup = findViewById(R.id.add_advertisement_object_chip_group);
         addPictureButton = findViewById(R.id.add_picture_button);
         picture = findViewById(R.id.add_advertisment_picture);
-
+        addPictureFromGalery = findViewById(R.id.add_picturefromgalery_button);
         this.api = API.getInstance();
 
         if (GlobalVariables.getUser().getSocial_links() == null) {
@@ -192,36 +196,52 @@ public class AddAdvertisementActivity extends NavigationActivity {
         addPictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dispatchTakePictureIntent();
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                try {
+                    startActivityForResult(takePictureIntent, 1);
+                } catch (ActivityNotFoundException e) {
+                    // display error state to the user
+                }
 
+            }
+        });
+
+        addPictureFromGalery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+
+                startActivityForResult(photoPickerIntent, 99);
             }
         });
     }
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        try {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        } catch (ActivityNotFoundException e) {
-            // display error state to the user
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+        if (requestCode == 1 && resultCode == RESULT_OK) { //retour de la prise de photo
             Bundle extras = data.getExtras();
             this.imageBitmap = (Bitmap) extras.get("data");
             picture.setImageBitmap(this.imageBitmap);
         }
-        if(requestCode == 2) {
+        if(requestCode == 2) { // retour de la modification des reseaux pcq on en avait pas
             Intent advertisement = new Intent(getApplicationContext(), AddAdvertisementActivity.class);
             advertisement.putExtra("CurrentCourse", course);
             advertisement.putExtra("ClickedAdvertisement", currentAdvertisement);
             startActivity(advertisement);
             finish();
+        }
+        if (resultCode == RESULT_OK && requestCode == 99) { //retour de l'upload de photo
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                imageBitmap = BitmapFactory.decodeStream(imageStream);
+                picture.setImageBitmap(imageBitmap);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 
