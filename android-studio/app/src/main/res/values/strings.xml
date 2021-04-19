@@ -90,5 +90,6 @@
     <string name="file_title_hint">Titre de la synthese</string>
     <string name="add_file_button">Ajouter une synthese</string>
     <string name="file_requirements">Doit etre un fichier au format PDF, max 10 Mo</string>
+    <string name="my_bookmarks_hint">Vos signets sont affichés ici.</string>
 
 </resources>
