@@ -1,11 +1,9 @@
 package com.example.p4_group12.database;
 
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.android.internal.http.multipart.MultipartEntity;
 import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.Course;
@@ -21,7 +19,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -191,6 +188,49 @@ public class API {
             }
         }
     }
+    private static class SyncSendFileCourse extends AsyncTask<Void, Void, String> {
+
+        private String requestURL;
+        private String email;
+        private File file;
+        private String course_id;
+        private String title;
+
+        public SyncSendFileCourse(String requestURL, String email, File file , String course_id, String title){
+            this.requestURL = requestURL;
+            this.email = email;
+            this.file = file;
+            this.course_id = course_id;
+            this.title = title;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+                String charset = "UTF-8";
+                MultipartUtility multipart = new MultipartUtility(requestURL, charset, key);
+                multipart.addFormField("email", email);
+                multipart.addFormField("course_id", course_id);
+                multipart.addFormField("title", title);
+                multipart.addFilePart("file", file);
+                String response = multipart.finish(); // response from server.
+                return response;
+            } catch (Exception e) {
+                Log.e("TAG", "multipart post error " + e);
+                return null;
+            }
+        }
+    }
 
     private static String key;
     private static API INSTANCE = null;
@@ -342,6 +382,23 @@ public class API {
         return allCourses;
     }
 
+    public void addCourseFile(String course_id, File file, String title) throws IOException, ExecutionException, InterruptedException, JSONException {
+        SyncSendFileCourse request = new SyncSendFileCourse(BuildConfig.DB_URL + "/course/file", GlobalVariables.getUser().getEmail(), file, course_id, title);
+        String response = request.execute().get();
+        JSONObject obj = new JSONObject(response);
+        //user.setPicture("users/"+obj.getString("image_name"));
+    }
+    public ArrayList<File> getCourseFiles(Course course){
+        ArrayList<File> files = new ArrayList<>();
+        try{
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/course/" + course.getID() + "/files", "", "GET");
+            String response = getJSON.execute().get();
+            loadIntoArrayList(response, files, File.class);
+        } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
+            e.printStackTrace();
+        }
+        return files;
+    }
     public HashSet<Integer> getFavoriteCoursesIdsOfUser(User user){
         HashSet<Integer> favoriteIDs = new HashSet<>();
         try{

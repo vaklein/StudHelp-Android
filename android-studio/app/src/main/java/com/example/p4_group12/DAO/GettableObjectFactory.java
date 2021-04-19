@@ -41,6 +41,9 @@ public class GettableObjectFactory {
         else if(objectClass.getCanonicalName().equals(Tag.class.getCanonicalName())) {
             return new Tag(Integer.parseInt(dbObject.getString("id")), Integer.parseInt(dbObject.getString("advertisement_id")), dbObject.getString("tag_type"), dbObject.getString("tag_value"));
         }
+        else if(objectClass.getCanonicalName().equals(File.class.getCanonicalName())) {
+            return new File(Integer.parseInt(dbObject.getString("id")), Integer.parseInt(dbObject.getString("course_id")), dbObject.getString("file"), dbObject.getString("title"), dbObject.getString("email"), dbObject.getString("created_at"));
+        }
         else throw new NoSuchElementException();
     }
 }
