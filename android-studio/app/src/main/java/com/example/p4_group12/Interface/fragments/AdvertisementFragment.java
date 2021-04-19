@@ -35,6 +35,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class AdvertisementFragment extends Fragment {
@@ -60,6 +61,8 @@ public class AdvertisementFragment extends Fragment {
         Log.v("jerem", "frag foreignnnnn : " + user.getLogin());
         Log.v("jerem", "frag foreignnnnn : " + user.getEmail());
 
+        HashSet<Integer> bookmarksIDs = api.getBookmarksIdsOfUser(GlobalVariables.getUser());
+
         advertisement = result.findViewById(R.id.no_advertisements_frag);
         advertisementsListComplete = api.getAdvertisementsOfUser(user);
         advertisementsListToShow = (ArrayList<Advertisement>) advertisementsListComplete.clone();
@@ -68,7 +71,7 @@ public class AdvertisementFragment extends Fragment {
         advertisementRecyclerView = result.findViewById(R.id.advertisementRecyclerView);
         advertisementLayoutManager = new LinearLayoutManager(getActivity());
         advertisementRecyclerView.setLayoutManager(advertisementLayoutManager);
-        advertisementListAdapter = new AdvertisementListAdapter(advertisementsListToShow);
+        advertisementListAdapter = new AdvertisementListAdapter(advertisementsListToShow, bookmarksIDs);
         advertisementRecyclerView.setAdapter(advertisementListAdapter);
         advertisementListAdapter.setAdvertisementClickListener(new AdvertisementListAdapter.OnAdvertisementClickListener() {
             @Override
