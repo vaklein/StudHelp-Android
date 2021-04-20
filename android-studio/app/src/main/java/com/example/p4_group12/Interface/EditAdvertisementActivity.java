@@ -338,7 +338,7 @@ public class EditAdvertisementActivity extends NavigationActivity{
 
         if (isCorrectlyFilled(checkedTypeID, checkedCyclesIDs, checkedObjectsIDs)) {
             // Update default fields of an ad
-            api.updateAdvertisement(toEditAdvertisement);
+
 
             // Get back the initial tags
             Tag initType = null;
@@ -426,7 +426,7 @@ public class EditAdvertisementActivity extends NavigationActivity{
             toEditAdvertisement.setTags(updatedTags);
             toEditAdvertisement.setTitle(advertisementTitleText.getText().toString());
             toEditAdvertisement.setDescription(advertisementDescriptionText.getText().toString());
-
+            api.updateAdvertisement(toEditAdvertisement);
 
             Intent intent = new Intent();
             intent.putExtra("Advertisement",toEditAdvertisement);
