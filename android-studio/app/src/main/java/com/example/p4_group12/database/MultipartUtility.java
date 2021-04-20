@@ -38,9 +38,11 @@ public class MultipartUtility {
 
         URL url = new URL(requestURL);
         httpConn = (HttpURLConnection) url.openConnection();
+        httpConn.setRequestMethod("POST");
         httpConn.setUseCaches(false);
         httpConn.setDoOutput(true); // indicates POST method
         httpConn.setDoInput(true);
+        httpConn.setRequestProperty("Accept", "application/json");
         httpConn.setRequestProperty("Content-Type", "application/json");
         httpConn.setRequestProperty("Content-Type",
                 "multipart/form-data; boundary=" + boundary);
