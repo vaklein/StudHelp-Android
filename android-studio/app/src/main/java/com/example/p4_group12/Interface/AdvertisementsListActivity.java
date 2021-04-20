@@ -1,5 +1,8 @@
 package com.example.p4_group12.Interface;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -7,6 +10,11 @@ import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.DAO.Tag;
 import com.example.p4_group12.Interface.adapter.AdvertisementListAdapter;
+import com.example.p4_group12.Interface.fragments.AdvertisementProfileFragment;
+import com.example.p4_group12.Interface.fragments.AdvertisementsListFragment;
+import com.example.p4_group12.Interface.fragments.ContactsFragment;
+import com.example.p4_group12.Interface.fragments.DataFragment;
+import com.example.p4_group12.Interface.fragments.FileFragment;
 import com.example.p4_group12.R;
 
 import com.example.p4_group12.database.API;
@@ -14,6 +22,7 @@ import com.example.p4_group12.database.API;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -32,7 +41,7 @@ import android.util.Log;
 
 import static java.util.Collections.sort;
 
-public class AdvertisementsListActivity extends NavigationActivity {
+public class AdvertisementsListActivity extends NavigationActivity implements TabLayout.OnTabSelectedListener{
     private RecyclerView advertisementRecyclerView;
     private RecyclerView.LayoutManager advertisementLayoutManager;
     private AdvertisementListAdapter advertisementListAdapter;
@@ -52,89 +61,38 @@ public class AdvertisementsListActivity extends NavigationActivity {
     private Animation mFabOpenAnim;
     private Animation mFabCloseAnim;
 
+    private TabLayout tabLayout;
+    private Fragment fragment = null;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
+
     private boolean isOpen;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Use this to set the correct layout instead of setContentView cfr NavigationActivity/drawer_layout
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); //Remember this is the FrameLayout area within your activity_main.xml
-        getLayoutInflater().inflate(R.layout.activity_advertisments_list, contentFrameLayout);
+        getLayoutInflater().inflate(R.layout.activity_course_advertisments_list, contentFrameLayout);
 
 
         currentCourse = (Course) getIntent().getSerializableExtra("ClickedCourse");
         if(currentCourse == null) Log.d("NULLWARNING", "Course is null in AdvertisementListActivity");
         setTitleToolbar("Annonces pour le cours " + currentCourse.getName());
 
-        api = API.getInstance();
-        if (api == null) Log.v("Jules", "API is null in AdvertisementListActivity");
-        Log.v("AdvertisementLoading", "start");
-        advertisementsListComplete = api.getCourseAdvertisements(currentCourse);
-        Log.v("AdvertisementLoading", "finish");
-        advertisementsListToShow = (ArrayList<Advertisement>) advertisementsListComplete.clone();
-        HashSet<Integer> bookmarksIds = api.getBookmarksIdsOfUser(GlobalVariables.getUser());
+        tabLayout = findViewById(R.id.tabs);
+        Bundle bundle = new Bundle();
+        bundle.putInt("course_id", currentCourse.getID());
+        bundle.putString("code", currentCourse.getCode());
+        bundle.putString("fac", currentCourse.getFaculty());
+        fragment = new AdvertisementsListFragment();
+        fragment.setArguments(bundle);
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameLayout, fragment);
 
-        filters = findViewById(R.id.advertisement_list_filter_chip_group);
-        courseCode = findViewById(R.id.advertisement_course_card_view_code);
-        courseFac = findViewById(R.id.advertisement_course_card_view_fac);
-        mTextView = (TextView) findViewById(R.id.text);
-        noAdvertisement = findViewById(R.id.no_advertisements);
-        if(advertisementsListToShow.size()==0){
-            noAdvertisement.setVisibility(View.VISIBLE);
-            findViewById(R.id.advertisement_list_filter_title).setVisibility(View.GONE);
-            filters.setVisibility(View.GONE);
-        }
-        advertisementRecyclerView = findViewById(R.id.advertisementRecyclerView);
-        //advertisementRecyclerView.setHasFixedSize(true);
-        advertisementLayoutManager = new LinearLayoutManager(this);
-        advertisementRecyclerView.setLayoutManager(advertisementLayoutManager);
-        advertisementListAdapter = new AdvertisementListAdapter(advertisementsListToShow, bookmarksIds);
-        advertisementRecyclerView.setAdapter(advertisementListAdapter);
-
-        // Gestion des champs textes affichés
-        courseCode.setText(currentCourse.getCode());
-        courseFac.setText(currentCourse.getFaculty());
-
-        // Gestion des filtres de recherche
-        for (String type : Tag.getAllTagsName()) {
-            Chip chip = new Chip(this);
-            chip.setText(type);
-            chip.setCheckable(true);
-            chip.setOnClickListener(new View.OnClickListener() {
-                @SuppressLint("SetTextI18n")
-                @Override
-                public void onClick(View v) {
-                    Log.v("Jules", "checked chip is " + chip.getText().toString());
-                    List<Integer> checkedChipIds = filters.getCheckedChipIds();
-                    Log.v("Jules", "Number of checked chips : " + checkedChipIds.size());
-                    if (checkedChipIds.isEmpty()) {
-                        advertisementsListToShow.clear();
-                        advertisementsListToShow.addAll(advertisementsListComplete);
-                        advertisementListAdapter.notifyDataSetChanged();
-                        if (!advertisementsListComplete.isEmpty()) {
-                            noAdvertisement.setVisibility(View.GONE);
-                        }
-                        return;
-                    }
-                    List<String> checkedChipStrings = new ArrayList<>();
-                    for (int i : checkedChipIds) {
-                        checkedChipStrings.add((String) ((Chip) filters.findViewById(i)).getText());
-                    }
-                    Log.v("Jules", "LIST OF CHECKED CHIPS :  " + checkedChipStrings.toString());
-                    advertisementsListToShow.clear();
-                    advertisementsListToShow.addAll(filterListOnCheckedChips(advertisementsListComplete, checkedChipStrings));
-                    Log.v("Jules", "Advertisements titles to show : " + advertisementsListToShow.toString());
-                    advertisementListAdapter.notifyDataSetChanged();
-                    if(advertisementsListToShow.size()==0){
-                        noAdvertisement.setVisibility(View.VISIBLE);
-                        noAdvertisement.setText("Aucune annonce ne correspond à votre recherche");
-                    } else {
-                        noAdvertisement.setVisibility(View.GONE);
-                    }
-                }
-            });
-            filterChips.add(chip);
-            filters.addView(chip);
-        }
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.commit();
+        tabLayout.addOnTabSelectedListener(this);
 
         mMainAddFab = findViewById(R.id.plus_button);
         mAddAdvertisementFab = findViewById(R.id.new_advertisement_button);
@@ -197,24 +155,42 @@ public class AdvertisementsListActivity extends NavigationActivity {
                 //startActivity(newAdvertisement);
             }
         });
+    }
 
-        // Gestion du clic sur une annonce du recyclerview
-        advertisementListAdapter.setAdvertisementClickListener(new AdvertisementListAdapter.OnAdvertisementClickListener() {
-            @Override
-            public void OnAdvertisementClick(int position) {
-                Advertisement clickedAdvertisement = advertisementsListToShow.get(position);
-                Intent advertisementView = new Intent(getApplicationContext(), AdvertisementViewActivity.class);
-                advertisementView.putExtra("ClickedAdvertisement", clickedAdvertisement);
-                int i = 0;
-                for (Tag tag : clickedAdvertisement.getTags()) {
-                    advertisementView.putExtra("tag"+i, tag);
-                    i++;
-                }
-                advertisementView.putExtra("Number of tags", i);
-                advertisementView.putExtra("contactable", 1);
-                startActivityForResult(advertisementView, 1);
-            }
-        });
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        Bundle bundle = new Bundle();
+        switch (tab.getPosition()) {
+            case 0:
+                bundle.putInt("course_id", currentCourse.getID());
+                bundle.putString("code", currentCourse.getCode());
+                bundle.putString("fac", currentCourse.getFaculty());
+                fragment = new AdvertisementsListFragment();
+                fragment.setArguments(bundle);
+                break;
+            case 1:
+                bundle.putInt("course_id", currentCourse.getID());
+                fragment = new FileFragment();
+                fragment.setArguments(bundle);
+                break;
+        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameLayout, fragment);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.commit();
+    }
+
+
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
     }
 
     @Override
@@ -229,21 +205,5 @@ public class AdvertisementsListActivity extends NavigationActivity {
         }
     }
 
-    private List<Advertisement> filterListOnCheckedChips(List<Advertisement> ads, List<String> checkedChipStrings) {
-        List<Advertisement> filteredList = new ArrayList<>();
-        for (Advertisement ad : ads) {
-            boolean addAd = true;
-            for (String chipTag : checkedChipStrings) {
-                if (!ad.getTagValues().contains(chipTag)) {
-                    addAd = false;
-                    break;
-                }
-            }
-            if (addAd) {
-                filteredList.add(ad);
-            }
-        }
-        return filteredList;
-    }
 
 }

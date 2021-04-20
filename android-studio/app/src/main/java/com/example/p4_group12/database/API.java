@@ -388,12 +388,12 @@ public class API {
         JSONObject obj = new JSONObject(response);
         //user.setPicture("users/"+obj.getString("image_name"));
     }
-    public ArrayList<File> getCourseFiles(Course course){
-        ArrayList<File> files = new ArrayList<>();
+    public ArrayList<com.example.p4_group12.DAO.File> getCourseFiles(int course_id){
+        ArrayList<com.example.p4_group12.DAO.File> files = new ArrayList<>();
         try{
-            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/course/" + course.getID() + "/files", "", "GET");
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/course/" + course_id + "/files", "", "GET");
             String response = getJSON.execute().get();
-            loadIntoArrayList(response, files, File.class);
+            loadIntoArrayList(response, files, com.example.p4_group12.DAO.File.class);
         } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
             e.printStackTrace();
         }
@@ -457,10 +457,10 @@ public class API {
         }
     }
 
-    public ArrayList<Advertisement> getCourseAdvertisements(Course course){
+    public ArrayList<Advertisement> getCourseAdvertisements(int course_id){
         ArrayList<Advertisement> allAds = new ArrayList<>();
         try{
-            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/course/" + course.getID() + "/advertisement", "", "GET");
+            SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/course/" + course_id + "/advertisement", "", "GET");
             String response = getJSON.execute().get();
             Log.v("responseJSON", "Str is : "+response);
             loadIntoArrayList(response, allAds, Advertisement.class);

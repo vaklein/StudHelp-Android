@@ -22,7 +22,7 @@ public class GlobalVariables {
 
     public static User getUser(){ return user; }
 
-    public static ArrayList<Course> getCourses() { return courseArrayList; }
+    public static ArrayList<Course> getCourses() { return (ArrayList<Course>) courseArrayList.clone(); }
     public static void setCourses(ArrayList<Course> courses) {
         courseArrayList = courses;
         for (Course course : courseArrayList) {
