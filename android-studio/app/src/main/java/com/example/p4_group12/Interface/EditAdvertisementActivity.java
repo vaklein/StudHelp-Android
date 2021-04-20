@@ -22,6 +22,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
+import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.Course;
 import com.example.p4_group12.DAO.Tag;
@@ -31,6 +32,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 
@@ -205,6 +207,10 @@ public class EditAdvertisementActivity extends NavigationActivity{
                 }
             }
         });
+
+        if(toEditAdvertisement.hasImages()) {
+            Picasso.get().load(BuildConfig.STORAGE_URL + toEditAdvertisement.getImages().get(0)).into(picture);
+        }
         addPictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
