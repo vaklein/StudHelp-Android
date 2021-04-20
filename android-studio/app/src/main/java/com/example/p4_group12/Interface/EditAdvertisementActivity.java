@@ -208,7 +208,9 @@ public class EditAdvertisementActivity extends NavigationActivity{
             }
         });
 
-        Picasso.get().load(BuildConfig.STORAGE_URL + toEditAdvertisement.getImages().get(0)).into(picture);
+        if(toEditAdvertisement.hasImages()) {
+            Picasso.get().load(BuildConfig.STORAGE_URL + toEditAdvertisement.getImages().get(0)).into(picture);
+        }
         addPictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
