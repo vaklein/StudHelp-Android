@@ -89,9 +89,8 @@ public class EditProfileActivity extends NavigationActivity {
         setTitleToolbar("Profil");
 
         edit_password = findViewById(R.id.edit_password);
-
+        edit_picture = (ImageView) findViewById(R.id.user_profile_photo);
         if (GlobalVariables.getUser().getPicture() != "null") {
-            edit_picture = (ImageView) findViewById(R.id.user_profile_photo);
             Picasso.get().load(BuildConfig.STORAGE_URL + GlobalVariables.getUser().getPicture()).transform(new CropCircleTransformation()).into(edit_picture);
         }
         edit_picture_button = findViewById(R.id.edit_profile_picture);
