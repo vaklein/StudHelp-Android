@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
@@ -56,6 +57,7 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
         private TextView advertisementDateTextView;
         private CheckBox bookmarkCheckBox;
         private API api;
+        private ImageView picturePresence;
 
 
         public AdvertisementListViewHolder(@NonNull View itemView, OnAdvertisementClickListener advertisementClickListener) {
@@ -65,7 +67,7 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
             advertisementDescriptionTextView = itemView.findViewById(R.id.advertisement_description_recycler);
             advertisementDateTextView = itemView.findViewById(R.id.advertisement_item_date);
             bookmarkCheckBox = itemView.findViewById(R.id.bookmarkCheckBox);
-
+            picturePresence = itemView.findViewById(R.id.picturePresence);
             api = API.getInstance();
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -149,6 +151,10 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
                 }
             }
         });
+
+        if(currentAdvertisement.hasImages()){
+            holder.picturePresence.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
