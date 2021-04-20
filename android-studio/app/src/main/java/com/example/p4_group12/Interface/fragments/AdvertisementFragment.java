@@ -66,6 +66,7 @@ public class AdvertisementFragment extends Fragment {
         advertisement = result.findViewById(R.id.no_advertisements_frag);
         advertisementsListComplete = api.getAdvertisementsOfUser(user);
         advertisementsListToShow = (ArrayList<Advertisement>) advertisementsListComplete.clone();
+        if (!emailValue.equals(GlobalVariables.getUser().getEmail())) advertisement.setText(R.string.no_advertisment);
         if (advertisementsListComplete.isEmpty()) advertisement.setVisibility(View.VISIBLE);
 
         advertisementRecyclerView = result.findViewById(R.id.advertisementRecyclerView);
