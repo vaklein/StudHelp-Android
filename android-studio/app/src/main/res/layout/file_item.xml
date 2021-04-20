@@ -5,14 +5,13 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="10dp"
-    android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp"
     >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="4dp"
-        android:clickable="true">
+        android:layout_margin="4dp">
 
         <TextView
             android:id="@+id/username"
@@ -39,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/username"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginStart="15dp"
             android:text="File title"
             android:textColor="@color/bittersweet"
@@ -55,8 +54,8 @@
             android:layout_marginEnd="11dp"
             android:src="@drawable/ic_baseline_share_24"
             android:background="@color/transparent"
-            app:buttonTint="@color/myrtic_green" />
-
+            app:buttonTint="@color/myrtic_green"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 

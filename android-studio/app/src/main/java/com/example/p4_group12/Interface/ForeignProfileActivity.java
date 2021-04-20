@@ -1,57 +1,27 @@
 package com.example.p4_group12.Interface;
 
 import android.annotation.SuppressLint;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.p4_group12.BuildConfig;
-import com.example.p4_group12.DAO.Social_links;
 import com.example.p4_group12.DAO.User;
-import com.example.p4_group12.Interface.fragments.AdvertisementFragment;
+import com.example.p4_group12.Interface.fragments.AdvertisementProfileFragment;
 import com.example.p4_group12.Interface.fragments.ContactsFragment;
 import com.example.p4_group12.Interface.fragments.DataFragment;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.textfield.TextInputEditText;
 import com.squareup.picasso.Picasso;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
@@ -129,7 +99,7 @@ public class ForeignProfileActivity extends NavigationActivity implements TabLay
                 break;
             case 2:
                 bundle.putString("email", foreignUser.getEmail());
-                fragment = new AdvertisementFragment();
+                fragment = new AdvertisementProfileFragment();
                 fragment.setArguments(bundle);
                 break;
         }

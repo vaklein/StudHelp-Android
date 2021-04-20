@@ -11,85 +11,11 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/advertisement_course_card_view"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="15dp"
-            android:layout_marginHorizontal="10dp"
-            app:cardCornerRadius="10dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp">
-
-                <TextView
-                    android:id="@+id/advertisement_course_card_view_code"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:textSize="20sp"
-                    android:text="@string/advertisement_course_card_view_code_text"/>
-
-                <TextView
-                    android:id="@+id/advertisement_course_card_view_fac"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:textSize="20sp"
-                    android:text="@string/advertisement_course_card_view_fac_text"
-                    tools:ignore="RelativeOverlap"/>
-
-                <TextView
-                    android:id="@+id/advertisement_list_filter_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:text="@string/advertisement_list_filter_title_text"
-                    android:layout_below="@id/advertisement_course_card_view_code"/>
-
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/advertisement_list_filter_chip_group"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/advertisement_list_filter_title"/>
-
-            </RelativeLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <FrameLayout
+            android:id="@+id/frameLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/advertisement_course_card_view">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:paddingBottom="75dp"
-                android:clipToPadding="false"
-                android:id="@+id/advertisementRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="10dp"
-                android:scrollbars="vertical"/>
-
-            <TextView
-                android:id="@+id/no_advertisements"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="@string/no_advertisement_text"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:visibility="gone"
-                />
-
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            android:layout_below="@+id/advertisement_course_card_view"/>
     </RelativeLayout>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/container_layout"
@@ -102,11 +28,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
+            android:layout_marginVertical="50dp"
+            android:layout_marginHorizontal="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:srcCompat="@drawable/ic_plus_24"/>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/firstTabAdvertisement"
+                />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/secondTabAdvertisement"
+                />
+        </com.google.android.material.tabs.TabLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/new_advertisement_button"
         android:layout_width="wrap_content"

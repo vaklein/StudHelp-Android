@@ -42,7 +42,8 @@ public class GettableObjectFactory {
             return new Tag(Integer.parseInt(dbObject.getString("id")), Integer.parseInt(dbObject.getString("advertisement_id")), dbObject.getString("tag_type"), dbObject.getString("tag_value"));
         }
         else if(objectClass.getCanonicalName().equals(File.class.getCanonicalName())) {
-            return new File(Integer.parseInt(dbObject.getString("id")), Integer.parseInt(dbObject.getString("course_id")), dbObject.getString("file"), dbObject.getString("title"), dbObject.getString("email"), dbObject.getString("created_at"));
+            String goodFormatCreationDate = dbObject.getString("created_at").substring(0, 10) + " " + dbObject.getString("created_at").substring(11,19);
+            return new File(Integer.parseInt(dbObject.getString("id")), Integer.parseInt(dbObject.getString("course_id")), dbObject.getString("file"), dbObject.getString("title"), dbObject.getString("email"), goodFormatCreationDate);
         }
         else throw new NoSuchElementException();
     }
