@@ -1,13 +1,7 @@
 package com.example.p4_group12.Interface;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -19,18 +13,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.p4_group12.BuildConfig;
-import com.example.p4_group12.DAO.Social_links;
-import com.example.p4_group12.Interface.fragments.AdvertisementFragment;
+import com.example.p4_group12.Interface.fragments.AdvertisementProfileFragment;
 import com.example.p4_group12.Interface.fragments.ContactsFragment;
 import com.example.p4_group12.Interface.fragments.DataFragment;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
@@ -110,7 +100,7 @@ public class ProfileActivity extends NavigationActivity implements TabLayout.OnT
             case 2:
                 bundle.putString("email", GlobalVariables.getUser().getEmail());
                 Log.v("jerem", "frag : " + GlobalVariables.getUser().getEmail());
-                fragment = new AdvertisementFragment();
+                fragment = new AdvertisementProfileFragment();
                 fragment.setArguments(bundle);
                 break;
         }

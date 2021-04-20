@@ -6,13 +6,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,23 +20,15 @@ import com.example.p4_group12.DAO.Advertisement;
 import com.example.p4_group12.DAO.Tag;
 import com.example.p4_group12.DAO.User;
 import com.example.p4_group12.Interface.AdvertisementViewActivity;
-import com.example.p4_group12.Interface.AdvertisementsListActivity;
 import com.example.p4_group12.Interface.GlobalVariables;
-import com.example.p4_group12.Interface.MyAdvertisementsActivity;
-import com.example.p4_group12.Interface.ProfileActivity;
 import com.example.p4_group12.Interface.adapter.AdvertisementListAdapter;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
-public class AdvertisementFragment extends Fragment {
+public class AdvertisementProfileFragment extends Fragment {
     private TextView advertisement;
     private RecyclerView advertisementRecyclerView;
     private RecyclerView.LayoutManager advertisementLayoutManager;
@@ -97,7 +87,7 @@ public class AdvertisementFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 1
         if(requestCode == 1) {
-            Fragment fragment = new AdvertisementFragment();
+            Fragment fragment = new AdvertisementProfileFragment();
             Bundle bundle = new Bundle();
             bundle.putString("email", emailValue);
             fragment.setArguments(bundle);
