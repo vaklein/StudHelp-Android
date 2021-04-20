@@ -74,7 +74,7 @@
             android:layout_below="@+id/advertisement_item_date"
             android:layout_marginTop="10dp"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/ic_camera"
+            android:src="@drawable/ic_cameravect"
             android:visibility="invisible" />
 
 
