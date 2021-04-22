@@ -92,13 +92,15 @@
 
         <activity
             android:name=".Interface.HomeActivity"
-            android:label="HomeActivity" />
+            android:label="HomeActivity"
+            android:launchMode = "singleTop"/>
 
 
                         <!-- ############# EditPasswordActivity ############## -->
                 <!--#############################################################-->
         <activity
-            android:name=".Interface.MyAdvertisementsActivity" />
+            android:name=".Interface.MyAdvertisementsActivity"
+            android:launchMode = "singleTop"/>
 
 
 
@@ -106,11 +108,13 @@
                 <!--#############################################################-->
         <activity
             android:name=".Interface.ProfileActivity"
-            android:label="Mon profil" />
+            android:label="Mon profil"
+            android:launchMode = "singleTop"/>
 
         <activity
             android:name=".Interface.MyBookmarksActivity"
-            android:label="Mes signets" />
+            android:label="Mes signets"
+            android:launchMode = "singleTop"/>
 
 
         <!--#################################-->
@@ -124,7 +128,8 @@
         <activity
             android:name=".Interface.AddAdvertisementActivity"
             android:label="Ajouter une annonce"
-            android:parentActivityName=".Interface.AdvertisementsListActivity" />
+            android:parentActivityName=".Interface.AdvertisementsListActivity"
+            android:launchMode = "singleTop"/>
 
 
                    <!-- ############# ForeignProfileActivity ############## -->
@@ -145,6 +150,7 @@
 
         <activity
             android:name=".Interface.SearchActivity"
+            android:launchMode = "singleTop"
             android:label="@string/title_activity_course_list"
             android:parentActivityName=".Interface.HomeActivity"/>
 
