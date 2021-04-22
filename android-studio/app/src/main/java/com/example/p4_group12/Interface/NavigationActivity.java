@@ -26,6 +26,8 @@ import com.google.firebase.installations.FirebaseInstallations;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 
+import java.util.Objects;
+
 public class NavigationActivity extends AppCompatActivity{
     private DrawerLayout drawerLayout;
     protected MaterialToolbar toolbar;
@@ -35,6 +37,7 @@ public class NavigationActivity extends AppCompatActivity{
     private Button deconnexion;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String currAct = this.getClass().getSimpleName();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_layout);
 
@@ -97,7 +100,7 @@ public class NavigationActivity extends AppCompatActivity{
                     case R.id.nav_profil:
                         Intent intentprofile = new Intent(getApplicationContext(), ProfileActivity.class);
                         startActivity(intentprofile);
-                        finish();
+                        if (!currAct.equals("HomeActivity")) finish();
                         break;
                     case R.id.nav_home:
                         Intent intentHome = new Intent(getApplicationContext(), HomeActivity.class);
@@ -113,12 +116,12 @@ public class NavigationActivity extends AppCompatActivity{
                     case R.id.nav_myadvertisements:
                         Intent intentmyadverts = new Intent(getApplicationContext(), MyAdvertisementsActivity.class);
                         startActivity(intentmyadverts);
-                        finish();
+                        if (!currAct.equals("HomeActivity")) finish();
                         break;
                     case R.id.nav_mybookmarks:
                         Intent intentMyBookmarks = new Intent(getApplicationContext(), MyBookmarksActivity.class);
                         startActivity(intentMyBookmarks);
-                        finish();
+                        if (!currAct.equals("HomeActivity")) finish();
                     default:
                         break;
                 }

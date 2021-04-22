@@ -29,6 +29,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class LoginActivity extends AppCompatActivity {
     private Button sign_up;
@@ -123,6 +124,7 @@ public class LoginActivity extends AppCompatActivity {
         connexion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                loadingDialog.getDialog().show();
                 loginField.setErrorEnabled(false);
                 passwordField.setErrorEnabled(false);
                 if (isCorrectlyFil()) {
@@ -159,6 +161,7 @@ public class LoginActivity extends AppCompatActivity {
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         intent.putExtra("FavList", false);
                         startActivity(intent);
+                        loadingDialog.getDialog().cancel();
                         LoginActivity.this.finish();
                     }
                 }
