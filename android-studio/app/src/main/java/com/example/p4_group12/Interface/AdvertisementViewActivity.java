@@ -119,6 +119,7 @@ public class AdvertisementViewActivity extends NavigationActivity {
                 public void onClick(View view) {
                     Intent updateAdvertisement = new Intent(getApplicationContext(), EditAdvertisementActivity.class);
                     updateAdvertisement.putExtra("toEditAdvertisement", currentAdvertisement);
+                    updateAdvertisement.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivityForResult(updateAdvertisement,2);
                 }
             });
@@ -132,6 +133,7 @@ public class AdvertisementViewActivity extends NavigationActivity {
                     Intent foreignProfile = new Intent(getApplicationContext(),  ForeignProfileActivity.class);
                     foreignProfile.putExtra("ForeignUser", currentAdvertisement.getEmailAddress());
                     Log.v("jerem", "Foreign : "+currentAdvertisement.getEmailAddress());
+                    foreignProfile.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(foreignProfile);
                 }
             });

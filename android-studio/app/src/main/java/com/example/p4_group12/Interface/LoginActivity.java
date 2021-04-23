@@ -118,6 +118,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent sign_up = new Intent(getApplicationContext(), SignupActivity.class);
+                sign_up.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(sign_up);
             }
         });

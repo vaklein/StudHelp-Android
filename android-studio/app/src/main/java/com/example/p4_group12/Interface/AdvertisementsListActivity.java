@@ -139,6 +139,7 @@ public class AdvertisementsListActivity extends NavigationActivity implements Ta
                 // Toast.makeText(getApplication().getBaseContext(), clickedCourse.getName(), Toast.LENGTH_LONG).show();
                 Intent newAdvertisement = new Intent(getApplicationContext(), AddAdvertisementActivity.class);
                 newAdvertisement.putExtra("CurrentCourse", currentCourse);
+                newAdvertisement.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivityForResult(newAdvertisement, 1); // 1 for finish
                 //startActivity(newAdvertisement);
             }
@@ -151,6 +152,7 @@ public class AdvertisementsListActivity extends NavigationActivity implements Ta
                 // Toast.makeText(getApplication().getBaseContext(), clickedCourse.getName(), Toast.LENGTH_LONG).show();
                 Intent newAdvertisement = new Intent(getApplicationContext(), AddFileActivity.class);
                 newAdvertisement.putExtra("CurrentCourse", currentCourse);
+                newAdvertisement.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivityForResult(newAdvertisement, 1); // 1 for finish
                 //startActivity(newAdvertisement);
             }

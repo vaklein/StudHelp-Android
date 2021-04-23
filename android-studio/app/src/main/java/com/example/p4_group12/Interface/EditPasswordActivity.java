@@ -81,6 +81,7 @@ public class EditPasswordActivity extends NavigationActivity {
                         previous_passwordField.setError("Mauvais mot de passe");
                     }else{
                         Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
+                        edit_profil.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(edit_profil);
                         EditPasswordActivity.this.finish();
                     }

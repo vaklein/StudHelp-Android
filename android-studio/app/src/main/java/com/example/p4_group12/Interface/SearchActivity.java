@@ -146,6 +146,7 @@ public class SearchActivity extends NavigationActivity{
                 // Toast.makeText(getApplication().getBaseContext(), clickedCourse.getName(), Toast.LENGTH_LONG).show();
                 Intent advertisementsListAct = new Intent(getApplicationContext(), AdvertisementsListActivity.class);
                 advertisementsListAct.putExtra("ClickedCourse", clickedCourse);
+                advertisementsListAct.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(advertisementsListAct);
             }
         });

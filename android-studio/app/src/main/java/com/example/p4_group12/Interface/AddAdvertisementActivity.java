@@ -119,6 +119,7 @@ public class AddAdvertisementActivity extends NavigationActivity {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     dialogInterface.dismiss();
                     Intent modifyProfile = new Intent(getApplicationContext(),EditProfileActivity.class);
+                    modifyProfile.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivityForResult(modifyProfile,2);
                 }
             });

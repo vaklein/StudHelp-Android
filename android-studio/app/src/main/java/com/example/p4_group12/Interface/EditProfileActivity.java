@@ -142,6 +142,7 @@ public class EditProfileActivity extends NavigationActivity {
             @Override
             public void onClick(View view) {
                 Intent edit_pw = new Intent(getApplicationContext(), EditPasswordActivity.class);
+                edit_pw.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(edit_pw);
             }
         });

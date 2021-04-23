@@ -135,6 +135,7 @@ public class MyAdvertisementsActivity extends NavigationActivity{
                 }
                 advertisementView.putExtra("Number of tags", i);
                 advertisementView.putExtra("contactable", 1);
+                advertisementView.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivityForResult(advertisementView, 1);
             }
         });
