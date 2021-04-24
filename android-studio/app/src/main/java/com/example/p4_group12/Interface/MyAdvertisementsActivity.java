@@ -118,8 +118,8 @@ public class MyAdvertisementsActivity extends NavigationActivity{
         }
 
         // Can't add new advertisements in this section -> invisible
-        newAdvertisementButton = findViewById(R.id.new_advertisement_button);
-        newAdvertisementButton.setVisibility(View.INVISIBLE);
+        newAdvertisementButton = findViewById(R.id.plus_button);
+        newAdvertisementButton.setVisibility(View.GONE);
 
         // Gestion du clic sur une annonce
         advertisementListAdapter.setAdvertisementClickListener(new AdvertisementListAdapter.OnAdvertisementClickListener() {
