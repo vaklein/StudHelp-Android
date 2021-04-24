@@ -62,7 +62,7 @@ public class AdvertisementProfileFragment extends Fragment {
         advertisementRecyclerView = result.findViewById(R.id.advertisementRecyclerView);
         advertisementLayoutManager = new LinearLayoutManager(getActivity());
         advertisementRecyclerView.setLayoutManager(advertisementLayoutManager);
-        advertisementListAdapter = new AdvertisementListAdapter(advertisementsListToShow, bookmarksIDs);
+        advertisementListAdapter = new AdvertisementListAdapter(advertisementsListToShow, bookmarksIDs, true);
         advertisementRecyclerView.setAdapter(advertisementListAdapter);
         advertisementListAdapter.setAdvertisementClickListener(new AdvertisementListAdapter.OnAdvertisementClickListener() {
             @Override

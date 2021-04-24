@@ -72,7 +72,7 @@ public class MyBookmarksActivity extends NavigationActivity{
         bookamrksRecyclerView = findViewById(R.id.advertisementRecyclerView);
         bookmarksLayoutManager = new LinearLayoutManager(this);
         bookamrksRecyclerView.setLayoutManager(bookmarksLayoutManager);
-        bookmarksListAdapter = new AdvertisementListAdapter(bookmarksListToShow);
+        bookmarksListAdapter = new AdvertisementListAdapter(bookmarksListToShow, true);
         bookamrksRecyclerView.setAdapter(bookmarksListAdapter);
 
         // Gestion des champs textes affichés et du FAB

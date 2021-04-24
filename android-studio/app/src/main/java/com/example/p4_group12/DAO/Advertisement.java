@@ -40,6 +40,7 @@ public class Advertisement  implements Serializable, Comparable {
     private String title;
     private String description;
     private String type;
+    private String courseName;
     private int courseID;
     private List<Tag> tags;
     private List<String> tagValues = new ArrayList<>();
@@ -95,6 +96,7 @@ public class Advertisement  implements Serializable, Comparable {
             tagValues.add(tag.getTagValue());
         }
         this.images = images;
+        this.courseName = "This should be the course name"; // TODO : Update de courseName with respect to the one of the database
 
 
         Log.v("TimeLogs", "Creation is " + creationDate);
@@ -148,6 +150,10 @@ public class Advertisement  implements Serializable, Comparable {
 
     public Date getLastUpdateDate() {
         return lastUpdateDate;
+    }
+
+    public String getCourseName() {
+        return courseName;
     }
 
     @Override

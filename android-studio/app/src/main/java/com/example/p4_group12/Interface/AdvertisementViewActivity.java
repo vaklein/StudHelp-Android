@@ -102,7 +102,7 @@ public class AdvertisementViewActivity extends NavigationActivity {
         advertisementTitle.setText(currentAdvertisement.getTitle());
         advertisementDescription.setText(currentAdvertisement.getDescription());
         lastUpdateDate.setText("Dernière modification le "+ DateFormat.getDateTimeInstance(
-                DateFormat.MEDIUM, DateFormat.SHORT, Locale.FRANCE).format(currentAdvertisement.getCreationDate()));
+                DateFormat.MEDIUM, DateFormat.SHORT, Locale.FRANCE).format(currentAdvertisement.getLastUpdateDate()));
 
         for (Tag tag : currentAdvertisement.getTags()) {
             Chip chip = new Chip(this);

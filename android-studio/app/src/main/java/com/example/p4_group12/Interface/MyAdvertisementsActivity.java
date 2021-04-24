@@ -71,7 +71,7 @@ public class MyAdvertisementsActivity extends NavigationActivity{
         //advertisementRecyclerView.setHasFixedSize(true);
         advertisementLayoutManager = new LinearLayoutManager(this);
         advertisementRecyclerView.setLayoutManager(advertisementLayoutManager);
-        advertisementListAdapter = new AdvertisementListAdapter(advertisementsListToShow, bookmarksIds);
+        advertisementListAdapter = new AdvertisementListAdapter(advertisementsListToShow, bookmarksIds, true);
         advertisementRecyclerView.setAdapter(advertisementListAdapter);
 
         // Gestion des champs textes affichés
