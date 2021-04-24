@@ -364,7 +364,7 @@ public class API {
             Log.v("Jules", "[Bad thing] Error on JSON get for the user");
             return null;
 
-        } catch (ExecutionException | InterruptedException | JSONException | ParseException e) {
+        } catch (ExecutionException | InterruptedException | JSONException | InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException | ParseException e) {
             e.printStackTrace();
             return null;
         }
@@ -462,7 +462,7 @@ public class API {
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/course/" + course_id + "/advertisement", "", "GET");
             String response = getJSON.execute().get();
-            Log.v("responseJSON", "Str is : "+response);
+            Log.v("responseJSON", "getCourseAds Str is : "+response);
             loadIntoArrayList(response, allAds, Advertisement.class);
         } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
             e.printStackTrace();
@@ -474,6 +474,7 @@ public class API {
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement/" + id, "", "GET");
             String response = getJSON.execute().get();
+            Log.v("responseJSON", "getAd Str is : "+response);
             loadIntoArrayList(response, allAds, Advertisement.class);
         } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
             e.printStackTrace();
@@ -489,7 +490,7 @@ public class API {
             JSONObject jsonObject = (JSONObject) new JSONArray(response).get(0);
             if(jsonObject == null) return null;
             return (Social_links) GettableObjectFactory.getObject(jsonObject, Social_links.class);
-        } catch (InterruptedException | ExecutionException | JSONException | ParseException e) {
+        } catch (InterruptedException | ExecutionException | JSONException | ParseException | InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
             e.printStackTrace();
             return null;
         }
@@ -595,6 +596,7 @@ public class API {
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + user.getEmail() + "/advertisement", "", "GET");
             String response = getJSON.execute().get();
+            Log.v("responseJSON", "getAdOfUser Str is : "+response);
             loadIntoArrayList(response, allUserAds, Advertisement.class);
         } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
             e.printStackTrace();
@@ -667,8 +669,9 @@ public class API {
         try{
             ArrayList<Advertisement> out = new ArrayList<>();
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + user.getEmail() + "/bookmarks", "", "GET");
-
-            loadIntoArrayList(getJSON.execute().get(), out, Advertisement.class);
+            String response = getJSON.execute().get();
+            Log.v("responseJSON", "getBookmarksOfUser Str is : "+response);
+            loadIntoArrayList(response, out, Advertisement.class);
             return  out;
         } catch (JSONException | IllegalAccessException | InstantiationException | ParseException | InvocationTargetException | ExecutionException | NoSuchMethodException | InterruptedException e) {
             e.printStackTrace();
@@ -716,7 +719,7 @@ public class API {
     /**
      * Here we get the JSON given by the DB and we get the courses from it in order to add them into the course list
      */
-    private static void loadIntoArrayList(String json, ArrayList gettableObjectArrayList, Class objectClass) throws JSONException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ParseException {
+    public static void loadIntoArrayList(String json, ArrayList gettableObjectArrayList, Class objectClass) throws JSONException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ParseException {
         JSONArray jsonArray = new JSONArray(json);
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject obj = jsonArray.getJSONObject(i);
