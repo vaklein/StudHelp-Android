@@ -36,7 +36,9 @@ public class GettableObjectFactory {
             String goodFormatUpdatedDate = dbObject.getString("updated_at").substring(0, 10) + " " + dbObject.getString("updated_at").substring(11,19);
             Log.v("Creation date", goodFormatCreationDate);
             Log.v("Update date", goodFormatUpdatedDate);
-            return new Advertisement(Integer.parseInt(dbObject.getString("id")), dbObject.getString("user_email"), dbObject.getString("name"), dbObject.getString("title"), dbObject.getString("description"), tags, Integer.parseInt(dbObject.getString("course_id")), pictures, goodFormatCreationDate, goodFormatUpdatedDate);
+            Advertisement ad = new Advertisement(Integer.parseInt(dbObject.getString("id")), dbObject.getString("user_email"), dbObject.getString("name"), dbObject.getString("title"), dbObject.getString("description"), tags, Integer.parseInt(dbObject.getString("course_id")), pictures, goodFormatCreationDate, goodFormatUpdatedDate);
+            ad.setCourseName(dbObject.getString("course_name"));
+            return ad;
         }
         else if(objectClass.getCanonicalName().equals(User.class.getCanonicalName())) {
             return new User(dbObject.getString("name"), dbObject.getString("login"), dbObject.getString("email"), dbObject.getString("picture"), dbObject.getString("description"));

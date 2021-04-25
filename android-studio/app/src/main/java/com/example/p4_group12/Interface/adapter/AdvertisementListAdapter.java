@@ -125,7 +125,7 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
         holder.advertisementDescriptionTextView.setText(currentAdvertisement.getDescription());
         if (showCourseName) {
             holder.courseNameTextView.setVisibility(View.VISIBLE);
-            holder.courseNameTextView.setText("This should be the course name"); // TODO : change by currentAdvertisement.getCourseName()
+            holder.courseNameTextView.setText(currentAdvertisement.getCourseName());
         } else {
             holder.courseNameTextView.setVisibility(View.GONE);
         }

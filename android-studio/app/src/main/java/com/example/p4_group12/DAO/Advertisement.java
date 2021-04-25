@@ -84,6 +84,10 @@ public class Advertisement  implements Serializable, Comparable {
         this.images = images;
     }
 
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
     public Advertisement(int ID, String mail, String userFullname, String title, String description, List<Tag> tags, int courseID, List<String> images, String creationDate, String lastUpdateDate) throws ParseException {
         this.ID = ID;
         this.mail = mail;
@@ -96,8 +100,7 @@ public class Advertisement  implements Serializable, Comparable {
             tagValues.add(tag.getTagValue());
         }
         this.images = images;
-        this.courseName = "This should be the course name"; // TODO : Update de courseName with respect to the one of the database
-
+        this.courseName = "This should not appear, and be the course name";
 
         Log.v("TimeLogs", "Creation is " + creationDate);
         this.creationDate = getLocaleDateFromString(creationDate);
