@@ -30,6 +30,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -68,23 +69,27 @@ public class EditPasswordActivity extends NavigationActivity {
         edit_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                previous_passwordField.setErrorEnabled(false);
-                new_passwordField.setErrorEnabled(false);
-                password_confirmationField.setErrorEnabled(false);
-                password_confirmationField.setErrorEnabled(false);
-                if (isCorrectlyFill() && isSameNewPassword() && isPasswordPowerfull()) {
-                    api = API.getInstance();
-                    Boolean apiRetValue = api.updatePassword(GlobalVariables.getUser(), new_password.getText().toString(), password_confirmation.getText().toString(), previous_password.getText().toString());
-                    if(apiRetValue == null) {
-                        Toast.makeText(EditPasswordActivity.this, "Une erreur est survenue, veuillez réessayer", Toast.LENGTH_LONG).show();
-                    }else if(!apiRetValue){
-                        previous_passwordField.setError("Mauvais mot de passe");
-                    }else{
-                        Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
-                        edit_profil.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(edit_profil);
-                        EditPasswordActivity.this.finish();
+                try {
+                    previous_passwordField.setErrorEnabled(false);
+                    new_passwordField.setErrorEnabled(false);
+                    password_confirmationField.setErrorEnabled(false);
+                    password_confirmationField.setErrorEnabled(false);
+                    if (isCorrectlyFill() && isSameNewPassword() && isPasswordPowerfull()) {
+                        api = API.getInstance();
+                        Boolean apiRetValue = api.updatePassword(GlobalVariables.getUser(), new_password.getText().toString(), password_confirmation.getText().toString(), previous_password.getText().toString());
+                        if (apiRetValue == null) {
+                            Toast.makeText(EditPasswordActivity.this, "Une erreur est survenue, veuillez réessayer", Toast.LENGTH_LONG).show();
+                        } else if (!apiRetValue) {
+                            previous_passwordField.setError("Mauvais mot de passe");
+                        } else {
+                            Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
+                            edit_profil.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(edit_profil);
+                            EditPasswordActivity.this.finish();
+                        }
                     }
+                }catch (UnknownHostException e){
+                    Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
                 }
             }
         });

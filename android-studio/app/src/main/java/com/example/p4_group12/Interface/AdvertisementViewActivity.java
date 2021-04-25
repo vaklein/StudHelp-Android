@@ -157,23 +157,27 @@ public class AdvertisementViewActivity extends NavigationActivity {
         devImages.add("advertisements/ArBqYBaleyuw0aCD1SEtwlBrKKSXI58zw88HOE0m.jpg");
         currentAdvertisement.setImages(devImages);
         */
-        currentAdvertisement.setImages(api.getAdvertisementPictures(currentAdvertisement.getID()));
-        carousel = findViewById(R.id.advertisement_view_carousel);
-        System.out.println(currentAdvertisement.getImages().toString());
-        if (currentAdvertisement.hasImages()) {
-            // As long as we don't find a way to stop autoplay when the user swipe the carousel the user experience is better without autoplay
-            carousel.setAutoPlay(false);
-            carousel.setSize(currentAdvertisement.getImages().size());
-            carousel.setCarouselViewListener(new CarouselViewListener() {
-                @Override
-                public void onBindView(View view, int position) {
-                    ImageView imageView = view.findViewById(R.id.carousel_item_imageView);
-                    Picasso.get().load(BuildConfig.STORAGE_URL + currentAdvertisement.getImages().get(position)).into(imageView);
-                }
-            });
-            carousel.show();
-        } else {
-            carousel.setVisibility(View.GONE);
+        try {
+            currentAdvertisement.setImages(api.getAdvertisementPictures(currentAdvertisement.getID()));
+            carousel = findViewById(R.id.advertisement_view_carousel);
+            System.out.println(currentAdvertisement.getImages().toString());
+            if (currentAdvertisement.hasImages()) {
+                // As long as we don't find a way to stop autoplay when the user swipe the carousel the user experience is better without autoplay
+                carousel.setAutoPlay(false);
+                carousel.setSize(currentAdvertisement.getImages().size());
+                carousel.setCarouselViewListener(new CarouselViewListener() {
+                    @Override
+                    public void onBindView(View view, int position) {
+                        ImageView imageView = view.findViewById(R.id.carousel_item_imageView);
+                        Picasso.get().load(BuildConfig.STORAGE_URL + currentAdvertisement.getImages().get(position)).into(imageView);
+                    }
+                });
+                carousel.show();
+            } else {
+                carousel.setVisibility(View.GONE);
+            }
+        }catch (UnknownHostException e){
+            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -202,11 +206,16 @@ public class AdvertisementViewActivity extends NavigationActivity {
                 builder.setMessage("Etes vous sûr de vouloir supprimer cette annonce ?");
                 builder.setPositiveButton("OUI", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent();
-                        api.deleteAdvertisment(currentAdvertisement);
-                        setResult(1, intent);
-                        finish();
-                        dialog.dismiss();
+                        try {
+                            Intent intent = new Intent();
+                            api.deleteAdvertisment(currentAdvertisement);
+                            setResult(1, intent);
+                            finish();
+                            dialog.dismiss();
+                        }catch (UnknownHostException e){
+                            dialog.dismiss();
+                            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
                 builder.setNegativeButton("NON", new DialogInterface.OnClickListener() {
@@ -248,7 +257,6 @@ public class AdvertisementViewActivity extends NavigationActivity {
             }
             advertisementView.putExtra("Number of tags", i);
             advertisementView.putExtra("contactable", contactable);
-            Log.v("Lucas",ad.toString());
             startActivity(advertisementView);
             finish();
         }
