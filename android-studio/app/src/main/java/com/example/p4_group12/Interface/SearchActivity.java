@@ -108,58 +108,57 @@ public class SearchActivity extends NavigationActivity{
             courseRecyclerView.setLayoutManager(courseLayoutManager);
 
             courseRecyclerView.setAdapter(courseListAdapter);
+
+
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    if(true){
+                        currentQuery = query;
+                        courseListAdapter.getFilter().filter(query);
+                    }else{
+                        Toast.makeText(SearchActivity.this, "No Match found",Toast.LENGTH_LONG).show();
+                    }
+                    return false;
+                }
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    currentQuery = newText;
+                    courseListAdapter.getFilter().filter(newText);
+                    return false;
+                }
+            });
+
+            favoriteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean activated) {
+                    Log.v("Jules", searchView.getQuery().toString());
+                    if(activated) courseListAdapter.favoriteFilter(currentQuery);
+                    else courseListAdapter.resetFavoriteFilter(currentQuery);//courseListAdapter.getFilter().filter(searchView.getQuery());
+
+                    // courseList = courseListAdapter.courseList;
+                }
+            });
+
+
+
+            // Creating the onClickListener for the courses
+            courseListAdapter.setCourseClickListener(new CourseListAdapter.OnCourseClickListener() {
+                @Override
+                public void OnCourseClick(int position) {
+                    Course clickedCourse = courseList.get(position);
+                    // Toast.makeText(getApplication().getBaseContext(), clickedCourse.getName(), Toast.LENGTH_LONG).show();
+                    Intent advertisementsListAct = new Intent(getApplicationContext(), AdvertisementsListActivity.class);
+                    advertisementsListAct.putExtra("ClickedCourse", clickedCourse);
+                    advertisementsListAct.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(advertisementsListAct);
+                }
+            });
+
         } catch (UnknownHostException e){
             finish();
             Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG);
         }
-
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                if(true){
-                    currentQuery = query;
-                    courseListAdapter.getFilter().filter(query);
-                }else{
-                    Toast.makeText(SearchActivity.this, "No Match found",Toast.LENGTH_LONG).show();
-                }
-                return false;
-            }
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                currentQuery = newText;
-                courseListAdapter.getFilter().filter(newText);
-                return false;
-            }
-        });
-
-        favoriteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean activated) {
-                Log.v("Jules", searchView.getQuery().toString());
-                if(activated) courseListAdapter.favoriteFilter(currentQuery);
-                else courseListAdapter.resetFavoriteFilter(currentQuery);//courseListAdapter.getFilter().filter(searchView.getQuery());
-
-                // courseList = courseListAdapter.courseList;
-            }
-        });
-
-
-
-        // Creating the onClickListener for the courses
-        courseListAdapter.setCourseClickListener(new CourseListAdapter.OnCourseClickListener() {
-            @Override
-            public void OnCourseClick(int position) {
-                Course clickedCourse = courseList.get(position);
-                // Toast.makeText(getApplication().getBaseContext(), clickedCourse.getName(), Toast.LENGTH_LONG).show();
-                Intent advertisementsListAct = new Intent(getApplicationContext(), AdvertisementsListActivity.class);
-                advertisementsListAct.putExtra("ClickedCourse", clickedCourse);
-                advertisementsListAct.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(advertisementsListAct);
-            }
-        });
-
-
 
     }
 
