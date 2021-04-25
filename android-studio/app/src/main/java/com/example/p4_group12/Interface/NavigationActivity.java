@@ -42,7 +42,7 @@ public class NavigationActivity extends AppCompatActivity{
         setContentView(R.layout.drawer_layout);
 
         // Sending the token when the user is logged in
-        // Putting this here because it's created once and right after the log in WRONG !!!!!!
+        // At startup
         if(!GlobalVariables.tokenAlreadySent()){
             FirebaseMessaging.getInstance().getToken()
                     .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -60,7 +60,7 @@ public class NavigationActivity extends AppCompatActivity{
                             API.getInstance().sendToken(GlobalVariables.getUser().getEmail(), token);
                         }
                     });
-            GlobalVariables.switchBooleanToken();
+            GlobalVariables.tokenSent();
         }
 
 
@@ -83,7 +83,7 @@ public class NavigationActivity extends AppCompatActivity{
                 API.getInstance().logoutUser(sharedPreferences);
 
                 GlobalVariables.setUser(null);
-                GlobalVariables.switchBooleanToken();
+                GlobalVariables.revokeToken();
 
                 Intent intentLoginActivity = new Intent(getApplicationContext(), LoginActivity.class);
                 intentLoginActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

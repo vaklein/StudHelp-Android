@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                 sharedPreferences.edit().putString(PREF_EMAIL, null).apply();
 
                 GlobalVariables.setUser(null);
-                GlobalVariables.switchBooleanToken();
+                GlobalVariables.revokeToken();
 
                 Intent intentLoginActivity = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intentLoginActivity);
