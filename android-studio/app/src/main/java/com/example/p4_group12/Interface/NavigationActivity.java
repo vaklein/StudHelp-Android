@@ -100,14 +100,18 @@ public class NavigationActivity extends AppCompatActivity{
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.nav_profil:
-                        Intent intentprofile = new Intent(getApplicationContext(), ProfileActivity.class);
-                        startActivity(intentprofile);
-                        if (!currAct.equals("HomeActivity")) finish();
+                        Intent home1 = new Intent(getApplicationContext(), HomeActivity.class);
+                        Log.v("jeremActi", "profil");
+                        home1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(home1);
+                        Intent profil = new Intent(getApplicationContext(), ProfileActivity.class);
+                        startActivity(profil);
                         break;
                     case R.id.nav_home:
-                        Intent intentHome = new Intent(getApplicationContext(), HomeActivity.class);
-                        startActivity(intentHome);
-                        finish();
+                        Intent home2 = new Intent(getApplicationContext(), HomeActivity.class);
+                        Log.v("jeremActi", "profil");
+                        home2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(home2);
                         break;
                     /* Ça n'a plus beaucoup de sens d'afficher la liste des 42.500 cours...
                     case R.id.nav_courses:
@@ -116,14 +120,19 @@ public class NavigationActivity extends AppCompatActivity{
                         finish();
                         break;*/
                     case R.id.nav_myadvertisements:
-                        Intent intentmyadverts = new Intent(getApplicationContext(), MyAdvertisementsActivity.class);
-                        startActivity(intentmyadverts);
-                        if (!currAct.equals("HomeActivity")) finish();
+                        Intent home3 = new Intent(getApplicationContext(), HomeActivity.class);
+                        home3.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(home3);
+                        Intent adv = new Intent(getApplicationContext(), MyAdvertisementsActivity.class);
+                        startActivity(adv);
                         break;
                     case R.id.nav_mybookmarks:
-                        Intent intentMyBookmarks = new Intent(getApplicationContext(), MyBookmarksActivity.class);
-                        startActivity(intentMyBookmarks);
-                        if (!currAct.equals("HomeActivity")) finish();
+                        Intent home4 = new Intent(getApplicationContext(), HomeActivity.class);
+                        home4.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(home4);
+                        Intent book = new Intent(getApplicationContext(), MyBookmarksActivity.class);
+                        startActivity(book);
+                        break;
                     default:
                         break;
                 }
