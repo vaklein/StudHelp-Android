@@ -43,6 +43,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -99,33 +100,36 @@ public class AddAdvertisementActivity extends NavigationActivity {
         addPictureFromGalery = findViewById(R.id.add_picturefromgalery_button);
         this.api = API.getInstance();
 
-        if (GlobalVariables.getUser().getSocial_links() == null) {
-            GlobalVariables.getUser().setSocial_links(api.getSocialLinksOfUser(GlobalVariables.getUser()));
+        try {
+            if (GlobalVariables.getUser().getSocial_links() == null) {
+                GlobalVariables.getUser().setSocial_links(api.getSocialLinksOfUser(GlobalVariables.getUser()));
+            }
+            if (!GlobalVariables.getUser().hasASocialNetwork()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Attention");
+                builder.setMessage("Vous n'avez pas encore ajouté de réseau social. Vous pouvez ajouter des annonces mais les autres utilisateurs ne sauront pas vous contacter." +
+                        " Pour ajouter des réseaux sociaux, sélectionnez \"Ajouter des réseaux\".");
+                builder.setPositiveButton("J'ai compris !", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton("Ajouter des réseaux  ", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        Intent modifyProfile = new Intent(getApplicationContext(), EditProfileActivity.class);
+                        modifyProfile.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivityForResult(modifyProfile, 2);
+                    }
+                });
+                builder.show();
+            }
+        }catch (UnknownHostException e){
+            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG);
         }
-        if (!GlobalVariables.getUser().hasASocialNetwork()){
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Attention");
-            builder.setMessage("Vous n'avez pas encore ajouté de réseau social. Vous pouvez ajouter des annonces mais les autres utilisateurs ne sauront pas vous contacter." +
-                    " Pour ajouter des réseaux sociaux, sélectionnez \"Ajouter des réseaux\".");
-            builder.setPositiveButton("J'ai compris !", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // Do nothing
-                    dialog.dismiss();
-                }
-            });
-            builder.setNegativeButton("Ajouter des réseaux  ", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                    Intent modifyProfile = new Intent(getApplicationContext(),EditProfileActivity.class);
-                    modifyProfile.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivityForResult(modifyProfile,2);
-                }
-            });
-            builder.show();
-        }
-
         // Types
         types.add("Offre");
         types.add("Demande");

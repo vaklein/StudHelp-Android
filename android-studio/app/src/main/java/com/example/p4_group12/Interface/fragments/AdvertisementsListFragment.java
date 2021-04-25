@@ -11,6 +11,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,6 +36,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -45,6 +47,7 @@ public class AdvertisementsListFragment extends Fragment {
     private AdvertisementListAdapter advertisementListAdapter;
     private ArrayList<Advertisement> advertisementsListComplete;
     private ArrayList<Advertisement> advertisementsListToShow;
+    private HashSet<Integer> bookmarksIds;
     private TextView courseCode;
     private TextView courseFac;
     private ChipGroup filters;
@@ -75,10 +78,16 @@ public class AdvertisementsListFragment extends Fragment {
         if (api == null) Log.v("Jules", "API is null in AdvertisementListActivity");
         Log.v("AdvertisementLoading", "start");
         course_id = this.getArguments().getInt("course_id");
-        advertisementsListComplete = api.getCourseAdvertisements(course_id);
-        Log.v("AdvertisementLoading", "finish");
-        advertisementsListToShow = (ArrayList<Advertisement>) advertisementsListComplete.clone();
-        HashSet<Integer> bookmarksIds = api.getBookmarksIdsOfUser(GlobalVariables.getUser());
+
+        try {
+            advertisementsListComplete = api.getCourseAdvertisements(course_id);
+            Log.v("AdvertisementLoading", "finish");
+            advertisementsListToShow = (ArrayList<Advertisement>) advertisementsListComplete.clone();
+            bookmarksIds = api.getBookmarksIdsOfUser(GlobalVariables.getUser());
+        } catch (UnknownHostException e){
+            getActivity().finish();
+            Toast.makeText(getContext(), R.string.no_connection, Toast.LENGTH_LONG);
+        }
 
         filters = result.findViewById(R.id.advertisement_list_filter_chip_group);
         courseCode = result.findViewById(R.id.advertisement_course_card_view_code);

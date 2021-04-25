@@ -48,6 +48,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
@@ -109,9 +110,16 @@ public class EditProfileActivity extends NavigationActivity {
         new_loginField = (TextInputLayout) findViewById(R.id.teams);
         loadingDialog = new LoadingDialog(this, "Modification en cours...");
 
-        if(GlobalVariables.getUser().getSocial_links() == null){
-            GlobalVariables.getUser().setSocial_links(api.getSocialLinksOfUser(GlobalVariables.getUser()));
+        try{
+            if(GlobalVariables.getUser().getSocial_links() == null){
+                GlobalVariables.getUser().setSocial_links(api.getSocialLinksOfUser(GlobalVariables.getUser()));
+            }
+        } catch (UnknownHostException e){
+            finish();
+            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG);
         }
+
+
 
         phone_text = (TextInputEditText) findViewById(R.id.phone_text);
         phone_text.setText(GlobalVariables.getUser().getSocial_links().getPhone());

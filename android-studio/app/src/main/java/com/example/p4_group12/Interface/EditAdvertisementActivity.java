@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -41,6 +42,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -105,9 +107,15 @@ public class EditAdvertisementActivity extends NavigationActivity{
 
         this.api = API.getInstance();
 
-        if (GlobalVariables.getUser().getSocial_links() == null) {
-            GlobalVariables.getUser().setSocial_links(api.getSocialLinksOfUser(GlobalVariables.getUser()));
+        try {
+            if (GlobalVariables.getUser().getSocial_links() == null) {
+                GlobalVariables.getUser().setSocial_links(api.getSocialLinksOfUser(GlobalVariables.getUser()));
+            }
+        } catch (UnknownHostException e){
+            finish();
+            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG);
         }
+
         if (!GlobalVariables.getUser().hasASocialNetwork()){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Attention");

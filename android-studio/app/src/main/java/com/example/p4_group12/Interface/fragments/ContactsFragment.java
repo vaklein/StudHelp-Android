@@ -27,7 +27,12 @@ import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
 import com.google.android.material.card.MaterialCardView;
 
+import java.net.UnknownHostException;
+
 public class ContactsFragment extends Fragment {
+
+    private Social_links s;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -45,25 +50,57 @@ public class ContactsFragment extends Fragment {
         TextView discordtext = result.findViewById(R.id.discord_text);
 
         User user = new User(this.getArguments().getString("email"));
-        Social_links s;
-        if (this.getArguments().getString("type").equals("foreign")){
-            s = API.getInstance().getSocialLinksOfUser(user);
-        }else {
-            if (GlobalVariables.getUser().getSocial_links() == null) {
-                s = API.getInstance().getSocialLinksOfUser(GlobalVariables.getUser());
-                GlobalVariables.getUser().setSocial_links(s);
-            } else {
-                s = GlobalVariables.getUser().getSocial_links();
+
+        try {
+            if (this.getArguments().getString("type").equals("foreign")){
+                s = API.getInstance().getSocialLinksOfUser(user);
+            }else {
+                if (GlobalVariables.getUser().getSocial_links() == null) {
+                    s = API.getInstance().getSocialLinksOfUser(GlobalVariables.getUser());
+                    GlobalVariables.getUser().setSocial_links(s);
+                } else {
+                    s = GlobalVariables.getUser().getSocial_links();
+                }
             }
+
+            if(!s.getDiscord().equals("") && s.getDiscord() != null){
+                SpannableString content = new SpannableString(s.getDiscord());
+                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                discordtext.setText(content);
+                discordlayout.setVisibility(View.VISIBLE);
+                noNetworkString.setVisibility(View.GONE);
+            }
+
+            if(!s.getTeams().equals("") && s.getTeams() != null){
+                SpannableString content = new SpannableString(s.getTeams());
+                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                teamstext.setText(content);
+                teamslayout.setVisibility(View.VISIBLE);
+                noNetworkString.setVisibility(View.GONE);
+            }
+
+            if(!s.getPhone().equals("") && s.getPhone() != null){
+                SpannableString content = new SpannableString(s.getPhone());
+                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                phonetext.setText(content);
+                phonelayout.setVisibility(View.VISIBLE);
+                noNetworkString.setVisibility(View.GONE);
+            }
+
+            if(!s.getPublicEmail().equals("") && s.getPublicEmail() != null){
+                SpannableString content = new SpannableString(s.getPublicEmail());
+                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                publicemailtext.setText(content);
+                publicemaillayout.setVisibility(View.VISIBLE);
+                noNetworkString.setVisibility(View.GONE);
+            }
+        } catch (UnknownHostException e){
+            getActivity().finish();
+            Toast.makeText(getContext(), R.string.no_connection, Toast.LENGTH_LONG);
         }
 
-        if(!s.getDiscord().equals("") && s.getDiscord() != null){
-            SpannableString content = new SpannableString(s.getDiscord());
-            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-            discordtext.setText(content);
-            discordlayout.setVisibility(View.VISIBLE);
-            noNetworkString.setVisibility(View.GONE);
-        }
+
+
         discordtext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,13 +110,7 @@ public class ContactsFragment extends Fragment {
                 Toast.makeText(getContext(), "Copié !", Toast.LENGTH_LONG).show();
             }
         });
-        if(!s.getTeams().equals("") && s.getTeams() != null){
-            SpannableString content = new SpannableString(s.getTeams());
-            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-            teamstext.setText(content);
-            teamslayout.setVisibility(View.VISIBLE);
-            noNetworkString.setVisibility(View.GONE);
-        }
+
         teamstext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,13 +119,7 @@ public class ContactsFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        if(!s.getPhone().equals("") && s.getPhone() != null){
-            SpannableString content = new SpannableString(s.getPhone());
-            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-            phonetext.setText(content);
-            phonelayout.setVisibility(View.VISIBLE);
-            noNetworkString.setVisibility(View.GONE);
-        }
+
         phonetext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,13 +128,7 @@ public class ContactsFragment extends Fragment {
                 clipboard.setPrimaryClip(clip);
             }
         });
-        if(!s.getPublicEmail().equals("") && s.getPublicEmail() != null){
-            SpannableString content = new SpannableString(s.getPublicEmail());
-            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-            publicemailtext.setText(content);
-            publicemaillayout.setVisibility(View.VISIBLE);
-            noNetworkString.setVisibility(View.GONE);
-        }
+
         publicemailtext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

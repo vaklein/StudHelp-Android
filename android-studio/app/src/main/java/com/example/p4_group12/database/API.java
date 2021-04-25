@@ -481,7 +481,7 @@ public class API {
         }
     }
 
-    public void addNewFavoriteToUser(User user, Course course){
+    public void addNewFavoriteToUser(User user, Course course){ // No need to handle connection errors
         try{
             String data = URLEncoder.encode("user_email", "UTF-8") + "=" + URLEncoder.encode(user.getEmail(), "UTF-8") + "&" +
                     URLEncoder.encode("course_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(course.getID()), "UTF-8");
@@ -493,7 +493,7 @@ public class API {
         }
     }
 
-    public void removeFavoriteToUser(User user, Course course){
+    public void removeFavoriteToUser(User user, Course course){ // No need to handle connection errors
         try{
             String data = URLEncoder.encode("user_email", "UTF-8") + "=" + URLEncoder.encode(user.getEmail(), "UTF-8") + "&" +
                     URLEncoder.encode("course_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(course.getID()), "UTF-8");
@@ -505,11 +505,15 @@ public class API {
         }
     }
 
-    public ArrayList<Advertisement> getCourseAdvertisements(int course_id){
+    public ArrayList<Advertisement> getCourseAdvertisements(int course_id) throws UnknownHostException{
         ArrayList<Advertisement> allAds = new ArrayList<>();
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/course/" + course_id + "/advertisement", "", "GET");
             String response = getJSON.execute().get();
+
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
+
             Log.v("responseJSON", "getCourseAds Str is : "+response);
             loadIntoArrayList(response, allAds, Advertisement.class);
         } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
@@ -518,11 +522,15 @@ public class API {
         return allAds;
     }
 
-    public Advertisement getAdvertisment(int id){
+    public Advertisement getAdvertisment(int id) throws  UnknownHostException{
         ArrayList<Advertisement> allAds = new ArrayList<>();
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement/" + id, "", "GET");
             String response = getJSON.execute().get();
+
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
+
             Log.v("responseJSON", "getAd Str is : "+response);
             loadIntoArrayList(response, allAds, Advertisement.class);
         } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
@@ -531,10 +539,13 @@ public class API {
         return allAds.get(0);
     }
 
-    public Social_links getSocialLinksOfUser(User user){
+    public Social_links getSocialLinksOfUser(User user) throws UnknownHostException{
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + user.getEmail() + "/social_links", "", "GET");
             String response = getJSON.execute().get();
+
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
 
             JSONObject jsonObject = (JSONObject) new JSONArray(response).get(0);
             if(jsonObject == null) return null;
