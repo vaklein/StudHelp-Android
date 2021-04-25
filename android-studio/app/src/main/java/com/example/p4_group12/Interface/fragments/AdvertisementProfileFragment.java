@@ -44,48 +44,49 @@ public class AdvertisementProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View result = inflater.inflate(R.layout.fragment_advertisement, container, false);
 
-        API api = API.getInstance();
-        Log.v("jerem", "frag foreign 1 : ");
-        emailValue = this.getArguments().getString("email");
-        Log.v("jerem", "frag foreign : " + emailValue);
-        try{
+        try {
+            API api = API.getInstance();
+            Log.v("jerem", "frag foreign 1 : ");
+            emailValue = this.getArguments().getString("email");
+            Log.v("jerem", "frag foreign : " + emailValue);
+
             User user = api.getUserWithEmail(emailValue);
             advertisementsListComplete = api.getAdvertisementsOfUser(user);
-        } catch(UnknownHostException e){
-            getActivity().finish();
-            Toast.makeText(getContext(), R.string.no_connection, Toast.LENGTH_LONG);
-        }
 
-        HashSet<Integer> bookmarksIDs = api.getBookmarksIdsOfUser(GlobalVariables.getUser());
+            HashSet<Integer> bookmarksIDs = api.getBookmarksIdsOfUser(GlobalVariables.getUser());
 
-        advertisement = result.findViewById(R.id.no_advertisements_frag);
+            advertisement = result.findViewById(R.id.no_advertisements_frag);
 
-        advertisementsListToShow = (ArrayList<Advertisement>) advertisementsListComplete.clone();
-        if (!emailValue.equals(GlobalVariables.getUser().getEmail())) advertisement.setText(R.string.no_advertisment);
-        if (advertisementsListComplete.isEmpty()) advertisement.setVisibility(View.VISIBLE);
+            advertisementsListToShow = (ArrayList<Advertisement>) advertisementsListComplete.clone();
+            if (!emailValue.equals(GlobalVariables.getUser().getEmail()))
+                advertisement.setText(R.string.no_advertisment);
+            if (advertisementsListComplete.isEmpty()) advertisement.setVisibility(View.VISIBLE);
 
-        advertisementRecyclerView = result.findViewById(R.id.advertisementRecyclerView);
-        advertisementLayoutManager = new LinearLayoutManager(getActivity());
-        advertisementRecyclerView.setLayoutManager(advertisementLayoutManager);
-        advertisementListAdapter = new AdvertisementListAdapter(advertisementsListToShow, bookmarksIDs, true);
-        advertisementRecyclerView.setAdapter(advertisementListAdapter);
-        advertisementListAdapter.setAdvertisementClickListener(new AdvertisementListAdapter.OnAdvertisementClickListener() {
-            @Override
-            public void OnAdvertisementClick(int position) {
-                Advertisement clickedAdvertisement = advertisementsListToShow.get(position);
-                Intent advertisementView = new Intent(getActivity(), AdvertisementViewActivity.class);
-                advertisementView.putExtra("ClickedAdvertisement", clickedAdvertisement);
-                int i = 0;
-                for (Tag tag : clickedAdvertisement.getTags()) {
-                    advertisementView.putExtra("tag" + i, tag);
-                    i++;
+            advertisementRecyclerView = result.findViewById(R.id.advertisementRecyclerView);
+            advertisementLayoutManager = new LinearLayoutManager(getActivity());
+            advertisementRecyclerView.setLayoutManager(advertisementLayoutManager);
+            advertisementListAdapter = new AdvertisementListAdapter(advertisementsListToShow, bookmarksIDs, true);
+            advertisementRecyclerView.setAdapter(advertisementListAdapter);
+            advertisementListAdapter.setAdvertisementClickListener(new AdvertisementListAdapter.OnAdvertisementClickListener() {
+                @Override
+                public void OnAdvertisementClick(int position) {
+                    Advertisement clickedAdvertisement = advertisementsListToShow.get(position);
+                    Intent advertisementView = new Intent(getActivity(), AdvertisementViewActivity.class);
+                    advertisementView.putExtra("ClickedAdvertisement", clickedAdvertisement);
+                    int i = 0;
+                    for (Tag tag : clickedAdvertisement.getTags()) {
+                        advertisementView.putExtra("tag" + i, tag);
+                        i++;
+                    }
+                    advertisementView.putExtra("Number of tags", i);
+                    advertisementView.putExtra("contactable", 0);
+                    advertisementView.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivityForResult(advertisementView, 1);
                 }
-                advertisementView.putExtra("Number of tags", i);
-                advertisementView.putExtra("contactable", 0);
-                advertisementView.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivityForResult(advertisementView, 1);
-            }
-        });
+            });
+        }catch (UnknownHostException e){
+            Toast.makeText(getContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
+        }
         return result;
     }
     @Override

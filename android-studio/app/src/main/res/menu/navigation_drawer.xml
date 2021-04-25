@@ -27,5 +27,10 @@
             android:icon="@drawable/ic_baseline_bookmarks_24"
             android:title="@string/my_bookmarks"
             />
+        <item
+            android:id="@+id/nav_favoritecourses"
+            android:icon="@drawable/ic_baseline_favorite_selected"
+            android:title="@string/favorites"
+            />
     </group>
 </menu>

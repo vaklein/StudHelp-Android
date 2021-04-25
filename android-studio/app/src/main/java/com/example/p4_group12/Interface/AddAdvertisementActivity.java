@@ -331,39 +331,45 @@ public class AddAdvertisementActivity extends NavigationActivity {
         List<Integer> checkedObjectsIDs = objectChipGroup.getCheckedChipIds();
 
         if (isCorrectlyFilled(checkedTypeID, checkedCyclesIDs, checkedObjectsIDs)) {
-            int advertisementId = api.addNewAdvertisement(course.getID(), advertisementTitleText.getText().toString(), advertisementDescriptionText.getText().toString(), GlobalVariables.getUser().getEmail(), "Types are deprecated");
-            api.addNewTag(new Tag(-1, advertisementId, "type", (String) ((Chip) typeChipGroup.findViewById(checkedTypeID)).getText()));
-            for (int i : checkedCyclesIDs) {
-                api.addNewTag(new Tag(-1, advertisementId, "cycle", (String) ((Chip) cycleChipGroup.findViewById(i)).getText()));
-            }
-            for (int i : checkedObjectsIDs){
-                api.addNewTag(new Tag(-1, advertisementId, "object", (String) ((Chip) objectChipGroup.findViewById(i)).getText()));
-            }
+            int advertisementId = 0;
+            try {
+                advertisementId = api.addNewAdvertisement(course.getID(), advertisementTitleText.getText().toString(), advertisementDescriptionText.getText().toString(), GlobalVariables.getUser().getEmail(), "Types are deprecated");
 
-            if(imageBitmap != null) {
-                File test = null;
-                try {
-                    test = createImageFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                api.addNewTag(new Tag(-1, advertisementId, "type", (String) ((Chip) typeChipGroup.findViewById(checkedTypeID)).getText()));
+                for (int i : checkedCyclesIDs) {
+                    api.addNewTag(new Tag(-1, advertisementId, "cycle", (String) ((Chip) cycleChipGroup.findViewById(i)).getText()));
                 }
-                try (FileOutputStream out = new FileOutputStream(test)) {
-                    imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-                    // PNG is a lossless format, the compression factor (100) is ignored
-                } catch (IOException e) {
-                    e.printStackTrace();
+                for (int i : checkedObjectsIDs) {
+                    api.addNewTag(new Tag(-1, advertisementId, "object", (String) ((Chip) objectChipGroup.findViewById(i)).getText()));
                 }
 
-                try {
-                    api.setAdvertisementPicture(advertisementId,test);
-                } catch (IOException | ExecutionException | InterruptedException | JSONException e) {
-                    e.printStackTrace();
-                }
-            }
+                if (imageBitmap != null) {
+                    File test = null;
+                    try {
+                        test = createImageFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try (FileOutputStream out = new FileOutputStream(test)) {
+                        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                        // PNG is a lossless format, the compression factor (100) is ignored
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-            Intent intent = new Intent();
-            setResult(1, intent);
-            finish();
+                    try {
+                        api.setAdvertisementPicture(advertisementId, test);
+                    } catch (IOException | ExecutionException | InterruptedException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                Intent intent = new Intent();
+                setResult(1, intent);
+                finish();
+            }catch (UnknownHostException e) {
+                Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
+            }
         }
         return super.onOptionsItemSelected(item);
     }

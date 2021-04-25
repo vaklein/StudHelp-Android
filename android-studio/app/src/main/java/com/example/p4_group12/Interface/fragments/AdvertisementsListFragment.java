@@ -84,95 +84,95 @@ public class AdvertisementsListFragment extends Fragment {
             Log.v("AdvertisementLoading", "finish");
             advertisementsListToShow = (ArrayList<Advertisement>) advertisementsListComplete.clone();
             bookmarksIds = api.getBookmarksIdsOfUser(GlobalVariables.getUser());
+
+            filters = result.findViewById(R.id.advertisement_list_filter_chip_group);
+            courseCode = result.findViewById(R.id.advertisement_course_card_view_code);
+            courseFac = result.findViewById(R.id.advertisement_course_card_view_fac);
+            mTextView = (TextView) result.findViewById(R.id.text);
+            noAdvertisement = result.findViewById(R.id.no_advertisements);
+            if (advertisementsListToShow.size() == 0) {
+                noAdvertisement.setVisibility(View.VISIBLE);
+                result.findViewById(R.id.advertisement_list_filter_title).setVisibility(View.GONE);
+                filters.setVisibility(View.GONE);
+            }
+            advertisementRecyclerView = result.findViewById(R.id.advertisementRecyclerView);
+            //advertisementRecyclerView.setHasFixedSize(true);
+            advertisementLayoutManager = new LinearLayoutManager(getContext());
+            advertisementRecyclerView.setLayoutManager(advertisementLayoutManager);
+            advertisementListAdapter = new AdvertisementListAdapter(advertisementsListToShow, bookmarksIds);
+            advertisementRecyclerView.setAdapter(advertisementListAdapter);
+
+            // Gestion des champs textes affichés
+            code = this.getArguments().getString("code");
+            fac = this.getArguments().getString("fac");
+            courseCode.setText(code);
+            courseFac.setText(fac);
+
+            // Gestion des filtres de recherche
+            for (String type : Tag.getAllTagsName()) {
+                Chip chip = new Chip(getContext());
+                chip.setText(type);
+                chip.setCheckable(true);
+                chip.setOnClickListener(new View.OnClickListener() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onClick(View v) {
+                        Log.v("Jules", "checked chip is " + chip.getText().toString());
+                        List<Integer> checkedChipIds = filters.getCheckedChipIds();
+                        Log.v("Jules", "Number of checked chips : " + checkedChipIds.size());
+                        if (checkedChipIds.isEmpty()) {
+                            advertisementsListToShow.clear();
+                            advertisementsListToShow.addAll(advertisementsListComplete);
+                            advertisementListAdapter.notifyDataSetChanged();
+                            if (!advertisementsListComplete.isEmpty()) {
+                                noAdvertisement.setVisibility(View.GONE);
+                            }
+                            return;
+                        }
+                        List<String> checkedChipStrings = new ArrayList<>();
+                        for (int i : checkedChipIds) {
+                            checkedChipStrings.add((String) ((Chip) filters.findViewById(i)).getText());
+                        }
+                        Log.v("Jules", "LIST OF CHECKED CHIPS :  " + checkedChipStrings.toString());
+                        advertisementsListToShow.clear();
+                        advertisementsListToShow.addAll(filterListOnCheckedChips(advertisementsListComplete, checkedChipStrings));
+                        Log.v("Jules", "Advertisements titles to show : " + advertisementsListToShow.toString());
+                        advertisementListAdapter.notifyDataSetChanged();
+                        if (advertisementsListToShow.size() == 0) {
+                            noAdvertisement.setVisibility(View.VISIBLE);
+                            noAdvertisement.setText("Aucune annonce ne correspond à votre recherche");
+                        } else {
+                            noAdvertisement.setVisibility(View.GONE);
+                        }
+                    }
+                });
+                filterChips.add(chip);
+                filters.addView(chip);
+            }
+
+
+            // Gestion du clic sur une annonce du recyclerview
+            advertisementListAdapter.setAdvertisementClickListener(new AdvertisementListAdapter.OnAdvertisementClickListener() {
+                @Override
+                public void OnAdvertisementClick(int position) {
+                    Advertisement clickedAdvertisement = advertisementsListToShow.get(position);
+                    Intent advertisementView = new Intent(getActivity(), AdvertisementViewActivity.class);
+                    advertisementView.putExtra("ClickedAdvertisement", clickedAdvertisement);
+                    int i = 0;
+                    for (Tag tag : clickedAdvertisement.getTags()) {
+                        advertisementView.putExtra("tag" + i, tag);
+                        i++;
+                    }
+                    advertisementView.putExtra("Number of tags", i);
+                    advertisementView.putExtra("contactable", 1);
+                    advertisementView.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivityForResult(advertisementView, 1);
+                }
+            });
         } catch (UnknownHostException e){
             getActivity().finish();
             Toast.makeText(getContext(), R.string.no_connection, Toast.LENGTH_LONG);
         }
-
-        filters = result.findViewById(R.id.advertisement_list_filter_chip_group);
-        courseCode = result.findViewById(R.id.advertisement_course_card_view_code);
-        courseFac = result.findViewById(R.id.advertisement_course_card_view_fac);
-        mTextView = (TextView) result.findViewById(R.id.text);
-        noAdvertisement = result.findViewById(R.id.no_advertisements);
-        if(advertisementsListToShow.size()==0){
-            noAdvertisement.setVisibility(View.VISIBLE);
-            result.findViewById(R.id.advertisement_list_filter_title).setVisibility(View.GONE);
-            filters.setVisibility(View.GONE);
-        }
-        advertisementRecyclerView = result.findViewById(R.id.advertisementRecyclerView);
-        //advertisementRecyclerView.setHasFixedSize(true);
-        advertisementLayoutManager = new LinearLayoutManager(getContext());
-        advertisementRecyclerView.setLayoutManager(advertisementLayoutManager);
-        advertisementListAdapter = new AdvertisementListAdapter(advertisementsListToShow, bookmarksIds);
-        advertisementRecyclerView.setAdapter(advertisementListAdapter);
-
-        // Gestion des champs textes affichés
-        code = this.getArguments().getString("code");
-        fac = this.getArguments().getString("fac");
-        courseCode.setText(code);
-        courseFac.setText(fac);
-
-        // Gestion des filtres de recherche
-        for (String type : Tag.getAllTagsName()) {
-            Chip chip = new Chip(getContext());
-            chip.setText(type);
-            chip.setCheckable(true);
-            chip.setOnClickListener(new View.OnClickListener() {
-                @SuppressLint("SetTextI18n")
-                @Override
-                public void onClick(View v) {
-                    Log.v("Jules", "checked chip is " + chip.getText().toString());
-                    List<Integer> checkedChipIds = filters.getCheckedChipIds();
-                    Log.v("Jules", "Number of checked chips : " + checkedChipIds.size());
-                    if (checkedChipIds.isEmpty()) {
-                        advertisementsListToShow.clear();
-                        advertisementsListToShow.addAll(advertisementsListComplete);
-                        advertisementListAdapter.notifyDataSetChanged();
-                        if (!advertisementsListComplete.isEmpty()) {
-                            noAdvertisement.setVisibility(View.GONE);
-                        }
-                        return;
-                    }
-                    List<String> checkedChipStrings = new ArrayList<>();
-                    for (int i : checkedChipIds) {
-                        checkedChipStrings.add((String) ((Chip) filters.findViewById(i)).getText());
-                    }
-                    Log.v("Jules", "LIST OF CHECKED CHIPS :  " + checkedChipStrings.toString());
-                    advertisementsListToShow.clear();
-                    advertisementsListToShow.addAll(filterListOnCheckedChips(advertisementsListComplete, checkedChipStrings));
-                    Log.v("Jules", "Advertisements titles to show : " + advertisementsListToShow.toString());
-                    advertisementListAdapter.notifyDataSetChanged();
-                    if(advertisementsListToShow.size()==0){
-                        noAdvertisement.setVisibility(View.VISIBLE);
-                        noAdvertisement.setText("Aucune annonce ne correspond à votre recherche");
-                    } else {
-                        noAdvertisement.setVisibility(View.GONE);
-                    }
-                }
-            });
-            filterChips.add(chip);
-            filters.addView(chip);
-        }
-
-
-        // Gestion du clic sur une annonce du recyclerview
-        advertisementListAdapter.setAdvertisementClickListener(new AdvertisementListAdapter.OnAdvertisementClickListener() {
-            @Override
-            public void OnAdvertisementClick(int position) {
-                Advertisement clickedAdvertisement = advertisementsListToShow.get(position);
-                Intent advertisementView = new Intent(getActivity(), AdvertisementViewActivity.class);
-                advertisementView.putExtra("ClickedAdvertisement", clickedAdvertisement);
-                int i = 0;
-                for (Tag tag : clickedAdvertisement.getTags()) {
-                    advertisementView.putExtra("tag"+i, tag);
-                    i++;
-                }
-                advertisementView.putExtra("Number of tags", i);
-                advertisementView.putExtra("contactable", 1);
-                advertisementView.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivityForResult(advertisementView, 1);
-            }
-        });
         return result;
     }
 
