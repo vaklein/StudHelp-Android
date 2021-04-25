@@ -26,6 +26,7 @@ import com.google.firebase.installations.FirebaseInstallations;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 
+import java.net.UnknownHostException;
 import java.util.Objects;
 
 public class NavigationActivity extends AppCompatActivity{
@@ -80,7 +81,12 @@ public class NavigationActivity extends AppCompatActivity{
                 SharedPreferences sharedPreferences = getSharedPreferences(LoginActivity.PREFS_NAME,MODE_PRIVATE);
                 sharedPreferences.edit().putString(LoginActivity.PREF_EMAIL, null).apply();
 
-                API.getInstance().logoutUser(sharedPreferences);
+                try{
+                    API.getInstance().logoutUser(sharedPreferences);
+                } catch (UnknownHostException e){
+                    // not handling the exception -> user is loging out and token will be purged at next logout anyway
+                }
+
 
                 GlobalVariables.setUser(null);
                 GlobalVariables.revokeToken();

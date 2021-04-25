@@ -339,10 +339,14 @@ public class API {
         }
     }
 
-    public void logoutUser(SharedPreferences sharedPreferences){
+    public void logoutUser(SharedPreferences sharedPreferences) throws UnknownHostException{
         SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/logout", "", "POST");
         try {
             String response = getJSON.execute().get();
+
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
+
             Log.d("Gwen", response);
         } catch (ExecutionException e) {
             e.printStackTrace();
