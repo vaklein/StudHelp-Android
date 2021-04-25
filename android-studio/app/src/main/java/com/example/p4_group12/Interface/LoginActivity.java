@@ -29,7 +29,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 public class LoginActivity extends AppCompatActivity {
     private Button sign_up;
@@ -126,46 +125,57 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 loadingDialog.getDialog().show();
-                loginField.setErrorEnabled(false);
-                passwordField.setErrorEnabled(false);
-                if (isCorrectlyFil()) {
-                    JSONObject jsonObject = API.loginUser(login.getText().toString(), password.getText().toString());
+                Thread t = new Thread() {
+                    public void run() {
+                        loginField.setErrorEnabled(false);
+                        passwordField.setErrorEnabled(false);
+                        if (isCorrectlyFil()) {
+                            JSONObject jsonObject = API.loginUser(login.getText().toString(), password.getText().toString());
 
-                    if(jsonObject == null) Toast.makeText(LoginActivity.this, "OOPs! Réessayer", Toast.LENGTH_LONG).show();
-                    else if (jsonObject.has("message")) {
-                        loginField.setError("Identifiant/Mot de passe incorrect");
-                        passwordField.setError("Identifiant/Mot de passe incorrect");
-                    } else {
-                        try {
-                            if (rememberMe.isChecked()) {
-                                Log.v("jeremE", jsonObject.getString("email"));
-                                getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-                                        .edit()
-                                        .putString(PREF_EMAIL, jsonObject.getString("email"))
-                                        .apply();
-                                API.saveToken(getSharedPreferences(PREFS_NAME, MODE_PRIVATE)); // saving the API key in the shared prefs
+                            if(jsonObject == null) Toast.makeText(LoginActivity.this, "OOPs! Réessayer", Toast.LENGTH_LONG).show();
+                            else if (jsonObject.has("message")) {
+                                loginField.setError("Identifiant/Mot de passe incorrect");
+                                passwordField.setError("Identifiant/Mot de passe incorrect");
+                            } else {
+                                try {
+                                    if (rememberMe.isChecked()) {
+                                        Log.v("jeremE", jsonObject.getString("email"));
+                                        getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+                                                .edit()
+                                                .putString(PREF_EMAIL, jsonObject.getString("email"))
+                                                .apply();
+                                        API.saveToken(getSharedPreferences(PREFS_NAME, MODE_PRIVATE)); // saving the API key in the shared prefs
+                                    }
+                                    GlobalVariables.setUser(new User(jsonObject.getString("name"), jsonObject.getString("login"), jsonObject.getString("email"), jsonObject.getString("picture"), jsonObject.getString("description")));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                date_courses_data = API.tokenUpdateCourses();
+                                Log.v("jerem", "result : "+date_courses_data);
+                                Log.v("jeremr", "result : "+date_courses_data);
+
+                                try {
+                                    loadData(token_date_array, date_courses_data);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                            GlobalVariables.setUser(new User(jsonObject.getString("name"), jsonObject.getString("login"), jsonObject.getString("email"), jsonObject.getString("picture"), jsonObject.getString("description")));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
-                        date_courses_data = API.tokenUpdateCourses();
-                        Log.v("jerem", "result : "+date_courses_data);
-
-                        try {
-                            loadData(token_date_array, date_courses_data);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
-                        //startActivity(edit_profil);
-                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                        intent.putExtra("FavList", false);
-                        startActivity(intent);
-                        loadingDialog.getDialog().cancel();
-                        LoginActivity.this.finish();
                     }
+                };
+                t.start();
+                Log.v("jeremr", "result : 22");
+
+                try {
+                    t.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                intent.putExtra("FavList", false);
+                startActivity(intent);
+                loadingDialog.getDialog().cancel();
+                LoginActivity.this.finish();
             }
         });
     }

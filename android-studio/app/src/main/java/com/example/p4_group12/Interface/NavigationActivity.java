@@ -86,6 +86,8 @@ public class NavigationActivity extends AppCompatActivity{
                 GlobalVariables.switchBooleanToken();
 
                 Intent intentLoginActivity = new Intent(getApplicationContext(), LoginActivity.class);
+                intentLoginActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intentLoginActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intentLoginActivity);
                 finish();
             }
