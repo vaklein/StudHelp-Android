@@ -139,6 +139,12 @@ public class NavigationActivity extends AppCompatActivity{
                         Intent book = new Intent(getApplicationContext(), MyBookmarksActivity.class);
                         startActivity(book);
                         break;
+                    case R.id.nav_favoritecourses:
+                        Intent searchActivity = new Intent(getApplicationContext(), SearchActivity.class);
+                        searchActivity.putExtra("ClickedCategory", "favourites courses");
+                        searchActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(searchActivity);
+                        break;
                     default:
                         break;
                 }
