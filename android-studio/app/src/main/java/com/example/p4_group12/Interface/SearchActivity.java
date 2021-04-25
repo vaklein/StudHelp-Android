@@ -28,6 +28,7 @@ import com.example.p4_group12.database.API;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -63,7 +64,6 @@ public class SearchActivity extends NavigationActivity{
 
         // Doing all the synchronous queries
         api = API.getInstance();
-        HashSet<Integer> favoritesID = api.getFavoriteCoursesIdsOfUser(GlobalVariables.getUser());
 
         // Building the recycler view
         courseRecyclerView = findViewById(R.id.courseRecyclerView);
@@ -71,40 +71,48 @@ public class SearchActivity extends NavigationActivity{
         favoriteSwitch = findViewById(R.id.show_fav_switch);
         noCourses = findViewById(R.id.no_courses);
 
-        currentCategory = (String) getIntent().getSerializableExtra("ClickedCategory");
-        if(currentCategory == null) Log.d("NULLWARNING", "Category is null in SearchActivity");
+        try{
+            currentCategory = (String) getIntent().getSerializableExtra("ClickedCategory");
+            if(currentCategory == null) Log.d("NULLWARNING", "Category is null in SearchActivity");
 
-        if (currentCategory.equals("search all")) {
-            courseList = GlobalVariables.getCourses();
-            setTitleToolbar("Recherche dans tous les cours");
-            searchView.requestFocus();
-            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-            imm.showSoftInput(searchView, InputMethodManager.SHOW_IMPLICIT);
-        } else if (currentCategory.equals("favourites courses")) {
-            courseList = api.getFavoriteCoursesOfUser(GlobalVariables.getUser());
-            if (courseList.isEmpty()) {
-                noCourses.setVisibility(View.VISIBLE);
-                noCourses.setText("Vous n'avez pas encore de cours favoris.\n" +
-                        "Cochez l'étoile appartenant à un cours pour l'ajouter à vos favoris,\n" +
-                        "vous retrouvez alors ici l'ensemble de ces cours.");
+            if (currentCategory.equals("search all")) {
+                courseList = GlobalVariables.getCourses();
+                setTitleToolbar("Recherche dans tous les cours");
+                searchView.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.showSoftInput(searchView, InputMethodManager.SHOW_IMPLICIT);
+            } else if (currentCategory.equals("favourites courses")) {
+                courseList = api.getFavoriteCoursesOfUser(GlobalVariables.getUser());
+                if (courseList.isEmpty()) {
+                    noCourses.setVisibility(View.VISIBLE);
+                    noCourses.setText("Vous n'avez pas encore de cours favoris.\n" +
+                            "Cochez l'étoile appartenant à un cours pour l'ajouter à vos favoris,\n" +
+                            "vous retrouvez alors ici l'ensemble de ces cours.");
+                }
+                Log.v("Jules", "size is " + courseList.size());
+                setTitleToolbar("Recherche dans les cours favoris");
+                favoriteSwitch.setVisibility(View.GONE);
+            } else {
+                courseList = filterFaculties(GlobalVariables.getCourses(), currentCategory);
+                setTitleToolbar("Recherche dans les cours de la faculté " + currentCategory);
+                searchView.setQueryHint("Code ou nom de cours dans la faculté " + currentCategory);
             }
-            Log.v("Jules", "size is " + courseList.size());
-            setTitleToolbar("Recherche dans les cours favoris");
-            favoriteSwitch.setVisibility(View.GONE);
-        } else {
-            courseList = filterFaculties(GlobalVariables.getCourses(), currentCategory);
-            setTitleToolbar("Recherche dans les cours de la faculté " + currentCategory);
-            searchView.setQueryHint("Code ou nom de cours dans la faculté " + currentCategory);
-        }
 
         // Building the recycler view
-        courseListAdapter = new CourseListAdapter(courseList, favoritesID);
-        courseRecyclerView.setHasFixedSize(true);
-        courseLayoutManager = new LinearLayoutManager(this);
 
-        courseRecyclerView.setLayoutManager(courseLayoutManager);
+            HashSet<Integer> favoritesID = api.getFavoriteCoursesIdsOfUser(GlobalVariables.getUser());
+            courseListAdapter = new CourseListAdapter(courseList, favoritesID);
+            courseRecyclerView.setHasFixedSize(true);
+            courseLayoutManager = new LinearLayoutManager(this);
 
-        courseRecyclerView.setAdapter(courseListAdapter);
+            courseRecyclerView.setLayoutManager(courseLayoutManager);
+
+            courseRecyclerView.setAdapter(courseListAdapter);
+        } catch (UnknownHostException e){
+            finish();
+            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG);
+        }
+
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

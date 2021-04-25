@@ -208,7 +208,7 @@ public class LoginActivity extends AppCompatActivity {
         return filled;
     }
 
-    private void loadData(String token_date_array, String date_courses_data) throws ParseException {
+    private void loadData(String token_date_array, String date_courses_data) throws ParseException, UnknownHostException {
         if (date_courses_data == null) {
 
             Log.v("Jules", "is null");

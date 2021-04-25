@@ -38,11 +38,13 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import static java.util.Collections.sort;
 
@@ -204,14 +206,24 @@ public class AdvertisementsListActivity extends NavigationActivity implements Ta
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem changeFavorite = menu.findItem(R.id.action_favorite);
         changeFavorite.setVisible(true);
-        if (API.getInstance().getFavoriteCoursesIdsOfUser(GlobalVariables.getUser()).contains(currentCourse.getID())) {
-            changeFavorite.setChecked(true);
-            changeFavorite.setIcon(R.drawable.ic_baseline_favorite_selected);
-        } else {
-            changeFavorite.setChecked(false);
-            changeFavorite.setIcon(R.drawable.ic_baseline_favorite_not_selected);
+
+        try{
+            HashSet<Integer> userFavorites = API.getInstance().getFavoriteCoursesIdsOfUser(GlobalVariables.getUser());
+
+            if (userFavorites.contains(currentCourse.getID())) {
+                changeFavorite.setChecked(true);
+                changeFavorite.setIcon(R.drawable.ic_baseline_favorite_selected);
+            } else {
+                changeFavorite.setChecked(false);
+                changeFavorite.setIcon(R.drawable.ic_baseline_favorite_not_selected);
+            }
+            return true;
+        }catch (UnknownHostException e){
+            finish();
+            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG);
+        } finally {
+            return true;
         }
-        return true;
     }
 
     @Override

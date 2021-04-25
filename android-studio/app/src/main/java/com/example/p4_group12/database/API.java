@@ -203,6 +203,7 @@ public class API {
         private File file;
         private String course_id;
         private String title;
+        private UnknownHostException connectionException;
 
         public SyncSendFileCourse(String requestURL, String email, File file , String course_id, String title){
             this.requestURL = requestURL;
@@ -233,10 +234,17 @@ public class API {
                 multipart.addFilePart("file", file);
                 String response = multipart.finish(); // response from server.
                 return response;
+            } catch (UnknownHostException e) {
+                connectionException = e;
+                return null;
             } catch (Exception e) {
                 Log.e("TAG", "multipart post error " + e);
                 return null;
             }
+        }
+
+        public UnknownHostException getConnectionException(){
+            return connectionException;
         }
     }
 
@@ -396,11 +404,15 @@ public class API {
         }
     }
 
-    public ArrayList<Course> getCourses(){
+    public ArrayList<Course> getCourses() throws UnknownHostException{
         ArrayList<Course> allCourses = new ArrayList<>();
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/course", "", "GET");
             String response = getJSON.execute().get();
+
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
+
             loadIntoArrayList(response, allCourses, Course.class);
         } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
             e.printStackTrace();
@@ -408,9 +420,13 @@ public class API {
         return allCourses;
     }
 
-    public void addCourseFile(String course_id, File file, String title) throws IOException, ExecutionException, InterruptedException, JSONException {
+    public void addCourseFile(String course_id, File file, String title) throws ExecutionException, InterruptedException, JSONException, UnknownHostException {
         SyncSendFileCourse request = new SyncSendFileCourse(BuildConfig.DB_URL + "/course/file", GlobalVariables.getUser().getEmail(), file, course_id, title);
         String response = request.execute().get();
+
+        UnknownHostException e;
+        if(response == null && (e = request.connectionException) != null) throw e;
+
         JSONObject obj = new JSONObject(response);
         //user.setPicture("users/"+obj.getString("image_name"));
     }
@@ -425,11 +441,14 @@ public class API {
         }
         return files;
     }
-    public HashSet<Integer> getFavoriteCoursesIdsOfUser(User user){
+    public HashSet<Integer> getFavoriteCoursesIdsOfUser(User user) throws UnknownHostException{
         HashSet<Integer> favoriteIDs = new HashSet<>();
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/favorite/" + user.getEmail(), "", "GET");
             String response = getJSON.execute().get();
+
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
 
             // Reading the JSON and putting the IDs inside the hashet
             JSONArray jsonArray = new JSONArray(response);
@@ -443,12 +462,15 @@ public class API {
         return favoriteIDs;
     }
 
-    public ArrayList<Course> getFavoriteCoursesOfUser(User user){
+    public ArrayList<Course> getFavoriteCoursesOfUser(User user) throws UnknownHostException{
         try{
             ArrayList<Course> favCourse = new ArrayList<>();
 
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/favorite/" + user.getEmail(), "", "GET");
             String response = getJSON.execute().get();
+
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
 
             loadIntoArrayList(response, favCourse, Course.class);
 
@@ -495,6 +517,7 @@ public class API {
         }
         return allAds;
     }
+
     public Advertisement getAdvertisment(int id){
         ArrayList<Advertisement> allAds = new ArrayList<>();
         try{
