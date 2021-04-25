@@ -1,5 +1,7 @@
 package com.example.p4_group12.Interface;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -25,8 +27,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -194,6 +199,49 @@ public class AdvertisementsListActivity extends NavigationActivity implements Ta
     public void onTabReselected(TabLayout.Tab tab) {
 
     }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem changeFavorite = menu.findItem(R.id.action_favorite);
+        changeFavorite.setVisible(true);
+        if (API.getInstance().getFavoriteCoursesIdsOfUser(GlobalVariables.getUser()).contains(currentCourse.getID())) {
+            changeFavorite.setChecked(true);
+            changeFavorite.setIcon(R.drawable.ic_baseline_favorite_selected);
+        } else {
+            changeFavorite.setChecked(false);
+            changeFavorite.setIcon(R.drawable.ic_baseline_favorite_not_selected);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.favorite_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.action_favorite:
+                if(item.isChecked()){
+                    // Log.d("Gwen", "Adding " + currentCourse.getCode() + " to the favorites");
+                    item.setChecked(false);
+                    item.setIcon(R.drawable.ic_baseline_favorite_not_selected);
+                    API.getInstance().removeFavoriteToUser(GlobalVariables.getUser(), currentCourse);
+                }
+                else{
+                    // Log.d("Gwen", "Removing " + currentCourse.getCode() + " from the favorites");
+                    item.setChecked(true);
+                    item.setIcon(R.drawable.ic_baseline_favorite_selected);
+                    API.getInstance().addNewFavoriteToUser(GlobalVariables.getUser(), currentCourse);
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
