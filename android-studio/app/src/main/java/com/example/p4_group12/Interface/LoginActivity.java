@@ -126,6 +126,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         connexion.setOnClickListener(new View.OnClickListener() {
+            int error = 0; // error = 0 -> no error | error = 1 -> no connection
             @Override
             public void onClick(View view) {
                 loadingDialog.getDialog().show();
@@ -133,15 +134,15 @@ public class LoginActivity extends AppCompatActivity {
                     public void run() {
                         loginField.setErrorEnabled(false);
                         passwordField.setErrorEnabled(false);
-                        if (isCorrectlyFil()) {
-                            JSONObject jsonObject = API.loginUser(login.getText().toString(), password.getText().toString());
+                        try{
+                            if (isCorrectlyFil()) {
+                                JSONObject jsonObject = API.loginUser(login.getText().toString(), password.getText().toString());
 
-                            if(jsonObject == null) Toast.makeText(LoginActivity.this, "OOPs! Réessayer", Toast.LENGTH_LONG).show();
-                            else if (jsonObject.has("message")) {
-                                loginField.setError("Identifiant/Mot de passe incorrect");
-                                passwordField.setError("Identifiant/Mot de passe incorrect");
-                            } else {
-                                try {
+                                if(jsonObject == null) Toast.makeText(LoginActivity.this, "OOPs! Réessayer", Toast.LENGTH_LONG).show(); // pas certain que ça soit une bonne idée de lancer un toast ici https://stackoverflow.com/questions/3875184/cant-create-handler-inside-thread-that-has-not-called-looper-prepare
+                                else if (jsonObject.has("message")) {
+                                    loginField.setError("Identifiant/Mot de passe incorrect");
+                                    passwordField.setError("Identifiant/Mot de passe incorrect");
+                                } else {
                                     if (rememberMe.isChecked()) {
                                         Log.v("jeremE", jsonObject.getString("email"));
                                         getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
@@ -151,20 +152,21 @@ public class LoginActivity extends AppCompatActivity {
                                         API.saveToken(getSharedPreferences(PREFS_NAME, MODE_PRIVATE)); // saving the API key in the shared prefs
                                     }
                                     GlobalVariables.setUser(new User(jsonObject.getString("name"), jsonObject.getString("login"), jsonObject.getString("email"), jsonObject.getString("picture"), jsonObject.getString("description")));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                date_courses_data = API.tokenUpdateCourses();
-                                Log.v("jerem", "result : "+date_courses_data);
-                                Log.v("jeremr", "result : "+date_courses_data);
+                                    date_courses_data = API.tokenUpdateCourses();
+                                    Log.v("jerem", "result : "+date_courses_data);
+                                    Log.v("jeremr", "result : "+date_courses_data);
 
-                                try {
                                     loadData(token_date_array, date_courses_data);
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
                                 }
                             }
+                        } catch (UnknownHostException e){
+                            error = 1;
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
                         }
+
                     }
                 };
                 t.start();
@@ -172,14 +174,23 @@ public class LoginActivity extends AppCompatActivity {
 
                 try {
                     t.join();
+                    switch (error){
+                        case 1: Toast.makeText(LoginActivity.this, R.string.no_connection, Toast.LENGTH_LONG).show();
+                                loadingDialog.getDialog().cancel();
+                                break;
+                        case 0: Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                intent.putExtra("FavList", false);
+                                startActivity(intent);
+                                loadingDialog.getDialog().cancel();
+                                LoginActivity.this.finish();
+                                break;
+                        default: break;
+                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                } finally {
+                    error = 0;
                 }
-                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                intent.putExtra("FavList", false);
-                startActivity(intent);
-                loadingDialog.getDialog().cancel();
-                LoginActivity.this.finish();
             }
         });
     }

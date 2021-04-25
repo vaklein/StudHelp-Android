@@ -267,10 +267,14 @@ public class API {
         INSTANCE = new API(sharedPreferences.getString("API_key", null));
         return INSTANCE;
     }
-    public static String tokenUpdateCourses(){
+    public static String tokenUpdateCourses() throws UnknownHostException{
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/globalvariables/course_list_update", "", "GET");
             String response = getJSON.execute().get();
+
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
+
             Log.v("jerem", "try :" + response);
             JSONObject jsonObject = new JSONArray(response).getJSONObject(0);
             return jsonObject.getString("value");
@@ -294,6 +298,9 @@ public class API {
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/register", data, "POST");
             String response = getJSON.execute().get();
 
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
+
             // Handling the answer
             JSONObject jsonObject = new JSONObject(response);
             if(!jsonObject.has("error")){ // If no error while creating the new user, create an insance of the API object with the key of the user
@@ -307,13 +314,16 @@ public class API {
         }
     }
 
-    public static JSONObject loginUser(String login, String password){
+    public static JSONObject loginUser(String login, String password) throws UnknownHostException{
         try{
             String data = URLEncoder.encode("login", "UTF-8") + "=" + URLEncoder.encode(login, "UTF-8") + "&" +
                           URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(password, "UTF-8");
 
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/login", data, "POST");
             String response = getJSON.execute().get();
+
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
 
             JSONObject jsonObject = new JSONObject(response);
             if(jsonObject == null) return null;
