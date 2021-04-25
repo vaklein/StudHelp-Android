@@ -79,7 +79,6 @@ public class AdvertisementViewActivity extends NavigationActivity {
         currentAdvertisement = (Advertisement) getIntent().getSerializableExtra("ClickedAdvertisement");
         int n = (int) getIntent().getSerializableExtra("Number of tags");
         contactable = (int) getIntent().getSerializableExtra("contactable"); // to know if we have to show the button "contacter". 1 = to show and 0 = not show
-
         List<Tag> tags = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             tags.add((Tag) getIntent().getSerializableExtra("tag"+i));

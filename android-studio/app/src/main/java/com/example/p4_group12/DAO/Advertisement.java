@@ -143,7 +143,9 @@ public class Advertisement  implements Serializable, Comparable {
         return tagValues;
     }
 
-    public boolean hasImages() { return !images.isEmpty(); }
+    public boolean hasImages() {
+        return !images.get(0).equals("null");
+    }
 
     public List<String> getImages() { return images; }
 
