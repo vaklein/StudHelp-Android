@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +26,7 @@ import com.example.p4_group12.Interface.adapter.AdvertisementListAdapter;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -46,15 +48,18 @@ public class AdvertisementProfileFragment extends Fragment {
         Log.v("jerem", "frag foreign 1 : ");
         emailValue = this.getArguments().getString("email");
         Log.v("jerem", "frag foreign : " + emailValue);
-        User user = api.getUserWithEmail(emailValue);
-        Log.v("jerem", "frag foreignnnnn : " + user);
-        Log.v("jerem", "frag foreignnnnn : " + user.getLogin());
-        Log.v("jerem", "frag foreignnnnn : " + user.getEmail());
+        try{
+            User user = api.getUserWithEmail(emailValue);
+            advertisementsListComplete = api.getAdvertisementsOfUser(user);
+        } catch(UnknownHostException e){
+            getActivity().finish();
+            Toast.makeText(getContext(), R.string.no_connection, Toast.LENGTH_LONG);
+        }
 
         HashSet<Integer> bookmarksIDs = api.getBookmarksIdsOfUser(GlobalVariables.getUser());
 
         advertisement = result.findViewById(R.id.no_advertisements_frag);
-        advertisementsListComplete = api.getAdvertisementsOfUser(user);
+
         advertisementsListToShow = (ArrayList<Advertisement>) advertisementsListComplete.clone();
         if (!emailValue.equals(GlobalVariables.getUser().getEmail())) advertisement.setText(R.string.no_advertisment);
         if (advertisementsListComplete.isEmpty()) advertisement.setVisibility(View.VISIBLE);

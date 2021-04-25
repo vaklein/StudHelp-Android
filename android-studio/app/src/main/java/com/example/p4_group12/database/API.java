@@ -31,6 +31,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -47,6 +48,7 @@ public class API {
         private String urlWebService;
         private String data;
         private String requestType;
+        private UnknownHostException connectionException;
 
         public SyncGetJSON(String urlWebService, String data, String requestType){
             this.urlWebService = urlWebService;
@@ -66,7 +68,7 @@ public class API {
         }
 
         @Override
-        protected String doInBackground(Void... voids) {
+        protected String doInBackground(Void... voids){
             try {
                 // Sending the request
                 URL url = new URL(this.urlWebService);
@@ -103,10 +105,16 @@ public class API {
             } catch (MalformedURLException e) {
                 e.printStackTrace();
                 return null;
+            } catch (UnknownHostException e) {
+                connectionException = e;
+                return null;
             } catch (IOException e) {
-                e.printStackTrace();
                 return null;
             }
+        }
+
+        public UnknownHostException getConnectionException(){
+            return connectionException;
         }
     }
 
@@ -274,7 +282,7 @@ public class API {
         }
     }
 
-    public static JSONObject registerUser(User user, String password, String passwordConfirmation){
+    public static JSONObject registerUser(User user, String password, String passwordConfirmation) throws UnknownHostException {
         try {
             String data = URLEncoder.encode("login", "UTF-8") + "=" + URLEncoder.encode(user.getLogin(), "UTF-8") + "&" +
                     URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(password, "UTF-8") + "&" +
@@ -348,14 +356,18 @@ public class API {
 
     }
 
-    public User getUserWithEmail(String email){
+    public User getUserWithEmail(String email) throws UnknownHostException{
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + email, "", "GET");
             String response = getJSON.execute().get();
 
+            if(response == null){
+                UnknownHostException e = getJSON.getConnectionException();
+                if(e != null) throw e;
+            }
+
             JSONObject jsonObject = new JSONArray(response).getJSONObject(0);
             if(jsonObject == null) {
-                Log.v("Jules", "[Bad thing] Error on JSON get for the user");
                 return null;
             }
             else if(!jsonObject.has("error")){
@@ -495,6 +507,8 @@ public class API {
             return null;
         }
     }
+
+    // Gwen stop
 
     public int addNewAdvertisement(int courseId, String title, String description, String email, String type){
         try{

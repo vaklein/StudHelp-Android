@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -67,42 +68,45 @@ public class LoginActivity extends AppCompatActivity {
         if (already_email != null) {
             loadingDialog.getDialog().show();
 
-            API api =  API.setToken(getSharedPreferences(PREFS_NAME,MODE_PRIVATE));
-            if (api.getUserWithEmail(already_email) == null) {
-                SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME,MODE_PRIVATE);
-                sharedPreferences.edit().putString(PREF_EMAIL, null).apply();
-
-                GlobalVariables.setUser(null);
-                GlobalVariables.revokeToken();
-
-                Intent intentLoginActivity = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intentLoginActivity);
-                finish();
-            }
-            Log.v("jerem", "result email:"+api.getUserWithEmail(already_email));
-            Log.v("jerem", "result email 2:"+already_email);
-            GlobalVariables.setUser(api.getUserWithEmail(already_email));
-            date_courses_data = API.tokenUpdateCourses();
-
-            // Doing all the synchronous queries
-            Log.v("jerem", "result :"+date_courses_data);
-            Log.v("jerem", "result list :"+pref_date.getString(PREF_TOKEN_DATE_ARRAY, null));
-            SharedPreferences pref = getSharedPreferences(PREF_ARRAY,MODE_PRIVATE); // We only get the email. We might need to get the API token or the password
-            Log.v("jerem", "result list :"+pref.getString(PREF_COURSE_ARRAY_LIST, null));
-
             try {
+                API api =  API.setToken(getSharedPreferences(PREFS_NAME,MODE_PRIVATE));
+                if (api.getUserWithEmail(already_email) == null) {
+                    SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME,MODE_PRIVATE);
+                    sharedPreferences.edit().putString(PREF_EMAIL, null).apply();
+
+                    GlobalVariables.setUser(null);
+                    GlobalVariables.revokeToken();
+
+                    Intent intentLoginActivity = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intentLoginActivity);
+                    finish();
+                }
+                Log.v("jerem", "result email:"+api.getUserWithEmail(already_email));
+                Log.v("jerem", "result email 2:"+already_email);
+                GlobalVariables.setUser(api.getUserWithEmail(already_email));
+                date_courses_data = API.tokenUpdateCourses();
+
+                // Doing all the synchronous queries
+                Log.v("jerem", "result :"+date_courses_data);
+                Log.v("jerem", "result list :"+pref_date.getString(PREF_TOKEN_DATE_ARRAY, null));
+                SharedPreferences pref = getSharedPreferences(PREF_ARRAY,MODE_PRIVATE); // We only get the email. We might need to get the API token or the password
+                Log.v("jerem", "result list :"+pref.getString(PREF_COURSE_ARRAY_LIST, null));
+
+
                 loadData(token_date_array, date_courses_data);
+                //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
+                //startActivity(edit_profil);
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                intent.putExtra("FavList", false);
+                startActivity(intent);
+                loadingDialog.getDialog().cancel();
+                LoginActivity.this.finish();
             } catch (ParseException e) {
                 e.printStackTrace();
+            } catch (UnknownHostException e){
+                Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
+                loadingDialog.getDialog().cancel();
             }
-
-            //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
-            //startActivity(edit_profil);
-            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-            intent.putExtra("FavList", false);
-            startActivity(intent);
-            loadingDialog.getDialog().cancel();
-            LoginActivity.this.finish();
         }
 
         sign_up = findViewById(R.id.sign_up);

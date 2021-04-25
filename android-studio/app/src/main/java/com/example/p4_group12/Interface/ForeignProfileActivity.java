@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -22,6 +23,8 @@ import com.example.p4_group12.database.API;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.squareup.picasso.Picasso;
+
+import java.net.UnknownHostException;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
@@ -52,8 +55,13 @@ public class ForeignProfileActivity extends NavigationActivity implements TabLay
 
         String foreignUserEmail = (String) getIntent().getSerializableExtra("ForeignUser");
 
+        try {
+            foreignUser = api.getUserWithEmail(foreignUserEmail);
+        } catch (UnknownHostException e){
+            ForeignProfileActivity.this.finish();
+            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
+        }
 
-        foreignUser = api.getUserWithEmail(foreignUserEmail);
         if(foreignUser == null) Log.d("NULLWARNING", "foreignUser is null in ForeignProfileActivity");
 
         tabLayout = findViewById(R.id.tabs);

@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -33,6 +34,7 @@ import com.jama.carouselview.CarouselView;
 import com.jama.carouselview.CarouselViewListener;
 import com.squareup.picasso.Picasso;
 
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -88,13 +90,21 @@ public class AdvertisementViewActivity extends NavigationActivity {
         api = API.getInstance();
 
         //Il faut get le user proprietaire de l'annonce et set les variables ci-dessous
-        User onlyUser = api.getUserWithEmail(currentAdvertisement.getEmailAddress());
-        setTitleToolbar(onlyUser.getName());
-        profilePicture = findViewById(R.id.profile_picture);
-        profilePicture.setVisibility(View.VISIBLE);
-        if (onlyUser.getPicture() != "null") {
-            Picasso.get().load(BuildConfig.STORAGE_URL + onlyUser.getPicture()).transform(new CropCircleTransformation()).into(profilePicture);
+        try{
+            User onlyUser = api.getUserWithEmail(currentAdvertisement.getEmailAddress());
+            setTitleToolbar(onlyUser.getName());
+            profilePicture = findViewById(R.id.profile_picture);
+            profilePicture.setVisibility(View.VISIBLE);
+            if (onlyUser.getPicture() != "null") {
+                Picasso.get().load(BuildConfig.STORAGE_URL + onlyUser.getPicture()).transform(new CropCircleTransformation()).into(profilePicture);
+            }
+        } catch (UnknownHostException e){
+            AdvertisementViewActivity.this.finish();
+            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG);
         }
+
+
+
         advertisementTitle = findViewById(R.id.advertisement_title_view);
         advertisementDescription = findViewById(R.id.advertisement_description_view);
         advertisementTags = findViewById(R.id.advertisement_tags_view);

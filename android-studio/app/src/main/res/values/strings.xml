@@ -31,6 +31,7 @@
     <string name="deconnexion">Se déconnecter</string>
     <string name="my_bookmarks">Mes signets</string>
     <string name="no_bookmarks">Vous n\'avez pas de signet pour le moment</string>
+    <string name="no_connection">Pas de connexion internet</string>
 
 
     <!-- tests strings -->

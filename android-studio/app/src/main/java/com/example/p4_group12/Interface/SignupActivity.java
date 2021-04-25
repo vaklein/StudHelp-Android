@@ -33,6 +33,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -84,10 +85,9 @@ public class SignupActivity extends AppCompatActivity {
                     User user = new User(name.getText().toString(), login.getText().toString(), email.getText().toString(), "null", "null");
 
                     loadingDialog.getDialog().show();
-                    JSONObject apiResponse = API.registerUser(user,password.getText().toString(), confirmPassword.getText().toString());
-                    // TODO create a line in SOCIAL_LINKS (might be better to do that in the back end)
 
                     try {
+                        JSONObject apiResponse = API.registerUser(user,password.getText().toString(), confirmPassword.getText().toString());
                         if(apiResponse.has("error")){ // error while trying to create the new user
                             handleError(apiResponse);
                         }else{
@@ -120,7 +120,10 @@ public class SignupActivity extends AppCompatActivity {
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
-                    } finally {
+                    } catch (UnknownHostException e){
+                        Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
+                    }
+                    finally {
                         loadingDialog.getDialog().cancel();
                     }
                 }
