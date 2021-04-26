@@ -98,7 +98,7 @@ public class SearchActivity extends NavigationActivity{
                 searchView.setQueryHint("Code ou nom de cours dans la faculté " + currentCategory);
             }
 
-        // Building the recycler view
+            // Building the recycler view
 
             HashSet<Integer> favoritesID = api.getFavoriteCoursesIdsOfUser(GlobalVariables.getUser());
             courseListAdapter = new CourseListAdapter(courseList, favoritesID);
@@ -151,7 +151,7 @@ public class SearchActivity extends NavigationActivity{
                     Intent advertisementsListAct = new Intent(getApplicationContext(), AdvertisementsListActivity.class);
                     advertisementsListAct.putExtra("ClickedCourse", clickedCourse);
                     advertisementsListAct.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(advertisementsListAct);
+                    startActivityForResult(advertisementsListAct, 1);
                 }
             });
 
@@ -170,5 +170,19 @@ public class SearchActivity extends NavigationActivity{
             }
         }
         return filtered;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 1
+        if(requestCode == 1) {
+            Intent searchActivity = new Intent(getApplicationContext(), SearchActivity.class);
+            searchActivity.putExtra("ClickedCategory", currentCategory);
+            searchActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(searchActivity);
+            Log.v("StartSearch", "This should be printed");
+        }
     }
 }
