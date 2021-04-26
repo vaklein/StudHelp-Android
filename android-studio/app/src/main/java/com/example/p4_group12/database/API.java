@@ -601,11 +601,13 @@ public class API {
         getJSON.execute(); // Making the request Async
     }
 
-    public List<Tag> getAdvertisementTags(int advertisementId) {
+    public List<Tag> getAdvertisementTags(int advertisementId) throws UnknownHostException {
         ArrayList<Tag> tags = new ArrayList<>();
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement/tags/" + advertisementId, "", "GET");
             String response = getJSON.execute().get();
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
             //Log.v("Jules", "Tags json is : " + response);
             loadIntoArrayList(response, tags, Tag.class);
         } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {

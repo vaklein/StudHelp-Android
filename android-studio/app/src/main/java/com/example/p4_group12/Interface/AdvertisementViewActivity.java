@@ -161,7 +161,6 @@ public class AdvertisementViewActivity extends NavigationActivity {
         try {
             currentAdvertisement.setImages(api.getAdvertisementPictures(currentAdvertisement.getID()));
             carousel = findViewById(R.id.advertisement_view_carousel);
-            System.out.println(currentAdvertisement.getImages().toString());
             if (currentAdvertisement.hasImages()) {
                 // As long as we don't find a way to stop autoplay when the user swipe the carousel the user experience is better without autoplay
                 carousel.setAutoPlay(false);
