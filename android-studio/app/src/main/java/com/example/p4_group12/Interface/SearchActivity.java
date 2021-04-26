@@ -157,7 +157,7 @@ public class SearchActivity extends NavigationActivity{
 
         } catch (UnknownHostException e){
             finish();
-            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG);
+            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
         }
 
     }
