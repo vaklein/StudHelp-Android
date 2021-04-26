@@ -67,6 +67,7 @@ public class SearchActivity extends NavigationActivity{
 
         // Building the recycler view
         courseRecyclerView = findViewById(R.id.courseRecyclerView);
+        courseRecyclerView.setPadding(0,0,0,20);
         searchView = findViewById(R.id.searchView);
         favoriteSwitch = findViewById(R.id.show_fav_switch);
         noCourses = findViewById(R.id.no_courses);

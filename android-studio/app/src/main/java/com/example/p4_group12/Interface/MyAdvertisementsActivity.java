@@ -71,6 +71,7 @@ public class MyAdvertisementsActivity extends NavigationActivity{
                 filters.setVisibility(View.GONE);
             }
             advertisementRecyclerView = findViewById(R.id.advertisementRecyclerView);
+            advertisementRecyclerView.setPadding(0,0,0,20);
             //advertisementRecyclerView.setHasFixedSize(true);
             advertisementLayoutManager = new LinearLayoutManager(this);
             advertisementRecyclerView.setLayoutManager(advertisementLayoutManager);

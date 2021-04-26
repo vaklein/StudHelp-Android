@@ -73,6 +73,7 @@ public class MyBookmarksActivity extends NavigationActivity{
             }
 
             bookamrksRecyclerView = findViewById(R.id.advertisementRecyclerView);
+            bookamrksRecyclerView.setPadding(0,0,0,20);
             bookmarksLayoutManager = new LinearLayoutManager(this);
             bookamrksRecyclerView.setLayoutManager(bookmarksLayoutManager);
             bookmarksListAdapter = new AdvertisementListAdapter(bookmarksListToShow, true);
