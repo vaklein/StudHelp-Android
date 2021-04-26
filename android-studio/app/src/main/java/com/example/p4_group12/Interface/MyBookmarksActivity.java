@@ -139,8 +139,8 @@ public class MyBookmarksActivity extends NavigationActivity{
                 }
                 advertisementView.putExtra("Number of tags", i);
                 advertisementView.putExtra("contactable", 1);
-                startActivity(advertisementView);
-                //startActivityForResult(advertisementView, 1); a décommenter si on peut select/deselect le signet
+                //startActivity(advertisementView);
+                startActivityForResult(advertisementView, 1); //a décommenter si on peut select/deselect le signet
             }
         });
     }

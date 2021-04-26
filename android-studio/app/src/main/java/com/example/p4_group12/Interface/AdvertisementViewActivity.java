@@ -38,6 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
@@ -56,6 +57,7 @@ public class AdvertisementViewActivity extends NavigationActivity {
     private API api;
     private CarouselView carousel;
     private TextView lastUpdateDate;
+    private Boolean bookmarkChecked = false;
     private int contactable;
 
     /*
@@ -171,13 +173,18 @@ public class AdvertisementViewActivity extends NavigationActivity {
         if(GlobalVariables.getUser().getEmail().equals(currentAdvertisement.getEmailAddress())) {
             register.setVisible(true);
         }
+        MenuItem bookmark = menu.findItem(R.id.action_bookmark);
+        if(api.getBookmarksIdsOfUser(GlobalVariables.getUser()).contains(currentAdvertisement.getID())) {
+            bookmark.setIcon(R.drawable.ic_baseline_bookmark_selected);
+            bookmarkChecked = true;
+        }
         return true;
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.delete_menu, menu);
+        getMenuInflater().inflate(R.menu.advertisement_menu, menu);
         return true;
     }
 
@@ -206,6 +213,18 @@ public class AdvertisementViewActivity extends NavigationActivity {
                 });
                 AlertDialog alert = builder.create();
                 alert.show();
+                break;
+            case R.id.action_bookmark:
+                if (bookmarkChecked){
+                    api.removeBookmarkForUser(GlobalVariables.getUser(), currentAdvertisement);
+                    item.setIcon(R.drawable.ic_baseline_bookmark_not_selected);
+                    bookmarkChecked = false;
+                }else{
+                    api.addBookmarkForUser(GlobalVariables.getUser(), currentAdvertisement);
+                    item.setIcon(R.drawable.ic_baseline_bookmark_selected);
+                    bookmarkChecked = true;
+                }
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
