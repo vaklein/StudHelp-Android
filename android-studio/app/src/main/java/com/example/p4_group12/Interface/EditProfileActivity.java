@@ -1,6 +1,7 @@
 package com.example.p4_group12.Interface;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -114,46 +115,46 @@ public class EditProfileActivity extends NavigationActivity {
             if(GlobalVariables.getUser().getSocial_links() == null){
                 GlobalVariables.getUser().setSocial_links(api.getSocialLinksOfUser(GlobalVariables.getUser()));
             }
-        } catch (UnknownHostException e){
-            finish();
-            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG);
-        }
 
+            phone_text = (TextInputEditText) findViewById(R.id.phone_text);
+            phone_text.setText(GlobalVariables.getUser().getSocial_links().getPhone());
+            public_email_text = (TextInputEditText) findViewById(R.id.email_public_text);
+            public_email_text.setText(GlobalVariables.getUser().getSocial_links().getPublicEmail());
+            discord_text = findViewById(R.id.discord_text);
+            discord_text.setText(GlobalVariables.getUser().getSocial_links().getDiscord());
+            teams_text = findViewById(R.id.teams_text);
+            teams_text.setText(GlobalVariables.getUser().getSocial_links().getTeams());
+            //requestStoragePermission();
+            edit_picture_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-
-        phone_text = (TextInputEditText) findViewById(R.id.phone_text);
-        phone_text.setText(GlobalVariables.getUser().getSocial_links().getPhone());
-        public_email_text = (TextInputEditText) findViewById(R.id.email_public_text);
-        public_email_text.setText(GlobalVariables.getUser().getSocial_links().getPublicEmail());
-        discord_text = findViewById(R.id.discord_text);
-        discord_text.setText(GlobalVariables.getUser().getSocial_links().getDiscord());
-        teams_text = findViewById(R.id.teams_text);
-        teams_text.setText(GlobalVariables.getUser().getSocial_links().getTeams());
-        //requestStoragePermission();
-        edit_picture_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                try {
-                    startActivityForResult(takePictureIntent, 1);
-                } catch (ActivityNotFoundException e) {
-                    // display error state to the user
+                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    try {
+                        startActivityForResult(takePictureIntent, 1);
+                    } catch (ActivityNotFoundException e) {
+                        // display error state to the user
+                    }
+                    /* upload photo
+                    Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                    photoPickerIntent.setType("image/*");
+                    startActivityForResult(photoPickerIntent, 99);*/
                 }
-                /* upload photo
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, 99);*/
-            }
-        });
-        edit_password.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent edit_pw = new Intent(getApplicationContext(), EditPasswordActivity.class);
-                edit_pw.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(edit_pw);
-            }
-        });
+            });
+            edit_password.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent edit_pw = new Intent(getApplicationContext(), EditPasswordActivity.class);
+                    edit_pw.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(edit_pw);
+                }
+            });
+
+        } catch (UnknownHostException e){
+            setResult(Activity.RESULT_CANCELED);
+            finish();
+            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
+        }
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
