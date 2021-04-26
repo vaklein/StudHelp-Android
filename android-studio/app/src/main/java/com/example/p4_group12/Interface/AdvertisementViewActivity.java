@@ -189,9 +189,13 @@ public class AdvertisementViewActivity extends NavigationActivity {
             register.setVisible(true);
         }
         MenuItem bookmark = menu.findItem(R.id.action_bookmark);
-        if(api.getBookmarksIdsOfUser(GlobalVariables.getUser()).contains(currentAdvertisement.getID())) {
-            bookmark.setIcon(R.drawable.ic_baseline_bookmark_selected);
-            bookmarkChecked = true;
+        try {
+            if(api.getBookmarksIdsOfUser(GlobalVariables.getUser()).contains(currentAdvertisement.getID())) {
+                bookmark.setIcon(R.drawable.ic_baseline_bookmark_selected);
+                bookmarkChecked = true;
+            }
+        } catch (UnknownHostException e) {
+            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
         }
         return true;
     }
