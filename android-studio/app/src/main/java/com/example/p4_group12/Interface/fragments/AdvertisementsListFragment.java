@@ -170,8 +170,7 @@ public class AdvertisementsListFragment extends Fragment {
                 }
             });
         } catch (UnknownHostException e){
-            getActivity().finish();
-            Toast.makeText(getContext(), R.string.no_connection, Toast.LENGTH_LONG);
+            Toast.makeText(getContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
         }
         return result;
     }

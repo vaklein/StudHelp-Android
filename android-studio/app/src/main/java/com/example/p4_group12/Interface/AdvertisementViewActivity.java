@@ -101,7 +101,7 @@ public class AdvertisementViewActivity extends NavigationActivity {
             }
         } catch (UnknownHostException e){
             AdvertisementViewActivity.this.finish();
-            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG);
+            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
         }
 
 

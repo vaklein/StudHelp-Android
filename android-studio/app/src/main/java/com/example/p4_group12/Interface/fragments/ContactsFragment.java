@@ -95,8 +95,8 @@ public class ContactsFragment extends Fragment {
                 noNetworkString.setVisibility(View.GONE);
             }
         } catch (UnknownHostException e){
-            getActivity().finish();
-            Toast.makeText(getContext(), R.string.no_connection, Toast.LENGTH_LONG);
+            Toast.makeText(getContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
+            noNetworkString.setVisibility(View.GONE);
         }
 
 
