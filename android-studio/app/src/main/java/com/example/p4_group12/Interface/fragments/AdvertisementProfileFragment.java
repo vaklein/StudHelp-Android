@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +26,7 @@ import com.example.p4_group12.Interface.adapter.AdvertisementListAdapter;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -42,44 +44,49 @@ public class AdvertisementProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View result = inflater.inflate(R.layout.fragment_advertisement, container, false);
 
-        API api = API.getInstance();
-        Log.v("jerem", "frag foreign 1 : ");
-        emailValue = this.getArguments().getString("email");
-        Log.v("jerem", "frag foreign : " + emailValue);
-        User user = api.getUserWithEmail(emailValue);
-        Log.v("jerem", "frag foreignnnnn : " + user);
-        Log.v("jerem", "frag foreignnnnn : " + user.getLogin());
-        Log.v("jerem", "frag foreignnnnn : " + user.getEmail());
+        try {
+            API api = API.getInstance();
+            Log.v("jerem", "frag foreign 1 : ");
+            emailValue = this.getArguments().getString("email");
+            Log.v("jerem", "frag foreign : " + emailValue);
 
-        HashSet<Integer> bookmarksIDs = api.getBookmarksIdsOfUser(GlobalVariables.getUser());
+            User user = api.getUserWithEmail(emailValue);
+            advertisementsListComplete = api.getAdvertisementsOfUser(user);
 
-        advertisement = result.findViewById(R.id.no_advertisements_frag);
-        advertisementsListComplete = api.getAdvertisementsOfUser(user);
-        advertisementsListToShow = (ArrayList<Advertisement>) advertisementsListComplete.clone();
-        if (!emailValue.equals(GlobalVariables.getUser().getEmail())) advertisement.setText(R.string.no_advertisment);
-        if (advertisementsListComplete.isEmpty()) advertisement.setVisibility(View.VISIBLE);
+            HashSet<Integer> bookmarksIDs = api.getBookmarksIdsOfUser(GlobalVariables.getUser());
 
-        advertisementRecyclerView = result.findViewById(R.id.advertisementRecyclerView);
-        advertisementLayoutManager = new LinearLayoutManager(getActivity());
-        advertisementRecyclerView.setLayoutManager(advertisementLayoutManager);
-        advertisementListAdapter = new AdvertisementListAdapter(advertisementsListToShow, bookmarksIDs);
-        advertisementRecyclerView.setAdapter(advertisementListAdapter);
-        advertisementListAdapter.setAdvertisementClickListener(new AdvertisementListAdapter.OnAdvertisementClickListener() {
-            @Override
-            public void OnAdvertisementClick(int position) {
-                Advertisement clickedAdvertisement = advertisementsListToShow.get(position);
-                Intent advertisementView = new Intent(getActivity(), AdvertisementViewActivity.class);
-                advertisementView.putExtra("ClickedAdvertisement", clickedAdvertisement);
-                int i = 0;
-                for (Tag tag : clickedAdvertisement.getTags()) {
-                    advertisementView.putExtra("tag" + i, tag);
-                    i++;
+            advertisement = result.findViewById(R.id.no_advertisements_frag);
+
+            advertisementsListToShow = (ArrayList<Advertisement>) advertisementsListComplete.clone();
+            if (!emailValue.equals(GlobalVariables.getUser().getEmail()))
+                advertisement.setText(R.string.no_advertisment);
+            if (advertisementsListComplete.isEmpty()) advertisement.setVisibility(View.VISIBLE);
+
+            advertisementRecyclerView = result.findViewById(R.id.advertisementRecyclerView);
+            advertisementLayoutManager = new LinearLayoutManager(getActivity());
+            advertisementRecyclerView.setLayoutManager(advertisementLayoutManager);
+            advertisementListAdapter = new AdvertisementListAdapter(advertisementsListToShow, bookmarksIDs, true);
+            advertisementRecyclerView.setAdapter(advertisementListAdapter);
+            advertisementListAdapter.setAdvertisementClickListener(new AdvertisementListAdapter.OnAdvertisementClickListener() {
+                @Override
+                public void OnAdvertisementClick(int position) {
+                    Advertisement clickedAdvertisement = advertisementsListToShow.get(position);
+                    Intent advertisementView = new Intent(getActivity(), AdvertisementViewActivity.class);
+                    advertisementView.putExtra("ClickedAdvertisement", clickedAdvertisement);
+                    int i = 0;
+                    for (Tag tag : clickedAdvertisement.getTags()) {
+                        advertisementView.putExtra("tag" + i, tag);
+                        i++;
+                    }
+                    advertisementView.putExtra("Number of tags", i);
+                    advertisementView.putExtra("contactable", 0);
+                    advertisementView.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivityForResult(advertisementView, 1);
                 }
-                advertisementView.putExtra("Number of tags", i);
-                advertisementView.putExtra("contactable", 0);
-                startActivityForResult(advertisementView, 1);
-            }
-        });
+            });
+        }catch (UnknownHostException e){
+            Toast.makeText(getContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
+        }
         return result;
     }
     @Override

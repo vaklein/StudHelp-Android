@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -67,42 +68,45 @@ public class LoginActivity extends AppCompatActivity {
         if (already_email != null) {
             loadingDialog.getDialog().show();
 
-            API api =  API.setToken(getSharedPreferences(PREFS_NAME,MODE_PRIVATE));
-            if (api.getUserWithEmail(already_email) == null) {
-                SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME,MODE_PRIVATE);
-                sharedPreferences.edit().putString(PREF_EMAIL, null).apply();
-
-                GlobalVariables.setUser(null);
-                GlobalVariables.switchBooleanToken();
-
-                Intent intentLoginActivity = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intentLoginActivity);
-                finish();
-            }
-            Log.v("jerem", "result email:"+api.getUserWithEmail(already_email));
-            Log.v("jerem", "result email 2:"+already_email);
-            GlobalVariables.setUser(api.getUserWithEmail(already_email));
-            date_courses_data = API.tokenUpdateCourses();
-
-            // Doing all the synchronous queries
-            Log.v("jerem", "result :"+date_courses_data);
-            Log.v("jerem", "result list :"+pref_date.getString(PREF_TOKEN_DATE_ARRAY, null));
-            SharedPreferences pref = getSharedPreferences(PREF_ARRAY,MODE_PRIVATE); // We only get the email. We might need to get the API token or the password
-            Log.v("jerem", "result list :"+pref.getString(PREF_COURSE_ARRAY_LIST, null));
-
             try {
+                API api =  API.setToken(getSharedPreferences(PREFS_NAME,MODE_PRIVATE));
+                if (api.getUserWithEmail(already_email) == null) {
+                    SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME,MODE_PRIVATE);
+                    sharedPreferences.edit().putString(PREF_EMAIL, null).apply();
+
+                    GlobalVariables.setUser(null);
+                    GlobalVariables.revokeToken();
+
+                    Intent intentLoginActivity = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intentLoginActivity);
+                    finish();
+                }
+                Log.v("jerem", "result email:"+api.getUserWithEmail(already_email));
+                Log.v("jerem", "result email 2:"+already_email);
+                GlobalVariables.setUser(api.getUserWithEmail(already_email));
+                date_courses_data = API.tokenUpdateCourses();
+
+                // Doing all the synchronous queries
+                Log.v("jerem", "result :"+date_courses_data);
+                Log.v("jerem", "result list :"+pref_date.getString(PREF_TOKEN_DATE_ARRAY, null));
+                SharedPreferences pref = getSharedPreferences(PREF_ARRAY,MODE_PRIVATE); // We only get the email. We might need to get the API token or the password
+                Log.v("jerem", "result list :"+pref.getString(PREF_COURSE_ARRAY_LIST, null));
+
+
                 loadData(token_date_array, date_courses_data);
+                //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
+                //startActivity(edit_profil);
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                intent.putExtra("FavList", false);
+                startActivity(intent);
+                loadingDialog.getDialog().cancel();
+                LoginActivity.this.finish();
             } catch (ParseException e) {
                 e.printStackTrace();
+            } catch (UnknownHostException e){
+                Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
+                loadingDialog.getDialog().cancel();
             }
-
-            //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
-            //startActivity(edit_profil);
-            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-            intent.putExtra("FavList", false);
-            startActivity(intent);
-            loadingDialog.getDialog().cancel();
-            LoginActivity.this.finish();
         }
 
         sign_up = findViewById(R.id.sign_up);
@@ -117,50 +121,75 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent sign_up = new Intent(getApplicationContext(), SignupActivity.class);
+                sign_up.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(sign_up);
             }
         });
         connexion.setOnClickListener(new View.OnClickListener() {
+            int error = 0; // error = 0 -> no error | error = 1 -> no connection
             @Override
             public void onClick(View view) {
-                loginField.setErrorEnabled(false);
-                passwordField.setErrorEnabled(false);
-                if (isCorrectlyFil()) {
-                    JSONObject jsonObject = API.loginUser(login.getText().toString(), password.getText().toString());
+                loadingDialog.getDialog().show();
+                Thread t = new Thread() {
+                    public void run() {
+                        loginField.setErrorEnabled(false);
+                        passwordField.setErrorEnabled(false);
+                        try{
+                            if (isCorrectlyFil()) {
+                                JSONObject jsonObject = API.loginUser(login.getText().toString(), password.getText().toString());
 
-                    if(jsonObject == null) Toast.makeText(LoginActivity.this, "OOPs! Réessayer", Toast.LENGTH_LONG).show();
-                    else if (jsonObject.has("message")) {
-                        loginField.setError("Identifiant/Mot de passe incorrect");
-                        passwordField.setError("Identifiant/Mot de passe incorrect");
-                    } else {
-                        try {
-                            if (rememberMe.isChecked()) {
-                                Log.v("jeremE", jsonObject.getString("email"));
-                                getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-                                        .edit()
-                                        .putString(PREF_EMAIL, jsonObject.getString("email"))
-                                        .apply();
-                                API.saveToken(getSharedPreferences(PREFS_NAME, MODE_PRIVATE)); // saving the API key in the shared prefs
+                                if(jsonObject == null) Toast.makeText(LoginActivity.this, "OOPs! Réessayer", Toast.LENGTH_LONG).show(); // pas certain que ça soit une bonne idée de lancer un toast ici https://stackoverflow.com/questions/3875184/cant-create-handler-inside-thread-that-has-not-called-looper-prepare
+                                else if (jsonObject.has("message")) {
+                                    loginField.setError("Identifiant/Mot de passe incorrect");
+                                    passwordField.setError("Identifiant/Mot de passe incorrect");
+                                } else {
+                                    if (rememberMe.isChecked()) {
+                                        Log.v("jeremE", jsonObject.getString("email"));
+                                        getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+                                                .edit()
+                                                .putString(PREF_EMAIL, jsonObject.getString("email"))
+                                                .apply();
+                                        API.saveToken(getSharedPreferences(PREFS_NAME, MODE_PRIVATE)); // saving the API key in the shared prefs
+                                    }
+                                    GlobalVariables.setUser(new User(jsonObject.getString("name"), jsonObject.getString("login"), jsonObject.getString("email"), jsonObject.getString("picture"), jsonObject.getString("description")));
+                                    date_courses_data = API.tokenUpdateCourses();
+                                    Log.v("jerem", "result : "+date_courses_data);
+                                    Log.v("jeremr", "result : "+date_courses_data);
+
+                                    loadData(token_date_array, date_courses_data);
+                                }
                             }
-                            GlobalVariables.setUser(new User(jsonObject.getString("name"), jsonObject.getString("login"), jsonObject.getString("email"), jsonObject.getString("picture"), jsonObject.getString("description")));
+                        } catch (UnknownHostException e){
+                            error = 1;
                         } catch (JSONException e) {
                             e.printStackTrace();
-                        }
-                        date_courses_data = API.tokenUpdateCourses();
-                        Log.v("jerem", "result : "+date_courses_data);
-
-                        try {
-                            loadData(token_date_array, date_courses_data);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                        //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
-                        //startActivity(edit_profil);
-                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                        intent.putExtra("FavList", false);
-                        startActivity(intent);
-                        LoginActivity.this.finish();
+
                     }
+                };
+                t.start();
+                Log.v("jeremr", "result : 22");
+
+                try {
+                    t.join();
+                    switch (error){
+                        case 1: Toast.makeText(LoginActivity.this, R.string.no_connection, Toast.LENGTH_LONG).show();
+                                loadingDialog.getDialog().cancel();
+                                break;
+                        case 0: Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                intent.putExtra("FavList", false);
+                                startActivity(intent);
+                                loadingDialog.getDialog().cancel();
+                                LoginActivity.this.finish();
+                                break;
+                        default: break;
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    error = 0;
                 }
             }
         });
@@ -179,7 +208,7 @@ public class LoginActivity extends AppCompatActivity {
         return filled;
     }
 
-    private void loadData(String token_date_array, String date_courses_data) throws ParseException {
+    private void loadData(String token_date_array, String date_courses_data) throws ParseException, UnknownHostException {
         if (date_courses_data == null) {
 
             Log.v("Jules", "is null");

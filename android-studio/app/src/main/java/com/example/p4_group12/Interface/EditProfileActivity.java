@@ -48,6 +48,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
@@ -109,9 +110,16 @@ public class EditProfileActivity extends NavigationActivity {
         new_loginField = (TextInputLayout) findViewById(R.id.teams);
         loadingDialog = new LoadingDialog(this, "Modification en cours...");
 
-        if(GlobalVariables.getUser().getSocial_links() == null){
-            GlobalVariables.getUser().setSocial_links(api.getSocialLinksOfUser(GlobalVariables.getUser()));
+        try{
+            if(GlobalVariables.getUser().getSocial_links() == null){
+                GlobalVariables.getUser().setSocial_links(api.getSocialLinksOfUser(GlobalVariables.getUser()));
+            }
+        } catch (UnknownHostException e){
+            finish();
+            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG);
         }
+
+
 
         phone_text = (TextInputEditText) findViewById(R.id.phone_text);
         phone_text.setText(GlobalVariables.getUser().getSocial_links().getPhone());
@@ -121,7 +129,7 @@ public class EditProfileActivity extends NavigationActivity {
         discord_text.setText(GlobalVariables.getUser().getSocial_links().getDiscord());
         teams_text = findViewById(R.id.teams_text);
         teams_text.setText(GlobalVariables.getUser().getSocial_links().getTeams());
-        requestStoragePermission();
+        //requestStoragePermission();
         edit_picture_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,6 +150,7 @@ public class EditProfileActivity extends NavigationActivity {
             @Override
             public void onClick(View view) {
                 Intent edit_pw = new Intent(getApplicationContext(), EditPasswordActivity.class);
+                edit_pw.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(edit_pw);
             }
         });
@@ -192,53 +201,61 @@ public class EditProfileActivity extends NavigationActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        GlobalVariables.getUser().getSocial_links().setAllSocialLinks(phone_text.getText().toString(), public_email_text.getText().toString(), teams_text.getText().toString(), discord_text.getText().toString());
-        api.updateSocialLinks(GlobalVariables.getUser());
-        if(imageBitmap != null) {
-            new_picture = null;
-            try {
-                new_picture = createImageFile();
-            } catch (IOException e) {
-                e.printStackTrace();
+        try {
+            GlobalVariables.getUser().getSocial_links().setAllSocialLinks(phone_text.getText().toString(), public_email_text.getText().toString(), teams_text.getText().toString(), discord_text.getText().toString());
+            api.updateSocialLinks(GlobalVariables.getUser());
+            if (imageBitmap != null) {
+                new_picture = null;
+                try {
+                    new_picture = createImageFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try (FileOutputStream out = new FileOutputStream(new_picture)) {
+                    imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                    // PNG is a lossless format, the compression factor (100) is ignored
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    api.setProfilePicture(GlobalVariables.getUser(), new_picture);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-            try (FileOutputStream out = new FileOutputStream(new_picture)) {
-                imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-                // PNG is a lossless format, the compression factor (100) is ignored
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                api.setProfilePicture(GlobalVariables.getUser(), new_picture);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        new_loginField.setErrorEnabled(false);
-        if (!new_name.getText().toString().isEmpty() || !new_login.getText().toString().isEmpty()) {
-            String requestName = new_name.getText().toString().equals(GlobalVariables.getUser().getName()) ? null : new_name.getText().toString() ;
-            String requestLogin = new_login.getText().toString().equals(GlobalVariables.getUser().getLogin()) ? null : new_login.getText().toString();
-            String requestDescription = new_description.getText().toString().equals(GlobalVariables.getUser().getDescription()) ? null : new_description.getText().toString();
-            Boolean apiResponse = api.editNameAndLoginAndDescription(GlobalVariables.getUser(), requestName, requestLogin, requestDescription);
+            new_loginField.setErrorEnabled(false);
+            if (!new_name.getText().toString().isEmpty() || !new_login.getText().toString().isEmpty()) {
+                String requestName = new_name.getText().toString().equals(GlobalVariables.getUser().getName()) ? null : new_name.getText().toString();
+                String requestLogin = new_login.getText().toString().equals(GlobalVariables.getUser().getLogin()) ? null : new_login.getText().toString();
+                String requestDescription = new_description.getText().toString().equals(GlobalVariables.getUser().getDescription()) ? null : new_description.getText().toString();
+                Boolean apiResponse = api.editNameAndLoginAndDescription(GlobalVariables.getUser(), requestName, requestLogin, requestDescription);
 
-            if(apiResponse == null){ // error
-                Toast.makeText(EditProfileActivity.this, "Une erreur est survenue lors de la modification de votre nom, veuilliez réessayer", Toast.LENGTH_LONG).show();
-            }else if(apiResponse){
+                if (apiResponse == null) { // error
+                    Toast.makeText(EditProfileActivity.this, "Une erreur est survenue lors de la modification de votre nom, veuilliez réessayer", Toast.LENGTH_LONG).show();
+                } else if (apiResponse) {
 
-                if (new_name !=null) GlobalVariables.getUser().setName(new_name.getText().toString());
-                if(new_login !=null) GlobalVariables.getUser().setLogin(new_login.getText().toString());
-                if(new_description.getText().toString().isEmpty()) GlobalVariables.getUser().setDescription("null");
-                else GlobalVariables.getUser().setDescription(new_description.getText().toString());
+                    if (new_name != null)
+                        GlobalVariables.getUser().setName(new_name.getText().toString());
+                    if (new_login != null)
+                        GlobalVariables.getUser().setLogin(new_login.getText().toString());
+                    if (new_description.getText().toString().isEmpty())
+                        GlobalVariables.getUser().setDescription("null");
+                    else
+                        GlobalVariables.getUser().setDescription(new_description.getText().toString());
 
-                EditProfileActivity.this.finish();
-            }else{
-                new_loginField.setError("Identifiant déjà utilisé");
+                    EditProfileActivity.this.finish();
+                } else {
+                    new_loginField.setError("Identifiant déjà utilisé");
+                }
             }
+        }catch (UnknownHostException e){
+            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
         }
         return super.onOptionsItemSelected(item);
     }

@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -33,6 +34,7 @@ import com.jama.carouselview.CarouselView;
 import com.jama.carouselview.CarouselViewListener;
 import com.squareup.picasso.Picasso;
 
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -79,7 +81,6 @@ public class AdvertisementViewActivity extends NavigationActivity {
         currentAdvertisement = (Advertisement) getIntent().getSerializableExtra("ClickedAdvertisement");
         int n = (int) getIntent().getSerializableExtra("Number of tags");
         contactable = (int) getIntent().getSerializableExtra("contactable"); // to know if we have to show the button "contacter". 1 = to show and 0 = not show
-
         List<Tag> tags = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             tags.add((Tag) getIntent().getSerializableExtra("tag"+i));
@@ -90,13 +91,21 @@ public class AdvertisementViewActivity extends NavigationActivity {
         api = API.getInstance();
 
         //Il faut get le user proprietaire de l'annonce et set les variables ci-dessous
-        User onlyUser = api.getUserWithEmail(currentAdvertisement.getEmailAddress());
-        setTitleToolbar(onlyUser.getName());
-        profilePicture = findViewById(R.id.profile_picture);
-        profilePicture.setVisibility(View.VISIBLE);
-        if (onlyUser.getPicture() != "null") {
-            Picasso.get().load(BuildConfig.STORAGE_URL + onlyUser.getPicture()).transform(new CropCircleTransformation()).into(profilePicture);
+        try{
+            User onlyUser = api.getUserWithEmail(currentAdvertisement.getEmailAddress());
+            setTitleToolbar(onlyUser.getName());
+            profilePicture = findViewById(R.id.profile_picture);
+            profilePicture.setVisibility(View.VISIBLE);
+            if (onlyUser.getPicture() != "null") {
+                Picasso.get().load(BuildConfig.STORAGE_URL + onlyUser.getPicture()).transform(new CropCircleTransformation()).into(profilePicture);
+            }
+        } catch (UnknownHostException e){
+            AdvertisementViewActivity.this.finish();
+            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG);
         }
+
+
+
         advertisementTitle = findViewById(R.id.advertisement_title_view);
         advertisementDescription = findViewById(R.id.advertisement_description_view);
         advertisementTags = findViewById(R.id.advertisement_tags_view);
@@ -104,7 +113,7 @@ public class AdvertisementViewActivity extends NavigationActivity {
         advertisementTitle.setText(currentAdvertisement.getTitle());
         advertisementDescription.setText(currentAdvertisement.getDescription());
         lastUpdateDate.setText("Dernière modification le "+ DateFormat.getDateTimeInstance(
-                DateFormat.MEDIUM, DateFormat.SHORT, Locale.FRANCE).format(currentAdvertisement.getCreationDate()));
+                DateFormat.MEDIUM, DateFormat.SHORT, Locale.FRANCE).format(currentAdvertisement.getLastUpdateDate()));
 
         for (Tag tag : currentAdvertisement.getTags()) {
             Chip chip = new Chip(this);
@@ -121,6 +130,7 @@ public class AdvertisementViewActivity extends NavigationActivity {
                 public void onClick(View view) {
                     Intent updateAdvertisement = new Intent(getApplicationContext(), EditAdvertisementActivity.class);
                     updateAdvertisement.putExtra("toEditAdvertisement", currentAdvertisement);
+                    updateAdvertisement.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivityForResult(updateAdvertisement,2);
                 }
             });
@@ -134,6 +144,7 @@ public class AdvertisementViewActivity extends NavigationActivity {
                     Intent foreignProfile = new Intent(getApplicationContext(),  ForeignProfileActivity.class);
                     foreignProfile.putExtra("ForeignUser", currentAdvertisement.getEmailAddress());
                     Log.v("jerem", "Foreign : "+currentAdvertisement.getEmailAddress());
+                    foreignProfile.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(foreignProfile);
                 }
             });
@@ -147,23 +158,27 @@ public class AdvertisementViewActivity extends NavigationActivity {
         devImages.add("advertisements/ArBqYBaleyuw0aCD1SEtwlBrKKSXI58zw88HOE0m.jpg");
         currentAdvertisement.setImages(devImages);
         */
-        currentAdvertisement.setImages(api.getAdvertisementPictures(currentAdvertisement.getID()));
-        carousel = findViewById(R.id.advertisement_view_carousel);
-        System.out.println(currentAdvertisement.getImages().toString());
-        if (currentAdvertisement.hasImages()) {
-            // As long as we don't find a way to stop autoplay when the user swipe the carousel the user experience is better without autoplay
-            carousel.setAutoPlay(false);
-            carousel.setSize(currentAdvertisement.getImages().size());
-            carousel.setCarouselViewListener(new CarouselViewListener() {
-                @Override
-                public void onBindView(View view, int position) {
-                    ImageView imageView = view.findViewById(R.id.carousel_item_imageView);
-                    Picasso.get().load(BuildConfig.STORAGE_URL + currentAdvertisement.getImages().get(position)).into(imageView);
-                }
-            });
-            carousel.show();
-        } else {
-            carousel.setVisibility(View.GONE);
+        try {
+            currentAdvertisement.setImages(api.getAdvertisementPictures(currentAdvertisement.getID()));
+            carousel = findViewById(R.id.advertisement_view_carousel);
+            System.out.println(currentAdvertisement.getImages().toString());
+            if (currentAdvertisement.hasImages()) {
+                // As long as we don't find a way to stop autoplay when the user swipe the carousel the user experience is better without autoplay
+                carousel.setAutoPlay(false);
+                carousel.setSize(currentAdvertisement.getImages().size());
+                carousel.setCarouselViewListener(new CarouselViewListener() {
+                    @Override
+                    public void onBindView(View view, int position) {
+                        ImageView imageView = view.findViewById(R.id.carousel_item_imageView);
+                        Picasso.get().load(BuildConfig.STORAGE_URL + currentAdvertisement.getImages().get(position)).into(imageView);
+                    }
+                });
+                carousel.show();
+            } else {
+                carousel.setVisibility(View.GONE);
+            }
+        }catch (UnknownHostException e){
+            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -197,11 +212,16 @@ public class AdvertisementViewActivity extends NavigationActivity {
                 builder.setMessage("Etes vous sûr de vouloir supprimer cette annonce ?");
                 builder.setPositiveButton("OUI", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent();
-                        api.deleteAdvertisment(currentAdvertisement);
-                        setResult(1, intent);
-                        finish();
-                        dialog.dismiss();
+                        try {
+                            Intent intent = new Intent();
+                            api.deleteAdvertisment(currentAdvertisement);
+                            setResult(1, intent);
+                            finish();
+                            dialog.dismiss();
+                        }catch (UnknownHostException e){
+                            dialog.dismiss();
+                            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
                 builder.setNegativeButton("NON", new DialogInterface.OnClickListener() {
@@ -255,7 +275,6 @@ public class AdvertisementViewActivity extends NavigationActivity {
             }
             advertisementView.putExtra("Number of tags", i);
             advertisementView.putExtra("contactable", contactable);
-            Log.v("Lucas",ad.toString());
             startActivity(advertisementView);
             finish();
         }

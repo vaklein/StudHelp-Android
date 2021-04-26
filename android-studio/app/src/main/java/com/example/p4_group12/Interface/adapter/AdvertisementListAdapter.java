@@ -37,6 +37,7 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
     private ArrayList<Advertisement> advertisementList;
     private OnAdvertisementClickListener advertisementClickListener;
     private HashSet<Integer> bookmarkIds;
+    private boolean showCourseName = false;
     private final HashMap<String, User> usersMemory = new HashMap<>();
     private boolean onlyBookmarks;
 
@@ -55,6 +56,7 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
         private TextView advertisementTitleTextView;
         private TextView advertisementDescriptionTextView;
         private TextView advertisementDateTextView;
+        private TextView courseNameTextView;
         private CheckBox bookmarkCheckBox;
         private API api;
         private ImageView picturePresence;
@@ -66,6 +68,7 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
             advertisementTitleTextView = itemView.findViewById(R.id.advertisement_title_view);
             advertisementDescriptionTextView = itemView.findViewById(R.id.advertisement_description_recycler);
             advertisementDateTextView = itemView.findViewById(R.id.advertisement_item_date);
+            courseNameTextView = itemView.findViewById(R.id.advertisement_name_course_name_id);
             bookmarkCheckBox = itemView.findViewById(R.id.bookmarkCheckBox);
             picturePresence = itemView.findViewById(R.id.picturePresence);
             api = API.getInstance();
@@ -90,8 +93,16 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
         onlyBookmarks = false;
     }
 
-    public AdvertisementListAdapter(ArrayList<Advertisement> advertisementList) {
+    public AdvertisementListAdapter(ArrayList<Advertisement> advertisementList, HashSet<Integer> bookmarkIds, boolean showCourseName){
         this.advertisementList = advertisementList;
+        this.bookmarkIds = bookmarkIds;
+        this.showCourseName = showCourseName;
+        onlyBookmarks = false;
+    }
+
+    public AdvertisementListAdapter(ArrayList<Advertisement> advertisementList, boolean showCourseName) {
+        this.advertisementList = advertisementList;
+        this.showCourseName = showCourseName;
         onlyBookmarks = true;
     }
 
@@ -112,6 +123,12 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
         holder.usernameTextView.setText(currentAdvertisement.getUserFullname());
         holder.advertisementTitleTextView.setText(currentAdvertisement.getTitle());
         holder.advertisementDescriptionTextView.setText(currentAdvertisement.getDescription());
+        if (showCourseName) {
+            holder.courseNameTextView.setVisibility(View.VISIBLE);
+            holder.courseNameTextView.setText(currentAdvertisement.getCourseName());
+        } else {
+            holder.courseNameTextView.setVisibility(View.GONE);
+        }
 
         Date now = new Date();
         long timeDiff = now.getTime() - currentAdvertisement.getCreationDate().getTime();
@@ -151,7 +168,6 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
                 }
             }
         });
-
         if(currentAdvertisement.hasImages()){
             holder.picturePresence.setVisibility(View.VISIBLE);
         }

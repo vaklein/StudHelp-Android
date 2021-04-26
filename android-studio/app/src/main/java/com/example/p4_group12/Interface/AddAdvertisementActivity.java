@@ -43,6 +43,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -99,32 +100,36 @@ public class AddAdvertisementActivity extends NavigationActivity {
         addPictureFromGalery = findViewById(R.id.add_picturefromgalery_button);
         this.api = API.getInstance();
 
-        if (GlobalVariables.getUser().getSocial_links() == null) {
-            GlobalVariables.getUser().setSocial_links(api.getSocialLinksOfUser(GlobalVariables.getUser()));
+        try {
+            if (GlobalVariables.getUser().getSocial_links() == null) {
+                GlobalVariables.getUser().setSocial_links(api.getSocialLinksOfUser(GlobalVariables.getUser()));
+            }
+            if (!GlobalVariables.getUser().hasASocialNetwork()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Attention");
+                builder.setMessage("Vous n'avez pas encore ajouté de réseau social. Vous pouvez ajouter des annonces mais les autres utilisateurs ne sauront pas vous contacter." +
+                        " Pour ajouter des réseaux sociaux, sélectionnez \"Ajouter des réseaux\".");
+                builder.setPositiveButton("J'ai compris !", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton("Ajouter des réseaux  ", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        Intent modifyProfile = new Intent(getApplicationContext(), EditProfileActivity.class);
+                        modifyProfile.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivityForResult(modifyProfile, 2);
+                    }
+                });
+                builder.show();
+            }
+        }catch (UnknownHostException e){
+            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG);
         }
-        if (!GlobalVariables.getUser().hasASocialNetwork()){
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Attention");
-            builder.setMessage("Vous n'avez pas encore ajouté de réseau social. Vous pouvez ajouter des annonces mais les autres utilisateurs ne sauront pas vous contacter." +
-                    " Pour ajouter des réseaux sociaux, sélectionnez \"Ajouter des réseaux\".");
-            builder.setPositiveButton("J'ai compris !", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // Do nothing
-                    dialog.dismiss();
-                }
-            });
-            builder.setNegativeButton("Ajouter des réseaux  ", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                    Intent modifyProfile = new Intent(getApplicationContext(),EditProfileActivity.class);
-                    startActivityForResult(modifyProfile,2);
-                }
-            });
-            builder.show();
-        }
-
         // Types
         types.add("Offre");
         types.add("Demande");
@@ -326,39 +331,45 @@ public class AddAdvertisementActivity extends NavigationActivity {
         List<Integer> checkedObjectsIDs = objectChipGroup.getCheckedChipIds();
 
         if (isCorrectlyFilled(checkedTypeID, checkedCyclesIDs, checkedObjectsIDs)) {
-            int advertisementId = api.addNewAdvertisement(course.getID(), advertisementTitleText.getText().toString(), advertisementDescriptionText.getText().toString(), GlobalVariables.getUser().getEmail(), "Types are deprecated");
-            api.addNewTag(new Tag(-1, advertisementId, "type", (String) ((Chip) typeChipGroup.findViewById(checkedTypeID)).getText()));
-            for (int i : checkedCyclesIDs) {
-                api.addNewTag(new Tag(-1, advertisementId, "cycle", (String) ((Chip) cycleChipGroup.findViewById(i)).getText()));
-            }
-            for (int i : checkedObjectsIDs){
-                api.addNewTag(new Tag(-1, advertisementId, "object", (String) ((Chip) objectChipGroup.findViewById(i)).getText()));
-            }
+            int advertisementId = 0;
+            try {
+                advertisementId = api.addNewAdvertisement(course.getID(), advertisementTitleText.getText().toString(), advertisementDescriptionText.getText().toString(), GlobalVariables.getUser().getEmail(), "Types are deprecated");
 
-            if(imageBitmap != null) {
-                File test = null;
-                try {
-                    test = createImageFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                api.addNewTag(new Tag(-1, advertisementId, "type", (String) ((Chip) typeChipGroup.findViewById(checkedTypeID)).getText()));
+                for (int i : checkedCyclesIDs) {
+                    api.addNewTag(new Tag(-1, advertisementId, "cycle", (String) ((Chip) cycleChipGroup.findViewById(i)).getText()));
                 }
-                try (FileOutputStream out = new FileOutputStream(test)) {
-                    imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-                    // PNG is a lossless format, the compression factor (100) is ignored
-                } catch (IOException e) {
-                    e.printStackTrace();
+                for (int i : checkedObjectsIDs) {
+                    api.addNewTag(new Tag(-1, advertisementId, "object", (String) ((Chip) objectChipGroup.findViewById(i)).getText()));
                 }
 
-                try {
-                    api.setAdvertisementPicture(advertisementId,test);
-                } catch (IOException | ExecutionException | InterruptedException | JSONException e) {
-                    e.printStackTrace();
-                }
-            }
+                if (imageBitmap != null) {
+                    File test = null;
+                    try {
+                        test = createImageFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try (FileOutputStream out = new FileOutputStream(test)) {
+                        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                        // PNG is a lossless format, the compression factor (100) is ignored
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-            Intent intent = new Intent();
-            setResult(1, intent);
-            finish();
+                    try {
+                        api.setAdvertisementPicture(advertisementId, test);
+                    } catch (IOException | ExecutionException | InterruptedException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                Intent intent = new Intent();
+                setResult(1, intent);
+                finish();
+            }catch (UnknownHostException e) {
+                Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
+            }
         }
         return super.onOptionsItemSelected(item);
     }

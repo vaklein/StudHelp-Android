@@ -47,6 +47,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -170,8 +171,9 @@ public class AddFileActivity extends NavigationActivity {
         if (isCorrectlyFilled()) {
             try {
                 api.addCourseFile(Integer.toString(course.getID()), file, fileTitleText.getText().toString());
-            } catch (IOException e) {
+            } catch (UnknownHostException e) {
                 e.printStackTrace();
+                Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {

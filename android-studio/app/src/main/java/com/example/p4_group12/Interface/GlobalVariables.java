@@ -35,7 +35,9 @@ public class GlobalVariables {
 
     public static ArrayList<String> getFaculties() { return faculties; }
 
-    public static void switchBooleanToken(){isTokenAlreadySent = !isTokenAlreadySent;}
+    public static void tokenSent(){isTokenAlreadySent = true;}
+
+    public static void revokeToken(){isTokenAlreadySent = false;}
 
     public static boolean tokenAlreadySent(){return  isTokenAlreadySent;}
 

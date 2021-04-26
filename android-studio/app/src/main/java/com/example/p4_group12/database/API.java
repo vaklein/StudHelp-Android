@@ -31,6 +31,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -47,6 +48,7 @@ public class API {
         private String urlWebService;
         private String data;
         private String requestType;
+        private UnknownHostException connectionException;
 
         public SyncGetJSON(String urlWebService, String data, String requestType){
             this.urlWebService = urlWebService;
@@ -66,7 +68,7 @@ public class API {
         }
 
         @Override
-        protected String doInBackground(Void... voids) {
+        protected String doInBackground(Void... voids){
             try {
                 // Sending the request
                 URL url = new URL(this.urlWebService);
@@ -103,10 +105,16 @@ public class API {
             } catch (MalformedURLException e) {
                 e.printStackTrace();
                 return null;
+            } catch (UnknownHostException e) {
+                connectionException = e;
+                return null;
             } catch (IOException e) {
-                e.printStackTrace();
                 return null;
             }
+        }
+
+        public UnknownHostException getConnectionException(){
+            return connectionException;
         }
     }
 
@@ -195,6 +203,7 @@ public class API {
         private File file;
         private String course_id;
         private String title;
+        private UnknownHostException connectionException;
 
         public SyncSendFileCourse(String requestURL, String email, File file , String course_id, String title){
             this.requestURL = requestURL;
@@ -225,10 +234,17 @@ public class API {
                 multipart.addFilePart("file", file);
                 String response = multipart.finish(); // response from server.
                 return response;
+            } catch (UnknownHostException e) {
+                connectionException = e;
+                return null;
             } catch (Exception e) {
                 Log.e("TAG", "multipart post error " + e);
                 return null;
             }
+        }
+
+        public UnknownHostException getConnectionException(){
+            return connectionException;
         }
     }
 
@@ -259,10 +275,14 @@ public class API {
         INSTANCE = new API(sharedPreferences.getString("API_key", null));
         return INSTANCE;
     }
-    public static String tokenUpdateCourses(){
+    public static String tokenUpdateCourses() throws UnknownHostException{
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/globalvariables/course_list_update", "", "GET");
             String response = getJSON.execute().get();
+
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
+
             Log.v("jerem", "try :" + response);
             JSONObject jsonObject = new JSONArray(response).getJSONObject(0);
             return jsonObject.getString("value");
@@ -274,7 +294,7 @@ public class API {
         }
     }
 
-    public static JSONObject registerUser(User user, String password, String passwordConfirmation){
+    public static JSONObject registerUser(User user, String password, String passwordConfirmation) throws UnknownHostException {
         try {
             String data = URLEncoder.encode("login", "UTF-8") + "=" + URLEncoder.encode(user.getLogin(), "UTF-8") + "&" +
                     URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(password, "UTF-8") + "&" +
@@ -285,6 +305,9 @@ public class API {
             // Creating the request and getting the answer
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/register", data, "POST");
             String response = getJSON.execute().get();
+
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
 
             // Handling the answer
             JSONObject jsonObject = new JSONObject(response);
@@ -299,13 +322,16 @@ public class API {
         }
     }
 
-    public static JSONObject loginUser(String login, String password){
+    public static JSONObject loginUser(String login, String password) throws UnknownHostException{
         try{
             String data = URLEncoder.encode("login", "UTF-8") + "=" + URLEncoder.encode(login, "UTF-8") + "&" +
                           URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(password, "UTF-8");
 
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/login", data, "POST");
             String response = getJSON.execute().get();
+
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
 
             JSONObject jsonObject = new JSONObject(response);
             if(jsonObject == null) return null;
@@ -321,10 +347,14 @@ public class API {
         }
     }
 
-    public void logoutUser(SharedPreferences sharedPreferences){
+    public void logoutUser(SharedPreferences sharedPreferences) throws UnknownHostException{
         SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/logout", "", "POST");
         try {
             String response = getJSON.execute().get();
+
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
+
             Log.d("Gwen", response);
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -348,14 +378,18 @@ public class API {
 
     }
 
-    public User getUserWithEmail(String email){
+    public User getUserWithEmail(String email) throws UnknownHostException{
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + email, "", "GET");
             String response = getJSON.execute().get();
 
+            if(response == null){
+                UnknownHostException e = getJSON.getConnectionException();
+                if(e != null) throw e;
+            }
+
             JSONObject jsonObject = new JSONArray(response).getJSONObject(0);
             if(jsonObject == null) {
-                Log.v("Jules", "[Bad thing] Error on JSON get for the user");
                 return null;
             }
             else if(!jsonObject.has("error")){
@@ -364,17 +398,21 @@ public class API {
             Log.v("Jules", "[Bad thing] Error on JSON get for the user");
             return null;
 
-        } catch (ExecutionException | InterruptedException | JSONException | ParseException e) {
+        } catch (ExecutionException | InterruptedException | JSONException | InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException | ParseException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public ArrayList<Course> getCourses(){
+    public ArrayList<Course> getCourses() throws UnknownHostException{
         ArrayList<Course> allCourses = new ArrayList<>();
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/course", "", "GET");
             String response = getJSON.execute().get();
+
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
+
             loadIntoArrayList(response, allCourses, Course.class);
         } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
             e.printStackTrace();
@@ -382,9 +420,13 @@ public class API {
         return allCourses;
     }
 
-    public void addCourseFile(String course_id, File file, String title) throws IOException, ExecutionException, InterruptedException, JSONException {
+    public void addCourseFile(String course_id, File file, String title) throws ExecutionException, InterruptedException, JSONException, UnknownHostException {
         SyncSendFileCourse request = new SyncSendFileCourse(BuildConfig.DB_URL + "/course/file", GlobalVariables.getUser().getEmail(), file, course_id, title);
         String response = request.execute().get();
+
+        UnknownHostException e;
+        if(response == null && (e = request.connectionException) != null) throw e;
+
         JSONObject obj = new JSONObject(response);
         //user.setPicture("users/"+obj.getString("image_name"));
     }
@@ -399,11 +441,14 @@ public class API {
         }
         return files;
     }
-    public HashSet<Integer> getFavoriteCoursesIdsOfUser(User user){
+    public HashSet<Integer> getFavoriteCoursesIdsOfUser(User user) throws UnknownHostException{
         HashSet<Integer> favoriteIDs = new HashSet<>();
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/favorite/" + user.getEmail(), "", "GET");
             String response = getJSON.execute().get();
+
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
 
             // Reading the JSON and putting the IDs inside the hashet
             JSONArray jsonArray = new JSONArray(response);
@@ -417,12 +462,15 @@ public class API {
         return favoriteIDs;
     }
 
-    public ArrayList<Course> getFavoriteCoursesOfUser(User user){
+    public ArrayList<Course> getFavoriteCoursesOfUser(User user) throws UnknownHostException{
         try{
             ArrayList<Course> favCourse = new ArrayList<>();
 
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/favorite/" + user.getEmail(), "", "GET");
             String response = getJSON.execute().get();
+
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
 
             loadIntoArrayList(response, favCourse, Course.class);
 
@@ -433,7 +481,7 @@ public class API {
         }
     }
 
-    public void addNewFavoriteToUser(User user, Course course){
+    public void addNewFavoriteToUser(User user, Course course){ // No need to handle connection errors
         try{
             String data = URLEncoder.encode("user_email", "UTF-8") + "=" + URLEncoder.encode(user.getEmail(), "UTF-8") + "&" +
                     URLEncoder.encode("course_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(course.getID()), "UTF-8");
@@ -445,7 +493,7 @@ public class API {
         }
     }
 
-    public void removeFavoriteToUser(User user, Course course){
+    public void removeFavoriteToUser(User user, Course course){ // No need to handle connection errors
         try{
             String data = URLEncoder.encode("user_email", "UTF-8") + "=" + URLEncoder.encode(user.getEmail(), "UTF-8") + "&" +
                     URLEncoder.encode("course_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(course.getID()), "UTF-8");
@@ -457,23 +505,33 @@ public class API {
         }
     }
 
-    public ArrayList<Advertisement> getCourseAdvertisements(int course_id){
+    public ArrayList<Advertisement> getCourseAdvertisements(int course_id) throws UnknownHostException{
         ArrayList<Advertisement> allAds = new ArrayList<>();
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/course/" + course_id + "/advertisement", "", "GET");
             String response = getJSON.execute().get();
-            Log.v("responseJSON", "Str is : "+response);
+
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
+
+            Log.v("responseJSON", "getCourseAds Str is : "+response);
             loadIntoArrayList(response, allAds, Advertisement.class);
         } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
             e.printStackTrace();
         }
         return allAds;
     }
-    public Advertisement getAdvertisment(int id){
+
+    public Advertisement getAdvertisment(int id) throws  UnknownHostException{
         ArrayList<Advertisement> allAds = new ArrayList<>();
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement/" + id, "", "GET");
             String response = getJSON.execute().get();
+
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
+
+            Log.v("responseJSON", "getAd Str is : "+response);
             loadIntoArrayList(response, allAds, Advertisement.class);
         } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
             e.printStackTrace();
@@ -481,21 +539,26 @@ public class API {
         return allAds.get(0);
     }
 
-    public Social_links getSocialLinksOfUser(User user){
+    public Social_links getSocialLinksOfUser(User user) throws UnknownHostException{
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + user.getEmail() + "/social_links", "", "GET");
             String response = getJSON.execute().get();
 
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
+
             JSONObject jsonObject = (JSONObject) new JSONArray(response).get(0);
             if(jsonObject == null) return null;
             return (Social_links) GettableObjectFactory.getObject(jsonObject, Social_links.class);
-        } catch (InterruptedException | ExecutionException | JSONException | ParseException e) {
+        } catch (InterruptedException | ExecutionException | JSONException | ParseException | InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public int addNewAdvertisement(int courseId, String title, String description, String email, String type){
+    // Gwen stop
+
+    public int addNewAdvertisement(int courseId, String title, String description, String email, String type) throws UnknownHostException{
         try{
             String data = URLEncoder.encode("course_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(courseId), "UTF-8") + "&" +
                     URLEncoder.encode("title", "UTF-8") + "=" + URLEncoder.encode(title, "UTF-8") + "&" +
@@ -505,6 +568,8 @@ public class API {
 
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement", data, "POST");
             String response = getJSON.execute().get(); // Making the request Sync
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
             JSONObject jsonObject = new JSONObject(response);
             return Integer.parseInt(jsonObject.getString("id"));
         } catch (UnsupportedEncodingException | InterruptedException | ExecutionException | JSONException e) {
@@ -513,7 +578,7 @@ public class API {
         return -1;
     }
 
-    public int addNewTag(Tag tag) {
+    public int addNewTag(Tag tag) throws UnknownHostException {
         try {
             String data = URLEncoder.encode("advertisement_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(tag.getAdvertisementId()), "UTF-8") + "&" +
                     URLEncoder.encode("tag_type", "UTF-8") + "=" + URLEncoder.encode(tag.getTagType(), "UTF-8") + "&" +
@@ -521,6 +586,8 @@ public class API {
 
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement/tags", data, "POST");
             String response = getJSON.execute().get(); // Making the request Async
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
             JSONObject jsonObject = new JSONObject(response);
             return Integer.parseInt(jsonObject.getString("id"));
         } catch (UnsupportedEncodingException | ExecutionException | InterruptedException | JSONException e) {
@@ -546,12 +613,13 @@ public class API {
         }
         return tags;
     }
-    public ArrayList<String> getAdvertisementPictures(int advertisementId) {
+    public ArrayList<String> getAdvertisementPictures(int advertisementId) throws UnknownHostException{
         ArrayList<String> pictures = new ArrayList<>();
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement/pictures/" + advertisementId, "", "GET");
             String response = getJSON.execute().get();
-            //Log.v("Jules", "Tags json is : " + response);
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
 
             JSONArray jsonArray = new JSONArray(response);
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -564,12 +632,21 @@ public class API {
         return pictures;
     }
 
-    public void deleteAdvertisment(Advertisement advertisement){
+    public void deleteAdvertisment(Advertisement advertisement) throws UnknownHostException{
         SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement/" + advertisement.getID(), "", "DELETE");
-        getJSON.execute(); // Making the request Async
+        String response = null; // Making the request Async
+        try {
+            response = getJSON.execute().get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        UnknownHostException e;
+        if(response == null && (e = getJSON.connectionException) != null) throw e;
     }
 
-    public void updateAdvertisement(Advertisement advertisement){
+    public void updateAdvertisement(Advertisement advertisement) throws UnknownHostException{
         try{
             String data = URLEncoder.encode("course_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(advertisement.getCourseID()), "UTF-8") + "&" +
                     URLEncoder.encode("title", "UTF-8") + "=" + URLEncoder.encode(advertisement.getTitle(), "UTF-8") + "&" +
@@ -578,8 +655,14 @@ public class API {
                     URLEncoder.encode("description", "UTF-8") + "=" + URLEncoder.encode(advertisement.getDescription(), "UTF-8");
 
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/advertisement/" + advertisement.getID(), data, "PUT");
-            getJSON.execute(); // Making the request Async
+            String response = getJSON.execute().get(); // Making the request Async
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
         } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
             e.printStackTrace();
         }
     }
@@ -590,11 +673,14 @@ public class API {
         JSONObject obj = new JSONObject(response);
     }
 
-    public ArrayList<Advertisement> getAdvertisementsOfUser(User user){
+    public ArrayList<Advertisement> getAdvertisementsOfUser(User user) throws UnknownHostException{
         ArrayList<Advertisement> allUserAds = new ArrayList<>();
         try{
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + user.getEmail() + "/advertisement", "", "GET");
             String response = getJSON.execute().get();
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
+            Log.v("responseJSON", "getAdOfUser Str is : "+response);
             loadIntoArrayList(response, allUserAds, Advertisement.class);
         } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
             e.printStackTrace();
@@ -602,7 +688,7 @@ public class API {
         return allUserAds;
     }
 
-    public Boolean editNameAndLoginAndDescription(User user, String newName, String newLogin, String newDescription){
+    public Boolean editNameAndLoginAndDescription(User user, String newName, String newLogin, String newDescription) throws UnknownHostException{
         try{
             String data = "";
             // Probably a better way to do it but can't find it
@@ -619,7 +705,8 @@ public class API {
             }
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/profile/" + user.getEmail(), data, "PUT");
             String response = getJSON.execute().get();
-
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
             JSONObject jsonObject = new JSONObject(response);
             return jsonObject != null && !jsonObject.has("error");
         } catch (UnsupportedEncodingException | ExecutionException | InterruptedException | JSONException e) {
@@ -633,7 +720,7 @@ public class API {
         JSONObject obj = new JSONObject(response);
         user.setPicture("users/"+obj.getString("image_name"));
     }
-    public void updateSocialLinks(User user){
+    public void updateSocialLinks(User user) throws UnknownHostException{
         try{
             String data = URLEncoder.encode("discord", "UTF-8") + "=" + URLEncoder.encode(user.getSocial_links().getDiscord(), "UTF-8") + "&" +
                     URLEncoder.encode("teams", "UTF-8") + "=" + URLEncoder.encode(user.getSocial_links().getTeams(), "UTF-8") + "&" +
@@ -641,21 +728,33 @@ public class API {
                     URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(user.getSocial_links().getPublicEmail(), "UTF-8");
 
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/social_links/" + user.getEmail(), data, "PUT");
-            getJSON.execute(); // Making the request Async
+            String response = getJSON.execute().get(); // Making the request Async
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
+            JSONObject jsonObject = new JSONObject(response);
         } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public Boolean updatePassword(User user, String newPassword, String passwordConfirmation, String oldPasswordGiven){
+    public Boolean updatePassword(User user, String newPassword, String passwordConfirmation, String oldPasswordGiven)throws UnknownHostException{
         try{
             String data = URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(newPassword, "UTF-8") + "&" +
                     URLEncoder.encode("password_confirmation", "UTF-8") + "=" + URLEncoder.encode(passwordConfirmation, "UTF-8") + "&" +
                     URLEncoder.encode("old_password", "UTF-8") + "=" + URLEncoder.encode(oldPasswordGiven, "UTF-8");
 
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/password/" + user.getEmail(), data, "PUT");
-            JSONObject jsonObject = new JSONObject(getJSON.execute().get());
-            Log.d("Gwen", jsonObject.toString());
+            String response = getJSON.execute().get();
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
+            JSONObject jsonObject = new JSONObject(response);
+
             return !jsonObject.has("errors");
         } catch (UnsupportedEncodingException | ExecutionException | InterruptedException | JSONException e) {
             e.printStackTrace();
@@ -663,12 +762,15 @@ public class API {
         }
     }
 
-    public ArrayList<Advertisement> getBookmarksOfUser(User user){
+    public ArrayList<Advertisement> getBookmarksOfUser(User user)throws UnknownHostException{
         try{
             ArrayList<Advertisement> out = new ArrayList<>();
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + user.getEmail() + "/bookmarks", "", "GET");
-
-            loadIntoArrayList(getJSON.execute().get(), out, Advertisement.class);
+            String response = getJSON.execute().get();
+            UnknownHostException e;
+            if(response == null && (e = getJSON.connectionException) != null) throw e;
+            Log.v("responseJSON", "getBookmarksOfUser Str is : "+response);
+            loadIntoArrayList(response, out, Advertisement.class);
             return  out;
         } catch (JSONException | IllegalAccessException | InstantiationException | ParseException | InvocationTargetException | ExecutionException | NoSuchMethodException | InterruptedException e) {
             e.printStackTrace();
@@ -676,12 +778,14 @@ public class API {
         }
     }
 
-    public HashSet<Integer> getBookmarksIdsOfUser(User user){
+    public HashSet<Integer> getBookmarksIdsOfUser(User user)throws UnknownHostException{
         try{
             HashSet<Integer> out = new HashSet<>();
             SyncGetJSON getJSON = new SyncGetJSON(BuildConfig.DB_URL + "/user/" + user.getEmail() + "/bookmarks", "", "GET");
 
             String result = getJSON.execute().get();
+            UnknownHostException e;
+            if(result == null && (e = getJSON.connectionException) != null) throw e;
             // Log.d("Gwen", result);
             JSONArray jsonArray = new JSONArray(result);
 
@@ -716,7 +820,7 @@ public class API {
     /**
      * Here we get the JSON given by the DB and we get the courses from it in order to add them into the course list
      */
-    private static void loadIntoArrayList(String json, ArrayList gettableObjectArrayList, Class objectClass) throws JSONException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ParseException {
+    public static void loadIntoArrayList(String json, ArrayList gettableObjectArrayList, Class objectClass) throws JSONException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ParseException {
         JSONArray jsonArray = new JSONArray(json);
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject obj = jsonArray.getJSONObject(i);

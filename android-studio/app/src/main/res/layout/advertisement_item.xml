@@ -14,22 +14,36 @@
         android:layout_margin="4dp">
 
         <TextView
+            android:id="@+id/advertisement_name_course_name_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:textAlignment="center"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:textStyle="bold"
+            android:textColor="@color/myrtic_green"
+            android:visibility="gone"
+            android:text="Course name which can be very long so we must be able to deal with that"
+            />
+
+        <TextView
             android:id="@+id/username"
+            android:layout_below="@+id/advertisement_name_course_name_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="10dp"
             android:text="Username"
             android:textSize="15sp" />
 
         <TextView
             android:id="@+id/advertisement_item_date"
+            android:layout_below="@+id/advertisement_name_course_name_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="15dp"
+            android:layout_marginEnd="10dp"
             android:text="@string/advertisement_item_date_string"
             android:textSize="15sp" />
 
@@ -38,8 +52,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/username"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="53dp"
             android:text="Advertisement title (it could be a very long one)"
             android:textColor="@color/bittersweet"
             android:textSize="20sp"
@@ -50,20 +64,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/advertisement_title_view"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="53dp"
             android:text="This is the description of an advertisement. It could be a very long one too"
             android:textSize="15sp"
             android:lines="1"/>
 
         <CheckBox
             android:id="@+id/bookmarkCheckBox"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_marginTop="7dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_below="@+id/advertisement_item_date"
             android:layout_toStartOf="@+id/picturePresence"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="-9dp"
             android:button="@drawable/sl_bookmark"
             app:buttonTint="@color/myrtic_green" />
 
@@ -73,9 +86,10 @@
             android:layout_height="18dp"
             android:layout_below="@+id/advertisement_item_date"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_alignParentEnd="true"
             android:src="@drawable/ic_cameravect"
-            android:visibility="invisible" />
+            android:visibility="invisible"/>
 
 
     </RelativeLayout>

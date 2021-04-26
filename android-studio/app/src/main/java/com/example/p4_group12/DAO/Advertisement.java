@@ -40,6 +40,7 @@ public class Advertisement  implements Serializable, Comparable {
     private String title;
     private String description;
     private String type;
+    private String courseName;
     private int courseID;
     private List<Tag> tags;
     private List<String> tagValues = new ArrayList<>();
@@ -83,6 +84,10 @@ public class Advertisement  implements Serializable, Comparable {
         this.images = images;
     }
 
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
     public Advertisement(int ID, String mail, String userFullname, String title, String description, List<Tag> tags, int courseID, List<String> images, String creationDate, String lastUpdateDate) throws ParseException {
         this.ID = ID;
         this.mail = mail;
@@ -95,7 +100,7 @@ public class Advertisement  implements Serializable, Comparable {
             tagValues.add(tag.getTagValue());
         }
         this.images = images;
-
+        this.courseName = "This should not appear, and be the course name";
 
         Log.v("TimeLogs", "Creation is " + creationDate);
         this.creationDate = getLocaleDateFromString(creationDate);
@@ -138,7 +143,9 @@ public class Advertisement  implements Serializable, Comparable {
         return tagValues;
     }
 
-    public boolean hasImages() { return !images.isEmpty(); }
+    public boolean hasImages() {
+        return !images.get(0).equals("null");
+    }
 
     public List<String> getImages() { return images; }
 
@@ -148,6 +155,10 @@ public class Advertisement  implements Serializable, Comparable {
 
     public Date getLastUpdateDate() {
         return lastUpdateDate;
+    }
+
+    public String getCourseName() {
+        return courseName;
     }
 
     @Override

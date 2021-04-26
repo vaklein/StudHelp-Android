@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +20,7 @@ import com.example.p4_group12.Interface.GlobalVariables;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
 
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -92,7 +94,14 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileLi
     public void onBindViewHolder(@NonNull FileListViewHolder holder, int position) {
         File currentFile = fileList.get(position);
 
-        holder.usernameTextView.setText(API.getInstance().getUserWithEmail(currentFile.getEmail()).getName());
+
+        try {
+            holder.usernameTextView.setText(API.getInstance().getUserWithEmail(currentFile.getEmail()).getName());
+        } catch(UnknownHostException e){
+            Toast.makeText(holder.itemView.getContext(), R.string.no_connection, Toast.LENGTH_LONG);
+            return; // TODO smth better
+        }
+
         holder.fileTitleTextView.setText(currentFile.getTitle());
 
         Date now = new Date();

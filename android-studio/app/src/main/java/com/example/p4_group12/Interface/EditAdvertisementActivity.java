@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -41,6 +42,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -105,9 +107,15 @@ public class EditAdvertisementActivity extends NavigationActivity{
 
         this.api = API.getInstance();
 
-        if (GlobalVariables.getUser().getSocial_links() == null) {
-            GlobalVariables.getUser().setSocial_links(api.getSocialLinksOfUser(GlobalVariables.getUser()));
+        try {
+            if (GlobalVariables.getUser().getSocial_links() == null) {
+                GlobalVariables.getUser().setSocial_links(api.getSocialLinksOfUser(GlobalVariables.getUser()));
+            }
+        } catch (UnknownHostException e){
+            finish();
+            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG);
         }
+
         if (!GlobalVariables.getUser().hasASocialNetwork()){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Attention");
@@ -125,6 +133,7 @@ public class EditAdvertisementActivity extends NavigationActivity{
                 public void onClick(DialogInterface dialogInterface, int i) {
                     dialogInterface.dismiss();
                     Intent modifyProfile = new Intent(getApplicationContext(),EditProfileActivity.class);
+                    modifyProfile.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(modifyProfile);
                 }
             });
@@ -386,81 +395,85 @@ public class EditAdvertisementActivity extends NavigationActivity{
             for (Tag t : newObjects) { s1.append(" ").append(t.getTagValue()); }
             Log.v("new values", s1.toString());
 
-            // Update type
-            if (!initType.equals(newType)) {
-                api.addNewTag(newType);
-                api.removeTag(initType);
-            }
-
-            // Remove unchecked cycles
-            for (Tag initCycle : initCycles) {
-                if (!newCycles.contains(initCycle)) {
-                    Log.v("removed tag", initCycle.getTagValue());
-                    api.removeTag(initCycle);
-                }
-            }
-            // Remove unchecked objects
-            for (Tag initObject : initObjects) {
-                if (!newObjects.contains(initObject)) {
-                    Log.v("removed tag", initObject.getTagValue());
-                    api.removeTag(initObject);
-                }
-            }
-
-            // Add new cycles
-            for (Tag newCycle : newCycles) {
-                if (!initCycles.contains(newCycle)) {
-                    Log.v("added tag", newCycle.getTagValue());
-                    api.addNewTag(newCycle);
-                }
-            }
-            // Add new objects
-            for (Tag newObject : newObjects) {
-                if (!initObjects.contains(newObject)) {
-                    Log.v("added tag", newObject.getTagValue());
-                    api.addNewTag(newObject);
-                }
-            }
-
-
-            toEditAdvertisement.setTags(updatedTags);
-            toEditAdvertisement.setTitle(advertisementTitleText.getText().toString());
-            toEditAdvertisement.setDescription(advertisementDescriptionText.getText().toString());
-            api.updateAdvertisement(toEditAdvertisement);
-
-            Intent intent = new Intent();
-            intent.putExtra("Advertisement",toEditAdvertisement);
-            int i = 0;
-            for (Tag tag : toEditAdvertisement.getTags()) {
-                intent.putExtra("tag"+i, tag);
-                i++;
-            }
-
-            if(imageBitmap != null) {
-                File test = null;
-                try {
-                    test = createImageFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try (FileOutputStream out = new FileOutputStream(test)) {
-                    imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-                    // PNG is a lossless format, the compression factor (100) is ignored
-                } catch (IOException e) {
-                    e.printStackTrace();
+            try {
+                // Update type
+                if (!initType.equals(newType)) {
+                    api.addNewTag(newType);
+                    api.removeTag(initType);
                 }
 
-                try {
-                    api.setAdvertisementPicture(toEditAdvertisement.getID(),test);
-                } catch (IOException | ExecutionException | InterruptedException | JSONException e) {
-                    e.printStackTrace();
+                // Remove unchecked cycles
+                for (Tag initCycle : initCycles) {
+                    if (!newCycles.contains(initCycle)) {
+                        Log.v("removed tag", initCycle.getTagValue());
+                        api.removeTag(initCycle);
+                    }
+                }
+                // Remove unchecked objects
+                for (Tag initObject : initObjects) {
+                    if (!newObjects.contains(initObject)) {
+                        Log.v("removed tag", initObject.getTagValue());
+                        api.removeTag(initObject);
+                    }
                 }
 
-            }
+                // Add new cycles
+                for (Tag newCycle : newCycles) {
+                    if (!initCycles.contains(newCycle)) {
+                        Log.v("added tag", newCycle.getTagValue());
+                        api.addNewTag(newCycle);
+                    }
+                }
+                // Add new objects
+                for (Tag newObject : newObjects) {
+                    if (!initObjects.contains(newObject)) {
+                        Log.v("added tag", newObject.getTagValue());
+                        api.addNewTag(newObject);
+                    }
+                }
 
-            intent.putExtra("Number of tags", i);
-            setResult(2, intent);
-            finish();
+
+                toEditAdvertisement.setTags(updatedTags);
+                toEditAdvertisement.setTitle(advertisementTitleText.getText().toString());
+                toEditAdvertisement.setDescription(advertisementDescriptionText.getText().toString());
+                api.updateAdvertisement(toEditAdvertisement);
+
+                Intent intent = new Intent();
+                intent.putExtra("Advertisement", toEditAdvertisement);
+                int i = 0;
+                for (Tag tag : toEditAdvertisement.getTags()) {
+                    intent.putExtra("tag" + i, tag);
+                    i++;
+                }
+
+                if (imageBitmap != null) {
+                    File test = null;
+                    try {
+                        test = createImageFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try (FileOutputStream out = new FileOutputStream(test)) {
+                        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                        // PNG is a lossless format, the compression factor (100) is ignored
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        api.setAdvertisementPicture(toEditAdvertisement.getID(), test);
+                    } catch (IOException | ExecutionException | InterruptedException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                intent.putExtra("Number of tags", i);
+                setResult(2, intent);
+                finish();
+            }catch(UnknownHostException e){
+                Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
+            }
         }
         return super.onOptionsItemSelected(item);
     }

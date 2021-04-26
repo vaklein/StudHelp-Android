@@ -25,6 +25,7 @@ import com.example.p4_group12.database.API;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,20 +55,26 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         //action : diriger le user vers une activity quand il click sur la notif
         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-        Advertisement add = API.getInstance().getAdvertisment(advertisement_id);
-        Intent advertisementView = new Intent(getApplicationContext(), AdvertisementViewActivity.class);
-        advertisementView.putExtra("ClickedAdvertisement", add);
-        int i = 0;
-        for (Tag tag : add.getTags()) {
-            advertisementView.putExtra("tag"+i, tag);
-            i++;
-        }
-        advertisementView.putExtra("Number of tags", i);
-        advertisementView.putExtra("contactable", 1);
+        try{
+            Advertisement add = API.getInstance().getAdvertisment(advertisement_id);
+            Intent advertisementView = new Intent(getApplicationContext(), AdvertisementViewActivity.class);
+            advertisementView.putExtra("ClickedAdvertisement", add);
+            int i = 0;
+            for (Tag tag : add.getTags()) {
+                advertisementView.putExtra("tag"+i, tag);
+                i++;
+            }
+            advertisementView.putExtra("Number of tags", i);
+            advertisementView.putExtra("contactable", 1);
 
-        PendingIntent pendingIntent = PendingIntent.getActivities(getApplicationContext(), 0, new Intent[] {intent, advertisementView}, PendingIntent.FLAG_CANCEL_CURRENT);
-        // ajout de l'action
-        notificationBuilder.setContentIntent(pendingIntent);
+            PendingIntent pendingIntent = PendingIntent.getActivities(getApplicationContext(), 0, new Intent[] {intent, advertisementView}, PendingIntent.FLAG_CANCEL_CURRENT);
+            // ajout de l'action
+            notificationBuilder.setContentIntent(pendingIntent);
+
+        } catch (UnknownHostException e){
+            return;
+        }
+
 
 
         //vibration quand recoit une notif

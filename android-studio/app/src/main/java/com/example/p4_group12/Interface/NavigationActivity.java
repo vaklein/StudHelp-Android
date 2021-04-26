@@ -26,6 +26,9 @@ import com.google.firebase.installations.FirebaseInstallations;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 
+import java.net.UnknownHostException;
+import java.util.Objects;
+
 public class NavigationActivity extends AppCompatActivity{
     private DrawerLayout drawerLayout;
     protected MaterialToolbar toolbar;
@@ -35,11 +38,12 @@ public class NavigationActivity extends AppCompatActivity{
     private Button deconnexion;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String currAct = this.getClass().getSimpleName();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_layout);
 
         // Sending the token when the user is logged in
-        // Putting this here because it's created once and right after the log in WRONG !!!!!!
+        // At startup
         if(!GlobalVariables.tokenAlreadySent()){
             FirebaseMessaging.getInstance().getToken()
                     .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -57,7 +61,7 @@ public class NavigationActivity extends AppCompatActivity{
                             API.getInstance().sendToken(GlobalVariables.getUser().getEmail(), token);
                         }
                     });
-            GlobalVariables.switchBooleanToken();
+            GlobalVariables.tokenSent();
         }
 
 
@@ -77,12 +81,19 @@ public class NavigationActivity extends AppCompatActivity{
                 SharedPreferences sharedPreferences = getSharedPreferences(LoginActivity.PREFS_NAME,MODE_PRIVATE);
                 sharedPreferences.edit().putString(LoginActivity.PREF_EMAIL, null).apply();
 
-                API.getInstance().logoutUser(sharedPreferences);
+                try{
+                    API.getInstance().logoutUser(sharedPreferences);
+                } catch (UnknownHostException e){
+                    // not handling the exception -> user is loging out and token will be purged at next logout anyway
+                }
+
 
                 GlobalVariables.setUser(null);
-                GlobalVariables.switchBooleanToken();
+                GlobalVariables.revokeToken();
 
                 Intent intentLoginActivity = new Intent(getApplicationContext(), LoginActivity.class);
+                intentLoginActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intentLoginActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intentLoginActivity);
                 finish();
             }
@@ -95,14 +106,18 @@ public class NavigationActivity extends AppCompatActivity{
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.nav_profil:
-                        Intent intentprofile = new Intent(getApplicationContext(), ProfileActivity.class);
-                        startActivity(intentprofile);
-                        finish();
+                        Intent home1 = new Intent(getApplicationContext(), HomeActivity.class);
+                        Log.v("jeremActi", "profil");
+                        home1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(home1);
+                        Intent profil = new Intent(getApplicationContext(), ProfileActivity.class);
+                        startActivity(profil);
                         break;
                     case R.id.nav_home:
-                        Intent intentHome = new Intent(getApplicationContext(), HomeActivity.class);
-                        startActivity(intentHome);
-                        finish();
+                        Intent home2 = new Intent(getApplicationContext(), HomeActivity.class);
+                        Log.v("jeremActi", "profil");
+                        home2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(home2);
                         break;
                     /* Ça n'a plus beaucoup de sens d'afficher la liste des 42.500 cours...
                     case R.id.nav_courses:
@@ -111,14 +126,25 @@ public class NavigationActivity extends AppCompatActivity{
                         finish();
                         break;*/
                     case R.id.nav_myadvertisements:
-                        Intent intentmyadverts = new Intent(getApplicationContext(), MyAdvertisementsActivity.class);
-                        startActivity(intentmyadverts);
-                        finish();
+                        Intent home3 = new Intent(getApplicationContext(), HomeActivity.class);
+                        home3.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(home3);
+                        Intent adv = new Intent(getApplicationContext(), MyAdvertisementsActivity.class);
+                        startActivity(adv);
                         break;
                     case R.id.nav_mybookmarks:
-                        Intent intentMyBookmarks = new Intent(getApplicationContext(), MyBookmarksActivity.class);
-                        startActivity(intentMyBookmarks);
-                        finish();
+                        Intent home4 = new Intent(getApplicationContext(), HomeActivity.class);
+                        home4.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(home4);
+                        Intent book = new Intent(getApplicationContext(), MyBookmarksActivity.class);
+                        startActivity(book);
+                        break;
+                    case R.id.nav_favoritecourses:
+                        Intent searchActivity = new Intent(getApplicationContext(), SearchActivity.class);
+                        searchActivity.putExtra("ClickedCategory", "favourites courses");
+                        searchActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(searchActivity);
+                        break;
                     default:
                         break;
                 }
