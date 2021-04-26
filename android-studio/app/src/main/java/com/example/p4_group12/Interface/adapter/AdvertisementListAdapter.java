@@ -171,6 +171,9 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
         if(currentAdvertisement.hasImages()){
             holder.picturePresence.setVisibility(View.VISIBLE);
         }
+        else{
+            holder.picturePresence.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
