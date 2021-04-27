@@ -142,7 +142,7 @@ public class NavigationActivity extends AppCompatActivity{
                     case R.id.nav_favoritecourses:
                         Intent searchActivity = new Intent(getApplicationContext(), SearchActivity.class);
                         searchActivity.putExtra("ClickedCategory", "favourites courses");
-                        searchActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        searchActivity.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NO_HISTORY); // a voir comment on veut gérer ça
                         startActivity(searchActivity);
                         break;
                     default:
