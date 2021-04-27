@@ -733,7 +733,6 @@ public class API {
             String response = getJSON.execute().get(); // Making the request Async
             UnknownHostException e;
             if(response == null && (e = getJSON.connectionException) != null) throw e;
-            JSONObject jsonObject = new JSONObject(response);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

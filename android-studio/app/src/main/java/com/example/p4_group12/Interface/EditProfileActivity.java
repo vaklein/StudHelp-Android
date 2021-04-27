@@ -249,7 +249,7 @@ public class EditProfileActivity extends NavigationActivity {
                         GlobalVariables.getUser().setDescription("null");
                     else
                         GlobalVariables.getUser().setDescription(new_description.getText().toString());
-
+                    setResult(1);
                     EditProfileActivity.this.finish();
                 } else {
                     new_loginField.setError("Identifiant déjà utilisé");

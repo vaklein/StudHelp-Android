@@ -128,9 +128,10 @@ public class ProfileActivity extends NavigationActivity implements TabLayout.OnT
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == 1) {
+            finish();
             Intent profil = new Intent(getApplicationContext(), ProfileActivity.class);
             startActivity(profil);
-            finish();
+
         }
     }
 }
