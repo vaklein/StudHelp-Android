@@ -249,9 +249,9 @@ public class API {
     }
 
     private static String key;
-    private static API INSTANCE = null;
+    public static API INSTANCE = null;
 
-    private API(String key){
+    public API(String key){
         this.key = key;
     }
 

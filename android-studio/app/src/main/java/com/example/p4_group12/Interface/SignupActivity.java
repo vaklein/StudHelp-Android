@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -29,12 +30,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -53,6 +56,7 @@ public class SignupActivity extends AppCompatActivity {
     private TextInputLayout confirmPasswordField;
     private static final String PASSWORD_STRENGTH = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[*@#$%!]).{8,40})";
     private LoadingDialog loadingDialog;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,49 +86,12 @@ public class SignupActivity extends AppCompatActivity {
                 passwordField.setErrorEnabled(false);
                 confirmPasswordField.setErrorEnabled(false);
                 if (isCorrectlyFil() && isPasswordPowerfull() && isPasswordConfirmed()) {
-                    User user = new User(name.getText().toString(), login.getText().toString(), email.getText().toString(), "null", "null");
-
-                    loadingDialog.getDialog().show();
-
+                    user = new User(name.getText().toString(), login.getText().toString(), email.getText().toString(), "null", "null");
                     try {
-                        JSONObject apiResponse = API.registerUser(user,password.getText().toString(), confirmPassword.getText().toString());
-                        if(apiResponse.has("error")){ // error while trying to create the new user
-                            handleError(apiResponse);
-                        }else{
-                            GlobalVariables.setUser(user);
-                            SharedPreferences pref_date = getSharedPreferences(LoginActivity.PREF_DATE,MODE_PRIVATE); // We only get the email. We might need to get the API token or the password
-                            String token_date_array = pref_date.getString(LoginActivity.PREF_TOKEN_DATE_ARRAY, "1900-01-01 00:00:00");
-                            String date_courses_data = API.tokenUpdateCourses();
-                            ArrayList<Course> loadCourses = API.getInstance().getCourses();
-                            GlobalVariables.setCourses(loadCourses);
-                            // creating a new variable for gson.
-                            Gson gson = new Gson();
-                            // getting data from gson and storing it in a string.
-                            String json = gson.toJson(loadCourses);
+                        // Creating the request and getting the answer
+                        new SyncGetJSON().execute(user.getLogin(), password.getText().toString(), user.getName(), user.getEmail(), confirmPassword.getText().toString());
 
-                            getSharedPreferences(LoginActivity.PREF_ARRAY, MODE_PRIVATE)
-                                    .edit()
-                                    .putString(LoginActivity.PREF_COURSE_ARRAY_LIST, json)
-                                    .apply();
-                            getSharedPreferences(LoginActivity.PREF_DATE, MODE_PRIVATE)
-                                    .edit()
-                                    .putString(LoginActivity.PREF_TOKEN_DATE_ARRAY, date_courses_data)
-                                    .apply();
-
-                            // TODO make the connection permanent
-                            Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
-                            intent.putExtra("FavList", false);
-                            startActivity(intent);
-                            loadingDialog.getDialog().cancel();
-                            SignupActivity.this.finish();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (UnknownHostException e){
-                        Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
-                    }
-                    finally {
-                        loadingDialog.getDialog().cancel();
+                    } finally {
                     }
                 }
             }
@@ -183,6 +150,107 @@ public class SignupActivity extends AppCompatActivity {
             loginField.setError("Identifiant déjà utilisé");
         }else if (object.getString("error_msg").equals("EMAIL ALREADY EXISTS")) {
             emailField.setError("Email déjà utilisé");
+        }
+    }
+    class SyncGetJSON extends AsyncTask<String, Void, String> {
+        UnknownHostException connectionException;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            loadingDialog.getDialog().show();
+        }
+
+        @Override
+        protected String doInBackground(String... params){
+            try {
+                String data = URLEncoder.encode("login", "UTF-8") + "=" + URLEncoder.encode(params[0], "UTF-8") + "&" +
+                        URLEncoder.encode("password", "UTF-8") + "=" + URLEncoder.encode(params[1], "UTF-8") + "&" +
+                        URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(params[2], "UTF-8") + "&" +
+                        URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(params[3], "UTF-8") + "&" +
+                        URLEncoder.encode("password_confirmation", "UTF-8") + "=" + URLEncoder.encode(params[4], "UTF-8");//Build form answer
+
+                // Sending the request
+                URL url = new URL(BuildConfig.DB_URL + "/register");
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");  //setting the request type
+                httpURLConnection.setDoOutput(true);
+
+                if(data.length() > 0){
+                    OutputStream OS = httpURLConnection.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
+                    bufferedWriter.write(data);
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                    OS.close();
+                }
+
+                // Getting the answer from th DB
+                InputStream IS = httpURLConnection.getResponseCode() / 100 == 2 ? httpURLConnection.getInputStream() : httpURLConnection.getErrorStream(); //DB answer
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(IS));
+                String json;
+                StringBuilder result = new StringBuilder();
+                while ((json = bufferedReader.readLine()) != null) {
+                    result.append(json + "\n");
+                }
+                IS.close();
+                httpURLConnection.disconnect();
+                return result.toString();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return null;
+            } catch (UnknownHostException e) {
+                connectionException = e;
+                return null;
+            } catch (IOException e) {
+                return null;
+            }
+        }
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            // Handling the answer
+            JSONObject jsonObject = null;
+            try {
+                jsonObject = new JSONObject(s);
+                if(!jsonObject.has("error")){ // If no error while creating the new user, create an insance of the API object with the key of the user
+                    API.INSTANCE = new API(jsonObject.getString("token"));
+                    jsonObject = (JSONObject) jsonObject.get("user");
+                }
+                if(jsonObject.has("error")){ // error while trying to create the new user
+                    handleError(jsonObject);
+                }else {
+                    GlobalVariables.setUser(user);
+                    SharedPreferences pref_date = getSharedPreferences(LoginActivity.PREF_DATE, MODE_PRIVATE); // We only get the email. We might need to get the API token or the password
+                    String token_date_array = pref_date.getString(LoginActivity.PREF_TOKEN_DATE_ARRAY, "1900-01-01 00:00:00");
+                    String date_courses_data = API.tokenUpdateCourses();
+                    ArrayList<Course> loadCourses = API.getInstance().getCourses();
+                    GlobalVariables.setCourses(loadCourses);
+                    // creating a new variable for gson.
+                    Gson gson = new Gson();
+                    // getting data from gson and storing it in a string.
+                    String json = gson.toJson(loadCourses);
+
+                    getSharedPreferences(LoginActivity.PREF_ARRAY, MODE_PRIVATE)
+                            .edit()
+                            .putString(LoginActivity.PREF_COURSE_ARRAY_LIST, json)
+                            .apply();
+                    getSharedPreferences(LoginActivity.PREF_DATE, MODE_PRIVATE)
+                            .edit()
+                            .putString(LoginActivity.PREF_TOKEN_DATE_ARRAY, date_courses_data)
+                            .apply();
+                    // TODO make the connection permanent
+                    Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
+                    intent.putExtra("FavList", false);
+                    startActivity(intent);
+                    SignupActivity.this.finish();
+                }
+            } catch (JSONException | UnknownHostException e) {
+                e.printStackTrace();
+            }
+            loadingDialog.getDialog().cancel();
+        }
+        public UnknownHostException getConnectionException(){
+            return connectionException;
         }
     }
 }
