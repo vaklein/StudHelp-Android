@@ -242,10 +242,14 @@ public class AdvertisementViewActivity extends NavigationActivity {
                     api.removeBookmarkForUser(GlobalVariables.getUser(), currentAdvertisement);
                     item.setIcon(R.drawable.ic_baseline_bookmark_not_selected);
                     bookmarkChecked = false;
+                    Intent intent = new Intent();
+                    setResult(1, intent);
                 }else{
                     api.addBookmarkForUser(GlobalVariables.getUser(), currentAdvertisement);
                     item.setIcon(R.drawable.ic_baseline_bookmark_selected);
                     bookmarkChecked = true;
+                    Intent intent = new Intent();
+                    setResult(1, intent);
                 }
                 break;
         }

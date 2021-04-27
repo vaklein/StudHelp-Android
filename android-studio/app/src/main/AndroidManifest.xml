@@ -99,8 +99,7 @@
                         <!-- ############# EditPasswordActivity ############## -->
                 <!--#############################################################-->
         <activity
-            android:name=".Interface.MyAdvertisementsActivity"
-            android:launchMode = "singleTop"/>
+            android:name=".Interface.MyAdvertisementsActivity" />
 
 
 
@@ -113,8 +112,7 @@
 
         <activity
             android:name=".Interface.MyBookmarksActivity"
-            android:label="Mes signets"
-            android:launchMode = "singleTop"/>
+            android:label="Mes signets" />
 
 
         <!--#################################-->

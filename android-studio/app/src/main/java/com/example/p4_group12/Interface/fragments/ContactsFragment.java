@@ -54,6 +54,7 @@ public class ContactsFragment extends Fragment {
         try {
             if (this.getArguments().getString("type").equals("foreign")){
                 s = API.getInstance().getSocialLinksOfUser(user);
+                noNetworkString.setText(R.string.no_social_network_other_user);
             }else {
                 if (GlobalVariables.getUser().getSocial_links() == null) {
                     s = API.getInstance().getSocialLinksOfUser(GlobalVariables.getUser());
