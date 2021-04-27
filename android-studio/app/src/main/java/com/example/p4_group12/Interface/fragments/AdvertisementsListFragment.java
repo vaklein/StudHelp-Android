@@ -165,7 +165,7 @@ public class AdvertisementsListFragment extends Fragment {
                     }
                     advertisementView.putExtra("Number of tags", i);
                     advertisementView.putExtra("contactable", 1);
-                    advertisementView.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    advertisementView.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivityForResult(advertisementView, 1);
                 }
             });

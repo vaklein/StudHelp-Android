@@ -156,8 +156,9 @@
                 <!--#############################################################-->
         <activity
             android:name=".Interface.AdvertisementViewActivity"
+            android:launchMode = "singleTop"
             android:label="AdvertisementView"
-            android:parentActivityName=".Interface.AdvertisementViewActivity"/>
+            android:parentActivityName=".Interface.AdvertisementViewActivity" />
 
 
                    <!-- ############# SignupActivity ############## -->

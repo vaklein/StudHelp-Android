@@ -144,7 +144,7 @@ public class AdvertisementViewActivity extends NavigationActivity {
                     Intent foreignProfile = new Intent(getApplicationContext(),  ForeignProfileActivity.class);
                     foreignProfile.putExtra("ForeignUser", currentAdvertisement.getEmailAddress());
                     Log.v("jerem", "Foreign : "+currentAdvertisement.getEmailAddress());
-                    foreignProfile.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    foreignProfile.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(foreignProfile);
                 }
             });
