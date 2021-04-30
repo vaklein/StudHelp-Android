@@ -4,9 +4,11 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,6 +69,7 @@ public class ContactsFragment extends Fragment {
             if(!s.getDiscord().equals("") && s.getDiscord() != null){
                 SpannableString content = new SpannableString(s.getDiscord());
                 content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                content.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.myrtic_green)), 0, content.length(), 0);
                 discordtext.setText(content);
                 discordlayout.setVisibility(View.VISIBLE);
                 noNetworkString.setVisibility(View.GONE);
@@ -75,6 +78,7 @@ public class ContactsFragment extends Fragment {
             if(!s.getTeams().equals("") && s.getTeams() != null){
                 SpannableString content = new SpannableString(s.getTeams());
                 content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                content.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.myrtic_green)), 0, content.length(), 0);
                 teamstext.setText(content);
                 teamslayout.setVisibility(View.VISIBLE);
                 noNetworkString.setVisibility(View.GONE);
