@@ -51,7 +51,6 @@ public class FileFragment extends Fragment {
 
         advertisement = result.findViewById(R.id.no_advertisements_frag);
         advertisementsListComplete = api.getCourseFiles(course_id);
-        Log.v("vale", "fign : " + advertisementsListComplete.toString());
         if (advertisementsListComplete.isEmpty()) {
             advertisement.setVisibility(View.VISIBLE);
             advertisement.setText("Ce cours n'a pas encore de synthèse, n'hésitez pas à en ajouter!");

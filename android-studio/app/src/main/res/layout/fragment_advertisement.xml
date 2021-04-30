@@ -2,34 +2,31 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <RelativeLayout
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/advertisement_course_card_view">
 
         <TextView
             android:id="@+id/no_advertisements_frag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:text="@string/no_private_advertisment"
             android:textSize="20sp"
             android:textStyle="bold"
             android:visibility="gone"
             />
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/advertisementRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/advertisement_course_card_view">
+            android:layout_marginHorizontal="10dp"
+            android:scrollbars="vertical"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/advertisementRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="10dp"
-                android:scrollbars="vertical"/>
-
-
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
-    </RelativeLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
