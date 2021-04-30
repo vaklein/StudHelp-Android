@@ -103,6 +103,10 @@ public class NavigationActivity extends AppCompatActivity{
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
+                if (currAct.equals("SearchActivity")) {
+                    finish();
+                }
+
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.nav_profil:
