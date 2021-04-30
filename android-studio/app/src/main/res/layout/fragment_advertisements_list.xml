@@ -83,6 +83,7 @@
                 android:text="@string/no_advertisement_text"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:layout_marginHorizontal="10dp"
                 android:visibility="gone"
                 />
 

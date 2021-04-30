@@ -18,7 +18,8 @@
             android:text="@string/no_private_advertisment"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:visibility="gone"
+            android:layout_marginHorizontal="10dp"
+            android:visibility="visible"
             />
 
         <androidx.recyclerview.widget.RecyclerView
