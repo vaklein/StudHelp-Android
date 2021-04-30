@@ -54,7 +54,7 @@ public class FileFragment extends Fragment {
         Log.v("vale", "fign : " + advertisementsListComplete.toString());
         if (advertisementsListComplete.isEmpty()) {
             advertisement.setVisibility(View.VISIBLE);
-            advertisement.setText("Il n'y a pas de synthese");
+            advertisement.setText("Ce cours n'a pas encore de synthèse, n'hésitez pas à en ajouter!");
         }
 
         advertisementRecyclerView = result.findViewById(R.id.advertisementRecyclerView);
