@@ -101,6 +101,7 @@
                         android:layout_toRightOf="@+id/logo_email"
                         android:singleLine="true"
                         android:text="@string/email_public"
+                        android:autoLink="email"
                         android:textSize="18sp"
                         android:clickable="true"
                         android:background="?android:attr/selectableItemBackground"/>
