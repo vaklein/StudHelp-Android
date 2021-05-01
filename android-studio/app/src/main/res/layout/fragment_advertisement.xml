@@ -19,7 +19,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginHorizontal="10dp"
-            android:visibility="visible"
+            android:visibility="gone"
             />
 
         <androidx.recyclerview.widget.RecyclerView
