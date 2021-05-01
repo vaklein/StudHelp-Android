@@ -141,17 +141,20 @@ public class SignupActivity extends AppCompatActivity {
             return false;
         }
     }
+    /*
+    {"message": "The given data was invalid.","errors": {"login": ["The login has already been taken."],"email": ["The email has already been taken."]}
+    */
 
     private void handleError(JSONObject object) throws JSONException {
-        if (object.getString("error_msg").equals("EMAIL AND LOGIN ALREADY EXIST")) {
+        JSONObject jsonObject = (JSONObject) object.get("errors");
+        if (jsonObject.has("login") && jsonObject.getString("login").equals("[\"The login has already been taken.\"]")) {
             loginField.setError("Identifiant déjà utilisé");
-            emailField.setError("Email déjà utilisé");
-        }else if (object.getString("error_msg").equals("LOGIN ALREADY EXISTS")) {
-            loginField.setError("Identifiant déjà utilisé");
-        }else if (object.getString("error_msg").equals("EMAIL ALREADY EXISTS")) {
+        }
+        if (jsonObject.has("email") && jsonObject.getString("email").equals("[\"The email has already been taken.\"]")) {
             emailField.setError("Email déjà utilisé");
         }
     }
+
     class SyncGetJSON extends AsyncTask<String, Void, String> {
         UnknownHostException connectionException;
         @Override
@@ -172,6 +175,7 @@ public class SignupActivity extends AppCompatActivity {
                 // Sending the request
                 URL url = new URL(BuildConfig.DB_URL + "/register");
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestProperty("Accept", "application/json");
                 httpURLConnection.setRequestMethod("POST");  //setting the request type
                 httpURLConnection.setDoOutput(true);
 
@@ -212,11 +216,11 @@ public class SignupActivity extends AppCompatActivity {
             JSONObject jsonObject = null;
             try {
                 jsonObject = new JSONObject(s);
-                if(!jsonObject.has("error")){ // If no error while creating the new user, create an insance of the API object with the key of the user
+                if(!jsonObject.has("errors")){ // If no error while creating the new user, create an insance of the API object with the key of the user
                     API.INSTANCE = new API(jsonObject.getString("token"));
                     jsonObject = (JSONObject) jsonObject.get("user");
                 }
-                if(jsonObject.has("error")){ // error while trying to create the new user
+                if(jsonObject.has("errors")){ // error while trying to create the new user
                     handleError(jsonObject);
                 }else {
                     GlobalVariables.setUser(user);
