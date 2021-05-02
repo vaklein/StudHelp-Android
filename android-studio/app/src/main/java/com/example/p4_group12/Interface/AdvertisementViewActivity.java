@@ -86,7 +86,6 @@ public class AdvertisementViewActivity extends NavigationActivity {
             tags.add((Tag) getIntent().getSerializableExtra("tag"+i));
         }
         currentAdvertisement.setTags(tags);
-        if(currentAdvertisement == null) Log.d("NULLWARNING", "Course is null in AdvertisementListActivity");
 
         api = API.getInstance();
 

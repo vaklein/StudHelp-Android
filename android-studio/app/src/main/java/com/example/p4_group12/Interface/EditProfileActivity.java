@@ -169,7 +169,6 @@ public class EditProfileActivity extends NavigationActivity {
                 outputStream.close();
                 Picasso.get().load(uri).transform(new CropCircleTransformation()).into(edit_picture);
             } catch (Exception e) {
-                Log.e("LoadBitmapByPicasso", e.getMessage());
             }
         }
         if (resultCode == RESULT_OK && requestCode == 99) { //retour de l'upload de photo

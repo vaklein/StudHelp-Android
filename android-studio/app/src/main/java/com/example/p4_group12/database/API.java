@@ -89,7 +89,6 @@ public class API {
                     OS.close();
                 }
 
-                // Log.d("Gwen", Integer.toString(httpURLConnection.getResponseCode())); printing the response code of the http request
 
                 // Getting the answer from th DB
                 InputStream IS = httpURLConnection.getResponseCode() / 100 == 2 ? httpURLConnection.getInputStream() : httpURLConnection.getErrorStream(); //DB answer
@@ -150,7 +149,6 @@ public class API {
                 String response = multipart.finish(); // response from server.
                 return response;
             } catch (Exception e) {
-                Log.e("TAG", "multipart post error " + e);
                 return null;
             }
         }
@@ -191,7 +189,6 @@ public class API {
                 String response = multipart.finish(); // response from server.
                 return response;
             } catch (Exception e) {
-                Log.e("TAG", "multipart post error " + e);
                 return null;
             }
         }
@@ -238,7 +235,6 @@ public class API {
                 connectionException = e;
                 return null;
             } catch (Exception e) {
-                Log.e("TAG", "multipart post error " + e);
                 return null;
             }
         }
@@ -283,13 +279,11 @@ public class API {
             UnknownHostException e;
             if(response == null && (e = getJSON.connectionException) != null) throw e;
 
-            Log.v("jerem", "try :" + response);
             JSONObject jsonObject = new JSONArray(response).getJSONObject(0);
             return jsonObject.getString("value");
 
         } catch (ExecutionException | InterruptedException | JSONException e) {
             e.printStackTrace();
-            Log.v("jerem", "catch :");
             return null;
         }
     }
@@ -355,7 +349,6 @@ public class API {
             UnknownHostException e;
             if(response == null && (e = getJSON.connectionException) != null) throw e;
 
-            Log.d("Gwen", response);
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -372,7 +365,6 @@ public class API {
             getJSON.execute();
 
         } catch (UnsupportedEncodingException e) {
-            Log.d("Gwen", "error when sending the token");
             return;
         }
 
@@ -395,7 +387,6 @@ public class API {
             else if(!jsonObject.has("error")){
                 return (User) GettableObjectFactory.getObject(jsonObject, User.class);
             }
-            Log.v("Jules", "[Bad thing] Error on JSON get for the user");
             return null;
 
         } catch (ExecutionException | InterruptedException | JSONException | InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException | ParseException e) {
@@ -514,7 +505,6 @@ public class API {
             UnknownHostException e;
             if(response == null && (e = getJSON.connectionException) != null) throw e;
 
-            //Log.v("responseJSON", "getCourseAds Str is : "+response);
             loadIntoArrayList(response, allAds, Advertisement.class);
         } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
             e.printStackTrace();
@@ -531,7 +521,6 @@ public class API {
             UnknownHostException e;
             if(response == null && (e = getJSON.connectionException) != null) throw e;
 
-            Log.v("responseJSON", "getAd Str is : "+response);
             loadIntoArrayList(response, allAds, Advertisement.class);
         } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
             e.printStackTrace();
@@ -608,7 +597,6 @@ public class API {
             String response = getJSON.execute().get();
             UnknownHostException e;
             if(response == null && (e = getJSON.connectionException) != null) throw e;
-            //Log.v("Jules", "Tags json is : " + response);
             loadIntoArrayList(response, tags, Tag.class);
         } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
             e.printStackTrace();
@@ -682,7 +670,6 @@ public class API {
             String response = getJSON.execute().get();
             UnknownHostException e;
             if(response == null && (e = getJSON.connectionException) != null) throw e;
-            Log.v("responseJSON", "getAdOfUser Str is : "+response);
             loadIntoArrayList(response, allUserAds, Advertisement.class);
         } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
             e.printStackTrace();
@@ -768,7 +755,6 @@ public class API {
             String response = getJSON.execute().get();
             UnknownHostException e;
             if(response == null && (e = getJSON.connectionException) != null) throw e;
-            Log.v("responseJSON", "getBookmarksOfUser Str is : "+response);
             loadIntoArrayList(response, out, Advertisement.class);
             return  out;
         } catch (JSONException | IllegalAccessException | InstantiationException | ParseException | InvocationTargetException | ExecutionException | NoSuchMethodException | InterruptedException e) {
@@ -785,7 +771,6 @@ public class API {
             String result = getJSON.execute().get();
             UnknownHostException e;
             if(result == null && (e = getJSON.connectionException) != null) throw e;
-            // Log.d("Gwen", result);
             JSONArray jsonArray = new JSONArray(result);
 
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -823,7 +808,6 @@ public class API {
         JSONArray jsonArray = new JSONArray(json);
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject obj = jsonArray.getJSONObject(i);
-            // Log.d("Gwen", obj.toString());
             gettableObjectArrayList.add(GettableObjectFactory.getObject(obj, objectClass)); // Careful, check if the class has been added inside the factory method
         }
     }

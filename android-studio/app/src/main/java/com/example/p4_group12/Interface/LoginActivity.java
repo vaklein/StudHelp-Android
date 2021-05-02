@@ -312,8 +312,7 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONArray(s).getJSONObject(0);
                 User user = (User) GettableObjectFactory.getObject(jsonObject, User.class);
-                if (user == null) {
-                    Log.v("ici", "ici");
+                if (s == null) {
                     SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME,MODE_PRIVATE);
                     sharedPreferences.edit().putString(PREF_EMAIL, null).apply();
 

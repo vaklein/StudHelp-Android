@@ -54,7 +54,6 @@ public class MyAdvertisementsActivity extends NavigationActivity{
         try {
             api = API.getInstance();
             advertisementsListComplete = api.getAdvertisementsOfUser(GlobalVariables.getUser());
-            Log.d("Gwen", Integer.toString(advertisementsListComplete.size()));
             advertisementsListToShow = (ArrayList<Advertisement>) advertisementsListComplete.clone();
             HashSet<Integer> bookmarksIds = api.getBookmarksIdsOfUser(GlobalVariables.getUser());
 

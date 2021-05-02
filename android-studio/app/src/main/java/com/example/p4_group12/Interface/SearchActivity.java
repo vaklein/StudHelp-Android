@@ -74,7 +74,6 @@ public class SearchActivity extends NavigationActivity{
 
         try{
             currentCategory = (String) getIntent().getSerializableExtra("ClickedCategory");
-            if(currentCategory == null) Log.d("NULLWARNING", "Category is null in SearchActivity");
 
             if (currentCategory.equals("search all")) {
                 courseList = GlobalVariables.getCourses();

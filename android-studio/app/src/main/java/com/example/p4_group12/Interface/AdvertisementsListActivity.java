@@ -83,7 +83,6 @@ public class AdvertisementsListActivity extends NavigationActivity implements Ta
 
 
         currentCourse = (Course) getIntent().getSerializableExtra("ClickedCourse");
-        if(currentCourse == null) Log.d("NULLWARNING", "Course is null in AdvertisementListActivity");
         setTitleToolbar("Annonces pour le cours " + currentCourse.getName());
 
         tabLayout = findViewById(R.id.tabs);

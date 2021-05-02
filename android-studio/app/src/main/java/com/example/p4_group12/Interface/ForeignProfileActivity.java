@@ -59,7 +59,6 @@ public class ForeignProfileActivity extends NavigationActivity implements TabLay
             foreignUser = api.getUserWithEmail(foreignUserEmail);
 
 
-        if(foreignUser == null) Log.d("NULLWARNING", "foreignUser is null in ForeignProfileActivity");
 
         tabLayout = findViewById(R.id.tabs);
         Bundle bundle = new Bundle();

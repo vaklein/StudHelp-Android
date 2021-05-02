@@ -93,25 +93,11 @@ public class DatabaseContact {
                             URLEncoder.encode("user_email", "UTF-8") + "=" + URLEncoder.encode(user_email, "UTF-8") + "&" +
                             URLEncoder.encode("course_id", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(course_id), "UTF-8") + "&" +
                             URLEncoder.encode("type", "UTF-8") + "=" + URLEncoder.encode(type, "UTF-8");//Build form answer
-                    Log.d("title",title);
-                    Log.d("descr",description);
-                    Log.d("email",user_email);
-                    Log.d("id",String.valueOf(course_id));
                     bufferedWriter.write(data); //Send data
                     bufferedWriter.flush();
                     bufferedWriter.close();
                     OS.close();
                     InputStream IS = httpURLConnection.getInputStream(); //DB answer
-
-                    // Used to print what the php script is printing
-                    /* ByteArrayOutputStream result = new ByteArrayOutputStream();
-                    byte[] buffer = new byte[500];
-                    int length;
-                    while ((length = IS.read(buffer)) != -1) {
-                        result.write(buffer, 0, length);
-                    }
-
-                    Log.d("Gwen", result.toString()); */
 
                     IS.close();
                     httpURLConnection.disconnect();
@@ -127,9 +113,6 @@ public class DatabaseContact {
             protected void onPostExecute(String result) {
 
                 super.onPostExecute(result);
-                Log.i("result",result);
-                //Print txt when POST request done
-                //Toast.makeText(LoginActivity.this, "Data Submit Successfully", Toast.LENGTH_LONG).show();
 
             }
         }
@@ -175,13 +158,10 @@ public class DatabaseContact {
                     streamReader.close();
                     //Set our result equal to our stringBuilder
                     result = stringBuilder.toString();
-                    Log.v("Gwen", result);
 
                 } catch (MalformedURLException e) {
-                    Log.v("Gwen", "catch1");
                     e.printStackTrace();
                 } catch (IOException e) {
-                    Log.v("Gwen", e.toString());
                     e.printStackTrace();
                 }
 
@@ -236,7 +216,6 @@ public class DatabaseContact {
                     bufferedReader.close();
                     return sb.toString().trim();
                 } catch (Exception e) {
-                    Log.e("QUERY", e.toString());
                     e.printStackTrace();
                 }
                 return null;
@@ -252,7 +231,6 @@ public class DatabaseContact {
         JSONArray jsonArray = new JSONArray(json);
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject obj = jsonArray.getJSONObject(i);
-            // Log.v("Gwen", obj.toString());
             favoriteIDs.add(Integer.parseInt(obj.getString("COURSE_ID")));
         }
     }
@@ -426,9 +404,7 @@ public class DatabaseContact {
             protected void onPostExecute(String result) {
 
                 super.onPostExecute(result);
-                Log.i("lucas",result);
-                //Print txt when POST request done
-                //Toast.makeText(LoginActivity.this, "Data Submit Successfully", Toast.LENGTH_LONG).show();
+
 
             }
         }
@@ -505,16 +481,12 @@ public class DatabaseContact {
             @Override
             protected String doInBackground(String... params) {
                 try {
-                    Log.i("lucas","enter");
                     URL url = new URL(BuildConfig.DB_URL + "get_social_links.php");
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("POST");  //POST request
-                    Log.i("lucas","enter");
                     httpURLConnection.setDoOutput(true);
                     OutputStream OS = httpURLConnection.getOutputStream();
-                    Log.i("lucas","enter");
                     BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
-                    Log.i("lucas","enterbis");
                     String data = URLEncoder.encode("UserEmail", "UTF-8") + "=" + URLEncoder.encode(email, "UTF-8") ;//Build form answer
                     bufferedWriter.write(data); //Send data
                     bufferedWriter.flush();
