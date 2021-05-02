@@ -514,7 +514,7 @@ public class API {
             UnknownHostException e;
             if(response == null && (e = getJSON.connectionException) != null) throw e;
 
-            Log.v("responseJSON", "getCourseAds Str is : "+response);
+            //Log.v("responseJSON", "getCourseAds Str is : "+response);
             loadIntoArrayList(response, allAds, Advertisement.class);
         } catch (InterruptedException | ExecutionException | InstantiationException | JSONException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | ParseException e) {
             e.printStackTrace();

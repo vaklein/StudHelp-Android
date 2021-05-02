@@ -50,17 +50,14 @@ public class ForeignProfileActivity extends NavigationActivity implements TabLay
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); //Remember this is the FrameLayout area within your activity_main.xml
         getLayoutInflater().inflate(R.layout.activity_profile, contentFrameLayout);
         setTitleToolbar("Profil");
-
+        try {
         api = API.getInstance();
 
         String foreignUserEmail = (String) getIntent().getSerializableExtra("ForeignUser");
 
-        try {
+
             foreignUser = api.getUserWithEmail(foreignUserEmail);
-        } catch (UnknownHostException e){
-            ForeignProfileActivity.this.finish();
-            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
-        }
+
 
         if(foreignUser == null) Log.d("NULLWARNING", "foreignUser is null in ForeignProfileActivity");
 
@@ -86,6 +83,10 @@ public class ForeignProfileActivity extends NavigationActivity implements TabLay
         name.setText(String.valueOf(foreignUser.getName()));
         edit = findViewById(R.id.floating_action_button);
         edit.setVisibility(View.GONE);
+        } catch (UnknownHostException e){
+            ForeignProfileActivity.this.finish();
+            Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
