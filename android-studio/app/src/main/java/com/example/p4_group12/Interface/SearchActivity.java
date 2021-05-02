@@ -90,7 +90,6 @@ public class SearchActivity extends NavigationActivity{
                             "Cochez l'étoile appartenant à un cours pour l'ajouter à vos favoris,\n" +
                             "vous retrouvez alors ici l'ensemble de ces cours.");
                 }
-                Log.v("Jules", "size is " + courseList.size());
                 setTitleToolbar("Recherche dans les cours favoris");
                 favoriteSwitch.setVisibility(View.GONE);
             } else {
@@ -133,7 +132,6 @@ public class SearchActivity extends NavigationActivity{
             favoriteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean activated) {
-                    Log.v("Jules", searchView.getQuery().toString());
                     if(activated) courseListAdapter.favoriteFilter(currentQuery);
                     else courseListAdapter.resetFavoriteFilter(currentQuery);//courseListAdapter.getFilter().filter(searchView.getQuery());
 

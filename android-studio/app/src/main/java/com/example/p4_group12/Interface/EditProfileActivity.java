@@ -299,7 +299,6 @@ public class EditProfileActivity extends NavigationActivity {
 
         //Checking the request code of our request
         if (requestCode == STORAGE_PERMISSION_CODE) {
-
             //If permission is granted
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //Displaying a toast

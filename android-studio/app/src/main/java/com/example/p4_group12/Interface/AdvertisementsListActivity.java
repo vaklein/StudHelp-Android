@@ -238,13 +238,11 @@ public class AdvertisementsListActivity extends NavigationActivity implements Ta
         switch(item.getItemId()){
             case R.id.action_favorite:
                 if(item.isChecked()){
-                    // Log.d("Gwen", "Adding " + currentCourse.getCode() + " to the favorites");
                     item.setChecked(false);
                     item.setIcon(R.drawable.ic_baseline_favorite_not_selected);
                     API.getInstance().removeFavoriteToUser(GlobalVariables.getUser(), currentCourse);
                 }
                 else{
-                    // Log.d("Gwen", "Removing " + currentCourse.getCode() + " from the favorites");
                     item.setChecked(true);
                     item.setIcon(R.drawable.ic_baseline_favorite_selected);
                     API.getInstance().addNewFavoriteToUser(GlobalVariables.getUser(), currentCourse);

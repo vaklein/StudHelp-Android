@@ -46,9 +46,7 @@ public class AdvertisementProfileFragment extends Fragment {
 
         try {
             API api = API.getInstance();
-            Log.v("jerem", "frag foreign 1 : ");
             emailValue = this.getArguments().getString("email");
-            Log.v("jerem", "frag foreign : " + emailValue);
 
             User user = api.getUserWithEmail(emailValue);
             advertisementsListComplete = api.getAdvertisementsOfUser(user);
@@ -98,7 +96,6 @@ public class AdvertisementProfileFragment extends Fragment {
             Bundle bundle = new Bundle();
             bundle.putString("email", emailValue);
             fragment.setArguments(bundle);
-            Log.v("jerem", "frag test refresh :" + emailValue);
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.frameLayout, fragment);

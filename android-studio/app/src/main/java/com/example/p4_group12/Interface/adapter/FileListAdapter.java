@@ -83,7 +83,6 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileLi
     @NonNull
     @Override
     public FileListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Log.v("Gwen", "test");
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.file_item, parent, false);
         FileListViewHolder clh = new FileListViewHolder(v, this.fileClickListener);
         return  clh;
@@ -107,7 +106,6 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileLi
         Date now = new Date();
         long timeDiff = now.getTime() - currentFile.getCreated_at().getTime();
         long oneHour = 3600000;
-        Log.v("Jules", "timediff is : " + timeDiff);
         if (timeDiff < oneHour) { // Less than an hour
             int minutes = (int) (timeDiff/60000);
             if (minutes == 0) {

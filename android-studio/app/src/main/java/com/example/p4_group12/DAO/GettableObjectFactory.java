@@ -26,17 +26,13 @@ public class GettableObjectFactory {
         }
         else if(objectClass.getCanonicalName().equals(Advertisement.class.getCanonicalName())){
             ArrayList<Tag> tags = new ArrayList<>();
-            Log.v("respJSON", "tags are " + dbObject.getJSONArray("tags").toString());
             API.loadIntoArrayList(dbObject.getJSONArray("tags").toString(), tags, Tag.class);
             // Deal with the only picture but the app is implemented in a way that we can show multiple pictures
             List<String> pictures = new ArrayList<>();
             pictures.add(dbObject.getString("picture"));
             if(pictures.get(0).equals("null")) pictures.remove(0); // sinon on pense qu'il y a une image car liste non-vide
-            //for (Tag tag : tags) Log.v("Jules", "Tag = " + tag.getTagValue());
             String goodFormatCreationDate = dbObject.getString("created_at").substring(0, 10) + " " + dbObject.getString("created_at").substring(11,19);
             String goodFormatUpdatedDate = dbObject.getString("updated_at").substring(0, 10) + " " + dbObject.getString("updated_at").substring(11,19);
-            Log.v("Creation date", goodFormatCreationDate);
-            Log.v("Update date", goodFormatUpdatedDate);
             Advertisement ad = new Advertisement(Integer.parseInt(dbObject.getString("id")), dbObject.getString("user_email"), dbObject.getString("name"), dbObject.getString("title"), dbObject.getString("description"), tags, Integer.parseInt(dbObject.getString("course_id")), pictures, goodFormatCreationDate, goodFormatUpdatedDate);
             ad.setCourseName(dbObject.getString("course_name"));
             return ad;

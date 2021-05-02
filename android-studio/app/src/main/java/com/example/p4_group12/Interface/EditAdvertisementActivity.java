@@ -83,9 +83,7 @@ public class EditAdvertisementActivity extends NavigationActivity{
         // Use this to set the correct layout instead of setContentView cfr NavigationActivity/drawer_layout
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); //Remember this is the FrameLayout area within your activity_main.xml
         getLayoutInflater().inflate(R.layout.activity_add_advertisement, contentFrameLayout);
-        Log.v("Jules", "My advertisement button");
         toEditAdvertisement = (Advertisement) getIntent().getSerializableExtra("toEditAdvertisement");
-        Log.v("Jules", "My advertisement button");
         setTitleToolbar("Modifier votre annonce");
         advertisementTitle = findViewById(R.id.advertisement_title);
         advertisementDescription = findViewById(R.id.advertisement_description);
@@ -143,7 +141,6 @@ public class EditAdvertisementActivity extends NavigationActivity{
         for (Tag tag : toEditAdvertisement.getTags()) {
             tagStrings.add(tag.getTagValue());
         }
-        Log.v("Jules", "tagStrings = " + tagStrings.toString());
 
         // Types
         types.add("Offre");
@@ -389,11 +386,9 @@ public class EditAdvertisementActivity extends NavigationActivity{
             StringBuilder s = new StringBuilder(initType.getTagValue());
             for (Tag t : initCycles) { s.append(" ").append(t.getTagValue()); }
             for (Tag t : initObjects) { s.append(" ").append(t.getTagValue()); }
-            Log.v("init values", s.toString());
             StringBuilder s1 = new StringBuilder(newType.getTagValue());
             for (Tag t : newCycles) { s1.append(" ").append(t.getTagValue()); }
             for (Tag t : newObjects) { s1.append(" ").append(t.getTagValue()); }
-            Log.v("new values", s1.toString());
 
             try {
                 // Update type
@@ -405,14 +400,12 @@ public class EditAdvertisementActivity extends NavigationActivity{
                 // Remove unchecked cycles
                 for (Tag initCycle : initCycles) {
                     if (!newCycles.contains(initCycle)) {
-                        Log.v("removed tag", initCycle.getTagValue());
                         api.removeTag(initCycle);
                     }
                 }
                 // Remove unchecked objects
                 for (Tag initObject : initObjects) {
                     if (!newObjects.contains(initObject)) {
-                        Log.v("removed tag", initObject.getTagValue());
                         api.removeTag(initObject);
                     }
                 }
@@ -420,14 +413,12 @@ public class EditAdvertisementActivity extends NavigationActivity{
                 // Add new cycles
                 for (Tag newCycle : newCycles) {
                     if (!initCycles.contains(newCycle)) {
-                        Log.v("added tag", newCycle.getTagValue());
                         api.addNewTag(newCycle);
                     }
                 }
                 // Add new objects
                 for (Tag newObject : newObjects) {
                     if (!initObjects.contains(newObject)) {
-                        Log.v("added tag", newObject.getTagValue());
                         api.addNewTag(newObject);
                     }
                 }

@@ -76,8 +76,6 @@ public class HomeActivity extends NavigationActivity{
             @Override
             public void OnCategoryClick(int position) {
                 String faculty = categoryList.get(position);
-                Log.v("Jules", "Clicked category is " + faculty);
-                Log.v("Jules", "Category list size = " + categoryList.size());
                 Intent searchActivity = new Intent(getApplicationContext(), SearchActivity.class);
                 searchActivity.putExtra("ClickedCategory", faculty);
                 searchActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);

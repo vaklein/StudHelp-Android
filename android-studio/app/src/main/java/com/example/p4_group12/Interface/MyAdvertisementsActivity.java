@@ -53,7 +53,6 @@ public class MyAdvertisementsActivity extends NavigationActivity{
 
         try {
             api = API.getInstance();
-            if (api == null) Log.v("Jules", "API is null in MyAdvertisementActivity");
             advertisementsListComplete = api.getAdvertisementsOfUser(GlobalVariables.getUser());
             Log.d("Gwen", Integer.toString(advertisementsListComplete.size()));
             advertisementsListToShow = (ArrayList<Advertisement>) advertisementsListComplete.clone();
@@ -91,9 +90,7 @@ public class MyAdvertisementsActivity extends NavigationActivity{
                     @SuppressLint("SetTextI18n")
                     @Override
                     public void onClick(View v) {
-                        Log.v("Jules", "checked chip is " + chip.getText().toString());
                         List<Integer> checkedChipIds = filters.getCheckedChipIds();
-                        Log.v("Jules", "Number of checked chips : " + checkedChipIds.size());
                         if (checkedChipIds.isEmpty()) {
                             advertisementsListToShow.clear();
                             advertisementsListToShow.addAll(advertisementsListComplete);
@@ -104,10 +101,8 @@ public class MyAdvertisementsActivity extends NavigationActivity{
                         for (int i : checkedChipIds) {
                             checkedChipStrings.add((String) ((Chip) filters.findViewById(i)).getText());
                         }
-                        Log.v("Jules", "LIST OF CHECKED CHIPS :  " + checkedChipStrings.toString());
                         advertisementsListToShow.clear();
                         advertisementsListToShow.addAll(filterListOnCheckedChips(advertisementsListComplete, checkedChipStrings));
-                        Log.v("Jules", "Advertisements titles to show : " + advertisementsListToShow.toString());
                         advertisementListAdapter.notifyDataSetChanged();
                         if (advertisementsListToShow.size() == 0) {
                             noAdvertisement.setVisibility(View.VISIBLE);

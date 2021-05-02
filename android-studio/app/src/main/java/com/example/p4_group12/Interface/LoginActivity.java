@@ -96,6 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intentLoginActivity);
                     finish();
                 }
+
                 GlobalVariables.setUser(api.getUserWithEmail(already_email));
                 date_courses_data = API.tokenUpdateCourses();
 
@@ -111,6 +112,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
                 loadingDialog.getDialog().cancel();
                 LoginActivity.this.finish();
+
             } catch (ParseException e) {
                 e.printStackTrace();
             } catch (UnknownHostException e){
@@ -293,4 +295,83 @@ public class LoginActivity extends AppCompatActivity {
             loadingDialog.getDialog().cancel();
         }
     }
+
+    /*
+    class SyncGetJSON_Already_Connected extends AsyncTask<String, Void, Object> {
+        UnknownHostException connectionException;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            loadingDialog.getDialog().show();
+        }
+
+        @Override
+        protected Object doInBackground(String... params) {
+            try {
+                // Sending the request
+                URL url = new URL(BuildConfig.DB_URL + "/user/" + already_email);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("GET");  //setting the request type
+                httpURLConnection.setRequestProperty("Accept", "application/json");
+                httpURLConnection.setRequestProperty("Content-Type", "application/json");
+
+
+                // Getting the answer from th DB
+                InputStream IS = httpURLConnection.getResponseCode() / 100 == 2 ? httpURLConnection.getInputStream() : httpURLConnection.getErrorStream(); //DB answer
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(IS));
+                JSONObject jsonObject = new JSONArray(bufferedReader).getJSONObject(0);
+                IS.close();
+                httpURLConnection.disconnect();
+                return jsonObject;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return null;
+            } catch (UnknownHostException e) {
+                connectionException = e;
+                return null;
+            } catch (IOException e) {
+                return null;
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Object s) {
+            super.onPostExecute(s);
+            try {
+                API api =  API.setToken(getSharedPreferences(PREFS_NAME,MODE_PRIVATE));
+                if (s == null) {
+                    Log.v("ici", "ici");
+                    SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME,MODE_PRIVATE);
+                    sharedPreferences.edit().putString(PREF_EMAIL, null).apply();
+
+                    GlobalVariables.setUser(null);
+                    GlobalVariables.revokeToken();
+
+                    Intent intentLoginActivity = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intentLoginActivity);
+                    finish();
+                }
+
+                GlobalVariables.setUser((User) s);
+                date_courses_data = API.tokenUpdateCourses();
+                SharedPreferences pref = getSharedPreferences(PREF_ARRAY,MODE_PRIVATE); // We only get the email. We might need to get the API token or the password
+
+                loadData(token_date_array, date_courses_data);
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                intent.putExtra("FavList", false);
+                startActivity(intent);
+                loadingDialog.getDialog().cancel();
+                LoginActivity.this.finish();
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            } catch (UnknownHostException e){
+                Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
+            }
+            loadingDialog.getDialog().cancel();
+        }
+    }*/
 }

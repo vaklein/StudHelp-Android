@@ -79,7 +79,6 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
     @NonNull
     @Override
     public CourseListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Log.v("Gwen", "test");
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.course_item, parent, false);
         CourseListViewHolder clh = new CourseListViewHolder(v, this.courseClickListener);
         return  clh;
@@ -100,12 +99,10 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
             @Override
             public void onClick(View view) {
                 if(holder.favoriteCheckBox.isChecked()){
-                    // Log.d("Gwen", "Adding " + currentCourse.getCode() + " to the favorites");
                     favoritesID.add(currentCourse.getID());
                     holder.api.addNewFavoriteToUser(GlobalVariables.getUser(), currentCourse);
                 }
                 else{
-                    // Log.d("Gwen", "Removing " + currentCourse.getCode() + " from the favorites");
                     favoritesID.remove(currentCourse.getID());
                     holder.api.removeFavoriteToUser(GlobalVariables.getUser(), currentCourse);
                 }

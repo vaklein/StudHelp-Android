@@ -42,7 +42,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String notificationTitle = remoteMessage.getData().get("title");
         int advertisement_id = Integer.parseInt(remoteMessage.getData().get("notification_id")); // Use this to launch the right intent
 
-        Log.d("FirebaseMessage", "message received : " + myMessage);
 
         // création de la notif visuel
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CANAL); //construit une nouvelle notif

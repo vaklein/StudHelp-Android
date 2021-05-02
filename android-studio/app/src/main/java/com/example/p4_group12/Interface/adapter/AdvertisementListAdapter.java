@@ -109,7 +109,6 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
     @NonNull
     @Override
     public AdvertisementListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Log.v("Gwen", "test");
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.advertisement_item, parent, false);
         AdvertisementListViewHolder clh = new AdvertisementListViewHolder(v, this.advertisementClickListener);
         return  clh;
@@ -133,7 +132,6 @@ public class AdvertisementListAdapter extends RecyclerView.Adapter<Advertisement
         Date now = new Date();
         long timeDiff = now.getTime() - currentAdvertisement.getCreationDate().getTime();
         long oneHour = 3600000;
-        Log.v("Jules", "timediff is : " + timeDiff);
         if (timeDiff < oneHour) { // Less than an hour
             int minutes = (int) (timeDiff/60000);
             if (minutes == 0) {

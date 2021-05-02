@@ -47,7 +47,6 @@ public class FileFragment extends Fragment {
 
         API api = API.getInstance();
         course_id = this.getArguments().getInt("course_id");
-        Log.v("jerem", "frag foreign : " + course_id);
 
         advertisement = result.findViewById(R.id.no_advertisements_frag);
         advertisementsListComplete = api.getCourseFiles(course_id);
@@ -83,7 +82,6 @@ public class FileFragment extends Fragment {
             Bundle bundle = new Bundle();
             bundle.putInt("course_id", course_id);
             fragment.setArguments(bundle);
-            Log.v("jerem", "frag test refresh :" + course_id);
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.frameLayout, fragment);

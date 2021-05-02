@@ -75,13 +75,10 @@ public class AdvertisementsListFragment extends Fragment {
         getLayoutInflater().inflate(R.layout.activity_course_advertisments_list, contentFrameLayout);
 
         api = API.getInstance();
-        if (api == null) Log.v("Jules", "API is null in AdvertisementListActivity");
-        Log.v("AdvertisementLoading", "start");
         course_id = this.getArguments().getInt("course_id");
 
         try {
             advertisementsListComplete = api.getCourseAdvertisements(course_id);
-            Log.v("AdvertisementLoading", "finish");
             advertisementsListToShow = (ArrayList<Advertisement>) advertisementsListComplete.clone();
             bookmarksIds = api.getBookmarksIdsOfUser(GlobalVariables.getUser());
 
@@ -117,9 +114,7 @@ public class AdvertisementsListFragment extends Fragment {
                     @SuppressLint("SetTextI18n")
                     @Override
                     public void onClick(View v) {
-                        Log.v("Jules", "checked chip is " + chip.getText().toString());
                         List<Integer> checkedChipIds = filters.getCheckedChipIds();
-                        Log.v("Jules", "Number of checked chips : " + checkedChipIds.size());
                         if (checkedChipIds.isEmpty()) {
                             advertisementsListToShow.clear();
                             advertisementsListToShow.addAll(advertisementsListComplete);
@@ -133,10 +128,8 @@ public class AdvertisementsListFragment extends Fragment {
                         for (int i : checkedChipIds) {
                             checkedChipStrings.add((String) ((Chip) filters.findViewById(i)).getText());
                         }
-                        Log.v("Jules", "LIST OF CHECKED CHIPS :  " + checkedChipStrings.toString());
                         advertisementsListToShow.clear();
                         advertisementsListToShow.addAll(filterListOnCheckedChips(advertisementsListComplete, checkedChipStrings));
-                        Log.v("Jules", "Advertisements titles to show : " + advertisementsListToShow.toString());
                         advertisementListAdapter.notifyDataSetChanged();
                         if (advertisementsListToShow.size() == 0) {
                             noAdvertisement.setVisibility(View.VISIBLE);

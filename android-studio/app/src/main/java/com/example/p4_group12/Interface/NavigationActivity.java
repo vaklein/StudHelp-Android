@@ -121,12 +121,6 @@ public class NavigationActivity extends AppCompatActivity{
                             startActivity(home2);
                         }
                         break;
-                    /* Ça n'a plus beaucoup de sens d'afficher la liste des 42.500 cours...
-                    case R.id.nav_courses:
-                        Intent intentcourses = new Intent(getApplicationContext(), SearchActivity.class);
-                        startActivity(intentcourses);
-                        finish();
-                        break;*/
                     case R.id.nav_myadvertisements:
                         if (!currAct.equals("MyAdvertisementsActivity")) {
                             Intent adv = new Intent(getApplicationContext(), MyAdvertisementsActivity.class);

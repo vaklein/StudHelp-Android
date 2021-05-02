@@ -100,7 +100,6 @@ public class ProfileActivity extends NavigationActivity implements TabLayout.OnT
                 break;
             case 2:
                 bundle.putString("email", GlobalVariables.getUser().getEmail());
-                Log.v("jerem", "frag : " + GlobalVariables.getUser().getEmail());
                 fragment = new AdvertisementProfileFragment();
                 fragment.setArguments(bundle);
                 break;

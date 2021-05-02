@@ -102,7 +102,6 @@ public class Advertisement  implements Serializable, Comparable {
         this.images = images;
         this.courseName = "This should not appear, and be the course name";
 
-        Log.v("TimeLogs", "Creation is " + creationDate);
         this.creationDate = getLocaleDateFromString(creationDate);
         this.lastUpdateDate = getLocaleDateFromString(lastUpdateDate);
     }
