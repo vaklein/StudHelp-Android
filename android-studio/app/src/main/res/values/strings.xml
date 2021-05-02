@@ -95,5 +95,6 @@
     <string name="my_bookmarks_hint">Vos signets sont affichés ici.</string>
     <string name="firstTabAdvertisement">Annonces</string>
     <string name="secondTabAdvertisement">Syntheses</string>
+    <string name="password_requirements_text">Votre mot de passe doit contenir au moins 8 caractères dont :\n- un chiffre\n- une majuscule\n- une minuscule</string>
 
 </resources>

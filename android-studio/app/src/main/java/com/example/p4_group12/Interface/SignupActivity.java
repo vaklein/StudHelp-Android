@@ -54,7 +54,7 @@ public class SignupActivity extends AppCompatActivity {
     private TextInputLayout loginField;
     private TextInputLayout passwordField;
     private TextInputLayout confirmPasswordField;
-    private static final String PASSWORD_STRENGTH = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[*@#$%!]).{8,40})";
+    private static final String PASSWORD_STRENGTH = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z]).{8,40})";
     private LoadingDialog loadingDialog;
     private User user;
 
@@ -127,7 +127,7 @@ public class SignupActivity extends AppCompatActivity {
         Pattern passwordPattern = Pattern.compile(PASSWORD_STRENGTH);
         Matcher passwordMatcher = passwordPattern.matcher(password.getText().toString());
         if (!passwordMatcher.matches()){
-            passwordField.setError("Votre mot de passe doit contenir au moins 8 caractères dont au moins : un chiffre, une majuscule, une minuscule et un caractère spéciale (@, #, !, ...)");
+            passwordField.setError("Mot de passe non valide");
             return false;
         }
         return true;
