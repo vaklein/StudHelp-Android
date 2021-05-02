@@ -151,8 +151,8 @@ public class SearchActivity extends NavigationActivity{
                     // Toast.makeText(getApplication().getBaseContext(), clickedCourse.getName(), Toast.LENGTH_LONG).show();
                     Intent advertisementsListAct = new Intent(getApplicationContext(), AdvertisementsListActivity.class);
                     advertisementsListAct.putExtra("ClickedCourse", clickedCourse);
-                    advertisementsListAct.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivityForResult(advertisementsListAct, 1);
+                    advertisementsListAct.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(advertisementsListAct);
                 }
             });
 
@@ -171,19 +171,5 @@ public class SearchActivity extends NavigationActivity{
             }
         }
         return filtered;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // check if the request code is same as what is passed  here it is 1
-        if(requestCode == 1) {
-            Intent searchActivity = new Intent(getApplicationContext(), SearchActivity.class);
-            searchActivity.putExtra("ClickedCategory", currentCategory);
-            searchActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            finish();
-            startActivity(searchActivity);
-            Log.v("StartSearch", "This should be printed");
-        }
     }
 }

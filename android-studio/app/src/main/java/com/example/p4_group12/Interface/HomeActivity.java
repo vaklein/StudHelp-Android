@@ -44,7 +44,7 @@ public class HomeActivity extends NavigationActivity{
             public void onClick(View view) {
                 Intent searchActivity = new Intent(getApplicationContext(), SearchActivity.class);
                 searchActivity.putExtra("ClickedCategory", "search all");
-                searchActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                searchActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(searchActivity);
             }
         });
@@ -56,7 +56,7 @@ public class HomeActivity extends NavigationActivity{
             public void onClick(View v) {
                 Intent searchActivity = new Intent(getApplicationContext(), SearchActivity.class);
                 searchActivity.putExtra("ClickedCategory", "favourites courses");
-                searchActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                searchActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(searchActivity);
             }
         });
@@ -80,8 +80,8 @@ public class HomeActivity extends NavigationActivity{
                 Log.v("Jules", "Category list size = " + categoryList.size());
                 Intent searchActivity = new Intent(getApplicationContext(), SearchActivity.class);
                 searchActivity.putExtra("ClickedCategory", faculty);
-                searchActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivityForResult(searchActivity, 1);
+                searchActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(searchActivity);
             }
         });
     }

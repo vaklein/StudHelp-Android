@@ -74,7 +74,7 @@ public class ProfileActivity extends NavigationActivity implements TabLayout.OnT
             @Override
             public void onClick(View view) {
                 Intent edit_profil = new Intent(getApplicationContext(), EditProfileActivity.class);
-                edit_profil.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                edit_profil.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivityForResult(edit_profil,1);
             }
         });
