@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.p4_group12.BuildConfig;
 import com.example.p4_group12.DAO.Course;
+import com.example.p4_group12.DAO.GettableObjectFactory;
 import com.example.p4_group12.DAO.User;
 import com.example.p4_group12.R;
 import com.example.p4_group12.database.API;
@@ -24,6 +25,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,6 +36,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -63,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final String PREF_COURSE_ARRAY_LIST = null;
     String date_courses_data = "test";
     String token_date_array;
+    String already_email;
 
     // Test values
     //private Button rootButton;
@@ -76,49 +80,13 @@ public class LoginActivity extends AppCompatActivity {
         loadingDialog = new LoadingDialog(this, "Connexion en cours...");
 
         SharedPreferences pref_email = getSharedPreferences(PREFS_NAME,MODE_PRIVATE); // We only get the email. We might need to get the API token or the password
-        String already_email = pref_email.getString(PREF_EMAIL, null);
+        already_email = pref_email.getString(PREF_EMAIL, null);
         SharedPreferences pref_date = getSharedPreferences(PREF_DATE,MODE_PRIVATE); // We only get the email. We might need to get the API token or the password
         token_date_array = pref_date.getString(PREF_TOKEN_DATE_ARRAY, "1900-01-01 00:00:00");
 
         if (already_email != null) {
-            loadingDialog.getDialog().show();
-
-            try {
-                API api =  API.setToken(getSharedPreferences(PREFS_NAME,MODE_PRIVATE));
-                if (api.getUserWithEmail(already_email) == null) {
-                    SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME,MODE_PRIVATE);
-                    sharedPreferences.edit().putString(PREF_EMAIL, null).apply();
-
-                    GlobalVariables.setUser(null);
-                    GlobalVariables.revokeToken();
-
-                    Intent intentLoginActivity = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivity(intentLoginActivity);
-                    finish();
-                }
-
-                GlobalVariables.setUser(api.getUserWithEmail(already_email));
-                date_courses_data = API.tokenUpdateCourses();
-
-                // Doing all the synchronous queries
-                SharedPreferences pref = getSharedPreferences(PREF_ARRAY,MODE_PRIVATE); // We only get the email. We might need to get the API token or the password
-
-
-                loadData(token_date_array, date_courses_data);
-                //Intent edit_profil = new Intent(getApplicationContext(), ProfileActivity.class);
-                //startActivity(edit_profil);
-                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                intent.putExtra("FavList", false);
-                startActivity(intent);
-                loadingDialog.getDialog().cancel();
-                LoginActivity.this.finish();
-
-            } catch (ParseException e) {
-                e.printStackTrace();
-            } catch (UnknownHostException e){
-                Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
-                loadingDialog.getDialog().cancel();
-            }
+            API api = API.setToken(getSharedPreferences(PREFS_NAME,MODE_PRIVATE));
+            new SyncGetJSON_Already_Connected().execute(getSharedPreferences(PREFS_NAME,MODE_PRIVATE).getString("API_key", null));
         }
 
         sign_up = findViewById(R.id.sign_up);
@@ -296,8 +264,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    /*
-    class SyncGetJSON_Already_Connected extends AsyncTask<String, Void, Object> {
+    class SyncGetJSON_Already_Connected extends AsyncTask<String, Void, String> {
         UnknownHostException connectionException;
         @Override
         protected void onPreExecute() {
@@ -306,11 +273,12 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Object doInBackground(String... params) {
+        protected String doInBackground(String... params) {
             try {
                 // Sending the request
                 URL url = new URL(BuildConfig.DB_URL + "/user/" + already_email);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestProperty("Authorization","Bearer "+ params[0]); // Setting the bearer token for the request
                 httpURLConnection.setRequestMethod("GET");  //setting the request type
                 httpURLConnection.setRequestProperty("Accept", "application/json");
                 httpURLConnection.setRequestProperty("Content-Type", "application/json");
@@ -319,10 +287,14 @@ public class LoginActivity extends AppCompatActivity {
                 // Getting the answer from th DB
                 InputStream IS = httpURLConnection.getResponseCode() / 100 == 2 ? httpURLConnection.getInputStream() : httpURLConnection.getErrorStream(); //DB answer
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(IS));
-                JSONObject jsonObject = new JSONArray(bufferedReader).getJSONObject(0);
+                String json;
+                StringBuilder result = new StringBuilder();
+                while ((json = bufferedReader.readLine()) != null) {
+                    result.append(json + "\n");
+                }
                 IS.close();
                 httpURLConnection.disconnect();
-                return jsonObject;
+                return result.toString();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
                 return null;
@@ -331,18 +303,16 @@ public class LoginActivity extends AppCompatActivity {
                 return null;
             } catch (IOException e) {
                 return null;
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return null;
             }
         }
 
         @Override
-        protected void onPostExecute(Object s) {
+        protected void onPostExecute(String s) {
             super.onPostExecute(s);
             try {
-                API api =  API.setToken(getSharedPreferences(PREFS_NAME,MODE_PRIVATE));
-                if (s == null) {
+                JSONObject jsonObject = new JSONArray(s).getJSONObject(0);
+                User user = (User) GettableObjectFactory.getObject(jsonObject, User.class);
+                if (user == null) {
                     Log.v("ici", "ici");
                     SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME,MODE_PRIVATE);
                     sharedPreferences.edit().putString(PREF_EMAIL, null).apply();
@@ -355,7 +325,7 @@ public class LoginActivity extends AppCompatActivity {
                     finish();
                 }
 
-                GlobalVariables.setUser((User) s);
+                GlobalVariables.setUser(user);
                 date_courses_data = API.tokenUpdateCourses();
                 SharedPreferences pref = getSharedPreferences(PREF_ARRAY,MODE_PRIVATE); // We only get the email. We might need to get the API token or the password
 
@@ -370,8 +340,18 @@ public class LoginActivity extends AppCompatActivity {
                 e.printStackTrace();
             } catch (UnknownHostException e){
                 Toast.makeText(getApplicationContext(), R.string.no_connection, Toast.LENGTH_LONG).show();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
             }
             loadingDialog.getDialog().cancel();
         }
-    }*/
+    }
 }
