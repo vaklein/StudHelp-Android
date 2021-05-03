@@ -16,7 +16,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/no_private_advertisment"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:layout_marginHorizontal="10dp"
             android:visibility="gone"

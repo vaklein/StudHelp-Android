@@ -20,7 +20,7 @@
     <string name="social_network_underline"><u>Mes réseaux sociaux :</u></string>
     <string name="social_network_other_user"><u>Réseaux sociaux pour contacter la personne :</u></string>
     <string name="social_network">Mes réseaux sociaux :</string>
-    <string name="no_social_network_advertisment">Vous n\'avez pas encore ajouté de réseau social.</string>
+    <string name="no_social_network_advertisment">Vous n\'avez pas encore ajouté de réseau social</string>
     <string name="no_social_network_other_user">Cette personne n\'est pas contactable car elle n\'a pas encore ajouté ses réseaux sociaux.</string>
     <string name="personal_information_underline"><u>Mes données personelles :</u></string>
     <string name="social_network_public_advertissemnt">Ces données seront publiques, tous les utilisateurs pourront y accéder.</string>
